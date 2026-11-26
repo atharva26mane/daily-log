@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Daily Log" />
   <title>Daily Log</title>
-  <link id="app-icon" rel="icon" type="image/png" href="icon-192.png" />
-  <link id="apple-icon" rel="apple-touch-icon" href="icon-192.png" />
+  <link id="app-icon" rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link id="apple-icon" rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link id="pwa-manifest" rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -923,6 +923,7 @@
       <div data-s="loading"><div class="auth-spin" aria-hidden="true"></div><p class="auth-sub">Opening your log</p></div>
       <div data-s="signin">
         <p class="auth-sub">A calm place for water, food, sleep and the small things you want to remember.</p>
+        <p class="auth-sub" style="margin-top:-8px;font-size:14px">Pick the Google account you want to use on the next screen.</p>
         <button class="auth-google" id="auth-google" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23 12.27c0-.8-.07-1.56-.2-2.3H12v4.35h6.17a5.3 5.3 0 0 1-2.3 3.47v2.88h3.7C21.8 18.7 23 15.7 23 12.27z"/><path fill="#34A853" d="M12 23.5c3.1 0 5.7-1.03 7.6-2.8l-3.7-2.88c-1.03.7-2.35 1.1-3.9 1.1-3 0-5.5-2.02-6.4-4.75H1.8v2.97A11.5 11.5 0 0 0 12 23.5z"/><path fill="#FBBC05" d="M5.6 14.17a6.9 6.9 0 0 1 0-4.34V6.86H1.8a11.5 11.5 0 0 0 0 10.28l3.8-2.97z"/><path fill="#EA4335" d="M12 5.08c1.7 0 3.2.58 4.4 1.72l3.3-3.3A11.4 11.4 0 0 0 12 .5C7.5.5 3.7 3.1 1.8 6.86l3.8 2.97C6.5 7.1 9 5.08 12 5.08z"/></svg><span>Continue with Google</span></button>
         <ul class="auth-points">
           <li>Your logs are private. The person who runs this app sees your name, email and when you were last active. Never your logs.</li>
@@ -3039,9 +3040,18 @@
     } catch (e) { offline(); }
     booting = false;
   }
+  function savedSessionUid() {
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (/^sb-.*-auth-token$/.test(k)) { var o = JSON.parse(localStorage.getItem(k) || 'null'); return o && o.user && o.user.id; }
+      }
+    } catch (e) {}
+    return null;
+  }
   function offline() {
     var c = getCache();
-    if (c && c.status === 'approved') { me = c; openApp(); setupUi(); markReady(); }
+    if (c && c.status === 'approved' && savedSessionUid() === c.uid) { me = c; openApp(); setupUi(); markReady(); }
     else setGate('error', "Can't reach sign-in. Check your internet and try again.");
   }
 
@@ -3059,10 +3069,11 @@
       if (!prof) throw new Error('no profile');
     } catch (e) {
       var c = getCache();
-      if (c && c.uid === uid && c.status === 'approved') { me = c; openApp(); setupUi(); markReady(); return; }
+      if (c && c.uid === uid && c.status === 'approved' && savedSessionUid() === uid) { me = c; openApp(); setupUi(); markReady(); return; }
       return setGate('error', 'Could not reach the server. Try again in a moment.');
     }
     var mail = (prof.email || u.email || '').toLowerCase();
+    if (u.email && prof.email && u.email.toLowerCase() !== prof.email.toLowerCase()) { return setGate('error', 'Account mismatch. Sign out and try again.'); }
     me = { uid: uid, email: mail, name: prof.name || name, status: prof.status, ai: !!prof.ai_access, admin: mail === ADMIN };
     lsSet(CACHE, JSON.stringify(me));
     if (me.status === 'approved') { stopPoll(); await enter(); }
@@ -3192,14 +3203,15 @@
     clearTimeout(soTimer); v.textContent = 'Signing out...';
     signingOut = true;
     try { if (dirty) await push(); } catch (e) {}
-    try { await sb.auth.signOut(); } catch (e) {}
+    try { await sb.auth.signOut({ scope: 'local' }); } catch (e) {}
     wipeLocal(false);
     location.reload();
   }
-  async function plainSignOut() { signingOut = true; try { await sb.auth.signOut(); } catch (e) {} wipeLocal(false); location.reload(); }
+  async function plainSignOut() { signingOut = true; try { await sb.auth.signOut({ scope: 'local' }); } catch (e) {} wipeLocal(false); location.reload(); }
 
   $('auth-google').addEventListener('click', async function() {
     if (!sb) return boot();
+    try { await sb.auth.signOut({ scope: 'local' }); } catch (e) {}
     var r = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname, queryParams: { prompt: 'select_account' } } });
     if (r.error) setGate('error', 'Google sign-in did not start. Try again.');
   });
@@ -3480,7 +3492,7 @@
     try {
       var reg = await navigator.serviceWorker.ready;
       if (Notification.permission !== 'granted') { showToast('Turn on alerts first'); return; }
-      reg.showNotification('Daily Log', { body: 'Alerts work on this phone.', icon: 'icon-192.png', badge: 'icon-192.png', tag: 'test' });
+      reg.showNotification('Daily Log', { body: 'Alerts work on this phone.', icon: 'icon-192.png', badge: 'badge-96.png', tag: 'test' });
     } catch (e) { showToast('Could not show the test alert'); }
   });
 

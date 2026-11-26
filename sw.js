@@ -1,7 +1,7 @@
 // Daily Log service worker: lets the app open offline.
 // Network first (so new versions show up), cache as backup.
-const CACHE = 'daily-log-v17';
-const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const CACHE = 'daily-log-v18';
+const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './badge-96.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
@@ -40,7 +40,7 @@ self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (_) {}
   e.waitUntil(self.registration.showNotification(d.title || 'Daily Log', {
-    body: d.body || '', icon: 'icon-192.png', badge: 'icon-192.png', tag: d.tag || undefined, data: { url: './' }
+    body: d.body || '', icon: 'icon-192.png', badge: 'badge-96.png', tag: d.tag || undefined, data: { url: './' }
   }));
 });
 self.addEventListener('notificationclick', e => {
