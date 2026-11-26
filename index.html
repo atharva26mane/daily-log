@@ -457,6 +457,26 @@
     #acc-email { max-width: 72%; }
     .adm-ai { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; margin-left: auto; }
 
+        .fb-text { width: 100%; box-sizing: border-box; border: 1px solid rgba(128,128,128,.3); border-radius: 16px; padding: 12px 14px; font: 16px/1.45 var(--body); background: rgba(255,255,255,.55); color: inherit; resize: vertical; margin: 4px 0 12px; }
+    body.theme-volcano .fb-text { background: rgba(255,255,255,.06); }
+    #fb-send { width: 100%; min-height: 50px; }
+    .rem-add { display: grid; gap: 8px; margin-top: 6px; }
+    .rem-add .set-input { border: 1px solid rgba(128,128,128,.3); border-radius: 14px; padding: 10px 12px; min-height: 46px; background: rgba(255,255,255,.5); text-align: left; width: 100%; box-sizing: border-box; }
+    .rem-add-row { display: flex; gap: 8px; }
+    .rem-add-row .set-input { flex: 1; min-width: 0; text-align: left; }
+    .rem-days { display: flex; gap: 6px; }
+    .rem-days button { flex: 1; min-height: 40px; border-radius: 12px; border: 1px solid rgba(128,128,128,.35); background: transparent; color: inherit; font: 600 14px var(--body); }
+    .rem-days button.on { background: #609966; border-color: #609966; color: #fff; }
+    body.theme-volcano .rem-days button.on { background: #e8641a; border-color: #e8641a; color: #1b120e; }
+    .rem-item { display: flex; align-items: center; gap: 10px; border: 1px solid rgba(128,128,128,.25); background: rgba(128,128,128,.09); border-radius: 14px; padding: 8px 12px; margin: 0 0 6px; }
+    .rem-item b { flex: none; font-variant-numeric: tabular-nums; }
+    .rem-item span { flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: 14px; }
+    .rem-item small { display: block; opacity: .65; font-size: 12px; }
+    .adm-fb { border-top: 1px solid rgba(128,128,128,.25); padding: 10px 2px; font-size: 14px; line-height: 1.45; }
+    .adm-fb small { display: block; opacity: .65; margin-top: 2px; }
+    .adm-fb button { margin-top: 6px; }
+    #rem-mode { grid-template-columns: repeat(4, 1fr); }
+
     /* past days: no live sun, moon or night sky */
     body.past-day .orb, body.past-day .star, body.past-day .fly { display: none !important; }
     .sky-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -839,7 +859,9 @@
         <button class="set-row set-link" id="set-plan-row"><span class="set-name">My plan</span><span class="set-val">Redo questions</span></button>
         <button class="set-row set-link" id="set-cats-row"><span class="set-name">Categories</span><span class="set-val" id="set-cats-val">Add, rename, hide</span></button>
         <button class="set-row set-link" id="set-theme-row"><span class="set-name">Theme</span><span class="set-val" id="set-theme-val">Forest</span></button>
+        <button class="set-row set-link" id="set-rem-row"><span class="set-name">Reminders</span><span class="set-val">Water and your own</span></button>
         <button class="set-row set-link" id="set-ai-row"><span class="set-name">AI helper</span><span class="set-val" id="set-ai-val">Off</span></button>
+        <button class="set-row set-link" id="set-fb-row"><span class="set-name">Send feedback</span><span class="set-val">Tell me what to fix</span></button>
         <button class="set-row set-link" id="set-backup-row"><span class="set-name">Backup and restore</span><span class="set-val">Export / import</span></button>
       </div>
     </div>
@@ -937,11 +959,55 @@
         <p class="set-note">You see name, email and last active. Never anyone's logs.</p>
       </div>
       <div class="set-group">
+        <div class="set-label">Feedback</div>
+        <div id="adm-fb"><p class="set-note">Loading...</p></div>
+      </div>
+      <div class="set-group">
         <div class="set-label">AI keys you share</div>
         <label class="set-row"><span class="set-name">Groq key</span><input id="adm-groq" class="set-input" type="password" autocomplete="off" placeholder="Not set" /></label>
         <label class="set-row"><span class="set-name">Gemini key</span><input id="adm-gemini" class="set-input" type="password" autocomplete="off" placeholder="Not set" /></label>
         <button class="btn-primary" id="adm-save-keys" type="button">Save keys</button>
         <p class="set-note" id="adm-key-note">Only people you give AI access can use these.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEEDBACK MODAL -->
+  <div id="fb-modal" class="overlay">
+    <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Send feedback">
+      <div class="chat-head"><h2 class="sheet-title">Send feedback</h2><div class="chat-head-btns"><button id="fb-close">Close</button></div></div>
+      <p class="set-note">Tell me what is confusing, missing or broken. I read every message.</p>
+      <textarea id="fb-text" class="fb-text" rows="6" maxlength="1500" placeholder="Your message"></textarea>
+      <button class="btn-primary" id="fb-send" type="button">Send feedback</button>
+    </div>
+  </div>
+
+  <!-- REMINDERS MODAL -->
+  <div id="rem-modal" class="overlay">
+    <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Reminders">
+      <div class="chat-head"><h2 class="sheet-title">Reminders</h2><div class="chat-head-btns"><button id="rem-close">Done</button></div></div>
+      <div class="set-group">
+        <div class="set-label">This phone</div>
+        <div class="set-row"><span class="set-name">Alerts on this phone</span><label class="switch"><input type="checkbox" id="rem-push" /><span></span></label></div>
+        <p class="set-note" id="rem-push-note">Reminders can reach you even when the app is closed.</p>
+        <button class="set-row set-link" id="rem-test" type="button"><span class="set-name">Send a test alert</span><span class="set-val">Now</span></button>
+      </div>
+      <div class="set-group">
+        <div class="set-label">Water</div>
+        <div class="set-row"><span class="set-name">Water reminders</span><label class="switch"><input type="checkbox" id="rem-water" /><span></span></label></div>
+        <div class="set-name" style="margin:8px 4px 6px">How often</div>
+        <div class="seg" id="rem-mode"><button type="button" data-m="smart">Smart</button><button type="button" data-m="60">1h</button><button type="button" data-m="120">2h</button><button type="button" data-m="180">3h</button></div>
+        <p class="set-note" id="rem-smart-note">Smart adapts to your day: how much you have had, your activity, urine colour and constipation if you log them. Reminders stay between your wake and bed time.</p>
+      </div>
+      <div class="set-group">
+        <div class="set-label">Your own reminders</div>
+        <div id="rem-list"></div>
+        <div class="rem-add">
+          <input id="rem-label" class="set-input" type="text" maxlength="40" placeholder="What to remind (for example: take vitamins)" autocomplete="off" />
+          <div class="rem-add-row"><input id="rem-time" class="set-input" type="time" value="09:00" /><button class="adm-btn main" id="rem-add" type="button">Add</button></div>
+          <div class="rem-days" id="rem-days"><button type="button" data-d="1">M</button><button type="button" data-d="2">T</button><button type="button" data-d="3">W</button><button type="button" data-d="4">T</button><button type="button" data-d="5">F</button><button type="button" data-d="6">S</button><button type="button" data-d="0">S</button></div>
+          <p class="set-note">Pick the days, or leave all off for every day.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -1519,7 +1585,8 @@
         '11. STAY IN SCOPE. You only help with this Daily Log: logging entries, the user\'s water, food, fibre, medicines, symptoms, stool, sleep and weight, their goals and streaks, and simple routine tips based on their own log. For anything else (news, coding, homework, general chat, other apps) reply with one short friendly line like "I can only help with your Daily Log." and set action="none".',
         '12. Timing advice (for example "when should I drink water?"): look at the time now, the last water entry, and the meals logged today. Suggest small amounts (about 150 to 250 ml) spaced through the day, small sips close to a meal, and a proper glass about 30 to 45 minutes after a meal. Always say the reason in one short sentence. Never go over the daily target by a lot.',
         '13. You are not a doctor. Do not diagnose. If the user reports blood, strong pain or something worrying, tell them in one short line to talk to a doctor, and still log it.',
-        '14. If you are unsure what the user means or a time or amount is missing, ask ONE short question instead of guessing.'
+        '14. If you are unsure what the user means or a time or amount is missing, ask ONE short question instead of guessing.\n' +
+        '15. Water needs differ by person. Dark yellow or orange urine means drink more now. Pale or clear urine means they are well hydrated, so no extra water is needed. Constipation or hard stool needs steady water through the day (plus fibre), not one big drink. Heavy activity or heat means more. Use only what the person has logged or said, and never diagnose. For anything serious, suggest seeing a doctor.'
       ].filter(Boolean).join('\n');
     }
 
@@ -3213,7 +3280,237 @@
   $('adm-close').addEventListener('click', function(){ adm.classList.remove('open'); });
   adm.addEventListener('click', function(e){ if (e.target === adm) adm.classList.remove('open'); });
 
+  window.__auth = { sb: function(){ return sb; }, me: function(){ return me; } };
   boot();
+})();
+</script>
+<script>
+// =========================================================================
+// REMINDERS, SMART WATER, ALERTS (web push) AND FEEDBACK
+// =========================================================================
+(function(){
+  var VAPID_PUB = 'BCZGNjg_MOwSmBMavDZfpwrqkl58SyrbVJJ5gQmGiR1-4zG9a6uypjUHWk2_Am-HclHwCz38x-9n2hfnpk2mdOY';
+  var PUSHK = 'daily_log_push_v1';
+  function $(id) { return document.getElementById(id); }
+  function m2(h) { return String(h).padStart(2, '0'); }
+  function toMin(t) { var p = String(t || '').split(':'); return (+p[0]) * 60 + (+p[1] || 0); }
+  function sbc() { return window.__auth && window.__auth.sb(); }
+  function who() { return window.__auth && window.__auth.me(); }
+
+  // ---------- smart water gap (pure, easy to test) ----------
+  // ctx: { now, wake, bed, target, total, activity, goals[], texts[] (newest last) }
+  // returns { gap (minutes), reasons[] }
+  var DARK = /(dark|deep|yellow|orange|brown|amber)\s+(urine|pee)|(urine|pee)[^.\n]{0,20}(dark|yellow|orange|brown|amber)/i;
+  var PALE = /(clear|pale|white|colou?rless|transparent|light)\s+(urine|pee)|(urine|pee)[^.\n]{0,20}(clear|pale|white|colou?rless|transparent|light)/i;
+  var CONSTI = /constipat|hard stool|no stool|not passed|straining|stool[^.\n]{0,20}(hard|dry|pain)/i;
+  function waterGap(c) {
+    var gap = 120, why = [];
+    var span = Math.max(240, c.bed - c.wake), frac = Math.min(1, Math.max(0, (c.now - c.wake) / span));
+    var expected = c.target * frac;
+    if (c.activity === 'active') { gap -= 20; why.push('you are very active'); }
+    if (c.total < expected * 0.7) { gap -= 25; why.push('you are behind for this time of day'); }
+    else if (c.total > expected * 1.1 && c.total > 0) { gap += 30; why.push('you are ahead of pace'); }
+    var urine = '';
+    (c.texts || []).forEach(function(t) { if (DARK.test(t)) urine = 'dark'; else if (PALE.test(t)) urine = 'pale'; });
+    if (urine === 'dark') { gap -= 30; why.push('your urine was dark'); }
+    if (urine === 'pale') { gap += 40; why.push('your urine was pale, so you are well hydrated'); }
+    var consti = (c.texts || []).some(function(t) { return CONSTI.test(t); });
+    if (consti) { gap -= 20; why.push('constipation needs steady water'); }
+    gap = Math.min(180, Math.max(60, Math.round(gap / 5) * 5));
+    return { gap: gap, reasons: why, urine: urine, consti: consti };
+  }
+  window.__waterGapFor = waterGap;
+
+  // read this person's real state from the log
+  function context() {
+    var n = new Date(), now = n.getHours() * 60 + n.getMinutes();
+    var pr = SETTINGS.profile || {}, key = getTodayKey(), es = getDayEntries(key);
+    var texts = getDayEntries(shiftDateKey(key, -1)).concat(es).map(function(e){ return e.text || ''; });
+    return { now: now, wake: toMin(pr.wake || '06:30'), bed: toMin(pr.bed || '23:00'), target: WATER_TARGET_ML, total: getWaterTotal(es), activity: pr.activity || 'moderate', goals: pr.goals || [], texts: texts, entries: es };
+  }
+  function modeGap(c) {
+    var R = SETTINGS.reminders || {}, mode = (R.water && R.water.mode) || 'smart';
+    if (mode !== 'smart' && +mode) return { gap: +mode, reasons: [] };
+    return waterGap(c);
+  }
+  window.__waterGap = function() { return modeGap(context()); };
+
+  // ---------- reminder settings ----------
+  function R() { var r = SETTINGS.reminders = SETTINGS.reminders || {}; r.water = r.water || { on: true, mode: 'smart' }; r.custom = r.custom || []; return r; }
+  function save() { saveSettings(); }
+
+  // ---------- build the schedule (next ~30 hours) ----------
+  function atMin(dayOffset, minutes) { var d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime() + dayOffset * 86400000 + minutes * 60000; }
+  function buildSchedule() {
+    var r = R(), out = [], nowMs = Date.now(), c = context();
+    var horizon = nowMs + 30 * 3600000;
+    // custom reminders
+    r.custom.forEach(function(x) {
+      if (x.on === false) return;
+      for (var d = 0; d <= 1; d++) {
+        var at = atMin(d, toMin(x.time)), dow = new Date(at).getDay();
+        if (at <= nowMs + 60000 || at > horizon) continue;
+        if (x.days && x.days.length && x.days.indexOf(dow) < 0) continue;
+        out.push({ at: at, title: x.label || 'Reminder', body: 'Your reminder for ' + x.time, tag: 'c' + x.id });
+      }
+    });
+    // smart water
+    if (r.water.on !== false && c.total < c.target) {
+      var plan = modeGap(c), gap = plan.gap, amt = Math.min(300, Math.max(150, Math.round((c.target - c.total) / 6 / 50) * 50));
+      var waters = sortEntries(c.entries.filter(function(e){ return e.cat === 'water' && extractWaterMl(e.text) > 0; }));
+      var last = waters.length ? toMin(waters[waters.length - 1].time) : null;
+      var t = last === null ? Math.max(c.now + 5, c.wake + 30) : Math.max(c.now + 5, last + gap);
+      var meals = ['breakfast', 'lunch', 'dinner'].map(function(k){ return toMin((SETTINGS.mealTimes || {})[k] || { breakfast: '08:30', lunch: '13:00', dinner: '20:30' }[k]); });
+      var n = 0;
+      while (t < c.bed && n < 7) {
+        var mt = meals.filter(function(m){ return t > m - 35 && t < m; })[0];
+        if (mt !== undefined) t = mt + 30;
+        if (t >= c.bed) break;
+        out.push({ at: atMin(0, t), title: last === null && n === 0 ? 'No water yet today' : 'Time for water', body: 'About ' + amt + ' ml now.' + (plan.reasons.length && n === 0 ? ' ' + plan.reasons[0].charAt(0).toUpperCase() + plan.reasons[0].slice(1) + '.' : ''), tag: 'water' });
+        t += gap; n++;
+      }
+      // tomorrow morning
+      var tm = atMin(1, c.wake + 30);
+      if (tm < horizon + 3600000) out.push({ at: tm, title: 'Good morning', body: 'Start the day with a glass of water.', tag: 'water' });
+    }
+    return out.filter(function(x){ return x.at > nowMs; }).sort(function(a, b){ return a.at - b.at; }).slice(0, 14);
+  }
+  window.__buildSchedule = buildSchedule;
+
+  var schedTimer = null, lastSig = '';
+  function subscribedHere() { try { return localStorage.getItem(PUSHK) === '1'; } catch (e) { return false; } }
+  function schedSoon() { clearTimeout(schedTimer); schedTimer = setTimeout(pushSchedule, 4000); }
+  async function pushSchedule() {
+    var sb = sbc(), me = who();
+    if (!sb || !me || me.status !== 'approved' || !subscribedHere()) return;
+    var rows = buildSchedule().map(function(x){ return { user_id: me.uid, kind: 'sched', due_at: new Date(x.at).toISOString(), title: x.title, body: x.body, tag: x.tag }; });
+    var sig = JSON.stringify(rows.map(function(r){ return [r.due_at, r.title, r.body]; }));
+    if (sig === lastSig) return;
+    try {
+      var d = await sb.from('reminders').delete().eq('user_id', me.uid).eq('kind', 'sched').eq('sent', false);
+      if (d.error) throw d.error;
+      if (rows.length) { var i = await sb.from('reminders').insert(rows); if (i.error) throw i.error; }
+      lastSig = sig;
+    } catch (e) {}
+  }
+  // recalculate whenever the log or settings change
+  var wrapped = false;
+  function hook() {
+    if (wrapped || !window.__cloud) return; wrapped = true;
+    var old = window.__cloud.dirty;
+    window.__cloud.dirty = function() { old(); schedSoon(); };
+  }
+  setInterval(hook, 1500);
+  document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') { clearTimeout(schedTimer); pushSchedule(); } else schedSoon(); });
+
+  // ---------- push subscription ----------
+  function b64(s) { var p = '='.repeat((4 - s.length % 4) % 4), b = (s + p).replace(/-/g, '+').replace(/_/g, '/'), r = atob(b), o = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) o[i] = r.charCodeAt(i); return o; }
+  async function enablePush() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) { showToast('This browser cannot show alerts. Open the site in Chrome.'); return false; }
+    var perm = await Notification.requestPermission();
+    if (perm !== 'granted') { showToast('Alerts are blocked. Allow notifications for this site in Chrome settings.'); return false; }
+    try {
+      var reg = await navigator.serviceWorker.ready;
+      var sub = await reg.pushManager.getSubscription();
+      if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(VAPID_PUB) });
+      var j = sub.toJSON(), sb = sbc(), me = who();
+      var r = await sb.from('push_subscriptions').upsert({ endpoint: j.endpoint, user_id: me.uid, p256dh: j.keys.p256dh, auth: j.keys.auth, ua: navigator.userAgent.slice(0, 120) }, { onConflict: 'endpoint' });
+      if (r.error) throw r.error;
+      try { localStorage.setItem(PUSHK, '1'); } catch (e) {}
+      lastSig = ''; pushSchedule();
+      return true;
+    } catch (e) { showToast('Could not turn on alerts'); return false; }
+  }
+  async function disablePush() {
+    try {
+      var reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
+      if (sub) { var ep = sub.endpoint; await sub.unsubscribe(); await sbc().from('push_subscriptions').delete().eq('endpoint', ep); }
+      await sbc().from('reminders').delete().eq('user_id', who().uid).eq('kind', 'sched').eq('sent', false);
+    } catch (e) {}
+    try { localStorage.removeItem(PUSHK); } catch (e) {}
+  }
+
+  // ---------- reminders screen ----------
+  var rm = $('rem-modal'), days = {};
+  function drawList() {
+    var r = R(), list = $('rem-list');
+    list.innerHTML = r.custom.length ? r.custom.map(function(x) {
+      var dn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], ds = x.days && x.days.length ? x.days.map(function(d){ return dn[d]; }).join(', ') : 'Every day';
+      return '<div class="rem-item"><b>' + escapeHtml(x.time) + '</b><span>' + escapeHtml(x.label) + '<small>' + ds + '</small></span><label class="switch"><input type="checkbox" data-t="' + x.id + '" ' + (x.on !== false ? 'checked' : '') + ' /><span></span></label><button class="adm-btn" data-del="' + x.id + '" aria-label="Delete">x</button></div>';
+    }).join('') : '<p class="set-note">None yet.</p>';
+  }
+  function drawRem() {
+    var r = R();
+    $('rem-push').checked = subscribedHere() && ('Notification' in window) && Notification.permission === 'granted';
+    $('rem-water').checked = r.water.on !== false;
+    document.querySelectorAll('#rem-mode button').forEach(function(b){ b.classList.toggle('on', b.dataset.m === (r.water.mode || 'smart')); });
+    var plan = waterGap(context());
+    $('rem-smart-note').textContent = (r.water.mode || 'smart') === 'smart'
+      ? 'Smart gap right now: about ' + plan.gap + ' minutes' + (plan.reasons.length ? ' (' + plan.reasons.join(', ') + ')' : '') + '. It adapts to your day, urine colour and constipation if you log them. Only between your wake and bed time.'
+      : 'A reminder every ' + (r.water.mode / 60) + ' hour(s) while you are behind your goal, between your wake and bed time.';
+    drawList();
+  }
+  function openRem() { $('settings-modal').classList.remove('open'); drawRem(); rm.classList.add('open'); }
+  $('set-rem-row').addEventListener('click', openRem);
+  $('rem-close').addEventListener('click', function(){ rm.classList.remove('open'); });
+  rm.addEventListener('click', function(e){ if (e.target === rm) rm.classList.remove('open'); });
+  $('rem-push').addEventListener('change', async function(e) {
+    if (e.target.checked) { var ok = await enablePush(); e.target.checked = !!ok; } else { await disablePush(); }
+  });
+  $('rem-water').addEventListener('change', function(e){ R().water.on = e.target.checked; save(); drawRem(); schedSoon(); });
+  $('rem-mode').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; R().water.mode = b.dataset.m; save(); drawRem(); lastSig = ''; schedSoon(); });
+  $('rem-days').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; b.classList.toggle('on'); days[b.dataset.d] = b.classList.contains('on'); });
+  $('rem-add').addEventListener('click', function() {
+    var label = $('rem-label').value.trim(), time = $('rem-time').value;
+    if (!label || !time) { showToast('Add a name and a time'); return; }
+    var ds = Object.keys(days).filter(function(k){ return days[k]; }).map(Number);
+    R().custom.push({ id: Date.now().toString(36), label: label, time: time, days: ds, on: true });
+    save(); $('rem-label').value = ''; days = {}; document.querySelectorAll('#rem-days button').forEach(function(b){ b.classList.remove('on'); });
+    drawList(); lastSig = ''; schedSoon(); showToast('Reminder added');
+  });
+  $('rem-list').addEventListener('click', function(e) {
+    var b = e.target.closest('[data-del]'); if (!b) return;
+    var r = R(); r.custom = r.custom.filter(function(x){ return x.id !== b.dataset.del; }); save(); drawList(); lastSig = ''; schedSoon();
+  });
+  $('rem-list').addEventListener('change', function(e) {
+    var i = e.target; if (!i.dataset.t) return;
+    R().custom.forEach(function(x){ if (x.id === i.dataset.t) x.on = i.checked; }); save(); lastSig = ''; schedSoon();
+  });
+  $('rem-test').addEventListener('click', async function() {
+    try {
+      var reg = await navigator.serviceWorker.ready;
+      if (Notification.permission !== 'granted') { showToast('Turn on alerts first'); return; }
+      reg.showNotification('Daily Log', { body: 'Alerts work on this phone.', icon: 'icon-192.png', badge: 'icon-192.png', tag: 'test' });
+    } catch (e) { showToast('Could not show the test alert'); }
+  });
+
+  // ---------- feedback ----------
+  var fb = $('fb-modal');
+  $('set-fb-row').addEventListener('click', function(){ $('settings-modal').classList.remove('open'); $('fb-text').value = ''; fb.classList.add('open'); });
+  $('fb-close').addEventListener('click', function(){ fb.classList.remove('open'); });
+  fb.addEventListener('click', function(e){ if (e.target === fb) fb.classList.remove('open'); });
+  $('fb-send').addEventListener('click', async function() {
+    var msg = $('fb-text').value.trim(), me = who();
+    if (msg.length < 3) { showToast('Write a message first'); return; }
+    var r = await sbc().from('feedback').insert({ user_id: me.uid, name: me.name || '', email: me.email || '', message: msg });
+    if (r.error) { showToast('Could not send. Try again.'); return; }
+    fb.classList.remove('open'); showToast('Thank you. Sent.');
+  });
+  // admin: read feedback
+  async function loadFb() {
+    var box = $('adm-fb'); if (!box) return;
+    var r = await sbc().from('feedback').select('id,name,email,message,created_at');
+    if (r.error) { box.innerHTML = '<p class="set-note">Could not load feedback.</p>'; return; }
+    var rows = r.data.sort(function(a, b){ return Date.parse(b.created_at) - Date.parse(a.created_at); });
+    box.innerHTML = rows.length ? rows.map(function(f) {
+      return '<div class="adm-fb"><b>' + escapeHtml(f.name || f.email || 'Someone') + '</b>: ' + escapeHtml(f.message) + '<small>' + escapeHtml(f.email || '') + ' - ' + new Date(f.created_at).toLocaleString() + '</small><button class="adm-btn" data-fbdel="' + f.id + '">Delete</button></div>';
+    }).join('') : '<p class="set-note">No feedback yet.</p>';
+  }
+  $('set-admin-row').addEventListener('click', loadFb);
+  $('adm-fb').addEventListener('click', async function(e) {
+    var b = e.target.closest('[data-fbdel]'); if (!b) return;
+    await sbc().from('feedback').delete().eq('id', b.dataset.fbdel); loadFb();
+  });
 })();
 </script>
 <script>
@@ -3231,6 +3528,7 @@
       var waters = sortEntries(es.filter(function(e){ return e.cat === 'water' && extractWaterMl(e.text) > 0; }));
       var lastW = waters.length ? mins(waters[waters.length - 1].time) : null, since = lastW === null ? null : now - lastW;
       var wake = mins((SETTINGS.profile && SETTINGS.profile.wake) || '06:30'), bed = mins((SETTINGS.profile && SETTINGS.profile.bed) || '23:00');
+      var GAP = window.__waterGap ? window.__waterGap() : { gap: 90, reasons: [] };
       var t = '', sub = '', amt = Math.min(250, Math.max(100, Math.round(left / 50) * 50));
       var foods = es.filter(function(e){ return e.cat === 'food'; }).map(function(e){ return mins(e.time); }).filter(function(m){ return now - m >= 0 && now - m <= 60; });
       var next = meals().filter(function(m){ return m.at > now; })[0];
@@ -3239,8 +3537,8 @@
       else if (next && next.at - now > 0 && next.at - now <= 35) { t = next.name + ' in ' + (next.at - now) + ' min'; sub = 'Only small sips now, then a proper glass about 30 minutes after you eat.'; }
       else if (foods.length) { var since0 = now - Math.max.apply(null, foods); t = 'Good time for ~' + amt + ' ml'; sub = since0 >= 25 ? 'Your meal was ' + since0 + ' min ago. A glass now settles well.' : 'Wait a few minutes after eating, then take a glass.'; }
       else if (lastW === null) { t = 'No water yet today'; sub = 'Start with a glass (about ' + amt + ' ml).'; }
-      else if (since >= 90) { t = 'Time for ~' + amt + ' ml'; sub = 'It has been ' + Math.floor(since / 60) + 'h ' + pad2(since % 60) + 'm since your last water.'; }
-      else { t = 'On track'; sub = 'Next glass around ' + hhmm(lastW + 90) + '. ' + left + ' ml to go.'; }
+      else if (since >= GAP.gap) { t = 'Time for ~' + amt + ' ml'; sub = (GAP.reasons.length ? GAP.reasons[0].charAt(0).toUpperCase() + GAP.reasons[0].slice(1) + '. ' : '') + 'It has been ' + Math.floor(since / 60) + 'h ' + pad2(since % 60) + 'm since your last water.'; }
+      else { t = 'On track'; sub = 'Next glass around ' + hhmm(lastW + GAP.gap) + '. ' + left + ' ml to go.'; }
       document.getElementById('nudge-t').textContent = t; document.getElementById('nudge-s').textContent = sub; box.hidden = false;
     }
     window.__nudge = nudge; nudge(); setInterval(nudge, 30000);
