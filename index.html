@@ -257,8 +257,10 @@
     body[data-mood="dusk"] { --sky-top: #96b6c5; --sky-bottom: #eee0c9; --cloud: rgba(238,224,201,0.92); --sun-c: #d9b48c; }
     body[data-mood="night"] { --sky-top: #232e21; --sky-bottom: #40513b; --head: #fefae0; --head-sub: #a9b388; --head-bg: rgba(254,250,224,0.1); --head-line: rgba(254,250,224,0.3); --cloud: rgba(173,196,206,0.16); }
 
-    .clock { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; color: var(--head); margin-top: 6px; }
+    .clock { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: 0.005em; font-variant-numeric: tabular-nums; color: var(--head); margin-top: 6px; }
 
+    /* past days: no live sun, moon or night sky */
+    body.past-day .orb, body.past-day .star, body.past-day .fly { display: none !important; }
     .sky-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .orb { position: absolute; width: 58px; height: 58px; border-radius: 50%; opacity: 0; transition: opacity 1.2s ease; }
     .orb.sun { left: var(--sun-x, 70%); top: var(--sun-y, 80px); opacity: var(--sun-o, 0); background: radial-gradient(circle, var(--sun-c) 0 38%, transparent 70%); box-shadow: 0 0 40px 18px color-mix(in srgb, var(--sun-c) 55%, transparent); }
@@ -413,7 +415,7 @@
           <div>
             <h1 id="header-date"></h1>
             <div id="header-label" class="top-sub"></div>
-            <div id="clock" class="clock" aria-label="Current time"></div>
+            <div id="clock" class="clock" aria-label="Greeting"></div>
           </div>
           <div class="top-actions" id="today-actions">
             <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
@@ -1430,6 +1432,7 @@
       }
 
       document.getElementById('header-date').textContent = weekdayLong(activeDateKey);
+      if (typeof tickClock === 'function') tickClock();
       document.getElementById('header-label').textContent = viewingPastDay
         ? 'Past day, ' + shortDate(activeDateKey)
         : shortDate(activeDateKey);
@@ -1690,6 +1693,7 @@
       if (h >= 5 && h < 8) mood = 'dawn';
       else if (h >= 17 && h < 19.5) mood = 'dusk';
       else if (h >= 19.5 || h < 5) mood = 'night';
+      if (viewingPastDay) mood = 'day';
       document.body.dataset.mood = mood;
 
       const pSun = (h - 5.5) / 14;            // sun up from 05:30 to 19:30
@@ -1727,10 +1731,31 @@
       const diff = (now - lw) / 1000;
       el.textContent = diff < 0 ? 'Since last water --:--:--' : 'Since last water ' + hms(diff);
     }
+    // Short, calm greeting (replaces the live clock)
+    const GREETINGS = [
+      [0, 4,  ['Still up?', 'Quiet hours']],
+      [4, 6,  ['Early start', 'Up early']],
+      [6, 12, ['Good morning', 'Morning light']],
+      [12, 17, ['Good afternoon', 'Afternoon']],
+      [17, 21, ['Good evening', 'Evening']],
+      [21, 24, ['Winding down', 'Good night']]
+    ];
+    function greetingFor(d) {
+      const h = d.getHours();
+      for (const [a, b, list] of GREETINGS) {
+        if (h >= a && h < b) return list[(d.getDate() + h) % list.length];
+      }
+      return 'Hello';
+    }
     function tickClock() {
       const n = new Date();
       const c = document.getElementById('clock');
-      if (c) c.textContent = pad2(n.getHours()) + ':' + pad2(n.getMinutes()) + ':' + pad2(n.getSeconds());
+      if (c) {
+        c.style.display = viewingPastDay ? 'none' : '';
+        const g = greetingFor(n);
+        if (c.textContent !== g) c.textContent = g;
+      }
+      document.body.classList.toggle('past-day', !!viewingPastDay);
       updateSince(n);
     }
     setInterval(tickClock, 1000);
