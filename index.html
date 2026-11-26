@@ -3579,19 +3579,36 @@
     if (r.error) { showToast('Could not save'); i.checked = !i.checked; } else { showToast(i.checked ? 'AI access on' : 'AI access off'); if (i.checked) { var gq = $('adm-groq').placeholder, gm = $('adm-gemini').placeholder; if (/Not set/.test(gq) && /Not set/.test(gm)) setTimeout(function(){ showToast('No key saved yet. Add a key above first.'); }, 1800); } }
   });
   async function keyStatus() {
-    var r = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
-    if (r.error || !r.data) return;
-    $('adm-groq').placeholder = r.data.groq_key ? 'Saved (type to replace)' : 'Not set';
-    $('adm-gemini').placeholder = r.data.gemini_key ? 'Saved (type to replace)' : 'Not set';
+    var g = false, m = false, got = false;
+    try {
+      var r = await sb.rpc('get_ai_keys');
+      if (!r.error && r.data) { g = !!r.data.groq_key; m = !!r.data.gemini_key; got = true; }
+    } catch (e) {}
+    if (!got) {
+      var t = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
+      if (t.error || !t.data) return;
+      g = !!t.data.groq_key; m = !!t.data.gemini_key;
+    }
+    $('adm-groq').placeholder = g ? 'Saved (type to replace)' : 'Not set';
+    $('adm-gemini').placeholder = m ? 'Saved (type to replace)' : 'Not set';
   }
   $('adm-save-keys').addEventListener('click', async function() {
-    var patch = { id: 1 }, g = $('adm-groq').value.trim(), m = $('adm-gemini').value.trim();
-    if (g) patch.groq_key = g; if (m) patch.gemini_key = m;
+    var g = $('adm-groq').value.trim(), m = $('adm-gemini').value.trim();
     if (!g && !m) { showToast('Paste a key first'); return; }
-    var r = await sb.from('app_config').upsert(patch);
-    if (r.error) { showToast('Could not save keys'); return; }
+    var err = '';
+    var r = await sb.rpc('set_ai_keys', { p_groq: g || null, p_gemini: m || null });
+    if (r.error) {
+      // server function not installed: try writing the table directly
+      var patch = { id: 1 }; if (g) patch.groq_key = g; if (m) patch.gemini_key = m;
+      var r2 = await sb.from('app_config').upsert(patch);
+      if (r2.error) err = (r2.error.message || r.error.message || 'unknown error');
+    }
+    if (err) { showToast('Could not save: ' + err.slice(0, 80)); return; }
     $('adm-groq').value = ''; $('adm-gemini').value = '';
-    showToast('Keys saved'); keyStatus(); loadCloudKeys();
+    await keyStatus();
+    var ok = ($('adm-groq').placeholder + $('adm-gemini').placeholder).indexOf('Saved') >= 0;
+    showToast(ok ? 'Keys saved and checked' : 'Saved, but the server shows no key. Run the set_ai_keys SQL.');
+    loadCloudKeys();
   });
   $('set-admin-row').addEventListener('click', function() {
     $('settings-modal').classList.remove('open');
