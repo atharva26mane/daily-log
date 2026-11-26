@@ -48,15 +48,16 @@
     .container { max-width: 560px; margin: 0 auto; padding: 0 16px; }
 
     /* ---------- Sky + forest ---------- */
-    .sky { background: linear-gradient(180deg, var(--cream) 0%, var(--mist) 100%); padding-top: env(safe-area-inset-top, 0px); }
+    .sky { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%); padding-top: env(safe-area-inset-top, 0px); }
+    .sky > .container, .sky > .forest { position: relative; z-index: 2; }
     .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 0 10px; }
-    .top h1 { font-family: var(--display); font-size: 36px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; margin: 0; color: var(--forest); }
-    .top-sub { color: var(--moss); font-size: 15px; margin-top: 4px; }
+    .top h1 { font-family: var(--display); font-size: 36px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; margin: 0; color: var(--head); }
+    .top-sub { color: var(--head-sub); font-size: 15px; margin-top: 4px; }
     .top-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
-    .icon-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(64,81,59,0.08); border: 1px solid rgba(64,81,59,0.22); border-radius: 14px; cursor: pointer; color: var(--forest); }
+    .icon-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--head-bg); border: 1px solid var(--head-line); border-radius: 14px; cursor: pointer; color: var(--head); }
     .icon-btn:active { background: rgba(64,81,59,0.2); }
-    .pill-btn { min-height: 44px; background: rgba(64,81,59,0.08); border: 1px solid rgba(64,81,59,0.22); border-radius: 14px; padding: 0 14px; font-size: 15px; font-weight: 600; color: var(--forest); cursor: pointer; }
+    .pill-btn { min-height: 44px; background: var(--head-bg); border: 1px solid var(--head-line); border-radius: 14px; padding: 0 14px; font-size: 15px; font-weight: 600; color: var(--head); cursor: pointer; }
     .pill-btn:active { background: rgba(64,81,59,0.2); }
 
     .forest { position: relative; height: 170px; overflow: hidden; cursor: pointer; }
@@ -250,6 +251,65 @@
       .tank-fill, .sea, .toast { transition: none; }
       .overlay.open, .overlay.open .sheet { animation: none; }
     }
+    /* ---------- Time of day (changes the sky, sun, moon and creatures) ---------- */
+    body { --sky-top: #adc4ce; --sky-bottom: #edf1d6; --head: #40513b; --head-sub: #5f6f52; --head-bg: rgba(64,81,59,0.08); --head-line: rgba(64,81,59,0.22); --cloud: rgba(241,240,232,0.96); --sun-c: #f3dba6; }
+    body[data-mood="dawn"] { --sky-top: #eee0c9; --sky-bottom: #f1f0e8; --cloud: rgba(254,250,224,0.95); --sun-c: #e2bf8f; }
+    body[data-mood="dusk"] { --sky-top: #96b6c5; --sky-bottom: #eee0c9; --cloud: rgba(238,224,201,0.92); --sun-c: #d9b48c; }
+    body[data-mood="night"] { --sky-top: #232e21; --sky-bottom: #40513b; --head: #fefae0; --head-sub: #a9b388; --head-bg: rgba(254,250,224,0.1); --head-line: rgba(254,250,224,0.3); --cloud: rgba(173,196,206,0.16); }
+
+    .clock { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; color: var(--head); margin-top: 6px; }
+
+    .sky-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; width: 58px; height: 58px; border-radius: 50%; opacity: 0; transition: opacity 1.2s ease; }
+    .orb.sun { left: var(--sun-x, 70%); top: var(--sun-y, 80px); opacity: var(--sun-o, 0); background: radial-gradient(circle, var(--sun-c) 0 38%, transparent 70%); box-shadow: 0 0 40px 18px color-mix(in srgb, var(--sun-c) 55%, transparent); }
+    .orb.moon { left: var(--moon-x, 70%); top: var(--moon-y, 80px); opacity: var(--moon-o, 0); background: radial-gradient(circle at 38% 38%, #f1f0e8 0 55%, #cfd8cc 100%); box-shadow: 0 0 34px 10px rgba(173,196,206,0.28); width: 38px; height: 38px; }
+
+    .cloud { position: absolute; left: 0; color: var(--cloud); animation: cloud linear infinite; will-change: transform; }
+    .cloud svg { width: 100%; height: auto; fill: currentColor; stroke: none; display: block; }
+    .cloud.c1 { top: 28px; width: 120px; animation-duration: 90s; animation-delay: -30s; }
+    .cloud.c2 { top: 92px; width: 88px; animation-duration: 120s; animation-delay: -80s; opacity: 0.8; }
+    .cloud.c3 { top: 150px; width: 150px; animation-duration: 150s; animation-delay: -10s; opacity: 0.7; }
+    @keyframes cloud { from { transform: translateX(-200px); } to { transform: translateX(calc(100vw + 200px)); } }
+
+    .bird { position: absolute; top: 60px; left: 0; width: 26px; height: 12px; stroke: #5f6f52; fill: none; stroke-width: 1.8; opacity: 0; animation: fly 34s linear infinite; }
+    .bird.b2 { top: 84px; width: 20px; animation-delay: -3s; animation-duration: 38s; }
+    body[data-mood="day"] .bird, body[data-mood="dawn"] .bird { opacity: 0.8; }
+    @keyframes fly { from { transform: translate(calc(100vw + 40px), 10px); } 50% { transform: translate(50vw, -14px); } to { transform: translate(-60px, 8px); } }
+
+    .star { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fefae0; opacity: 0; }
+    body[data-mood="night"] .star { animation: twinkle 4s ease-in-out infinite; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.95; } }
+
+    .forest-fx { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+    .leaf { position: absolute; top: 0; width: 14px; height: 14px; fill: #609966; stroke: none; opacity: 0; animation: leaf linear infinite; }
+    .leaf.alt { fill: #a9b388; }
+    .leaf svg { width: 100%; height: 100%; fill: inherit; stroke: none; display: block; }
+    body[data-mood="night"] .leaf { display: none; }
+    @keyframes leaf { 0% { transform: translate(0, -20px) rotate(0); opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { transform: translate(var(--dx, -60px), 190px) rotate(420deg); opacity: 0; } }
+    .fly { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #fefae0; box-shadow: 0 0 10px 4px rgba(254,250,224,0.65); opacity: 0; }
+    body[data-mood="night"] .fly { animation: glow 6s ease-in-out infinite, wander 11s ease-in-out infinite; }
+    @keyframes glow { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
+    @keyframes wander { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(22px, -16px); } 66% { transform: translate(-14px, 10px); } }
+
+    .tank-since { margin-top: 6px; font-size: 14px; color: var(--moss); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+    /* crab on the sand */
+    .crab { position: absolute; z-index: 3; left: 0; top: 318px; width: 46px; height: 34px; padding: 0; border: none; background: none; cursor: pointer; animation: scuttle 30s linear infinite; }
+    .crab svg { width: 46px; height: 34px; fill: #b99470; stroke: none; }
+    .crab .legs { animation: legs 0.28s ease-in-out infinite alternate; transform-origin: 50% 70%; }
+    .crab.hop svg { animation: hop 0.6s ease-out; }
+    @keyframes scuttle { 0% { transform: translateX(-70px); } 100% { transform: translateX(calc(100vw + 70px)); } }
+    @keyframes legs { to { transform: translateY(1.5px) scaleX(1.04); } }
+    @keyframes hop { 40% { transform: translateY(-16px) rotate(-8deg); } 100% { transform: translateY(0); } }
+
+    .glint { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #f1f0e8; opacity: 0; animation: twinkle 3.5s ease-in-out infinite; }
+    body[data-mood="night"] .shore::before { content: ""; position: absolute; inset: 0; z-index: 3; background: rgba(35,46,33,0.32); pointer-events: none; }
+    body[data-mood="dusk"] .shore::before { content: ""; position: absolute; inset: 0; z-index: 3; background: rgba(185,148,112,0.14); pointer-events: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cloud, .bird, .leaf, .fly, .star, .crab, .crab .legs, .glint { animation: none !important; }
+      .cloud.c1 { left: 20%; } .cloud.c2 { left: 60%; } .cloud.c3 { left: 40%; }
+    }
   </style>
 </head>
 <body>
@@ -262,6 +322,7 @@
           <div>
             <h1 id="header-date"></h1>
             <div id="header-label" class="top-sub"></div>
+            <div id="clock" class="clock" aria-label="Current time"></div>
           </div>
           <div class="top-actions" id="today-actions">
             <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
@@ -287,6 +348,7 @@
           </div>
           <div class="tank-num"><span id="tank-ml">0</span><small>ml</small></div>
           <div class="tank-sub" id="tank-sub"></div>
+          <div class="tank-since" id="tank-since"></div>
           <div class="tank-quick" id="tank-quick">
             <button class="quick-btn" data-ml="100">+100</button>
             <button class="quick-btn" data-ml="200">+200</button>
@@ -309,6 +371,7 @@
       <svg class="deco" style="right:9%;top:330px;width:34px;height:34px;transform:rotate(22deg);opacity:.7" viewBox="0 0 40 40"><polygon points="20.0,2.0 24.7,14.5 38.1,15.1 27.6,23.5 31.2,36.4 20.0,29.0 8.8,36.4 12.4,23.5 1.9,15.1 15.3,14.5"/></svg>
       <svg class="deco" style="left:38%;top:285px;width:14px;height:14px;opacity:.55" viewBox="0 0 10 10"><ellipse cx="5" cy="5" rx="5" ry="4"/></svg>
       <svg class="deco" style="left:72%;top:262px;width:10px;height:10px;opacity:.5" viewBox="0 0 10 10"><ellipse cx="5" cy="5" rx="5" ry="4"/></svg>
+      <button class="crab" id="crab" aria-label="Crab. Tap to check your water"><svg viewBox="0 0 46 34" aria-hidden="true"><g class="legs"><path d="M8 22 L1 28 M10 25 L4 32 M38 22 L45 28 M36 25 L42 32 M14 27 L11 33 M32 27 L35 33" stroke="#b99470" stroke-width="2.2" stroke-linecap="round" fill="none"/></g><ellipse cx="23" cy="21" rx="14" ry="9"/><path d="M12 15 C5 12 4 5 9 3 C12 6 12 10 15 13Z"/><path d="M34 15 C41 12 42 5 37 3 C34 6 34 10 31 13Z"/><circle cx="18" cy="11" r="2.2" fill="#fefae0"/><circle cx="28" cy="11" r="2.2" fill="#fefae0"/><circle cx="18" cy="11" r="1" fill="#40513b"/><circle cx="28" cy="11" r="1" fill="#40513b"/></svg></button>
       <div class="shore-inner">
         <h2 class="shore-title">Your week on the shore</h2>
         <p class="shore-sub">A filled shell means you reached your water target that day. Tap a shell to open the day.</p>
@@ -1232,6 +1295,7 @@
 
       document.getElementById('shore').style.setProperty('--tide', Math.round(waterPct));
       renderShells();
+      updateSince(new Date());
 
       const yesterdayKey = shiftDateKey(activeDateKey, -1);
       const yesterdayGudlax = sortEntries(
@@ -1406,6 +1470,117 @@
       viewingPastDay = activeDateKey !== getTodayKey();
       renderMain();
       window.scrollTo({ top: 0, behavior: calmMotion ? 'auto' : 'smooth' });
+    });
+
+    // =========================================================================
+    // 8c. LIVING SCENE: time of day, sky creatures, clock and timers
+    // =========================================================================
+    const CLOUD_SVG = '<svg viewBox="0 0 120 50" aria-hidden="true"><path d="M20 44 C6 44 2 30 14 26 C14 14 30 8 40 18 C46 6 70 6 76 20 C90 14 106 22 102 34 C112 36 112 44 100 44Z"/></svg>';
+    const BIRD_SVG = '<svg class="bird__SUF__" viewBox="0 0 26 12" aria-hidden="true"><path d="M1 8 Q7 1 13 7 Q19 1 25 8"/></svg>';
+    const LEAF_SVG = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1 C17 5 17 14 10 19 C3 14 3 5 10 1Z"/></svg>';
+
+    function buildFx() {
+      document.querySelectorAll('.sky').forEach(sky => {
+        const fx = document.createElement('div');
+        fx.className = 'sky-fx';
+        fx.setAttribute('aria-hidden', 'true');
+        let h = '<div class="orb sun"></div><div class="orb moon"></div>';
+        for (let i = 0; i < 22; i++) {
+          h += '<i class="star" style="left:' + (Math.random() * 100).toFixed(1) + '%;top:' + (4 + Math.random() * 190).toFixed(0) +
+               'px;animation-delay:-' + (Math.random() * 5).toFixed(1) + 's;animation-duration:' + (3 + Math.random() * 3).toFixed(1) + 's"></i>';
+        }
+        h += '<div class="cloud c1">' + CLOUD_SVG + '</div><div class="cloud c2">' + CLOUD_SVG + '</div><div class="cloud c3">' + CLOUD_SVG + '</div>';
+        h += BIRD_SVG.replace('__SUF__', '').replace('<svg class="bird"', '<svg class="bird"') + BIRD_SVG.replace('__SUF__', ' b2');
+        fx.innerHTML = h;
+        sky.insertBefore(fx, sky.firstChild);
+      });
+      document.querySelectorAll('.forest').forEach(f => {
+        const fx = document.createElement('div');
+        fx.className = 'forest-fx';
+        fx.setAttribute('aria-hidden', 'true');
+        let h = '';
+        for (let i = 0; i < 7; i++) {
+          h += '<div class="leaf' + (i % 2 ? ' alt' : '') + '" style="left:' + (8 + i * 13 + Math.random() * 6).toFixed(0) + '%;--dx:' + (-70 + Math.random() * 120).toFixed(0) +
+               'px;animation-duration:' + (13 + Math.random() * 10).toFixed(1) + 's;animation-delay:-' + (Math.random() * 20).toFixed(1) + 's">' + LEAF_SVG + '</div>';
+        }
+        for (let i = 0; i < 9; i++) {
+          h += '<i class="fly" style="left:' + (6 + Math.random() * 88).toFixed(0) + '%;top:' + (40 + Math.random() * 110).toFixed(0) +
+               'px;animation-delay:-' + (Math.random() * 6).toFixed(1) + 's,-' + (Math.random() * 10).toFixed(1) + 's"></i>';
+        }
+        fx.innerHTML = h;
+        f.appendChild(fx);
+      });
+      const sea = document.getElementById('sea');
+      let g = '';
+      for (let i = 0; i < 12; i++) {
+        g += '<i class="glint" style="left:' + (Math.random() * 100).toFixed(0) + '%;top:' + (20 + Math.random() * 140).toFixed(0) +
+             'px;animation-delay:-' + (Math.random() * 4).toFixed(1) + 's"></i>';
+      }
+      sea.insertAdjacentHTML('beforeend', g);
+    }
+
+    // Sun and moon travel across the sky with the real time.
+    function applyMood() {
+      const d = new Date();
+      const h = (typeof window.__forceHour === 'number') ? window.__forceHour : d.getHours() + d.getMinutes() / 60;
+      let mood = 'day';
+      if (h >= 5 && h < 8) mood = 'dawn';
+      else if (h >= 17 && h < 19.5) mood = 'dusk';
+      else if (h >= 19.5 || h < 5) mood = 'night';
+      document.body.dataset.mood = mood;
+
+      const pSun = (h - 5.5) / 14;            // sun up from 05:30 to 19:30
+      const pMoon = ((h - 19 + 24) % 24) / 11; // moon up from 19:00 to 06:00
+      const arc = p => (190 - Math.sin(Math.PI * Math.min(Math.max(p, 0), 1)) * 140).toFixed(0) + 'px';
+      const left = p => (6 + Math.min(Math.max(p, 0), 1) * 78).toFixed(1) + '%';
+      const st = document.body.style;
+      st.setProperty('--sun-x', left(pSun));  st.setProperty('--sun-y', arc(pSun));  st.setProperty('--sun-o', (pSun >= 0 && pSun <= 1) ? '1' : '0');
+      st.setProperty('--moon-x', left(pMoon)); st.setProperty('--moon-y', arc(pMoon)); st.setProperty('--moon-o', (pMoon >= 0 && pMoon <= 1) ? '1' : '0');
+    }
+
+    // Live clock and "since last water" timer (HH:MM:SS)
+    function hms(totalSeconds) {
+      const s = Math.max(0, Math.floor(totalSeconds));
+      return pad2(Math.floor(s / 3600)) + ':' + pad2(Math.floor((s % 3600) / 60)) + ':' + pad2(s % 60);
+    }
+    function lastWaterDate() {
+      const key = getTodayKey();
+      const list = sortEntries(getDayEntries(key).filter(e => e.cat === 'water' && extractWaterMl(e.text) > 0));
+      if (list.length === 0) return null;
+      const last = list[list.length - 1];
+      const parts = (last.time || '00:00').split(':').map(Number);
+      const base = keyToDate(key);
+      if (parts[0] < NEW_DAY_HOUR) base.setDate(base.getDate() + 1);
+      base.setHours(parts[0], parts[1] || 0, 0, 0);
+      return base;
+    }
+    function updateSince(now) {
+      const el = document.getElementById('tank-since');
+      if (!el) return;
+      if (viewingPastDay) { el.style.display = 'none'; return; }
+      el.style.display = 'block';
+      const lw = lastWaterDate();
+      if (!lw) { el.textContent = 'No water logged yet today'; return; }
+      const diff = (now - lw) / 1000;
+      el.textContent = diff < 0 ? 'Since last water --:--:--' : 'Since last water ' + hms(diff);
+    }
+    function tickClock() {
+      const n = new Date();
+      const c = document.getElementById('clock');
+      if (c) c.textContent = pad2(n.getHours()) + ':' + pad2(n.getMinutes()) + ':' + pad2(n.getSeconds());
+      updateSince(n);
+    }
+    setInterval(tickClock, 1000);
+    setInterval(applyMood, 60000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { tickClock(); applyMood(); } });
+
+    document.getElementById('crab').addEventListener('click', e => {
+      const c = e.currentTarget;
+      c.classList.remove('hop');
+      void c.offsetWidth;
+      c.classList.add('hop');
+      const ml = getWaterTotal(getDayEntries(getTodayKey()));
+      showToast(ml >= WATER_TARGET_ML ? 'Target reached. Nice work!' : 'Water so far: ' + ml + ' ml');
     });
 
     // =========================================================================
@@ -1877,7 +2052,10 @@
 
     // Boot
     populateCategorySelect();
+    buildFx();
+    applyMood();
     renderMain();
+    tickClock();
     try { initPWA(); } catch (e) {}
     restoreFromMirror();
     protectStorage();
