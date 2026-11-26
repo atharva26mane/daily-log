@@ -933,6 +933,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 28</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -4337,6 +4338,20 @@
   // wait for sign-in / cloud settings before the first read
   setTimeout(refreshWx, 1500); setInterval(refreshWx, 10 * 60 * 1000);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) refreshWx(); });
+})();
+</script>
+<script>
+(function () {
+  // "Update app": drop the saved copy of the app on this phone and load the newest one.
+  var row = document.getElementById('set-update-row'); if (!row) return;
+  row.addEventListener('click', async function () {
+    var v = document.getElementById('app-build'); v.textContent = 'Updating…';
+    try {
+      if (navigator.serviceWorker) { var regs = await navigator.serviceWorker.getRegistrations(); await Promise.all(regs.map(function (r) { return r.unregister(); })); }
+      if (window.caches) { var ks = await caches.keys(); await Promise.all(ks.map(function (k) { return caches.delete(k); })); }
+    } catch (e) {}
+    location.replace(location.pathname + '?u=' + Date.now());
+  });
 })();
 </script>
 </body>
