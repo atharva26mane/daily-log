@@ -305,6 +305,20 @@
     body.theme-volcano .ins-bar { background: #e8c7b0; } body.theme-volcano .ins-goal { border-color: rgba(180,64,14,.55); }
     body.theme-volcano .ins-cell.h1 { background: rgba(232,100,26,.22); } body.theme-volcano .ins-cell.h2, body.theme-volcano .ins-legend i.h2 { background: rgba(232,100,26,.5); }
     body.theme-volcano .ins-legend i.h1 { background: rgba(232,100,26,.22); }
+
+    /* Samsung-style edge blur: the list melts into a soft blur under the floating bar */
+    .edge-blur { display: none; position: fixed; left: 0; right: 0; bottom: 0; height: calc(150px + var(--safe-bottom)); z-index: 19; pointer-events: none;
+      --eb-tint: rgba(46,60,42,.62); }
+    body:has(#main-screen.active) .edge-blur { display: block; }
+    .edge-blur i { position: absolute; inset: 0; -webkit-backdrop-filter: blur(var(--b)); backdrop-filter: blur(var(--b));
+      -webkit-mask-image: linear-gradient(to top, #000 0, #000 var(--s), transparent 100%); mask-image: linear-gradient(to top, #000 0, #000 var(--s), transparent 100%); }
+    .edge-blur i:nth-child(1) { --b: 1.5px; --s: 100%; -webkit-mask-image: linear-gradient(to top, #000 55%, transparent 100%); mask-image: linear-gradient(to top, #000 55%, transparent 100%); }
+    .edge-blur i:nth-child(2) { --b: 3px;  --s: 62%; }
+    .edge-blur i:nth-child(3) { --b: 7px;  --s: 42%; }
+    .edge-blur i:nth-child(4) { --b: 14px; --s: 26%; }
+    .edge-blur::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--eb-tint) 0, transparent 100%); }
+    body.theme-volcano .edge-blur { --eb-tint: rgba(18,10,7,.78); }
+    @media (prefers-reduced-transparency: reduce) { .edge-blur i { display: none; } }
     /* past days: no live sun, moon or night sky */
     body.past-day .orb, body.past-day .star, body.past-day .fly { display: none !important; }
     .sky-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -531,6 +545,7 @@
     </section>
     <div class="theme-end" aria-hidden="true"></div>
 
+    <div class="edge-blur" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="bottom-bar" id="today-bottom-bar">
       <div class="bottom-inner">
         <button class="btn-primary" id="copy-today-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg>Copy today</button>
