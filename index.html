@@ -319,6 +319,25 @@
     .edge-blur::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--eb-tint) 0, transparent 100%); }
     body.theme-volcano .edge-blur { --eb-tint: rgba(18,10,7,.78); }
     @media (prefers-reduced-transparency: reduce) { .edge-blur i { display: none; } }
+
+    /* categories sheet */
+    .cat-row { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 6px 10px 6px 12px; margin: 0 0 6px; border: 1px solid rgba(64,81,59,.14); border-radius: 16px; background: rgba(255,255,255,.55); }
+    .cat-row.off { opacity: .55; }
+    .cat-dot { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+    .cat-name { flex: 1; min-width: 0; min-height: 40px; border: 0; background: transparent; font: inherit; font-weight: 600; color: inherit; outline: none; }
+    .cat-name:focus { box-shadow: 0 2px 0 0 var(--moss); }
+    .cat-tag { font-size: 11px; opacity: .6; }
+    .cat-del { width: 40px; height: 40px; border: 0; border-radius: 12px; background: rgba(196,88,76,.12); color: #b34a3f; font-size: 18px; }
+    .switch { position: relative; width: 48px; height: 28px; flex: none; }
+    .switch input { position: absolute; inset: 0; opacity: 0; margin: 0; width: 100%; height: 100%; cursor: pointer; }
+    .switch span { position: absolute; inset: 0; border-radius: 14px; background: rgba(64,81,59,.25); transition: background .2s; pointer-events: none; }
+    .switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: transform .2s; }
+    .switch input:checked + span { background: var(--moss); } .switch input:checked + span::after { transform: translateX(20px); }
+    .cat-add { display: grid; gap: 8px; }
+    .cat-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cat-swatches button { width: 36px; height: 36px; border-radius: 50%; border: 3px solid transparent; }
+    .cat-swatches button.on { border-color: var(--forest); box-shadow: 0 0 0 2px #fff inset; }
+    body.theme-volcano .switch input:checked + span { background: #e8641a; }
     /* past days: no live sun, moon or night sky */
     body.past-day .orb, body.past-day .star, body.past-day .fly { display: none !important; }
     .sky-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -690,6 +709,7 @@
 
       <div class="set-group">
         <div class="set-label">App</div>
+        <button class="set-row set-link" id="set-cats-row"><span class="set-name">Categories</span><span class="set-val" id="set-cats-val">Add, rename, hide</span></button>
         <button class="set-row set-link" id="set-theme-row"><span class="set-name">Theme</span><span class="set-val" id="set-theme-val">Forest</span></button>
         <button class="set-row set-link" id="set-ai-row"><span class="set-name">AI helper</span><span class="set-val" id="set-ai-val">Off</span></button>
         <button class="set-row set-link" id="set-backup-row"><span class="set-name">Backup and restore</span><span class="set-val">Export / import</span></button>
@@ -708,6 +728,22 @@
       <div class="set-label" style="margin-top:12px;">Last 5 weeks</div>
       <div class="ins-heat" id="ins-heat"></div>
       <div class="ins-legend"><span><i class="h3"></i>Goal met</span><span><i class="h2"></i>Some water</span><span><i class="h1"></i>Logged</span><span><i class="h0"></i>Nothing</span></div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES MODAL -->
+  <div id="cats-modal" class="overlay">
+    <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Categories">
+      <div class="chat-head"><h2 class="sheet-title">Categories</h2><div class="chat-head-btns"><button id="cats-close-btn">Done</button></div></div>
+      <p class="set-note" style="margin-top:0">Rename any category, or hide the ones you don't use. Hidden ones keep their old entries.</p>
+      <div id="cats-list"></div>
+      <div class="set-label" style="margin-top:14px;">Add your own</div>
+      <div class="cat-add">
+        <input id="cat-new-name" class="text-input" type="text" maxlength="24" autocomplete="off" placeholder="Name, e.g. Coffee" />
+        <input id="cat-new-kw" class="text-input" type="text" autocomplete="off" placeholder="Keywords, e.g. coffee, tea, chai" />
+        <div class="cat-swatches" id="cat-swatches"></div>
+        <button class="btn-primary" id="cat-add-btn">Add category</button>
+      </div>
     </div>
   </div>
 
@@ -774,7 +810,7 @@
     let WATER_TARGET_ML = Math.min(6000, Math.max(500, Number(SETTINGS.waterTarget) || 2500));
     const NEW_DAY_HOUR = 4; // New day starts automatically at 04:00 AM
 
-    const CATEGORIES = [
+    const BASE_CATEGORIES = [
       { id: 'water',     name: 'Water',                   copyLabel: 'WATER',     hint: 'target 2500 ml' },
       { id: 'food',      name: 'Food',                    copyLabel: 'FOOD',      hint: 'breakfast / lunch / snack / dinner' },
       { id: 'fibre',     name: 'Fibre',                   copyLabel: 'FIBRE',     hint: 'Sunfiber, isabgol, chia' },
@@ -786,6 +822,7 @@
       { id: 'weight',    name: 'Weight',                  copyLabel: 'WEIGHT',    hint: '' },
       { id: 'notes',     name: 'Notes',                   copyLabel: 'NOTES',     hint: 'anything else' }
     ];
+    let CATEGORIES = BASE_CATEGORIES.slice();
 
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -847,6 +884,22 @@
       water: '#4f8ea8', food: '#b99470', fibre: '#609966', gudlax: '#8a7bb5', stool: '#8a6a4a',
       medicines: '#c0707f', symptoms: '#c4584c', sleep: '#5a76b8', weight: '#4f8ea8', notes: '#5f6f52'
     };
+
+    // ---- Your own categories (rename, hide, add) ----
+    const BASE_PRIORITY = KEYWORD_PRIORITY.slice();
+    const BASE_KEYWORD_IDS = Object.keys(KEYWORDS);
+    const CUSTOM_COLORS = ['#e07a5f', '#3d8fa6', '#81b29a', '#f2cc8f', '#9b7ede', '#d4829b', '#6d8f4e', '#c28a3a'];
+    function applyCategorySettings() {
+      const names = SETTINGS.catNames || {}, hidden = SETTINGS.catHidden || [], custom = SETTINGS.catCustom || [];
+      CATEGORIES = BASE_CATEGORIES.map(c => Object.assign({}, c, { name: names[c.id] || c.name, hidden: hidden.includes(c.id) && c.id !== 'water' }))
+        .concat(custom.map(c => ({ id: c.id, name: names[c.id] || c.name, copyLabel: (names[c.id] || c.name).toUpperCase(), hint: (c.keywords || []).join(', '), custom: true, hidden: hidden.includes(c.id) })));
+      Object.keys(KEYWORDS).forEach(id => { if (!BASE_KEYWORD_IDS.includes(id)) delete KEYWORDS[id]; });
+      custom.forEach(c => { KEYWORDS[c.id] = (c.keywords || []).filter(Boolean); CAT_COLORS[c.id] = c.color || '#b4c2c0'; });
+      KEYWORD_PRIORITY.length = 0;
+      custom.forEach(c => { if (!hidden.includes(c.id) && (KEYWORDS[c.id] || []).length) KEYWORD_PRIORITY.push(c.id); });
+      BASE_PRIORITY.forEach(id => KEYWORD_PRIORITY.push(id));
+    }
+    applyCategorySettings();
 
     function formatDisplayDate(key) {
       const d = keyToDate(key);
@@ -1182,7 +1235,7 @@
     // Quick sorting of one line. Returns a category id, or null.
     async function aiClassify(text) {
       if (!getAiKey()) return null;
-      const ids = CATEGORIES.map(c => c.id);
+      const ids = CATEGORIES.filter(c => !c.hidden).map(c => c.id);
       const prompt =
         'You sort short personal health-diary lines into ONE category.\n' +
         'Categories:\n' +
@@ -1229,7 +1282,7 @@
       const logged = entries.map(e => '- [' + e.cat + '] ' + e.time + ' ' + e.text).join('\n') || '(nothing logged yet)';
       const yGud = sortEntries(getDayEntries(shiftDateKey(dayKey, -1)).filter(e => e.cat === 'gudlax'))
         .map(e => e.text + ' at ' + e.time).join(', ') || 'none';
-      const cats = CATEGORIES.map(c => '- ' + c.id + ': ' + c.name + (c.hint ? ' (' + c.hint + ')' : '')).join('\n');
+      const cats = CATEGORIES.filter(c => !c.hidden).map(c => '- ' + c.id + ': ' + c.name + (c.hint ? (c.custom ? ' (the user\'s own category; keywords: ' + c.hint + ')' : ' (' + c.hint + ')') : '')).join('\n');
       return [
         'You are the assistant inside the "Daily Log" phone app. The user logs their health routine here and chats with you in simple English.',
         'Your job: understand what the user says they did (and did NOT do), and propose diary entries to save in the right category. The user confirms before anything is saved.',
@@ -1282,7 +1335,7 @@
     }
 
     function addProposal(p) {
-      const ids = CATEGORIES.map(c => c.id);
+      const ids = CATEGORIES.filter(c => !c.hidden).map(c => c.id);
       const cat = ids.includes(p.cat) ? p.cat : 'notes';
       const time = /^\d{1,2}:\d{2}$/.test(p.time || '') ? p.time.padStart(5, '0') : getCurrentHHMM();
       const dateKey = p.day === 'yesterday' ? shiftDateKey(activeDateKey, -1) : activeDateKey;
@@ -1349,7 +1402,7 @@
       document.getElementById('chat-send-btn').disabled = true;
       renderChat();
 
-      const ids = CATEGORIES.map(c => c.id);
+      const ids = CATEGORIES.filter(c => !c.hidden).map(c => c.id);
       const raw = await aiGenerate({
         systemInstruction: { parts: [{ text: buildChatSystem() }] },
         contents: chatContents(),
@@ -1592,7 +1645,7 @@
         const catEntries = entries.filter(e => e.cat === cat.id);
         const hasYesterday = cat.id === 'gudlax' && yesterdayGudlax.length > 0;
         if (catEntries.length === 0 && !hasYesterday) {
-          if (cat.id !== 'water') emptyCats.push(cat);
+          if (cat.id !== 'water' && !cat.hidden) emptyCats.push(cat);
           continue;
         }
 
@@ -1902,7 +1955,7 @@
     const deleteBtn = document.getElementById('delete-entry-btn');
 
     function populateCategorySelect() {
-      catSelect.innerHTML = CATEGORIES
+      catSelect.innerHTML = CATEGORIES.filter(c => !c.hidden)
         .map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`)
         .join('');
     }
@@ -2501,6 +2554,69 @@
       activeDateKey = b.dataset.date; viewingPastDay = activeDateKey !== getTodayKey();
       renderMain(); showScreen('main');
     });
+  })();
+</script>
+<script>
+  (function(){
+    var m = document.getElementById('cats-modal'), list = document.getElementById('cats-list'), pick = CUSTOM_COLORS[0];
+    function persist() { saveSettings(); applyCategorySettings(); populateCategorySelect(); renderMain(); }
+    function esc(t) { return escapeHtml(t); }
+    function draw() {
+      list.innerHTML = CATEGORIES.map(function(c){
+        return '<div class="cat-row' + (c.hidden ? ' off' : '') + '" data-id="' + c.id + '">' +
+          '<i class="cat-dot" style="background:' + (CAT_COLORS[c.id] || '#b4c2c0') + '"></i>' +
+          '<input class="cat-name" value="' + esc(c.name) + '" maxlength="24" aria-label="Category name" />' +
+          (c.custom ? '<button class="cat-del" aria-label="Delete ' + esc(c.name) + '">&#10005;</button>' : '') +
+          (c.id === 'water' ? '<span class="cat-tag">always on</span>' : '<label class="switch" aria-label="Show ' + esc(c.name) + '"><input type="checkbox" ' + (c.hidden ? '' : 'checked') + ' /><span></span></label>') +
+          '</div>';
+      }).join('');
+      document.getElementById('cat-swatches').innerHTML = CUSTOM_COLORS.map(function(c){ return '<button type="button" data-c="' + c + '" class="' + (c === pick ? 'on' : '') + '" style="background:' + c + '" aria-label="Colour"></button>'; }).join('');
+      var n = (SETTINGS.catCustom || []).length;
+      document.getElementById('set-cats-val').textContent = n ? n + ' of your own' : 'Add, rename, hide';
+    }
+    list.addEventListener('change', function(e){
+      var row = e.target.closest('.cat-row'); if (!row || e.target.type !== 'checkbox') return;
+      var id = row.dataset.id, h = SETTINGS.catHidden || [];
+      h = h.filter(function(x){ return x !== id; }); if (!e.target.checked) h.push(id);
+      SETTINGS.catHidden = h; persist(); draw();
+    });
+    list.addEventListener('input', function(e){
+      var row = e.target.closest('.cat-row'); if (!row || !e.target.classList.contains('cat-name')) return;
+      var v = e.target.value.trim().slice(0, 24); SETTINGS.catNames = SETTINGS.catNames || {};
+      if (v) SETTINGS.catNames[row.dataset.id] = v; else delete SETTINGS.catNames[row.dataset.id];
+      saveSettings(); applyCategorySettings(); populateCategorySelect(); renderMain();
+    });
+    list.addEventListener('click', function(e){
+      var b = e.target.closest('.cat-del'); if (!b) return;
+      var id = b.closest('.cat-row').dataset.id, c = CATEGORIES.find(function(x){ return x.id === id; });
+      if (!confirm('Delete "' + (c ? c.name : 'this category') + '"? Its entries move to Notes.')) return;
+      Object.keys(allData).forEach(function(k){ (allData[k] || []).forEach(function(en){ if (en.cat === id) en.cat = 'notes'; }); });
+      saveData();
+      SETTINGS.catCustom = (SETTINGS.catCustom || []).filter(function(x){ return x.id !== id; });
+      persist(); draw();
+    });
+    document.getElementById('cat-swatches').addEventListener('click', function(e){
+      var b = e.target.closest('button[data-c]'); if (!b) return; pick = b.dataset.c; draw();
+    });
+    document.getElementById('cat-add-btn').addEventListener('click', function(){
+      var nameIn = document.getElementById('cat-new-name'), kwIn = document.getElementById('cat-new-kw');
+      var name = nameIn.value.trim();
+      if (!name) { showToast('Give it a name first'); return; }
+      if (CATEGORIES.some(function(c){ return c.name.toLowerCase() === name.toLowerCase(); })) { showToast('That name already exists'); return; }
+      var kws = kwIn.value.split(',').map(function(x){ return x.trim().toLowerCase(); }).filter(Boolean);
+      if (!kws.length) kws = [name.toLowerCase()];
+      var id = 'c_' + name.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 10) + Math.floor(Math.random() * 900 + 100);
+      SETTINGS.catCustom = (SETTINGS.catCustom || []).concat([{ id: id, name: name, color: pick, keywords: kws }]);
+      nameIn.value = ''; kwIn.value = ''; persist(); draw(); showToast('Added ' + name);
+    });
+    function close() { m.classList.remove('open'); }
+    document.getElementById('set-cats-row').addEventListener('click', function(){
+      document.getElementById('settings-modal').classList.remove('open'); draw(); setTimeout(function(){ m.classList.add('open'); }, 120);
+    });
+    document.getElementById('cats-close-btn').addEventListener('click', close);
+    m.addEventListener('click', function(e){ if (e.target === m) close(); });
+    document.getElementById('open-settings-btn').addEventListener('click', function(){ draw(); });
+    populateCategorySelect(); draw();
   })();
 </script>
 </body>
