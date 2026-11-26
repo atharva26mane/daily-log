@@ -259,6 +259,26 @@
 
     .clock { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: 0.005em; font-variant-numeric: tabular-nums; color: var(--head); margin-top: 6px; }
 
+
+    .icon-btn[hidden] { display: none !important; }
+    /* proverb card */
+    .proverb { margin: 4px 0 12px; padding: 12px 16px; border-radius: 18px; background: rgba(254,250,224,.7); border: 1px solid rgba(64,81,59,.15); }
+    .proverb-text { margin: 0; font-family: var(--display); font-style: italic; font-size: 15px; line-height: 1.4; color: var(--forest); }
+    body.theme-volcano .proverb { background: var(--basalt); border: 1px solid var(--edge); backdrop-filter: blur(10px); }
+    body.theme-volcano .proverb-text { color: #f1dccb; }
+    /* settings */
+    .settings-sheet { max-height: 88vh; overflow-y: auto; }
+    .set-group { margin: 6px 0 14px; }
+    .set-label { font-size: 13px; font-weight: 700; color: var(--moss); margin: 4px 4px 6px; }
+    .set-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 52px; padding: 8px 14px; margin: 0 0 6px; border: 1px solid rgba(64,81,59,.14); border-radius: 16px; background: rgba(255,255,255,.55); font: inherit; color: inherit; text-align: left; }
+    .set-link { cursor: pointer; } .set-link:active { transform: scale(.985); }
+    .set-name { font-weight: 600; } .set-val { opacity: .65; font-size: 14px; }
+    .set-input { flex: 1; max-width: 55%; min-height: 40px; border: 0; background: transparent; text-align: right; font: inherit; color: inherit; outline: none; }
+    .set-input:focus { box-shadow: 0 2px 0 0 var(--moss); }
+    .set-note { margin: 0 6px 4px; font-size: 13px; opacity: .65; }
+    .stepper { display: inline-flex; align-items: center; gap: 4px; }
+    .stepper button { width: 44px; height: 44px; border-radius: 14px; border: 1px solid rgba(64,81,59,.2); background: #fff; font-size: 22px; font-weight: 700; color: var(--forest); }
+    .stepper output { min-width: 64px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
     /* past days: no live sun, moon or night sky */
     body.past-day .orb, body.past-day .star, body.past-day .fly { display: none !important; }
     .sky-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -419,9 +439,10 @@
           </div>
           <div class="top-actions" id="today-actions">
             <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
-            <button class="icon-btn" id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg></button>
-            <button class="icon-btn" id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.4 0 2-.9 2-1.8 0-1.3-1-1.6-1-2.7 0-1 .8-1.6 1.8-1.6H17a3.5 3.5 0 0 0 3.5-3.5C20.5 6.6 16.8 3.5 12 3.5z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.8" r="1"/><circle cx="16" cy="10" r="1"/></svg></button>
-            <button class="icon-btn" id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5l1.9 5.6 5.6 1.9-5.6 1.9L11 18.5l-1.9-5.6L3.5 11l5.6-1.9z"/><path d="M18.5 15.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z"/></svg></button>
+            <button class="icon-btn" id="open-settings-btn" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></button>
+            <button class="icon-btn" hidden id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg></button>
+            <button class="icon-btn" hidden id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.4 0 2-.9 2-1.8 0-1.3-1-1.6-1-2.7 0-1 .8-1.6 1.8-1.6H17a3.5 3.5 0 0 0 3.5-3.5C20.5 6.6 16.8 3.5 12 3.5z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.8" r="1"/><circle cx="16" cy="10" r="1"/></svg></button>
+            <button class="icon-btn" hidden id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5l1.9 5.6 5.6 1.9-5.6 1.9L11 18.5l-1.9-5.6L3.5 11l5.6-1.9z"/><path d="M18.5 15.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z"/></svg></button>
           </div>
           <div class="top-actions" id="past-actions" style="display:none;">
             <button class="pill-btn" id="back-to-history-btn">History</button>
@@ -434,6 +455,7 @@
 
     <div class="ground">
       <div class="container">
+        <aside class="proverb" id="proverb" aria-label="Proverb of the day"><p class="proverb-text" id="proverb-text"></p></aside>
         <section class="tank" id="tank" aria-label="Water today">
           <div class="tank-fill" id="tank-fill" aria-hidden="true">
             <svg class="wave w2" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 2 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
@@ -610,6 +632,29 @@
     </div>
   </div>
 
+  <!-- SETTINGS MODAL -->
+  <div id="settings-modal" class="overlay">
+    <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Settings">
+      <div class="chat-head"><h2 class="sheet-title">Settings</h2><div class="chat-head-btns"><button id="settings-close-btn">Done</button></div></div>
+
+      <div class="set-group">
+        <div class="set-label">Profile</div>
+        <label class="set-row"><span class="set-name">Your name</span>
+          <input id="set-name" class="set-input" type="text" maxlength="24" autocomplete="off" placeholder="Optional" /></label>
+        <div class="set-row"><span class="set-name">Daily water goal</span>
+          <span class="stepper"><button type="button" id="set-water-minus" aria-label="Less water">-</button><output id="set-water-val">2500</output><button type="button" id="set-water-plus" aria-label="More water">+</button></span></div>
+        <p class="set-note">Goal in ml. Changes by 250 each tap.</p>
+      </div>
+
+      <div class="set-group">
+        <div class="set-label">App</div>
+        <button class="set-row set-link" id="set-theme-row"><span class="set-name">Theme</span><span class="set-val" id="set-theme-val">Forest</span></button>
+        <button class="set-row set-link" id="set-ai-row"><span class="set-name">AI helper</span><span class="set-val" id="set-ai-val">Off</span></button>
+        <button class="set-row set-link" id="set-backup-row"><span class="set-name">Backup and restore</span><span class="set-val">Export / import</span></button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -661,7 +706,16 @@
     // 2. APP SETTINGS & CATEGORY DEFINITIONS
     // =========================================================================
     const STORAGE_KEY = 'daily_log_data_v1';
-    const WATER_TARGET_ML = 2500;
+    const SETTINGS_KEY = 'daily_log_settings_v1';
+    function loadSettings() {
+      try { const o = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; }
+    }
+    let SETTINGS = loadSettings();
+    function saveSettings() {
+      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(SETTINGS)); } catch (e) {}
+      mirrorSet(SETTINGS_KEY, JSON.stringify(SETTINGS));
+    }
+    let WATER_TARGET_ML = Math.min(6000, Math.max(500, Number(SETTINGS.waterTarget) || 2500));
     const NEW_DAY_HOUR = 4; // New day starts automatically at 04:00 AM
 
     const CATEGORIES = [
@@ -1433,6 +1487,7 @@
 
       document.getElementById('header-date').textContent = weekdayLong(activeDateKey);
       if (typeof tickClock === 'function') tickClock();
+      { const pv = document.getElementById('proverb'); if (pv) pv.style.display = viewingPastDay ? 'none' : ''; }
       document.getElementById('header-label').textContent = viewingPastDay
         ? 'Past day, ' + shortDate(activeDateKey)
         : shortDate(activeDateKey);
@@ -1752,7 +1807,9 @@
       const c = document.getElementById('clock');
       if (c) {
         c.style.display = viewingPastDay ? 'none' : '';
-        const g = greetingFor(n);
+        let g = greetingFor(n);
+        const nm = (SETTINGS.name || '').trim();
+        if (nm) g = g.endsWith('?') ? g.slice(0, -1) + ', ' + nm + '?' : g + ', ' + nm;
         if (c.textContent !== g) c.textContent = g;
       }
       document.body.classList.toggle('past-day', !!viewingPastDay);
@@ -2274,6 +2331,58 @@
       try { localStorage.setItem(KEY,b.dataset.theme); } catch(e){}
       apply(b.dataset.theme); m.classList.remove('open'); window.scrollTo(0,0);
     }); });
+  })();
+</script>
+<script>
+  (function(){
+    // ---- Proverb of the day (changes at 5 AM) ----
+    var PROVERBS = [
+      'A journey of a thousand miles begins with a single step.','Well begun is half done.','Slow and steady wins the race.','Actions speak louder than words.',
+      "Rome wasn't built in a day.",'Practice makes perfect.','Better late than never.',"Where there's a will, there's a way.",'A stitch in time saves nine.',
+      'Little strokes fell great oaks.','Fall seven times, stand up eight.','The best time to plant a tree was twenty years ago. The second best time is now.',
+      'Prevention is better than cure.','Health is better than wealth.','An apple a day keeps the doctor away.','Early to bed and early to rise makes a person healthy, wealthy and wise.',
+      'Drop by drop, the ocean fills.','Patience is bitter, but its fruit is sweet.',"It is always darkest before the dawn.",'Every cloud has a silver lining.',
+      'Many hands make light work.','The early bird catches the worm.','Time and tide wait for no one.',"You can't pour from an empty cup.",'Look before you leap.',
+      'Measure twice, cut once.','Habit is second nature.','Water wears away stone.','Still waters run deep.','Mighty oaks from little acorns grow.',
+      'He who has health has hope.','Haste makes waste.','Eat to live, not live to eat.','Good things come to those who wait.','A good beginning makes a good ending.',
+      'Learn to walk before you run.','No pain, no gain.','When the going gets tough, the tough get going.','Do not put off till tomorrow what you can do today.','A healthy mind lives in a healthy body.'
+    ];
+    function proverbDay() { var d = new Date(Date.now() - 5 * 3600 * 1000); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000); }
+    function showProverb() {
+      var el = document.getElementById('proverb'), tx = document.getElementById('proverb-text');
+      if (!el || !tx) return;
+      tx.textContent = PROVERBS[proverbDay() % PROVERBS.length];
+      el.style.display = (typeof viewingPastDay !== 'undefined' && viewingPastDay) ? 'none' : '';
+    }
+    showProverb(); setInterval(showProverb, 60000);
+    document.addEventListener('visibilitychange', function(){ if (!document.hidden) showProverb(); });
+
+    // ---- Settings ----
+    var m = document.getElementById('settings-modal');
+    var nameIn = document.getElementById('set-name'), wVal = document.getElementById('set-water-val');
+    function refresh() {
+      nameIn.value = SETTINGS.name || '';
+      wVal.textContent = WATER_TARGET_ML;
+      document.getElementById('set-theme-val').textContent = document.body.classList.contains('theme-volcano') ? 'Volcano' : 'Forest';
+      var on = [getGroqKey() && 'Groq', getGeminiKey() && 'Gemini'].filter(Boolean);
+      document.getElementById('set-ai-val').textContent = on.length ? 'On (' + on.join(' + ') + ')' : 'Off';
+    }
+    function close() { m.classList.remove('open'); }
+    document.getElementById('open-settings-btn').addEventListener('click', function(){ refresh(); m.classList.add('open'); });
+    document.getElementById('settings-close-btn').addEventListener('click', close);
+    m.addEventListener('click', function(e){ if (e.target === m) close(); });
+    nameIn.addEventListener('input', function(){ SETTINGS.name = nameIn.value.trim().slice(0, 24); saveSettings(); tickClock(); });
+    function setWater(v) {
+      WATER_TARGET_ML = Math.min(6000, Math.max(500, v)); SETTINGS.waterTarget = WATER_TARGET_ML; saveSettings();
+      wVal.textContent = WATER_TARGET_ML; renderMain();
+    }
+    document.getElementById('set-water-minus').addEventListener('click', function(){ setWater(WATER_TARGET_ML - 250); });
+    document.getElementById('set-water-plus').addEventListener('click', function(){ setWater(WATER_TARGET_ML + 250); });
+    function via(id) { return function(){ close(); setTimeout(function(){ document.getElementById(id).click(); }, 120); }; }
+    document.getElementById('set-theme-row').addEventListener('click', via('open-theme-btn'));
+    document.getElementById('set-ai-row').addEventListener('click', via('open-ai-btn'));
+    document.getElementById('set-backup-row').addEventListener('click', via('open-backup-btn'));
+    tickClock();
   })();
 </script>
 </body>
