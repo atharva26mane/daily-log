@@ -970,7 +970,10 @@
     // 6b. AI SORTING (Gemini). Key is kept only in this phone's browser.
     // =========================================================================
     const AI_KEY_STORAGE = 'daily_log_gemini_key_v1';
-    const AI_MODEL = 'gemini-flash-latest'; // change here if Google renames the model
+    // Tried in this order. If Google renames models, edit this list.
+    const AI_MODELS = ['gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest'];
+    const AI_MODEL_STORAGE = 'daily_log_gemini_model_v1';
+    let aiLastError = '';
     const AI_TIMEOUT_MS = 8000;
 
     function getAiKey() {
@@ -1004,43 +1007,65 @@
         '- notes: anything else\n' +
         'Line: "' + text.replace(/"/g, "'") + '"';
 
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), AI_TIMEOUT_MS);
+      let order = AI_MODELS.slice();
       try {
-        const res = await fetch(
-          'https://generativelanguage.googleapis.com/v1beta/models/' + AI_MODEL + ':generateContent',
-          {
-            method: 'POST',
-            signal: ctrl.signal,
-            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: {
-                temperature: 0,
-                responseMimeType: 'application/json',
-                responseSchema: {
-                  type: 'OBJECT',
-                  properties: { category: { type: 'STRING', enum: ids } },
-                  required: ['category']
+        const good = localStorage.getItem(AI_MODEL_STORAGE);
+        if (good && order.includes(good)) order = [good, ...order.filter(m => m !== good)];
+      } catch (e) {}
+
+      aiLastError = '';
+      for (const model of order) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), AI_TIMEOUT_MS);
+        try {
+          const res = await fetch(
+            'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent',
+            {
+              method: 'POST',
+              signal: ctrl.signal,
+              headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                  temperature: 0,
+                  responseMimeType: 'application/json',
+                  responseSchema: {
+                    type: 'OBJECT',
+                    properties: { category: { type: 'STRING', enum: ids } },
+                    required: ['category']
+                  }
                 }
-              }
-            })
+              })
+            }
+          );
+          if (!res.ok) {
+            let msg = '';
+            try { msg = ((await res.json()).error || {}).message || ''; } catch (e) {}
+            aiLastError = model + ': error ' + res.status + (msg ? ' - ' + msg.slice(0, 160) : '');
+            if (res.status === 404) continue; // model not available for this key, try next one
+            return null;
           }
-        );
-        if (!res.ok) return null;
-        const data = await res.json();
-        const raw = data && data.candidates && data.candidates[0] &&
-          data.candidates[0].content && data.candidates[0].content.parts &&
-          data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
-        if (!raw) return null;
-        let cat = '';
-        try { cat = JSON.parse(raw).category; } catch (e) { cat = String(raw).trim().toLowerCase(); }
-        return ids.includes(cat) ? cat : null;
-      } catch (e) {
-        return null;
-      } finally {
-        clearTimeout(timer);
+          const data = await res.json();
+          const raw = data && data.candidates && data.candidates[0] &&
+            data.candidates[0].content && data.candidates[0].content.parts &&
+            data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+          if (!raw) { aiLastError = model + ': empty answer'; continue; }
+          let cat = '';
+          try { cat = JSON.parse(raw).category; } catch (e) { cat = String(raw).trim().toLowerCase(); }
+          if (ids.includes(cat)) {
+            try { localStorage.setItem(AI_MODEL_STORAGE, model); } catch (e) {}
+            return cat;
+          }
+          aiLastError = model + ': unexpected answer';
+          return null;
+        } catch (e) {
+          aiLastError = model + ': ' + (e && e.name === 'AbortError' ? 'took too long' : 'no internet or blocked');
+          return null;
+        } finally {
+          clearTimeout(timer);
+        }
       }
+      return null;
     }
 
     // =========================================================================
@@ -1660,7 +1685,7 @@
       const r = await aiClassify('idli 3 sambar');
       aiStatus.textContent = r
         ? 'Works! Test line "idli 3 sambar" went to: ' + r + '. AI is ON.'
-        : 'Test failed. Check the key and internet, then try again.';
+        : 'Test failed. ' + (aiLastError || 'Check the key and internet.');
     });
 
     // Auto-refresh when crossing 4 AM
