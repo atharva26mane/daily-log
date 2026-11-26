@@ -3401,17 +3401,24 @@
   });
   window.addEventListener('online', function(){ if (dirty) push(); });
 
+  var aiInfo = null;
   async function loadCloudKeys() {
-    var status = 'none';
+    var status = 'none', keys = null;
     try {
-      var r = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
-      if (r.error) status = 'error';
-      else {
-        var d = r.data;
-        if (d && (d.groq_key || d.gemini_key)) { lsSet(CLOUDAI, JSON.stringify({ groq: d.groq_key || '', gemini: d.gemini_key || '' })); status = 'ok'; }
-        else lsDel(CLOUDAI);
+      var r = await sb.rpc('get_ai_keys');
+      if (!r.error && r.data) {
+        aiInfo = r.data; keys = { groq: r.data.groq_key || '', gemini: r.data.gemini_key || '' };
+      } else {
+        // server function not installed yet: fall back to reading the table directly
+        var t = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
+        if (t.error) status = 'error';
+        else { aiInfo = null; if (t.data) keys = { groq: t.data.groq_key || '', gemini: t.data.gemini_key || '' }; }
       }
     } catch (e) { status = 'error'; }
+    if (status !== 'error') {
+      if (keys && (keys.groq || keys.gemini)) { lsSet(CLOUDAI, JSON.stringify(keys)); status = 'ok'; }
+      else lsDel(CLOUDAI);
+    }
     var a = $('set-ai-val');
     if (a) {
       var on = [getGroqKey() && 'Groq', getGeminiKey() && 'Gemini'].filter(Boolean);
@@ -3424,7 +3431,8 @@
   window.__aiWhy = function () {
     if (!me) return '';
     if (lastAiStatus === 'error') return 'Could not reach the server to check your AI access. Try again in a moment.';
-    if (!me.ai) return 'AI is not switched on for your account yet. Ask the admin to turn on AI access for you.';
+    if (aiInfo && aiInfo.approved === false) return 'Your account is not approved yet.';
+    if (aiInfo ? !aiInfo.allowed : !me.ai) return 'AI is not switched on for your account yet. Ask the admin to turn on AI access for you.';
     return 'AI access is on for you, but the admin has not saved a key yet. Ask the admin to add one.';
   };
   async function refreshAccess(manual) {
@@ -3833,8 +3841,9 @@
       breakfast: (SETTINGS.mealTimes || {}).breakfast || '08:30', lunch: (SETTINGS.mealTimes || {}).lunch || '13:00', dinner: (SETTINGS.mealTimes || {}).dinner || '20:30', extra: '', aiCats: [], touched: {} }; }
     function calcWater() { var w = Math.round(P.weight * 35 / 250) * 250; w += P.activity === 'active' ? 500 : P.activity === 'moderate' ? 250 : 0; return Math.min(4000, Math.max(1500, w)); }
     function visibleCats() {
+      if (P.aiPlan) { var ap = { water: 1, notes: 1 }; Object.keys(P.aiPlan).forEach(function(k){ if (P.aiPlan[k]) ap[k] = 1; }); return ap; }
       var g = P.goals, show = { water: 1, food: 1, notes: 1 };
-      if (!g.length || g.indexOf('diary') >= 0) { ['fibre', 'stool', 'medicines', 'symptoms', 'sleep', 'weight'].forEach(function(c){ show[c] = 1; }); }
+      if (!g.length || g.indexOf('diary') >= 0) { ['medicines', 'sleep', 'weight'].forEach(function(c){ show[c] = 1; }); }
       if (g.indexOf('digestion') >= 0) { show.fibre = show.stool = show.symptoms = 1; }
       if (g.indexOf('sleep') >= 0) show.sleep = 1; if (g.indexOf('meds') >= 0) show.medicines = 1;
       if (g.indexOf('gain') >= 0 || g.indexOf('lose') >= 0) show.weight = 1;
@@ -3861,13 +3870,13 @@
       body: function(){ return { html: '<h1 class="onb-h">A little about you</h1><p class="onb-p">Used only to suggest a water goal. Drag the sliders.</p>' + '<div class="onb-card"><h4>AGE</h4>' + slider('o-age', 'Age', ' yrs', 10, 90, P.age) + '</div><div class="onb-card" style="margin-top:10px"><h4>HEIGHT</h4>' + slider('o-h', 'Height', ' cm', 120, 220, P.height) + '</div><div class="onb-card" style="margin-top:10px"><h4>WEIGHT</h4>' + slider('o-w', 'Weight', ' kg', 30, 160, P.weight) + '</div>', bind: function(){ [['o-age', 'age'], ['o-h', 'height'], ['o-w', 'weight']].forEach(function(x){ var r = document.getElementById(x[0]); r.addEventListener('input', function(){ P[x[1]] = +r.value; P.touched[x[1]] = 1; document.getElementById(x[0] + '-v').firstChild.nodeValue = r.value; }); }); } }; },
       activity: function(){ return { html: '<h1 class="onb-h">How active are you?</h1><p class="onb-p">On a normal day.</p><div class="onb-chips">' + ACT.map(function(a){ return chip(P.activity === a[0], a[1], a[2], a[3], 'data-a="' + a[0] + '"'); }).join('') + '</div>', bind: function(){ body.querySelector('.onb-chips').addEventListener('click', function(e){ var b = e.target.closest('[data-a]'); if (!b) return; P.activity = b.dataset.a; body.querySelectorAll('.onb-chip').forEach(function(c){ c.classList.toggle('on', c === b); }); }); } }; },
       rhythm: function(){ var row = function(l, k){ return '<label class="onb-time"><span>' + l + '</span><input type="time" data-k="' + k + '" value="' + P[k] + '" /></label>'; }; return { html: '<h1 class="onb-h">Your usual day</h1><p class="onb-p">So reminders and water tips fit your meals.</p><div class="onb-times">' + row('Wake up', 'wake') + row('Breakfast', 'breakfast') + row('Lunch', 'lunch') + row('Dinner', 'dinner') + row('Bedtime', 'bed') + '</div>', bind: function(){ body.querySelectorAll('input[type=time]').forEach(function(i){ i.addEventListener('change', function(){ if (i.value) P[i.dataset.k] = i.value; }); }); } }; },
-      extra: function(){ var ai = !!getAiKey(); return { html: '<h1 class="onb-h">Anything else?</h1><p class="onb-p">' + (ai ? 'Tell me in your own words what you want to track or improve. The AI will suggest extra categories for you.' : 'Tell me what else you want to track. (Add an AI key in Settings and I can suggest categories from this.)') + '</p><textarea class="onb-ta" id="o-extra" maxlength="400" placeholder="e.g. I drink lots of coffee and want to cut down, and I get headaches in the evening">' + escapeHtml(P.extra) + '</textarea>', bind: function(){ document.getElementById('o-extra').addEventListener('input', function(e){ P.extra = e.target.value.trim(); }); } }; },
+      extra: function(){ var ai = !!getAiKey(); return { html: '<h1 class="onb-h">Anything else?</h1><p class="onb-p">' + (ai ? 'Tell me anything about you or what you want to track or improve. The AI builds your categories from all your answers, so only what fits you shows up.' : 'Tell me what else you want to track. (With AI switched on, your categories are built from your answers.)') + '</p><textarea class="onb-ta" id="o-extra" maxlength="400" placeholder="e.g. I drink lots of coffee and want to cut down, and I get headaches in the evening">' + escapeHtml(P.extra) + '</textarea>', bind: function(){ document.getElementById('o-extra').addEventListener('input', function(e){ P.extra = e.target.value.trim(); }); } }; },
       plan: function(){
         var show = visibleCats(), w = P.touched.water || calcWater();
         P.water = P.water || w;
         return { html: '<h1 class="onb-h">Your plan' + (P.name ? ', ' + escapeHtml(P.name) : '') + '</h1><p class="onb-p">Change anything before you start.</p><div class="onb-plan">' +
           '<div class="onb-card"><h4>DAILY WATER GOAL</h4><div class="onb-row"><span>' + (P.touched.weight ? 'From your weight and activity' : 'Standard goal') + '</span><span class="stepper"><button type="button" id="p-wm" aria-label="Less">-</button><output id="p-wv">' + P.water + '</output><button type="button" id="p-wp" aria-label="More">+</button></span></div></div>' +
-          '<div class="onb-card"><h4>WHAT YOU\'LL SEE</h4>' + CATEGORIES.filter(function(c){ return !c.custom && c.id !== 'gudlax'; }).map(function(c){ return '<div class="onb-row"><span>' + escapeHtml(c.name) + '</span>' + (c.id === 'water' ? '<span class="cat-tag">always on</span>' : '<label class="switch"><input type="checkbox" data-c="' + c.id + '" ' + (show[c.id] ? 'checked' : '') + ' /><span></span></label>') + '</div>'; }).join('') + (P.aiCats.length ? '<h4 style="margin-top:10px">SUGGESTED FOR YOU</h4>' + P.aiCats.map(function(c, i){ return '<div class="onb-row"><span>' + escapeHtml(c.name) + '</span><label class="switch"><input type="checkbox" data-ai="' + i + '" checked /><span></span></label></div>'; }).join('') : '') + '</div>' +
+          '<div class="onb-card"><h4>' + (P.aiPlan ? 'PICKED FOR YOU' : 'WHAT YOU\'LL SEE') + '</h4>' + CATEGORIES.filter(function(c){ return !c.custom && c.id !== 'gudlax' && (!P.aiPlan || c.id === 'water' || show[c.id]); }).map(function(c){ return '<div class="onb-row"><span>' + escapeHtml(c.name) + '</span>' + (c.id === 'water' ? '<span class="cat-tag">always on</span>' : '<label class="switch"><input type="checkbox" data-c="' + c.id + '" ' + (show[c.id] ? 'checked' : '') + ' /><span></span></label>') + '</div>'; }).join('') + (P.aiCats.length ? '<h4 style="margin-top:10px">SUGGESTED FOR YOU</h4>' + P.aiCats.map(function(c, i){ return '<div class="onb-row"><span>' + escapeHtml(c.name) + '</span><label class="switch"><input type="checkbox" data-ai="' + i + '" checked /><span></span></label></div>'; }).join('') : '') + '</div>' +
           '<div class="onb-card"><h4>MEALS</h4><div class="onb-row"><span>Breakfast ' + P.breakfast + '</span><span>Lunch ' + P.lunch + '</span><span>Dinner ' + P.dinner + '</span></div></div></div>' +
           '<p class="onb-note">These are general targets, not medical advice. For health concerns, talk to a doctor.</p>', bind: function(){
             var out = document.getElementById('p-wv'); function setW(v){ P.water = Math.min(6000, Math.max(500, v)); out.textContent = P.water; }
@@ -3890,13 +3899,27 @@
       function end() { if (!cur) return; cur.classList.remove('drag'); cur.style.transform = ''; cur = null; P.goals = [].slice.call(ul.children).map(function(li){ return li.dataset.g; }); renum(); }
       ul.addEventListener('pointerup', end); ul.addEventListener('pointercancel', end);
     }
+    // With an AI key, the AI reads ALL the answers and picks this person's categories. Without one, simple rules decide.
     async function askAi() {
-      if (!P.extra || !getAiKey()) return;
-      body.innerHTML = '<div class="onb-spin">Thinking about what suits you…</div>'; btnNext.disabled = true;
-      var goals = P.goals.map(function(g){ return GOALS.filter(function(x){ return x[0] === g; })[0][2]; }).join(', ') || 'general diary';
-      var raw = await aiGenerate({ contents: [{ parts: [{ text: 'A user is setting up a personal health and routine tracking diary. Their goals: ' + goals + '. In their own words they want to track or improve: "' + P.extra.replace(/"/g, "'") + '". Suggest up to 3 SHORT extra tracking categories (name 1 to 2 words, plus 3 to 6 lowercase keywords that would appear in diary lines for that category). Do not repeat these existing ones: water, food, fibre, stool, medicines, symptoms, sleep, weight, notes.' }] }],
-        generationConfig: { temperature: 0.3, responseMimeType: 'application/json', responseSchema: { type: 'OBJECT', properties: { categories: { type: 'ARRAY', items: { type: 'OBJECT', properties: { name: { type: 'STRING' }, keywords: { type: 'ARRAY', items: { type: 'STRING' } } }, required: ['name', 'keywords'] } } }, required: ['categories'] } } }, 15000);
-      try { var j = JSON.parse(raw); P.aiCats = (j.categories || []).slice(0, 3).filter(function(c){ return c && c.name; }).map(function(c){ return { name: String(c.name).slice(0, 24), keywords: (c.keywords || []).map(function(k){ return String(k).toLowerCase(); }).slice(0, 8) }; }); } catch (e) { P.aiCats = []; }
+      P.aiPlan = null; P.aiCats = [];
+      if (!getAiKey()) return;
+      body.innerHTML = '<div class="onb-spin">Building your plan from your answers…</div>'; btnNext.disabled = true;
+      var goals = P.goals.map(function(g){ return GOALS.filter(function(x){ return x[0] === g; })[0][2]; }).join(', ') || 'none picked';
+      var txt = 'A person is setting up a personal daily tracking diary. Choose which tracking categories suit THIS person only. ' +
+        'Their goals, most important first: ' + goals + '. Age ' + P.age + ', height ' + P.height + ' cm, weight ' + P.weight + ' kg, activity: ' + P.activity + '. Wake ' + P.wake + ', bed ' + P.bed + '. ' +
+        'In their own words: "' + (P.extra || 'nothing added').replace(/"/g, "'") + '". ' +
+        'Ready-made categories you may keep (use these exact ids): food (meals and snacks), fibre (fibre supplements), stool (bowel movements), medicines (tablets, vitamins, supplements), symptoms (headache, gas, pain, anything off), sleep (sleep and wake times), weight (body weight). ' +
+        'Rules: keep only categories that clearly fit what they said or their goals. Do NOT include stool, fibre or symptoms unless they asked about digestion, gut, stomach, constipation, pain or similar. Include medicines only if they mention tablets, vitamins, supplements or the medicines goal. Include sleep only for the sleep goal or if they mention sleep. Include weight only for gain or lose weight goals or if they mention it. Water and notes are always on, do not list them. ' +
+        'Also suggest 0 to 4 extra custom categories that fit their own words (name 1 to 2 words, plus 3 to 6 lowercase keywords that would appear in diary lines for it, for example coffee, study, workout, mood). Do not repeat the ready-made ones. This is not medical advice.';
+      var raw = await aiGenerate({ contents: [{ parts: [{ text: txt }] }],
+        generationConfig: { temperature: 0.3, responseMimeType: 'application/json', responseSchema: { type: 'OBJECT', properties: { keep: { type: 'ARRAY', items: { type: 'STRING' } }, categories: { type: 'ARRAY', items: { type: 'OBJECT', properties: { name: { type: 'STRING' }, keywords: { type: 'ARRAY', items: { type: 'STRING' } } }, required: ['name', 'keywords'] } } }, required: ['keep', 'categories'] } } }, 20000);
+      try {
+        var j = JSON.parse(raw), ids = ['food', 'fibre', 'stool', 'medicines', 'symptoms', 'sleep', 'weight'], plan = { food: false };
+        ids.forEach(function(id){ plan[id] = (j.keep || []).map(function(x){ return String(x).toLowerCase(); }).indexOf(id) >= 0; });
+        if (!ids.some(function(id){ return plan[id]; })) plan.food = true;
+        P.aiPlan = plan; P.show = {};
+        P.aiCats = (j.categories || []).slice(0, 4).filter(function(c){ return c && c.name; }).map(function(c){ return { name: String(c.name).slice(0, 24), keywords: (c.keywords || []).map(function(k){ return String(k).toLowerCase(); }).slice(0, 8) }; });
+      } catch (e) { P.aiPlan = null; P.aiCats = []; }
     }
     function finish() {
       var show = Object.assign(visibleCats(), P.show || {});
