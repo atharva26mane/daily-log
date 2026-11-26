@@ -321,6 +321,58 @@
     @media (prefers-reduced-transparency: reduce) { .edge-blur i { display: none; } }
 
 
+
+    /* water nudge */
+    .nudge { display: flex; gap: 12px; align-items: center; margin: 0 0 12px; padding: 12px 14px; border-radius: 18px; background: rgba(255,255,255,.72); border: 1px solid rgba(64,81,59,.15); }
+    .nudge[hidden] { display: none; }
+    .nudge-ic { flex: none; width: 34px; height: 34px; border-radius: 12px; background: #dfeee8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f8ea8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5s6 6.2 6 10.5a6 6 0 0 1-12 0c0-4.3 6-10.5 6-10.5z'/%3E%3C/svg%3E") center/22px no-repeat; }
+    .nudge-t { font-weight: 700; font-size: 15px; line-height: 1.3; color: var(--forest); } .nudge-s { font-size: 13px; opacity: .72; margin-top: 2px; }
+    body.theme-volcano .nudge { background: var(--basalt); border: 1px solid var(--edge); backdrop-filter: blur(10px); }
+    body.theme-volcano .nudge-t { color: #ffd9bd; } body.theme-volcano .nudge-s { color: #e4c9b6; } body.theme-volcano .nudge-ic { background-color: rgba(232,100,26,.2); }
+    /* onboarding */
+    .onb { position: fixed; inset: 0; z-index: 200; display: flex; flex-direction: column; background: linear-gradient(180deg, #fefae0 0%, #eef2dc 100%); color: #2c3a28; padding: calc(14px + env(safe-area-inset-top)) 20px calc(16px + var(--safe-bottom)); }
+    .onb[hidden] { display: none; }
+    .onb-top { display: flex; align-items: center; justify-content: space-between; min-height: 44px; }
+    .onb-dots { display: flex; gap: 6px; } .onb-dots i { width: 8px; height: 8px; border-radius: 4px; background: rgba(64,81,59,.2); transition: width .25s, background .25s; } .onb-dots i.on { width: 26px; background: #40513b; } .onb-dots i.done { background: #81a37e; }
+    .onb-link { min-height: 44px; padding: 0 12px; border: 0; background: none; font: inherit; font-weight: 600; color: #5f6f52; }
+    .onb-link[hidden] { visibility: hidden; display: inline-block; }
+    .onb-body { flex: 1; overflow-y: auto; padding: 18px 2px 8px; animation: onbIn .28s ease-out both; }
+    @keyframes onbIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    .onb-h { font-family: var(--display); font-size: 31px; line-height: 1.12; font-weight: 700; margin: 6px 0 8px; }
+    .onb-p { margin: 0 0 20px; font-size: 16px; line-height: 1.45; color: #5f6f52; }
+    .onb-foot { display: flex; align-items: center; gap: 8px; padding-top: 10px; }
+    .onb-primary { flex: 1; min-height: 56px; border: 0; border-radius: 20px; background: #2e3c2a; color: #fefae0; font: inherit; font-size: 17px; font-weight: 700; box-shadow: 0 8px 20px rgba(46,60,42,.28); }
+    .onb-primary:active { transform: scale(.985); } .onb-primary:disabled { opacity: .4; box-shadow: none; }
+    .onb-in { width: 100%; min-height: 58px; padding: 0 18px; border: 2px solid rgba(64,81,59,.2); border-radius: 18px; background: #fff; font: inherit; font-size: 20px; color: inherit; outline: none; }
+    .onb-in:focus { border-color: #40513b; }
+    .onb-chips { display: grid; gap: 10px; }
+    .onb-chip { display: flex; align-items: center; gap: 14px; min-height: 60px; padding: 10px 16px; border: 2px solid rgba(64,81,59,.16); border-radius: 18px; background: #fff; font: inherit; font-size: 17px; font-weight: 600; color: inherit; text-align: left; transition: transform .12s, background .2s, border-color .2s; }
+    .onb-chip small { display: block; font-weight: 400; font-size: 13px; opacity: .7; }
+    .onb-chip .em { font-size: 24px; width: 30px; text-align: center; flex: none; }
+    .onb-chip:active { transform: scale(.985); } .onb-chip.on { background: #40513b; border-color: #40513b; color: #fefae0; }
+    .onb-chip.on small { opacity: .85; }
+    .onb-big { text-align: center; margin: 8px 0 4px; font-family: var(--display); font-size: 56px; font-weight: 700; font-variant-numeric: tabular-nums; } .onb-big small { font-size: 18px; font-weight: 600; margin-left: 4px; opacity: .6; }
+    .onb-range { width: 100%; height: 44px; -webkit-appearance: none; appearance: none; background: transparent; margin: 6px 0 22px; touch-action: pan-y; }
+    .onb-range::-webkit-slider-runnable-track { height: 10px; border-radius: 5px; background: rgba(64,81,59,.18); }
+    .onb-range::-webkit-slider-thumb { -webkit-appearance: none; width: 36px; height: 36px; margin-top: -13px; border-radius: 50%; background: #40513b; border: 4px solid #fefae0; box-shadow: 0 3px 10px rgba(0,0,0,.3); }
+    .onb-range::-moz-range-track { height: 10px; border-radius: 5px; background: rgba(64,81,59,.18); }
+    .onb-range::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: #40513b; border: 4px solid #fefae0; }
+    .onb-times { display: grid; gap: 10px; } .onb-time { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 0 16px; border-radius: 18px; background: #fff; border: 2px solid rgba(64,81,59,.12); font-weight: 600; font-size: 16px; }
+    .onb-time input { border: 0; background: transparent; font: inherit; font-size: 18px; font-weight: 700; color: inherit; text-align: right; outline: none; }
+    .onb-rank { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    .onb-rank li { display: flex; align-items: center; gap: 12px; min-height: 58px; padding: 0 8px 0 16px; border-radius: 18px; background: #fff; border: 2px solid rgba(64,81,59,.12); font-weight: 600; font-size: 17px; touch-action: none; user-select: none; }
+    .onb-rank li .n { width: 26px; height: 26px; border-radius: 50%; background: #40513b; color: #fefae0; font-size: 13px; display: grid; place-items: center; flex: none; }
+    .onb-rank li .grip { margin-left: auto; width: 48px; height: 48px; display: grid; place-items: center; color: #5f6f52; font-size: 22px; cursor: grab; touch-action: none; }
+    .onb-rank li.drag { position: relative; z-index: 3; box-shadow: 0 12px 28px rgba(0,0,0,.22); transform: scale(1.03); border-color: #40513b; }
+    .onb-ta { width: 100%; min-height: 120px; padding: 14px 16px; border: 2px solid rgba(64,81,59,.2); border-radius: 18px; background: #fff; font: inherit; font-size: 17px; color: inherit; outline: none; resize: none; }
+    .onb-plan { display: grid; gap: 10px; } .onb-card { padding: 14px 16px; border-radius: 20px; background: #fff; border: 2px solid rgba(64,81,59,.12); }
+    .onb-card h4 { margin: 0 0 8px; font-size: 13px; color: #5f6f52; font-weight: 700; }
+    .onb-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; font-weight: 600; }
+    .onb-note { font-size: 13px; color: #5f6f52; line-height: 1.4; margin: 12px 4px 0; }
+    .onb-spin { text-align: center; padding: 40px 0; color: #5f6f52; }
+    body.theme-volcano .onb-dots i.on, body.theme-volcano .onb-chip.on, body.theme-volcano .onb-range::-webkit-slider-thumb, body.theme-volcano .onb-rank li .n { background: #e8641a; border-color: #e8641a; }
+    body.theme-volcano .onb-primary { background: #e8641a; color: #fff; box-shadow: 0 8px 20px rgba(232,100,26,.35); }
+    @media (prefers-reduced-motion: reduce) { .onb-body { animation: none; } }
     /* trends */
     .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border-radius: 16px; background: rgba(64,81,59,.1); margin-bottom: 8px; }
     .seg button { min-height: 40px; border: 0; border-radius: 12px; background: transparent; font: inherit; font-weight: 600; color: inherit; }
@@ -538,6 +590,7 @@
     <div class="ground">
       <div class="container">
         <aside class="proverb" id="proverb" aria-label="Proverb of the day"><p class="proverb-text" id="proverb-text"></p></aside>
+        <aside class="nudge" id="nudge" aria-live="polite" hidden><i class="nudge-ic" aria-hidden="true"></i><div><div class="nudge-t" id="nudge-t"></div><div class="nudge-s" id="nudge-s"></div></div></aside>
         <section class="tank" id="tank" aria-label="Water today">
           <div class="tank-fill" id="tank-fill" aria-hidden="true">
             <svg class="wave w2" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 2 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
@@ -731,6 +784,7 @@
 
       <div class="set-group">
         <div class="set-label">App</div>
+        <button class="set-row set-link" id="set-plan-row"><span class="set-name">My plan</span><span class="set-val">Redo questions</span></button>
         <button class="set-row set-link" id="set-cats-row"><span class="set-name">Categories</span><span class="set-val" id="set-cats-val">Add, rename, hide</span></button>
         <button class="set-row set-link" id="set-theme-row"><span class="set-name">Theme</span><span class="set-val" id="set-theme-val">Forest</span></button>
         <button class="set-row set-link" id="set-ai-row"><span class="set-name">AI helper</span><span class="set-val" id="set-ai-val">Off</span></button>
@@ -777,6 +831,13 @@
         <button class="btn-primary" id="cat-add-btn">Add category</button>
       </div>
     </div>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div id="onb" class="onb" hidden>
+    <div class="onb-top"><div class="onb-dots" id="onb-dots"></div><button class="onb-link" id="onb-skipall">Skip all</button></div>
+    <div class="onb-body" id="onb-body"></div>
+    <div class="onb-foot"><button class="onb-link" id="onb-back">Back</button><button class="onb-link" id="onb-skip">Skip</button><button class="onb-primary" id="onb-next">Continue</button></div>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -1636,6 +1697,7 @@
       document.getElementById('header-date').textContent = weekdayLong(activeDateKey);
       if (typeof tickClock === 'function') tickClock();
       { const pv = document.getElementById('proverb'); if (pv) pv.style.display = viewingPastDay ? 'none' : ''; }
+      if (window.__nudge) window.__nudge();
       document.getElementById('header-label').textContent = viewingPastDay
         ? 'Past day, ' + shortDate(activeDateKey)
         : shortDate(activeDateKey);
@@ -2744,6 +2806,143 @@
     document.getElementById('tr-seg').addEventListener('click', function(e){ var b = e.target.closest('button[data-t]'); if (b) { tab = b.dataset.t; render(); } });
     document.getElementById('open-insights-btn').addEventListener('click', render);
     window.__trendsRender = render; window.__sleepHours = sleepHours; window.__parseWeight = parseWeight;
+  })();
+</script>
+<script>
+  (function(){
+    // =============== Water nudge (rules, uses your meal times) ===============
+    var DEF_MEALS = { breakfast: '08:30', lunch: '13:00', dinner: '20:30' };
+    function mins(hhmm) { var p = String(hhmm || '').split(':'); return (+p[0]) * 60 + (+p[1] || 0); }
+    function hhmm(m) { m = ((m % 1440) + 1440) % 1440; return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60); }
+    function meals() { var mt = SETTINGS.mealTimes || {}; return [['Breakfast', mt.breakfast || DEF_MEALS.breakfast], ['Lunch', mt.lunch || DEF_MEALS.lunch], ['Dinner', mt.dinner || DEF_MEALS.dinner]].map(function(x){ return { name: x[0], at: mins(x[1]) }; }); }
+    function nudge() {
+      var box = document.getElementById('nudge'); if (!box) return;
+      if (viewingPastDay) { box.hidden = true; return; }
+      var n = new Date(), now = n.getHours() * 60 + n.getMinutes(), es = getDayEntries(getTodayKey());
+      var total = getWaterTotal(es), target = WATER_TARGET_ML, left = Math.max(0, target - total);
+      var waters = sortEntries(es.filter(function(e){ return e.cat === 'water' && extractWaterMl(e.text) > 0; }));
+      var lastW = waters.length ? mins(waters[waters.length - 1].time) : null, since = lastW === null ? null : now - lastW;
+      var wake = mins((SETTINGS.profile && SETTINGS.profile.wake) || '06:30'), bed = mins((SETTINGS.profile && SETTINGS.profile.bed) || '23:00');
+      var t = '', sub = '', amt = Math.min(250, Math.max(100, Math.round(left / 50) * 50));
+      var foods = es.filter(function(e){ return e.cat === 'food'; }).map(function(e){ return mins(e.time); }).filter(function(m){ return now - m >= 0 && now - m <= 60; });
+      var next = meals().filter(function(m){ return m.at > now; })[0];
+      if (total >= target) { t = 'Water goal done'; sub = 'Sip only when you feel thirsty.'; }
+      else if (now < wake - 30 || now > bed + 30) { box.hidden = true; return; }
+      else if (next && next.at - now > 0 && next.at - now <= 35) { t = next.name + ' in ' + (next.at - now) + ' min'; sub = 'Only small sips now, then a proper glass about 30 minutes after you eat.'; }
+      else if (foods.length) { var since0 = now - Math.max.apply(null, foods); t = 'Good time for ~' + amt + ' ml'; sub = since0 >= 25 ? 'Your meal was ' + since0 + ' min ago. A glass now settles well.' : 'Wait a few minutes after eating, then take a glass.'; }
+      else if (lastW === null) { t = 'No water yet today'; sub = 'Start with a glass (about ' + amt + ' ml).'; }
+      else if (since >= 90) { t = 'Time for ~' + amt + ' ml'; sub = 'It has been ' + Math.floor(since / 60) + 'h ' + pad2(since % 60) + 'm since your last water.'; }
+      else { t = 'On track'; sub = 'Next glass around ' + hhmm(lastW + 90) + '. ' + left + ' ml to go.'; }
+      document.getElementById('nudge-t').textContent = t; document.getElementById('nudge-s').textContent = sub; box.hidden = false;
+    }
+    window.__nudge = nudge; nudge(); setInterval(nudge, 30000);
+    document.addEventListener('visibilitychange', function(){ if (!document.hidden) nudge(); });
+
+    // =============== Onboarding questionnaire ===============
+    var el = document.getElementById('onb'), body = document.getElementById('onb-body'), dots = document.getElementById('onb-dots');
+    var btnNext = document.getElementById('onb-next'), btnBack = document.getElementById('onb-back'), btnSkip = document.getElementById('onb-skip'), btnAll = document.getElementById('onb-skipall');
+    var P, step, order;
+    var GOALS = [['water', '💧', 'Drink more water', 'Hit a daily target'], ['gain', '📈', 'Gain weight', 'Eat more, steadily'], ['lose', '📉', 'Lose weight', 'Track food and weight'], ['food', '🍽️', 'Eat better', 'Log meals and snacks'], ['digestion', '🌿', 'Better digestion', 'Fibre, stool, symptoms'], ['sleep', '🌙', 'Sleep better', 'Bed and wake times'], ['meds', '💊', 'Remember medicines', 'Tablets and supplements'], ['diary', '📝', 'Just a daily diary', 'Keep it simple']];
+    var ACT = [['light', '🪑', 'Mostly sitting', 'Desk, study, light walking'], ['moderate', '🚶', 'Moderately active', 'On my feet, regular walks'], ['active', '🏃', 'Very active', 'Workouts or physical work']];
+    function defaults() { var pr = SETTINGS.profile || {}; return { name: SETTINGS.name || '', goals: pr.goals || [], age: pr.age || 25, height: pr.height || 170, weight: pr.weight || 65, activity: pr.activity || 'moderate', wake: pr.wake || '06:30', bed: pr.bed || '23:00',
+      breakfast: (SETTINGS.mealTimes || {}).breakfast || '08:30', lunch: (SETTINGS.mealTimes || {}).lunch || '13:00', dinner: (SETTINGS.mealTimes || {}).dinner || '20:30', extra: '', aiCats: [], touched: {} }; }
+    function calcWater() { var w = Math.round(P.weight * 35 / 250) * 250; w += P.activity === 'active' ? 500 : P.activity === 'moderate' ? 250 : 0; return Math.min(4000, Math.max(1500, w)); }
+    function visibleCats() {
+      var g = P.goals, show = { water: 1, food: 1, notes: 1 };
+      if (!g.length || g.indexOf('diary') >= 0) { ['fibre', 'stool', 'medicines', 'symptoms', 'sleep', 'weight'].forEach(function(c){ show[c] = 1; }); }
+      if (g.indexOf('digestion') >= 0) { show.fibre = show.stool = show.symptoms = 1; }
+      if (g.indexOf('sleep') >= 0) show.sleep = 1; if (g.indexOf('meds') >= 0) show.medicines = 1;
+      if (g.indexOf('gain') >= 0 || g.indexOf('lose') >= 0) show.weight = 1;
+      return show;
+    }
+    var STEPS = ['welcome', 'goals', 'rank', 'body', 'activity', 'rhythm', 'extra', 'plan'];
+    function liveSteps() { return STEPS.filter(function(s){ return s !== 'rank' || P.goals.length > 1; }); }
+    function open(fresh) { P = defaults(); step = 0; el.hidden = false; document.body.style.overflow = 'hidden'; draw(); }
+    function close(status) { el.hidden = true; document.body.style.overflow = ''; SETTINGS.onboarded = status; saveSettings(); applyCategorySettings(); populateCategorySelect(); renderMain(); nudge(); }
+    function draw() {
+      var list = liveSteps(), id = list[step];
+      dots.innerHTML = list.map(function(_, i){ return '<i class="' + (i === step ? 'on' : i < step ? 'done' : '') + '"></i>'; }).join('');
+      btnBack.hidden = step === 0; btnSkip.hidden = id === 'plan' || id === 'welcome'; btnAll.hidden = id === 'plan';
+      btnNext.textContent = id === 'plan' ? 'Start tracking' : id === 'welcome' ? "Let's go" : 'Continue'; btnNext.disabled = false;
+      body.style.animation = 'none'; void body.offsetWidth; body.style.animation = '';
+      var f = VIEWS[id](); body.innerHTML = f.html; if (f.bind) f.bind(); body.scrollTop = 0;
+    }
+    function chip(on, em, t, sm, attr) { return '<button type="button" class="onb-chip' + (on ? ' on' : '') + '" ' + attr + '><span class="em">' + em + '</span><span>' + t + (sm ? '<small>' + sm + '</small>' : '') + '</span></button>'; }
+    function slider(id, label, unit, min, max, val) { return '<div class="onb-big" id="' + id + '-v">' + val + '<small>' + unit + '</small></div><input class="onb-range" id="' + id + '" type="range" min="' + min + '" max="' + max + '" value="' + val + '" aria-label="' + label + '" />'; }
+    var VIEWS = {
+      welcome: function(){ return { html: '<h1 class="onb-h">Welcome. Let\'s set up your log.</h1><p class="onb-p">A few quick questions so the app fits you. You can skip anything and change it later.</p><input class="onb-in" id="o-name" placeholder="What should I call you?" maxlength="24" autocomplete="off" value="' + escapeHtml(P.name) + '" />', bind: function(){ document.getElementById('o-name').addEventListener('input', function(e){ P.name = e.target.value.trim(); }); } }; },
+      goals: function(){ return { html: '<h1 class="onb-h">What do you want from this app?</h1><p class="onb-p">Pick all that apply.</p><div class="onb-chips">' + GOALS.map(function(g){ return chip(P.goals.indexOf(g[0]) >= 0, g[1], g[2], g[3], 'data-g="' + g[0] + '"'); }).join('') + '</div>', bind: function(){ body.querySelector('.onb-chips').addEventListener('click', function(e){ var b = e.target.closest('[data-g]'); if (!b) return; var g = b.dataset.g, i = P.goals.indexOf(g); if (i >= 0) P.goals.splice(i, 1); else P.goals.push(g); b.classList.toggle('on'); }); } }; },
+      rank: function(){ return { html: '<h1 class="onb-h">What matters most?</h1><p class="onb-p">Drag the handle to put your top goal first.</p><ul class="onb-rank" id="o-rank">' + P.goals.map(function(g, i){ var d = GOALS.filter(function(x){ return x[0] === g; })[0]; return '<li data-g="' + g + '"><span class="n">' + (i + 1) + '</span><span>' + d[1] + ' ' + d[2] + '</span><span class="grip" aria-label="Drag to reorder">&#8942;&#8942;</span></li>'; }).join('') + '</ul>', bind: bindRank }; },
+      body: function(){ return { html: '<h1 class="onb-h">A little about you</h1><p class="onb-p">Used only to suggest a water goal. Drag the sliders.</p>' + '<div class="onb-card"><h4>AGE</h4>' + slider('o-age', 'Age', ' yrs', 10, 90, P.age) + '</div><div class="onb-card" style="margin-top:10px"><h4>HEIGHT</h4>' + slider('o-h', 'Height', ' cm', 120, 220, P.height) + '</div><div class="onb-card" style="margin-top:10px"><h4>WEIGHT</h4>' + slider('o-w', 'Weight', ' kg', 30, 160, P.weight) + '</div>', bind: function(){ [['o-age', 'age'], ['o-h', 'height'], ['o-w', 'weight']].forEach(function(x){ var r = document.getElementById(x[0]); r.addEventListener('input', function(){ P[x[1]] = +r.value; P.touched[x[1]] = 1; document.getElementById(x[0] + '-v').firstChild.nodeValue = r.value; }); }); } }; },
+      activity: function(){ return { html: '<h1 class="onb-h">How active are you?</h1><p class="onb-p">On a normal day.</p><div class="onb-chips">' + ACT.map(function(a){ return chip(P.activity === a[0], a[1], a[2], a[3], 'data-a="' + a[0] + '"'); }).join('') + '</div>', bind: function(){ body.querySelector('.onb-chips').addEventListener('click', function(e){ var b = e.target.closest('[data-a]'); if (!b) return; P.activity = b.dataset.a; body.querySelectorAll('.onb-chip').forEach(function(c){ c.classList.toggle('on', c === b); }); }); } }; },
+      rhythm: function(){ var row = function(l, k){ return '<label class="onb-time"><span>' + l + '</span><input type="time" data-k="' + k + '" value="' + P[k] + '" /></label>'; }; return { html: '<h1 class="onb-h">Your usual day</h1><p class="onb-p">So reminders and water tips fit your meals.</p><div class="onb-times">' + row('Wake up', 'wake') + row('Breakfast', 'breakfast') + row('Lunch', 'lunch') + row('Dinner', 'dinner') + row('Bedtime', 'bed') + '</div>', bind: function(){ body.querySelectorAll('input[type=time]').forEach(function(i){ i.addEventListener('change', function(){ if (i.value) P[i.dataset.k] = i.value; }); }); } }; },
+      extra: function(){ var ai = !!getAiKey(); return { html: '<h1 class="onb-h">Anything else?</h1><p class="onb-p">' + (ai ? 'Tell me in your own words what you want to track or improve. The AI will suggest extra categories for you.' : 'Tell me what else you want to track. (Add an AI key in Settings and I can suggest categories from this.)') + '</p><textarea class="onb-ta" id="o-extra" maxlength="400" placeholder="e.g. I drink lots of coffee and want to cut down, and I get headaches in the evening">' + escapeHtml(P.extra) + '</textarea>', bind: function(){ document.getElementById('o-extra').addEventListener('input', function(e){ P.extra = e.target.value.trim(); }); } }; },
+      plan: function(){
+        var show = visibleCats(), w = P.touched.water || calcWater();
+        P.water = P.water || w;
+        return { html: '<h1 class="onb-h">Your plan' + (P.name ? ', ' + escapeHtml(P.name) : '') + '</h1><p class="onb-p">Change anything before you start.</p><div class="onb-plan">' +
+          '<div class="onb-card"><h4>DAILY WATER GOAL</h4><div class="onb-row"><span>' + (P.touched.weight ? 'From your weight and activity' : 'Standard goal') + '</span><span class="stepper"><button type="button" id="p-wm" aria-label="Less">-</button><output id="p-wv">' + P.water + '</output><button type="button" id="p-wp" aria-label="More">+</button></span></div></div>' +
+          '<div class="onb-card"><h4>WHAT YOU\'LL SEE</h4>' + CATEGORIES.filter(function(c){ return !c.custom && c.id !== 'gudlax'; }).map(function(c){ return '<div class="onb-row"><span>' + escapeHtml(c.name) + '</span>' + (c.id === 'water' ? '<span class="cat-tag">always on</span>' : '<label class="switch"><input type="checkbox" data-c="' + c.id + '" ' + (show[c.id] ? 'checked' : '') + ' /><span></span></label>') + '</div>'; }).join('') + (P.aiCats.length ? '<h4 style="margin-top:10px">SUGGESTED FOR YOU</h4>' + P.aiCats.map(function(c, i){ return '<div class="onb-row"><span>' + escapeHtml(c.name) + '</span><label class="switch"><input type="checkbox" data-ai="' + i + '" checked /><span></span></label></div>'; }).join('') : '') + '</div>' +
+          '<div class="onb-card"><h4>MEALS</h4><div class="onb-row"><span>Breakfast ' + P.breakfast + '</span><span>Lunch ' + P.lunch + '</span><span>Dinner ' + P.dinner + '</span></div></div></div>' +
+          '<p class="onb-note">These are general targets, not medical advice. For health concerns, talk to a doctor.</p>', bind: function(){
+            var out = document.getElementById('p-wv'); function setW(v){ P.water = Math.min(6000, Math.max(500, v)); out.textContent = P.water; }
+            document.getElementById('p-wm').addEventListener('click', function(){ setW(P.water - 250); }); document.getElementById('p-wp').addEventListener('click', function(){ setW(P.water + 250); });
+            body.querySelectorAll('input[data-c]').forEach(function(i){ i.addEventListener('change', function(){ P.show = P.show || {}; P.show[i.dataset.c] = i.checked; }); });
+            body.querySelectorAll('input[data-ai]').forEach(function(i){ i.addEventListener('change', function(){ P.aiCats[+i.dataset.ai].off = !i.checked; }); });
+          } };
+      }
+    };
+    function bindRank() {
+      var ul = document.getElementById('o-rank'), cur = null, startY = 0;
+      function renum() { ul.querySelectorAll('li').forEach(function(li, i){ li.querySelector('.n').textContent = i + 1; }); }
+      ul.addEventListener('pointerdown', function(e){ var g = e.target.closest('.grip'); if (!g) return; cur = g.parentNode; startY = e.clientY; cur.classList.add('drag'); g.setPointerCapture(e.pointerId); e.preventDefault(); });
+      ul.addEventListener('pointermove', function(e){
+        if (!cur) return; cur.style.transform = 'translateY(' + (e.clientY - startY) + 'px) scale(1.03)';
+        var items = [].slice.call(ul.children).filter(function(x){ return x !== cur; }), r = cur.getBoundingClientRect(), mid = r.top + r.height / 2;
+        for (var i = 0; i < items.length; i++) { var b = items[i].getBoundingClientRect(); if (mid < b.top + b.height / 2) { if (cur.nextSibling !== items[i]) { var before = cur.getBoundingClientRect().top; ul.insertBefore(cur, items[i]); startY += cur.getBoundingClientRect().top - before; cur.style.transform = 'translateY(' + (e.clientY - startY) + 'px) scale(1.03)'; } renum(); return; } }
+        if (ul.lastElementChild !== cur) { var b0 = cur.getBoundingClientRect().top; ul.appendChild(cur); startY += cur.getBoundingClientRect().top - b0; cur.style.transform = 'translateY(' + (e.clientY - startY) + 'px) scale(1.03)'; renum(); }
+      });
+      function end() { if (!cur) return; cur.classList.remove('drag'); cur.style.transform = ''; cur = null; P.goals = [].slice.call(ul.children).map(function(li){ return li.dataset.g; }); renum(); }
+      ul.addEventListener('pointerup', end); ul.addEventListener('pointercancel', end);
+    }
+    async function askAi() {
+      if (!P.extra || !getAiKey()) return;
+      body.innerHTML = '<div class="onb-spin">Thinking about what suits you…</div>'; btnNext.disabled = true;
+      var goals = P.goals.map(function(g){ return GOALS.filter(function(x){ return x[0] === g; })[0][2]; }).join(', ') || 'general diary';
+      var raw = await aiGenerate({ contents: [{ parts: [{ text: 'A user is setting up a personal health and routine tracking diary. Their goals: ' + goals + '. In their own words they want to track or improve: "' + P.extra.replace(/"/g, "'") + '". Suggest up to 3 SHORT extra tracking categories (name 1 to 2 words, plus 3 to 6 lowercase keywords that would appear in diary lines for that category). Do not repeat these existing ones: water, food, fibre, stool, medicines, symptoms, sleep, weight, notes.' }] }],
+        generationConfig: { temperature: 0.3, responseMimeType: 'application/json', responseSchema: { type: 'OBJECT', properties: { categories: { type: 'ARRAY', items: { type: 'OBJECT', properties: { name: { type: 'STRING' }, keywords: { type: 'ARRAY', items: { type: 'STRING' } } }, required: ['name', 'keywords'] } } }, required: ['categories'] } } }, 15000);
+      try { var j = JSON.parse(raw); P.aiCats = (j.categories || []).slice(0, 3).filter(function(c){ return c && c.name; }).map(function(c){ return { name: String(c.name).slice(0, 24), keywords: (c.keywords || []).map(function(k){ return String(k).toLowerCase(); }).slice(0, 8) }; }); } catch (e) { P.aiCats = []; }
+    }
+    function finish() {
+      var show = Object.assign(visibleCats(), P.show || {});
+      SETTINGS.name = P.name; SETTINGS.waterTarget = WATER_TARGET_ML = Math.min(6000, Math.max(500, P.water || calcWater()));
+      SETTINGS.profile = { goals: P.goals, age: P.age, height: P.height, weight: P.weight, activity: P.activity, wake: P.wake, bed: P.bed, extra: P.extra };
+      SETTINGS.mealTimes = { breakfast: P.breakfast, lunch: P.lunch, dinner: P.dinner };
+      var hide = []; BASE_CATEGORIES.forEach(function(c){ if (c.id === 'water') return; if (c.id === 'gudlax') { var hasData = Object.keys(allData).some(function(k){ return Array.isArray(allData[k]) && allData[k].length; }); if (!hasData || (SETTINGS.catHidden || []).indexOf('gudlax') >= 0) hide.push('gudlax'); return; } if (!show[c.id]) hide.push(c.id); });
+      SETTINGS.catHidden = hide.concat((SETTINGS.catHidden || []).filter(function(id){ return id.indexOf('c_') === 0; }));
+      P.aiCats.forEach(function(c){ if (c.off) return; var id = 'c_' + c.name.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 10) + Math.floor(Math.random() * 900 + 100); SETTINGS.catCustom = (SETTINGS.catCustom || []).concat([{ id: id, name: c.name, color: CUSTOM_COLORS[(SETTINGS.catCustom || []).length % CUSTOM_COLORS.length], keywords: c.keywords.length ? c.keywords : [c.name.toLowerCase()] }]); });
+      close('done'); showToast('Your plan is ready');
+    }
+    btnNext.addEventListener('click', async function(){
+      var list = liveSteps(), id = list[step];
+      if (id === 'plan') { finish(); return; }
+      if (id === 'extra') { await askAi(); }
+      if (id === 'body') P.touched.weight = 1;
+      if (id === 'body' || id === 'activity') P.water = null;
+      step = Math.min(step + 1, liveSteps().length - 1); draw();
+    });
+    btnBack.addEventListener('click', function(){ step = Math.max(0, step - 1); draw(); });
+    btnSkip.addEventListener('click', function(){ step = Math.min(step + 1, liveSteps().length - 1); draw(); });
+    btnAll.addEventListener('click', function(){ close('skipped'); });
+    document.getElementById('set-plan-row').addEventListener('click', function(){ document.getElementById('settings-modal').classList.remove('open'); setTimeout(function(){ open(); }, 150); });
+    // first run: only for a brand new person with nothing logged
+    setTimeout(function(){
+      if (SETTINGS.onboarded) return;
+      var has = Object.keys(allData).some(function(k){ return Array.isArray(allData[k]) && allData[k].length; });
+      if (has) { SETTINGS.onboarded = 'existing'; saveSettings(); return; }
+      open();
+    }, 400);
+    window.__openOnboarding = open;
   })();
 </script>
 </body>
