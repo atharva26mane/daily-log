@@ -1821,8 +1821,10 @@
       input.value = '';
       chatHistory.push({ role: 'user', text });
 
+      if (!getAiKey() && window.__refreshAccess) { await window.__refreshAccess(false); }
       if (!getAiKey()) {
-        chatHistory.push({ role: 'model', local: true, text: 'Please add your Gemini key first. Close this, tap the AI button on the main page, and paste the key.' });
+        const why = window.__aiWhy ? window.__aiWhy() : '';
+        chatHistory.push({ role: 'model', local: true, text: why || 'AI is not set up on this phone yet. Ask the admin to switch AI on for your account, or add your own Groq or Gemini key in Settings > AI helper.' });
         renderChat();
         return;
       }
@@ -3418,7 +3420,13 @@
     return status;
   }
   // The admin can switch AI on or off at any time, so each device re-checks its own access now and then.
-  var accessBusy = false;
+  var accessBusy = false, lastAiStatus = '';
+  window.__aiWhy = function () {
+    if (!me) return '';
+    if (lastAiStatus === 'error') return 'Could not reach the server to check your AI access. Try again in a moment.';
+    if (!me.ai) return 'AI is not switched on for your account yet. Ask the admin to turn on AI access for you.';
+    return 'AI access is on for you, but the admin has not saved a key yet. Ask the admin to add one.';
+  };
   async function refreshAccess(manual) {
     if (!sb || !me || me.status !== 'approved' || accessBusy) return;
     accessBusy = true;
@@ -3432,6 +3440,7 @@
         }
       } catch (e) {}
       var st = await loadCloudKeys();
+      lastAiStatus = st;
       var has = !!getAiKey();
       if (has && !had) showToast('AI is now on for you');
       else if (manual) showToast(has ? 'AI is on' : (st === 'error' ? 'Could not check. Try again.' : (me.ai ? 'AI is on, but no key is saved yet. Ask the admin.' : 'AI is off for your account')));
