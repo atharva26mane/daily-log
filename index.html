@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Daily Log" />
+  <title>Daily Log</title>
+  <link id="app-icon" rel="icon" href="" />
+  <link id="apple-icon" rel="apple-touch-icon" href="" />
+  <link id="pwa-manifest" rel="manifest" href="" />
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1f2630;
+      --border: #2b3340;
+      --text: #f0f4f8;
+      --muted: #8b949e;
+      --accent: #38bdf8;
+      --accent-dark: #0284c7;
+      --green: #34d399;
+      --danger: #f87171;
+      --radius: 14px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.4;
+      min-height: 100%;
+    }
+
+    body {
+      padding-bottom: calc(96px + var(--safe-bottom));
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 14px 14px 24px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .app-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .date-title {
+      font-size: 21px;
+      font-weight: 700;
+      margin: 2px 0 0;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .pill-btn {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .pill-btn:active {
+      background: var(--surface-2);
+    }
+
+    /* Big Quick Add Button */
+    .big-add-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #06131f;
+      border: none;
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      font-size: 19px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.22);
+    }
+
+    .big-add-btn:active {
+      background: var(--accent-dark);
+      color: #fff;
+      transform: scale(0.99);
+    }
+
+    .big-plus {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    /* Category Cards */
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-title-wrap {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .card-hint {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .water-badge {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .water-badge.done {
+      color: var(--green);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-2);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.2s ease;
+    }
+
+    .progress-fill.done {
+      background: var(--green);
+    }
+
+    .card-add-btn {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--accent);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .card-add-btn:active {
+      background: var(--accent);
+      color: #06131f;
+    }
+
+    .entries {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 8px 0 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .entry-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--surface-2);
+      cursor: pointer;
+    }
+
+    .entry-item:active {
+      opacity: 0.8;
+    }
+
+    .entry-time {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px;
+      color: var(--muted);
+      padding-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .entry-text {
+      font-size: 15px;
+      word-break: break-word;
+      flex: 1;
+    }
+
+    .yesterday-note {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(56, 189, 248, 0.08);
+      border-radius: 8px;
+      padding: 6px 10px;
+    }
+
+    /* Sticky Bottom Bar */
+    .bottom-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(13, 17, 23, 0.95);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      padding: 10px 14px calc(10px + var(--safe-bottom));
+      z-index: 20;
+    }
+
+    .bottom-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #052014;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 14px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active {
+      opacity: 0.85;
+    }
+
+    /* Modal / Bottom Sheet */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.68);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 50;
+      padding: 12px;
+    }
+
+    .overlay.open {
+      display: flex;
+    }
+
+    .sheet {
+      width: 100%;
+      max-width: 560px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 16px calc(18px + var(--safe-bottom));
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .sheet-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .text-input,
+    .select-input,
+    .time-input {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 14px;
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .text-input:focus,
+    .select-input:focus,
+    .time-input:focus {
+      border-color: var(--accent);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .auto-tag {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-left: 6px;
+    }
+
+    .sheet-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .sheet-actions button {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-save {
+      background: var(--accent);
+      color: #06131f;
+      border: none;
+    }
+
+    .btn-cancel {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-delete {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid rgba(248, 113, 113, 0.45);
+      flex: 0.7;
+    }
+
+    /* History Screen */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .history-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .history-item:active {
+      background: var(--surface-2);
+    }
+
+    .history-date {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .history-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: var(--muted);
+      padding: 36px 16px;
+      font-size: 15px;
+    }
+
+    .backup-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .backup-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 8px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(90px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(20px);
+      background: #f0f4f8;
+      color: #0d1117;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MAIN SCREEN (Today or Selected Past Day) -->
+  <div id="main-screen" class="screen active">
+    <div class="container">
+      <header class="header">
+        <div>
+          <div id="header-label" class="app-label">Daily Log</div>
+          <h1 id="header-date" class="date-title"></h1>
+        </div>
+        <div class="header-actions" id="today-actions">
+          <button class="pill-btn" id="open-history-btn">History</button>
+          <button class="pill-btn" id="open-backup-btn">Backup</button>
+        </div>
+        <div class="header-actions" id="past-actions" style="display:none;">
+          <button class="pill-btn" id="back-to-history-btn">← History</button>
+          <button class="pill-btn" id="back-to-today-btn">Today</button>
+        </div>
+      </header>
+
+      <button class="big-add-btn" id="big-add-btn">
+        <span class="big-plus">+</span>
+        <span>Add Entry</span>
+      </button>
+
+      <div id="cards-container" class="cards"></div>
+    </div>
+
+    <div class="bottom-bar" id="today-bottom-bar">
+      <div class="bottom-inner">
+        <button class="btn-primary" id="copy-today-btn">Copy Today</button>
+        <button class="btn-secondary" id="copy-3days-btn">Copy Last 3 Days</button>
+      </div>
+    </div>
+
+    <div class="bottom-bar" id="past-bottom-bar" style="display:none;">
+      <div class="bottom-inner" style="grid-template-columns: 1fr;">
+        <button class="btn-primary" id="copy-viewed-day-btn">Copy This Day</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY SCREEN -->
+  <div id="history-screen" class="screen">
+    <div class="container">
+      <header class="header">
+        <div>
+          <div class="app-label">Daily Log</div>
+          <h1 class="date-title">History</h1>
+        </div>
+        <div class="header-actions">
+          <button class="pill-btn" id="close-history-btn">← Today</button>
+        </div>
+      </header>
+      <div id="history-list" class="history-list"></div>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT ENTRY MODAL -->
+  <div id="entry-modal" class="overlay">
+    <div class="sheet">
+      <div class="sheet-title">
+        <span id="modal-title">Add Entry</span>
+      </div>
+
+      <label class="field-label" for="entry-text-input">What happened?</label>
+      <input
+        id="entry-text-input"
+        class="text-input"
+        type="text"
+        autocomplete="off"
+        placeholder="e.g. water 200, idli 3 sambar, stool medium soft pain 2"
+      />
+
+      <div class="row-2">
+        <div>
+          <label class="field-label" for="entry-cat-select">
+            Category <span id="auto-tag" class="auto-tag"></span>
+          </label>
+          <select id="entry-cat-select" class="select-input"></select>
+        </div>
+        <div>
+          <label class="field-label" for="entry-time-input">Time</label>
+          <input id="entry-time-input" class="time-input" type="time" />
+        </div>
+      </div>
+
+      <div class="sheet-actions">
+        <button class="btn-delete" id="delete-entry-btn" style="display:none;">Delete</button>
+        <button class="btn-cancel" id="cancel-entry-btn">Cancel</button>
+        <button class="btn-save" id="save-entry-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKUP MODAL -->
+  <div id="backup-modal" class="overlay">
+    <div class="sheet">
+      <div class="sheet-title">Backup &amp; Restore</div>
+      <p class="backup-note">
+        Your logs are saved only on this phone. Export a JSON file regularly to keep a backup.
+      </p>
+      <div class="backup-stack">
+        <button class="btn-primary" id="export-btn">Export JSON Backup</button>
+        <button class="btn-secondary" id="import-trigger-btn">Import JSON Backup</button>
+        <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;" />
+        <button class="btn-cancel" id="close-backup-btn" style="padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // =========================================================================
+    // 1. EASY-TO-EDIT KEYWORD LIST (case-insensitive)
+    //    If an entry matches more than one category, the first match in
+    //    KEYWORD_PRIORITY wins. Anything with no match goes to "food".
+    // =========================================================================
+    const KEYWORDS = {
+      gudlax: [
+        'gudlax', 'syrup'
+      ],
+      fibre: [
+        'sunfiber', 'trulo', 'isabgol', 'psyllium', 'chia', 'lactifiber'
+      ],
+      stool: [
+        'stool', 'toilet', 'motion', 'potty', 'round'
+      ],
+      medicines: [
+        'iron', 'elwin', 'escot', 'tablet', 'tab', 'ointment', 'cream',
+        'vitamin', 'tetrafol', 'ace blend', 'probiotic', 'vsl'
+      ],
+      water: [
+        'water', 'ml of water', 'glass', 'bottle', 'sip', 'litre'
+      ],
+      symptoms: [
+        'ulcer', 'tongue', 'acne', 'gas', 'bloating', 'itch', 'pain',
+        'burn', 'blood', 'headache', 'dry throat'
+      ],
+      sleep: [
+        'sleep', 'slept', 'woke', 'wake'
+      ],
+      weight: [
+        'kg', 'weight'
+      ],
+      food: [
+        'breakfast', 'lunch', 'dinner', 'snack', 'idli', 'dosa', 'rice',
+        'dal', 'roti', 'chapati', 'sabzi', 'sambar', 'poha', 'upma',
+        'fruit', 'apple', 'banana', 'guava', 'curd', 'milk', 'ice cream'
+      ]
+    };
+
+    const KEYWORD_PRIORITY = [
+      'gudlax', 'fibre', 'stool', 'medicines', 'water',
+      'symptoms', 'sleep', 'weight', 'food'
+    ];
+
+    // =========================================================================
+    // 2. APP SETTINGS & CATEGORY DEFINITIONS
+    // =========================================================================
+    const STORAGE_KEY = 'daily_log_data_v1';
+    const WATER_TARGET_ML = 2500;
+    const NEW_DAY_HOUR = 4; // New day starts automatically at 04:00 AM
+
+    const CATEGORIES = [
+      { id: 'water',     name: 'Water',                   copyLabel: 'WATER',     hint: 'target 2500 ml' },
+      { id: 'food',      name: 'Food',                    copyLabel: 'FOOD',      hint: 'breakfast / lunch / snack / dinner' },
+      { id: 'fibre',     name: 'Fibre',                   copyLabel: 'FIBRE',     hint: 'Sunfiber, isabgol, chia' },
+      { id: 'gudlax',    name: 'Gudlax',                  copyLabel: 'GUDLAX',    hint: 'ml and time' },
+      { id: 'stool',     name: 'Stool',                   copyLabel: 'STOOL',     hint: 'time, softness, pain, blood yes/no' },
+      { id: 'medicines', name: 'Medicines / supplements', copyLabel: 'MEDICINES', hint: 'iron, Elwin, Escot, others' },
+      { id: 'symptoms',  name: 'Symptoms',                copyLabel: 'SYMPTOMS',  hint: 'ulcer, tongue, acne, gas, itch, pain, burn' },
+      { id: 'sleep',     name: 'Sleep',                   copyLabel: 'SLEEP',     hint: 'sleep time, wake time' },
+      { id: 'weight',    name: 'Weight',                  copyLabel: 'WEIGHT',    hint: '' },
+      { id: 'notes',     name: 'Notes',                   copyLabel: 'NOTES',     hint: 'anything else' }
+    ];
+
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    // =========================================================================
+    // 3. STATE
+    // =========================================================================
+    let allData = loadData();
+    let activeDateKey = getTodayKey();
+    let viewingPastDay = false;
+
+    // Modal editing state
+    let editingEntryId = null;
+    let manualCategoryLocked = false;
+
+    // =========================================================================
+    // 4. DATE & TIME HELPERS (4 AM Day Rollover)
+    // =========================================================================
+    function pad2(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function dateToKey(d) {
+      return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+    }
+
+    function keyToDate(key) {
+      const [y, m, d] = key.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function getTodayKey() {
+      const now = new Date();
+      if (now.getHours() < NEW_DAY_HOUR) {
+        now.setDate(now.getDate() - 1);
+      }
+      return dateToKey(now);
+    }
+
+    function shiftDateKey(key, deltaDays) {
+      const d = keyToDate(key);
+      d.setDate(d.getDate() + deltaDays);
+      return dateToKey(d);
+    }
+
+    function getCurrentHHMM() {
+      const now = new Date();
+      return `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+    }
+
+    function formatDisplayDate(key) {
+      const d = keyToDate(key);
+      return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()} (${DAYS[d.getDay()]})`;
+    }
+
+    // Sort times respecting the 4 AM day boundary (04:00 is start, 03:59 is end)
+    function timeToSortMinutes(hhmm) {
+      const parts = (hhmm || '00:00').split(':').map(Number);
+      const h = isNaN(parts[0]) ? 0 : parts[0];
+      const m = isNaN(parts[1]) ? 0 : parts[1];
+      return ((h - NEW_DAY_HOUR + 24) % 24) * 60 + m;
+    }
+
+    function sortEntries(list) {
+      return [...list].sort((a, b) => {
+        const diff = timeToSortMinutes(a.time) - timeToSortMinutes(b.time);
+        if (diff !== 0) return diff;
+        return (a.createdAt || 0) - (b.createdAt || 0);
+      });
+    }
+
+    // =========================================================================
+    // 5. STORAGE
+    // =========================================================================
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+      } catch (e) {
+        showToast('Could not save data (storage full)');
+      }
+    }
+
+    function getDayEntries(key) {
+      return Array.isArray(allData[key]) ? allData[key] : [];
+    }
+
+    // =========================================================================
+    // 6. KEYWORD AUTO-SORTING & WATER PARSING
+    // =========================================================================
+    function escapeRegex(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function keywordMatches(text, keyword) {
+      const kw = keyword.toLowerCase();
+      const esc = escapeRegex(kw);
+
+      // Exact short tokens so "tab" doesn't match "vegetable", etc.
+      if (kw === 'tab' || kw === 'vsl' || kw === 'sip') {
+        return new RegExp(`\\b${esc}\\b`, 'i').test(text);
+      }
+      // Allow "65kg" or "65 kg"
+      if (kw === 'kg') {
+        return /(?:^|[^a-z])kg(?![a-z])/i.test(text);
+      }
+      // Match start of word so "burn" matches "burning", "itch" matches "itching"
+      return new RegExp(`\\b${esc}`, 'i').test(text);
+    }
+
+    function detectCategory(text) {
+      const clean = (text || '').trim().toLowerCase();
+      if (!clean) return 'food';
+
+      for (const catId of KEYWORD_PRIORITY) {
+        const list = KEYWORDS[catId] || [];
+        // Prevent "ice cream" from matching "cream" in medicines
+        const target = catId === 'medicines'
+          ? clean.replace(/\bice\s+cream\b/g, ' ')
+          : clean;
+
+        for (const kw of list) {
+          if (keywordMatches(target, kw)) {
+            return catId;
+          }
+        }
+      }
+      return 'food';
+    }
+
+    function extractWaterMl(text) {
+      if (!text) return 0;
+      const lower = text.toLowerCase();
+      let total = 0;
+      let foundExplicit = false;
+
+      // Litres: e.g. 1l, 1.5 l, 0.5 litre, 2 liters
+      const litreRegex = /(\d+(?:\.\d+)?)\s*(?:litres?|liters?|l)\b/g;
+      let match;
+      while ((match = litreRegex.exec(lower)) !== null) {
+        total += Math.round(parseFloat(match[1]) * 1000);
+        foundExplicit = true;
+      }
+
+      // Millilitres: e.g. 200ml, 250 ml
+      const mlRegex = /(\d+(?:\.\d+)?)\s*ml\b/g;
+      while ((match = mlRegex.exec(lower)) !== null) {
+        total += Math.round(parseFloat(match[1]));
+        foundExplicit = true;
+      }
+
+      // Shorthand in Water category: e.g. "water 200" or "250"
+      if (!foundExplicit) {
+        const withoutClock = lower.replace(/\b\d{1,2}:\d{2}\b/g, ' ');
+        const bare = withoutClock.match(/\b(\d{2,4})\b/);
+        if (bare) {
+          const num = parseInt(bare[1], 10);
+          if (num >= 20 && num <= 5000) {
+            total += num;
+          }
+        }
+      }
+
+      if (total === 0) {
+        const g = lower.match(/(\d+)\s*glass/);
+        if (g) total = parseInt(g[1], 10) * 200;
+        else if (/\bglass\b/.test(lower)) total = 200;
+      }
+
+      return total;
+    }
+
+    function getWaterTotal(entries) {
+      return entries
+        .filter(e => e.cat === 'water')
+        .reduce((sum, e) => sum + extractWaterMl(e.text), 0);
+    }
+
+    // =========================================================================
+    // 7. PLAIN-TEXT COPY FORMATTER
+    // =========================================================================
+    function formatWaterEntryForCopy(entry) {
+      const ml = extractWaterMl(entry.text);
+      if (ml > 0) {
+        // Check if text is mostly just the water amount (e.g. "water 200", "250ml", "0.5l")
+        const leftover = entry.text
+          .toLowerCase()
+          .replace(/\b(water|of|ml|l|litre|litres|liter|liters)\b/g, '')
+          .replace(/\d+(?:\.\d+)?\s*(ml|l|litres?|liters?)?/g, '')
+          .replace(/[^\w]+/g, ' ')
+          .trim();
+
+        if (!leftover) {
+          return `${ml}ml ${entry.time}`;
+        }
+        return `${ml}ml (${leftover}) ${entry.time}`;
+      }
+      return `${entry.text} ${entry.time}`;
+    }
+
+    function formatDayForCopy(dateKey) {
+      const entries = sortEntries(getDayEntries(dateKey));
+      const yesterdayKey = shiftDateKey(dateKey, -1);
+      const yesterdayGudlax = sortEntries(
+        getDayEntries(yesterdayKey).filter(e => e.cat === 'gudlax')
+      );
+
+      const isToday = dateKey === getTodayKey();
+      const lines = [];
+
+      const dateHeader = isToday
+        ? `DATE: ${formatDisplayDate(dateKey)}, time now ${getCurrentHHMM()}`
+        : `DATE: ${formatDisplayDate(dateKey)}`;
+      lines.push(dateHeader);
+
+      for (const cat of CATEGORIES) {
+        const catEntries = entries.filter(e => e.cat === cat.id);
+
+        if (cat.id === 'gudlax') {
+          if (catEntries.length === 0 && yesterdayGudlax.length === 0) continue;
+
+          const todayPart = catEntries
+            .map(e => `${e.text} at ${e.time}`)
+            .join(' | ');
+
+          const lastNightPart = yesterdayGudlax.length > 0
+            ? yesterdayGudlax.map(e => `${e.text} at ${e.time}`).join(', ')
+            : '';
+
+          if (todayPart && lastNightPart) {
+            lines.push(`GUDLAX: ${todayPart} (last night: ${lastNightPart})`);
+          } else if (todayPart) {
+            lines.push(`GUDLAX: ${todayPart}`);
+          } else {
+            lines.push(`GUDLAX: (last night: ${lastNightPart})`);
+          }
+          continue;
+        }
+
+        if (catEntries.length === 0) continue;
+
+        if (cat.id === 'water') {
+          const total = getWaterTotal(catEntries);
+          const items = catEntries.map(formatWaterEntryForCopy).join(' | ');
+          lines.push(`WATER: ${items} | TOTAL ${total} ml / ${WATER_TARGET_ML}`);
+          continue;
+        }
+
+        if (cat.id === 'sleep') {
+          const items = catEntries.map(e => {
+            const hasClock = /\d{1,2}[:.]\d{2}/.test(e.text);
+            return hasClock ? e.text : `${e.time} ${e.text}`;
+          }).join(', ');
+          lines.push(`SLEEP: ${items}`);
+          continue;
+        }
+
+        const items = catEntries.map(e => `${e.time} ${e.text}`).join(' | ');
+        lines.push(`${cat.copyLabel}: ${items}`);
+      }
+
+      return lines.join('\n');
+    }
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (e) {
+        // Fallback below
+      }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try {
+        ok = document.execCommand('copy');
+      } catch (e) {
+        ok = false;
+      }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    // =========================================================================
+    // 8. RENDERING
+    // =========================================================================
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderMain() {
+      const todayKey = getTodayKey();
+      if (!viewingPastDay && activeDateKey !== todayKey) {
+        activeDateKey = todayKey;
+      }
+
+      document.getElementById('header-date').textContent = formatDisplayDate(activeDateKey);
+      document.getElementById('header-label').textContent = viewingPastDay ? 'Past Day' : 'Daily Log';
+      document.getElementById('today-actions').style.display = viewingPastDay ? 'none' : 'flex';
+      document.getElementById('past-actions').style.display = viewingPastDay ? 'flex' : 'none';
+      document.getElementById('today-bottom-bar').style.display = viewingPastDay ? 'none' : 'block';
+      document.getElementById('past-bottom-bar').style.display = viewingPastDay ? 'block' : 'none';
+
+      const entries = sortEntries(getDayEntries(activeDateKey));
+      const waterTotal = getWaterTotal(entries);
+      const waterPct = Math.min(100, Math.round((waterTotal / WATER_TARGET_ML) * 100));
+      const waterDone = waterTotal >= WATER_TARGET_ML;
+
+      const yesterdayKey = shiftDateKey(activeDateKey, -1);
+      const yesterdayGudlax = sortEntries(
+        getDayEntries(yesterdayKey).filter(e => e.cat === 'gudlax')
+      );
+
+      const container = document.getElementById('cards-container');
+      container.innerHTML = CATEGORIES.map(cat => {
+        const catEntries = entries.filter(e => e.cat === cat.id);
+
+        let extraHeader = '';
+        let progressHtml = '';
+        if (cat.id === 'water') {
+          extraHeader = `<span class="water-badge ${waterDone ? 'done' : ''}">${waterTotal} / ${WATER_TARGET_ML} ml</span>`;
+          progressHtml = `
+            <div class="progress-track">
+              <div class="progress-fill ${waterDone ? 'done' : ''}" style="width:${waterPct}%"></div>
+            </div>`;
+        } else if (cat.hint) {
+          extraHeader = `<span class="card-hint">${escapeHtml(cat.hint)}</span>`;
+        }
+
+        let yesterdayHtml = '';
+        if (cat.id === 'gudlax' && yesterdayGudlax.length > 0) {
+          const txt = yesterdayGudlax.map(e => `${e.text} at ${e.time}`).join(', ');
+          yesterdayHtml = `<div class="yesterday-note">Last night: ${escapeHtml(txt)}</div>`;
+        }
+
+        const listHtml = catEntries.length > 0
+          ? `<ul class="entries">${catEntries.map(e => `
+              <li class="entry-item" data-id="${escapeHtml(e.id)}">
+                <span class="entry-time">${escapeHtml(e.time)}</span>
+                <span class="entry-text">${escapeHtml(e.text)}</span>
+              </li>`).join('')}
+            </ul>`
+          : '';
+
+        return `
+          <section class="card">
+            <div class="card-header">
+              <div class="card-title-wrap">
+                <div class="card-title-row">
+                  <h2 class="card-title">${escapeHtml(cat.name)}</h2>
+                  ${extraHeader}
+                </div>
+                ${progressHtml}
+              </div>
+              <button class="card-add-btn" data-cat="${cat.id}" aria-label="Add to ${escapeHtml(cat.name)}">+</button>
+            </div>
+            ${yesterdayHtml}
+            ${listHtml}
+          </section>`;
+      }).join('');
+    }
+
+    function renderHistory() {
+      const listEl = document.getElementById('history-list');
+      const todayKey = getTodayKey();
+      const keys = Object.keys(allData)
+        .filter(k => Array.isArray(allData[k]) && allData[k].length > 0)
+        .sort((a, b) => b.localeCompare(a));
+
+      if (keys.length === 0) {
+        listEl.innerHTML = `<div class="empty-msg">No saved days yet. Start logging on the main page!</div>`;
+        return;
+      }
+
+      listEl.innerHTML = keys.map(key => {
+        const entries = allData[key];
+        const water = getWaterTotal(entries);
+        const tag = key === todayKey ? ' · Today' : '';
+        return `
+          <div class="history-item" data-date="${key}">
+            <div>
+              <div class="history-date">${formatDisplayDate(key)}${tag}</div>
+              <div class="history-meta">${entries.length} ${entries.length === 1 ? 'entry' : 'entries'} · Water ${water} ml</div>
+            </div>
+            <span style="color:var(--muted);font-size:20px;">›</span>
+          </div>`;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 9. MODALS & ACTIONS
+    // =========================================================================
+    const entryModal = document.getElementById('entry-modal');
+    const textInput = document.getElementById('entry-text-input');
+    const catSelect = document.getElementById('entry-cat-select');
+    const timeInput = document.getElementById('entry-time-input');
+    const autoTag = document.getElementById('auto-tag');
+    const deleteBtn = document.getElementById('delete-entry-btn');
+
+    function populateCategorySelect() {
+      catSelect.innerHTML = CATEGORIES
+        .map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`)
+        .join('');
+    }
+
+    function openAddModal(forcedCat = null) {
+      editingEntryId = null;
+      document.getElementById('modal-title').textContent = 'Add Entry';
+      textInput.value = '';
+      timeInput.value = getCurrentHHMM();
+      deleteBtn.style.display = 'none';
+
+      if (forcedCat) {
+        catSelect.value = forcedCat;
+        manualCategoryLocked = true;
+        autoTag.textContent = '';
+      } else {
+        catSelect.value = 'food';
+        manualCategoryLocked = false;
+        autoTag.textContent = '(auto)';
+      }
+
+      entryModal.classList.add('open');
+      setTimeout(() => textInput.focus(), 50);
+    }
+
+    function openEditModal(entryId) {
+      const entries = getDayEntries(activeDateKey);
+      const item = entries.find(e => e.id === entryId);
+      if (!item) return;
+
+      editingEntryId = entryId;
+      manualCategoryLocked = true;
+      document.getElementById('modal-title').textContent = 'Edit Entry';
+      textInput.value = item.text;
+      catSelect.value = item.cat;
+      timeInput.value = item.time || getCurrentHHMM();
+      autoTag.textContent = '';
+      deleteBtn.style.display = 'block';
+
+      entryModal.classList.add('open');
+      setTimeout(() => textInput.focus(), 50);
+    }
+
+    function closeEntryModal() {
+      entryModal.classList.remove('open');
+      editingEntryId = null;
+    }
+
+    function saveEntry() {
+      const text = textInput.value.trim();
+      if (!text) {
+        textInput.focus();
+        return;
+      }
+      const cat = catSelect.value;
+      const time = timeInput.value || getCurrentHHMM();
+
+      if (!Array.isArray(allData[activeDateKey])) {
+        allData[activeDateKey] = [];
+      }
+
+      if (editingEntryId) {
+        const idx = allData[activeDateKey].findIndex(e => e.id === editingEntryId);
+        if (idx !== -1) {
+          allData[activeDateKey][idx] = {
+            ...allData[activeDateKey][idx],
+            text,
+            cat,
+            time
+          };
+        }
+      } else {
+        allData[activeDateKey].push({
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          text,
+          cat,
+          time,
+          createdAt: Date.now()
+        });
+      }
+
+      saveData();
+      closeEntryModal();
+      renderMain();
+    }
+
+    function deleteEntry() {
+      if (!editingEntryId) return;
+      const list = getDayEntries(activeDateKey).filter(e => e.id !== editingEntryId);
+      if (list.length === 0) {
+        delete allData[activeDateKey];
+      } else {
+        allData[activeDateKey] = list;
+      }
+      saveData();
+      closeEntryModal();
+      renderMain();
+      showToast('Entry deleted');
+    }
+
+    function showScreen(name) {
+      document.getElementById('main-screen').classList.toggle('active', name === 'main');
+      document.getElementById('history-screen').classList.toggle('active', name === 'history');
+      window.scrollTo(0, 0);
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+    }
+
+    // =========================================================================
+    // 10. BACKUP (EXPORT / IMPORT JSON)
+    // =========================================================================
+    function exportJson() {
+      const payload = JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), data: allData }, null, 2);
+      const blob = new Blob([payload], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `daily-log-backup-${getTodayKey()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Backup downloaded');
+    }
+
+    function importJsonFile(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          const imported = (parsed && parsed.data && typeof parsed.data === 'object')
+            ? parsed.data
+            : parsed;
+
+          if (!imported || typeof imported !== 'object' || Array.isArray(imported)) {
+            throw new Error('Invalid format');
+          }
+
+          const dayCount = Object.keys(imported).length;
+          const ok = confirm(`Import ${dayCount} day(s)? Matching dates will be merged without deleting other saved days.`);
+          if (!ok) return;
+
+          for (const [key, items] of Object.entries(imported)) {
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(key) || !Array.isArray(items)) continue;
+            const existing = getDayEntries(key);
+            const seenIds = new Set(existing.map(e => e.id));
+            const merged = [...existing];
+            for (const item of items) {
+              if (!item || typeof item.text !== 'string') continue;
+              const id = item.id || `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+              if (!seenIds.has(id)) {
+                merged.push({
+                  id,
+                  text: item.text,
+                  cat: CATEGORIES.some(c => c.id === item.cat) ? item.cat : 'notes',
+                  time: item.time || '00:00',
+                  createdAt: item.createdAt || Date.now()
+                });
+                seenIds.add(id);
+              }
+            }
+            allData[key] = merged;
+          }
+
+          saveData();
+          renderMain();
+          document.getElementById('backup-modal').classList.remove('open');
+          showToast('Backup imported!');
+        } catch (e) {
+          alert('Could not read this file. Please select a valid Daily Log JSON backup.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // =========================================================================
+    // 11. EVENT LISTENERS
+    // =========================================================================
+    document.getElementById('big-add-btn').addEventListener('click', () => openAddModal(null));
+
+    document.getElementById('cards-container').addEventListener('click', e => {
+      const addBtn = e.target.closest('.card-add-btn');
+      if (addBtn) {
+        openAddModal(addBtn.dataset.cat);
+        return;
+      }
+      const entryRow = e.target.closest('.entry-item');
+      if (entryRow) {
+        openEditModal(entryRow.dataset.id);
+      }
+    });
+
+    textInput.addEventListener('input', () => {
+      if (!manualCategoryLocked) {
+        catSelect.value = detectCategory(textInput.value);
+        autoTag.textContent = '(auto)';
+      }
+    });
+
+    catSelect.addEventListener('change', () => {
+      manualCategoryLocked = true;
+      autoTag.textContent = '';
+    });
+
+    textInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveEntry();
+      }
+    });
+
+    document.getElementById('save-entry-btn').addEventListener('click', saveEntry);
+    document.getElementById('cancel-entry-btn').addEventListener('click', closeEntryModal);
+    deleteBtn.addEventListener('click', deleteEntry);
+
+    entryModal.addEventListener('click', e => {
+      if (e.target === entryModal) closeEntryModal();
+    });
+
+    // Copy Today
+    document.getElementById('copy-today-btn').addEventListener('click', async () => {
+      const key = getTodayKey();
+      const text = formatDayForCopy(key);
+      const ok = await copyText(text);
+      showToast(ok ? 'Copied today!' : 'Copy failed');
+    });
+
+    // Copy Last 3 Days
+    document.getElementById('copy-3days-btn').addEventListener('click', async () => {
+      const todayKey = getTodayKey();
+      const keys = [
+        shiftDateKey(todayKey, -2),
+        shiftDateKey(todayKey, -1),
+        todayKey
+      ];
+      const blocks = keys
+        .filter(k => getDayEntries(k).length > 0 || (k === todayKey && getDayEntries(shiftDateKey(k, -1)).some(e => e.cat === 'gudlax')))
+        .map(formatDayForCopy);
+
+      if (blocks.length === 0) {
+        showToast('Nothing logged in the last 3 days');
+        return;
+      }
+      const ok = await copyText(blocks.join('\n\n'));
+      showToast(ok ? `Copied ${blocks.length} day(s)!` : 'Copy failed');
+    });
+
+    // Copy Viewed Past Day
+    document.getElementById('copy-viewed-day-btn').addEventListener('click', async () => {
+      const text = formatDayForCopy(activeDateKey);
+      const ok = await copyText(text);
+      showToast(ok ? 'Copied day!' : 'Copy failed');
+    });
+
+    // History Navigation
+    document.getElementById('open-history-btn').addEventListener('click', () => {
+      renderHistory();
+      showScreen('history');
+    });
+
+    document.getElementById('close-history-btn').addEventListener('click', () => {
+      viewingPastDay = false;
+      activeDateKey = getTodayKey();
+      renderMain();
+      showScreen('main');
+    });
+
+    document.getElementById('back-to-history-btn').addEventListener('click', () => {
+      renderHistory();
+      showScreen('history');
+    });
+
+    document.getElementById('back-to-today-btn').addEventListener('click', () => {
+      viewingPastDay = false;
+      activeDateKey = getTodayKey();
+      renderMain();
+    });
+
+    document.getElementById('history-list').addEventListener('click', e => {
+      const item = e.target.closest('.history-item');
+      if (!item) return;
+      const chosen = item.dataset.date;
+      activeDateKey = chosen;
+      viewingPastDay = chosen !== getTodayKey();
+      renderMain();
+      showScreen('main');
+    });
+
+    // Backup Modal
+    const backupModal = document.getElementById('backup-modal');
+    document.getElementById('open-backup-btn').addEventListener('click', () => {
+      backupModal.classList.add('open');
+    });
+    document.getElementById('close-backup-btn').addEventListener('click', () => {
+      backupModal.classList.remove('open');
+    });
+    backupModal.addEventListener('click', e => {
+      if (e.target === backupModal) backupModal.classList.remove('open');
+    });
+
+    document.getElementById('export-btn').addEventListener('click', exportJson);
+    const importInput = document.getElementById('import-file-input');
+    document.getElementById('import-trigger-btn').addEventListener('click', () => {
+      importInput.value = '';
+      importInput.click();
+    });
+    importInput.addEventListener('change', e => {
+      if (e.target.files && e.target.files[0]) {
+        importJsonFile(e.target.files[0]);
+      }
+    });
+
+    // Auto-refresh when crossing 4 AM
+    function checkDayRollover() {
+      if (!viewingPastDay) {
+        const current = getTodayKey();
+        if (current !== activeDateKey) {
+          activeDateKey = current;
+          renderMain();
+        }
+      }
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) checkDayRollover();
+    });
+    setInterval(checkDayRollover, 60000);
+
+    // =========================================================================
+    // 12. PWA SETUP (Inline Icon + Dynamic Manifest + Optional Service Worker)
+    // =========================================================================
+    function initPWA() {
+      // Generate a crisp PNG icon for Android & iOS Home Screen
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#0d1117';
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Rounded inner badge
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.roundRect(64, 64, 384, 384, 88);
+      ctx.fill();
+
+      // Checkmark / Log lines icon
+      ctx.strokeStyle = '#06131f';
+      ctx.lineWidth = 34;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(156, 200); ctx.lineTo(356, 200);
+      ctx.moveTo(156, 270); ctx.lineTo(316, 270);
+      ctx.moveTo(156, 340); ctx.lineTo(260, 340);
+      ctx.stroke();
+
+      const pngIcon = canvas.toDataURL('image/png');
+      document.getElementById('app-icon').href = pngIcon;
+      document.getElementById('apple-icon').href = pngIcon;
+
+      // Inline Web App Manifest
+      const manifest = {
+        name: 'Daily Log',
+        short_name: 'Daily Log',
+        start_url: window.location.href,
+        display: 'standalone',
+        background_color: '#0d1117',
+        theme_color: '#0d1117',
+        icons: [
+          { src: pngIcon, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+        ]
+      };
+      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      document.getElementById('pwa-manifest').href = URL.createObjectURL(manifestBlob);
+
+      // Register sw.js if present (for full offline launch without internet)
+      if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      }
+    }
+
+    // Boot
+    populateCategorySelect();
+    renderMain();
+    try { initPWA(); } catch (e) {}
+  </script>
+</body>
+</html>
