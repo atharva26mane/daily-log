@@ -1225,7 +1225,10 @@
         'Keyword hints the app also uses for sorting: ' + JSON.stringify(KEYWORDS),
         'Water target is ' + WATER_TARGET_ML + ' ml per day. The day starts at 4 AM, so times from 00:00 to 03:59 belong to the previous day.',
         '',
-        'RIGHT NOW: date being logged = ' + formatDisplayDate(dayKey) + ', time now = ' + getCurrentHHMM() + ' (24-hour).',
+        'RIGHT NOW (real clock): ' + new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + ', time ' + getCurrentHHMM() + ' (24-hour), time zone ' + (Intl.DateTimeFormat().resolvedOptions().timeZone || 'local') + '. Today in the app = ' + formatDisplayDate(getTodayKey()) + '.',
+        'Date being logged in the app right now = ' + formatDisplayDate(dayKey) + (viewingPastDay ? ' (a PAST day the user opened)' : ' (today)') + '. Work out "yesterday", "last night", "this morning" and weekday names from these dates.',
+        (SETTINGS.name ? 'The user\'s name is ' + SETTINGS.name + '.' : ''),
+        'Recent days (for context only): ' + [1, 2, 3].map(i => { const k = shiftDateKey(dayKey, -i); return formatDisplayDate(k) + ': water ' + getWaterTotal(getDayEntries(k)) + ' ml, ' + getDayEntries(k).length + ' entries'; }).join('; ') + '.',
         'Water drunk so far on this day: ' + getWaterTotal(entries) + ' ml.',
         'ALREADY LOGGED on this day:',
         logged,
@@ -1241,8 +1244,12 @@
         '7. Things the user did NOT do or skipped must also be saved, in the right category, with clear words, e.g. "iron tablet NOT taken" in medicines, "skipped lunch" in food. Never write ml in these.',
         '8. "time" is HH:MM in 24-hour format. Use the time the user says. If they give none, use the time now. If they say last night or yesterday, set day="yesterday", otherwise day="today".',
         '9. Do not add anything already in the ALREADY LOGGED list unless the user clearly wants it again.',
-        '10. Use "notes" only if nothing else fits.'
-      ].join('\n');
+        '10. Use "notes" only if nothing else fits.',
+        '11. STAY IN SCOPE. You only help with this Daily Log: logging entries, the user\'s water, food, fibre, medicines, symptoms, stool, sleep and weight, their goals and streaks, and simple routine tips based on their own log. For anything else (news, coding, homework, general chat, other apps) reply with one short friendly line like "I can only help with your Daily Log." and set action="none".',
+        '12. Timing advice (for example "when should I drink water?"): look at the time now, the last water entry, and the meals logged today. Suggest small amounts (about 150 to 250 ml) spaced through the day, small sips close to a meal, and a proper glass about 30 to 45 minutes after a meal. Always say the reason in one short sentence. Never go over the daily target by a lot.',
+        '13. You are not a doctor. Do not diagnose. If the user reports blood, strong pain or something worrying, tell them in one short line to talk to a doctor, and still log it.',
+        '14. If you are unsure what the user means or a time or amount is missing, ask ONE short question instead of guessing.'
+      ].filter(Boolean).join('\n');
     }
 
     function chatContents() {
