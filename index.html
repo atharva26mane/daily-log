@@ -477,6 +477,16 @@
     .adm-fb button { margin-top: 6px; }
     #rem-mode { grid-template-columns: repeat(4, 1fr); }
 
+    /* press feel: fast ease-out squish, never slow */
+    :root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }
+    .quick-btn, .act, .card-add-btn, .chip-add, .icon-btn, .pill-btn, .btn-primary, .btn-secondary, .history-item { transition: transform 140ms var(--ease-out), background-color 140ms ease, color 140ms ease, opacity 140ms ease; }
+    .quick-btn:active, .act:active, .card-add-btn:active, .chip-add:active, .icon-btn:active, .btn-primary:active, .btn-secondary:active { transform: scale(0.95); }
+    .history-item:active { transform: scale(0.985); }
+    .fx-drop { position: absolute; z-index: 5; width: 9px; height: 12px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; background: #8fd0f2; border: 1.5px solid #4a2f4f; pointer-events: none; will-change: transform, opacity; }
+    .fx-drop.warm { background: #ffb59e; }
+    body.theme-volcano .fx-drop { background: #ffb347; border-color: #5a2312; }
+    .tank-num { transform-origin: 0 70%; }
+    @media (prefers-reduced-motion: reduce) { .fx-drop { display: none; } }
     /* scroll motion (GSAP ScrollTrigger) */
     #scroll-water { position: fixed; left: 0; top: 0; right: 0; height: 3px; z-index: 9000; transform: scaleX(0); transform-origin: 0 50%; background: linear-gradient(90deg, #bfe6f7, #5fb6e3); border-radius: 0 3px 3px 0; opacity: 0; pointer-events: none; transition: opacity .3s; }
     body:has(#main-screen.active) #scroll-water { opacity: .9; }
@@ -1018,6 +1028,76 @@
     </div>
   </div>
 
+<script>
+(function () {
+  // Tank effects: count-up, pour splash, one-time goal celebration, haptics.
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var shown = null, lastDone = null, GOAL_KEY = 'daily_log_goal_fx_v1';
+  function buzz(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
+  function numEl() { return document.getElementById('tank-ml'); }
+  function drops(host, x, y, n, o) {
+    if (calm || !window.gsap) return;
+    o = o || {};
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('i');
+      d.className = 'fx-drop' + (o.warm && i % 3 === 0 ? ' warm' : '');
+      d.style.left = x + 'px'; d.style.top = y + 'px';
+      host.appendChild(d);
+      var ang = (o.spread != null ? o.spread : 1) * (Math.random() - 0.5) * Math.PI - Math.PI / 2;
+      var dist = (o.min || 40) + Math.random() * (o.max || 80);
+      gsap.fromTo(d, { x: 0, y: 0, scale: 0.4, opacity: 1, rotation: 0 },
+        { x: Math.cos(ang) * dist, y: Math.sin(ang) * dist + (o.fall || 0), scale: 0.9 + Math.random() * 0.4,
+          rotation: (Math.random() - 0.5) * 80, duration: 0.55 + Math.random() * 0.3, ease: 'power2.out',
+          onComplete: (function (el) { return function () { el.remove(); }; })(d) });
+      gsap.to(d, { opacity: 0, duration: 0.25, delay: 0.4 + Math.random() * 0.25 });
+    }
+  }
+  function pulse() {
+    var n = numEl() && numEl().parentNode; if (!n || calm || !window.gsap) return;
+    gsap.fromTo(n, { scale: 1 }, { scale: 1.07, duration: 0.12, ease: 'power2.out', yoyo: true, repeat: 1, overwrite: 'auto' });
+  }
+  function pour(btn) {
+    buzz(12);
+    var tank = document.getElementById('tank');
+    if (!tank || calm || !window.gsap) return;
+    var tr = tank.getBoundingClientRect(), br = btn.getBoundingClientRect();
+    drops(tank, br.left - tr.left + br.width / 2, br.top - tr.top, 7, { spread: 0.9, min: 50, max: 90, fall: 20 });
+    gsap.fromTo(btn, { scale: 0.92 }, { scale: 1, duration: 0.35, ease: 'back.out(3)' });
+    pulse();
+  }
+  function celebrate() {
+    var tank = document.getElementById('tank'); if (!tank) return;
+    buzz([15, 70, 25]);
+    if (!calm && window.gsap) {
+      var r = numEl().getBoundingClientRect(), t = tank.getBoundingClientRect();
+      drops(tank, r.left - t.left + r.width / 2, r.top - t.top + r.height / 2, 22, { spread: 2, min: 70, max: 130, fall: 40, warm: true });
+      gsap.fromTo(tank, { scale: 1 }, { scale: 1.025, duration: 0.18, ease: 'power2.out', yoyo: true, repeat: 1 });
+      var c = document.getElementById('crab');
+      if (c) { c.classList.remove('hop'); void c.offsetWidth; c.classList.add('hop'); setTimeout(function () { c.classList.remove('hop'); }, 700); }
+    }
+    if (window.showToast) window.showToast('Water target reached. Well done.');
+  }
+  function tank(total, done, past, key) {
+    var el = numEl(); if (!el) return;
+    var from = shown == null ? 0 : shown;
+    if (calm || !window.gsap || from === total || past) { el.textContent = total; }
+    else {
+      var o = { v: from };
+      gsap.to(o, { v: total, duration: Math.min(0.9, 0.3 + Math.abs(total - from) / 900), ease: 'power2.out', overwrite: 'auto',
+        onUpdate: function () { el.textContent = Math.round(o.v); }, onComplete: function () { el.textContent = total; } });
+    }
+    if (!past) {
+      if (done && lastDone === false) {
+        var seen = ''; try { seen = localStorage.getItem(GOAL_KEY) || ''; } catch (e) {}
+        if (seen !== key) { try { localStorage.setItem(GOAL_KEY, key); } catch (e) {} setTimeout(celebrate, 350); }
+      }
+      lastDone = !!done;
+      shown = total;
+    }
+  }
+  window.__fx = { tank: tank, pour: pour, buzz: buzz, celebrate: celebrate };
+})();
+</script>
   <script>
     // =========================================================================
     // 1. EASY-TO-EDIT KEYWORD LIST (case-insensitive)
@@ -1899,7 +1979,7 @@
       // Water tank (the hero)
       const tank = document.getElementById('tank');
       tank.classList.toggle('done', waterDone);
-      document.getElementById('tank-ml').textContent = waterTotal;
+      if (window.__fx) window.__fx.tank(waterTotal, waterDone, viewingPastDay, activeDateKey); else document.getElementById('tank-ml').textContent = waterTotal;
       document.getElementById('tank-sub').textContent = waterDone
         ? 'Target reached (' + WATER_TARGET_ML + ' ml)'
         : (WATER_TARGET_ML - waterTotal) + ' ml to go of ' + WATER_TARGET_ML;
@@ -2342,6 +2422,7 @@
       }
 
       saveData();
+      if (window.__fx) window.__fx.buzz(10);
       closeEntryModal();
       renderMain();
       if (aiUsed) {
@@ -2453,7 +2534,7 @@
 
     document.getElementById('tank-quick').addEventListener('click', e => {
       const b = e.target.closest('[data-ml]');
-      if (b) addQuickWater(Number(b.dataset.ml));
+      if (b) { if (window.__fx) window.__fx.pour(b); addQuickWater(Number(b.dataset.ml)); }
     });
 
     document.getElementById('cards-container').addEventListener('click', e => {
@@ -3668,6 +3749,7 @@
     window.__openOnboarding = open;
   })();
 </script>
+
 <div id="scroll-water" aria-hidden="true"></div>
 <script src="gsap.min.js"></script>
 <script src="ScrollTrigger.min.js"></script>
