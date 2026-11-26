@@ -82,8 +82,8 @@
     .fill-body { position: absolute; top: 12px; left: 0; right: 0; bottom: 0; background: var(--fillc); }
     @keyframes drift { to { transform: translateX(-50%); } }
 
-    .tank-num { font-family: var(--display); font-weight: 800; font-size: 84px; line-height: 0.95; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--forest); }
-    .tank-num small { font-size: 26px; font-weight: 600; margin-left: 6px; color: var(--moss); letter-spacing: 0; }
+    .tank-num { font-family: var(--display); font-weight: 800; font-size: 60px; line-height: 0.95; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--forest); }
+    .tank-num small { font-size: 20px; font-weight: 600; margin-left: 6px; color: var(--moss); letter-spacing: 0; }
     .tank-sub { color: var(--moss); font-size: 15px; margin-top: 8px; font-weight: 500; }
     .tank.done .tank-sub { color: var(--forest); font-weight: 700; }
 
@@ -498,6 +498,11 @@
     .adm-fb button { margin-top: 6px; }
     #rem-mode { grid-template-columns: repeat(4, 1fr); }
 
+    .more-toggle { display: block; width: 100%; min-height: 40px; margin: 2px 0 0; padding: 0; border: none; border-top: 1px solid rgba(64,81,59,0.16); background: none; color: var(--c); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; text-align: left; }
+    .more-toggle:active { opacity: 0.6; }
+    .tank { padding: 16px 18px 14px; }
+    .quick-btn { min-height: 42px; }
+    .tank-quick { margin-top: 12px; }
     /* press feel: fast ease-out squish, never slow */
     :root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }
     .quick-btn, .act, .card-add-btn, .chip-add, .icon-btn, .pill-btn, .btn-primary, .btn-secondary, .history-item { transition: transform 140ms var(--ease-out), background-color 140ms ease, color 140ms ease, opacity 140ms ease; }
@@ -1122,7 +1127,7 @@
   }
   function pulse() {
     var n = numEl() && numEl().parentNode; if (!n || calm || !window.gsap) return;
-    gsap.fromTo(n, { scale: 1 }, { scale: 1.07, duration: 0.12, ease: 'power2.out', yoyo: true, repeat: 1, overwrite: 'auto' });
+    gsap.fromTo(n, { scale: 1 }, { scale: 1.03, duration: 0.12, ease: 'power2.out', yoyo: true, repeat: 1, overwrite: 'auto' });
   }
   function pour(btn) {
     buzz(12);
@@ -1139,7 +1144,7 @@
     if (!calm && window.gsap) {
       var r = numEl().getBoundingClientRect(), t = tank.getBoundingClientRect();
       drops(tank, r.left - t.left + r.width / 2, r.top - t.top + r.height / 2, 22, { spread: 2, min: 70, max: 130, fall: 40, warm: true });
-      gsap.fromTo(tank, { scale: 1 }, { scale: 1.025, duration: 0.18, ease: 'power2.out', yoyo: true, repeat: 1 });
+      gsap.fromTo(tank, { scale: 1 }, { scale: 1.01, duration: 0.18, ease: 'power2.out', yoyo: true, repeat: 1 });
       var c = document.getElementById('crab');
       if (c) { c.classList.remove('hop'); void c.offsetWidth; c.classList.add('hop'); setTimeout(function () { c.classList.remove('hop'); }, 700); }
     }
@@ -2081,8 +2086,14 @@
         const note = hasYesterday
           ? '<div class="card-note">Last night: ' + escapeHtml(yesterdayGudlax.map(e => e.text + ' at ' + e.time).join(', ')) + '</div>'
           : '';
+        // a long water list keeps the card small: show the latest 3, the rest sit behind one tap
+        const collapse = cat.id === 'water' && catEntries.length > 4 && !(window.__waterOpen && window.__waterOpen === activeDateKey);
+        const shownEntries = collapse ? catEntries.slice(-3) : catEntries;
+        const moreBtn = collapse
+          ? '<button type="button" class="more-toggle" data-more="water">Show ' + (catEntries.length - 3) + ' earlier</button>'
+          : (cat.id === 'water' && catEntries.length > 4 ? '<button type="button" class="more-toggle" data-more="water-hide">Show less</button>' : '');
         const rows = catEntries.length > 0
-          ? '<ul class="entries">' + catEntries.map(e =>
+          ? moreBtn + '<ul class="entries">' + shownEntries.map(e =>
               '<li class="entry-item" data-id="' + escapeHtml(e.id) + '">' +
               '<span class="entry-time">' + escapeHtml(e.time) + '</span>' +
               '<span class="entry-text">' + escapeHtml(e.text) + '</span></li>').join('') + '</ul>'
@@ -2353,8 +2364,9 @@
 
       const pSun = (h - 5.5) / 14;            // sun up from 05:30 to 19:30
       const pMoon = ((h - 19 + 24) % 24) / 11; // moon up from 19:00 to 06:00
-      const arc = p => (190 - Math.sin(Math.PI * Math.min(Math.max(p, 0), 1)) * 140).toFixed(0) + 'px';
-      const left = p => (6 + Math.min(Math.max(p, 0), 1) * 78).toFixed(1) + '%';
+      // the sun and moon travel on the right side so they never sit on top of the date and greeting
+      const arc = p => (190 - Math.sin(Math.PI * Math.min(Math.max(p, 0), 1)) * 105).toFixed(0) + 'px';
+      const left = p => (52 + Math.min(Math.max(p, 0), 1) * 30).toFixed(1) + '%';
       const st = document.body.style;
       st.setProperty('--sun-x', left(pSun));  st.setProperty('--sun-y', arc(pSun));  st.setProperty('--sun-o', (pSun >= 0 && pSun <= 1) ? '1' : '0');
       st.setProperty('--moon-x', left(pMoon)); st.setProperty('--moon-y', arc(pMoon)); st.setProperty('--moon-o', (pMoon >= 0 && pMoon <= 1) ? '1' : '0');
@@ -2665,6 +2677,8 @@
     });
 
     document.getElementById('cards-container').addEventListener('click', e => {
+      const moreT = e.target.closest('.more-toggle');
+      if (moreT) { window.__waterOpen = moreT.dataset.more === 'water' ? activeDateKey : null; renderMain(); return; }
       const addBtn = e.target.closest('.card-add-btn, .chip-add');
       if (addBtn) {
         openAddModal(addBtn.dataset.cat);
@@ -2982,6 +2996,7 @@
     function via(id) { return function(){ close(); setTimeout(function(){ document.getElementById(id).click(); }, 120); }; }
     document.getElementById('set-theme-row').addEventListener('click', via('open-theme-btn'));
     document.getElementById('set-ai-row').addEventListener('click', via('open-ai-btn'));
+    document.getElementById('set-ai-row').addEventListener('click', function () { if (window.__refreshAccess) window.__refreshAccess(true); });
     document.getElementById('set-backup-row').addEventListener('click', via('open-backup-btn'));
     tickClock();
   })();
@@ -3380,20 +3395,50 @@
   } };
   document.addEventListener('visibilitychange', function() {
     if (document.visibilityState === 'hidden') { if (dirty) push(); }
-    else { if (gate && !gate.hidden && gate.dataset.st === 'pending') recheck(); else pull(); }
+    else { if (gate && !gate.hidden && gate.dataset.st === 'pending') recheck(); else { pull(); refreshAccess(false); } }
   });
   window.addEventListener('online', function(){ if (dirty) push(); });
 
   async function loadCloudKeys() {
+    var status = 'none';
     try {
       var r = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
-      if (r.error) return;
-      var d = r.data;
-      if (d && (d.groq_key || d.gemini_key)) lsSet(CLOUDAI, JSON.stringify({ groq: d.groq_key || '', gemini: d.gemini_key || '' }));
-      else lsDel(CLOUDAI);
-      var a = $('set-ai-val'); if (a) { var on = [getGroqKey() && 'Groq', getGeminiKey() && 'Gemini'].filter(Boolean); a.textContent = on.length ? 'On (' + on.join(' + ') + ')' : 'Off'; }
-    } catch (e) {}
+      if (r.error) status = 'error';
+      else {
+        var d = r.data;
+        if (d && (d.groq_key || d.gemini_key)) { lsSet(CLOUDAI, JSON.stringify({ groq: d.groq_key || '', gemini: d.gemini_key || '' })); status = 'ok'; }
+        else lsDel(CLOUDAI);
+      }
+    } catch (e) { status = 'error'; }
+    var a = $('set-ai-val');
+    if (a) {
+      var on = [getGroqKey() && 'Groq', getGeminiKey() && 'Gemini'].filter(Boolean);
+      a.textContent = on.length ? 'On (' + on.join(' + ') + ')' : (status === 'error' ? 'Could not check' : 'Off');
+    }
+    return status;
   }
+  // The admin can switch AI on or off at any time, so each device re-checks its own access now and then.
+  var accessBusy = false;
+  async function refreshAccess(manual) {
+    if (!sb || !me || me.status !== 'approved' || accessBusy) return;
+    accessBusy = true;
+    try {
+      var had = !!getAiKey();
+      try {
+        var r = await sb.from('profiles').select('status,ai_access').eq('id', me.uid).maybeSingle();
+        if (r.data) {
+          if (r.data.status === 'blocked') { location.reload(); return; }
+          me.ai = !!r.data.ai_access; lsSet(CACHE, JSON.stringify(me));
+        }
+      } catch (e) {}
+      var st = await loadCloudKeys();
+      var has = !!getAiKey();
+      if (has && !had) showToast('AI is now on for you');
+      else if (manual) showToast(has ? 'AI is on' : (st === 'error' ? 'Could not check. Try again.' : (me.ai ? 'AI is on, but no key is saved yet. Ask the admin.' : 'AI is off for your account')));
+    } finally { accessBusy = false; }
+  }
+  window.__refreshAccess = refreshAccess;
+  setInterval(function () { if (!document.hidden) refreshAccess(false); }, 90000);
 
   // ---------- account UI ----------
   function setSync(t) { var el = $('acc-sync'); if (el) el.textContent = t; }
@@ -3481,7 +3526,7 @@
   $('adm-list').addEventListener('change', async function(e) {
     var i = e.target; if (i.dataset.a !== 'ai') return;
     var r = await sb.from('profiles').update({ ai_access: i.checked }).eq('id', i.dataset.id);
-    if (r.error) { showToast('Could not save'); i.checked = !i.checked; } else showToast(i.checked ? 'AI access on' : 'AI access off');
+    if (r.error) { showToast('Could not save'); i.checked = !i.checked; } else { showToast(i.checked ? 'AI access on' : 'AI access off'); if (i.checked) { var gq = $('adm-groq').placeholder, gm = $('adm-gemini').placeholder; if (/Not set/.test(gq) && /Not set/.test(gm)) setTimeout(function(){ showToast('No key saved yet. Add a key above first.'); }, 1800); } }
   });
   async function keyStatus() {
     var r = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
