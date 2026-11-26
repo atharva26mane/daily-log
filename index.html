@@ -503,6 +503,8 @@
     .tank { padding: 16px 18px 14px; }
     .quick-btn { min-height: 42px; }
     .tank-quick { margin-top: 12px; }
+    .ai-diag { margin: 4px 0 10px; padding: 10px 12px; border-radius: 12px; background: rgba(64,81,59,0.07); font-size: 14px; line-height: 1.45; }
+    .ai-diag .dg { padding: 2px 0; } .ai-diag .dg.ok { color: #2f6b3a; } .ai-diag .dg.bad { color: #a5402f; font-weight: 600; }
     /* press feel: fast ease-out squish, never slow */
     :root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }
     .quick-btn, .act, .card-add-btn, .chip-add, .icon-btn, .pill-btn, .btn-primary, .btn-secondary, .history-item { transition: transform 140ms var(--ease-out), background-color 140ms ease, color 140ms ease, opacity 140ms ease; }
@@ -883,6 +885,8 @@
       <label class="field-label" for="ai-key-input" style="margin-top:10px;">Gemini API key (backup)</label>
       <input id="ai-key-input" class="text-input" type="password" autocomplete="off" placeholder="Paste Gemini key here" />
       <p class="backup-note" id="ai-status" style="margin-top:10px;"></p>
+      <div id="ai-diag" class="ai-diag" hidden></div>
+      <button class="btn-secondary" id="ai-diag-btn" type="button" style="margin-bottom:10px;">Check my AI access</button>
       <div class="backup-stack">
         <button class="btn-primary" id="ai-save-btn">Save and test</button>
         <button class="btn-secondary" id="ai-remove-btn">Remove keys and turn AI off</button>
@@ -1821,7 +1825,7 @@
       input.value = '';
       chatHistory.push({ role: 'user', text });
 
-      if (!getAiKey() && window.__refreshAccess) { await window.__refreshAccess(false); }
+      if (!getAiKey() && window.__refreshAccess) { await Promise.race([window.__refreshAccess(false), sleep(7000)]); }
       if (!getAiKey()) {
         const why = window.__aiWhy ? window.__aiWhy() : '';
         chatHistory.push({ role: 'model', local: true, text: why || 'AI is not set up on this phone yet. Ask the admin to switch AI on for your account, or add your own Groq or Gemini key in Settings > AI helper.' });
@@ -3401,17 +3405,18 @@
   });
   window.addEventListener('online', function(){ if (dirty) push(); });
 
-  var aiInfo = null;
+  var aiInfo = null, aiErr = '';
   async function loadCloudKeys() {
     var status = 'none', keys = null;
     try {
-      var r = await sb.rpc('get_ai_keys');
+      var r = await Promise.race([sb.rpc('get_ai_keys'), new Promise(function (res) { setTimeout(function () { res({ error: { message: 'timed out' } }); }, 6000); })]);
+      aiErr = r.error ? (r.error.message || r.error.code || 'error') : '';
       if (!r.error && r.data) {
         aiInfo = r.data; keys = { groq: r.data.groq_key || '', gemini: r.data.gemini_key || '' };
       } else {
         // server function not installed yet: fall back to reading the table directly
-        var t = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
-        if (t.error) status = 'error';
+        var t = await Promise.race([sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle(), new Promise(function (res) { setTimeout(function () { res({ error: { message: 'timed out' } }); }, 6000); })]);
+        if (t.error) { status = 'error'; aiErr = (aiErr ? aiErr + ' / ' : '') + (t.error.message || 'table read failed'); }
         else { aiInfo = null; if (t.data) keys = { groq: t.data.groq_key || '', gemini: t.data.gemini_key || '' }; }
       }
     } catch (e) { status = 'error'; }
@@ -3441,7 +3446,7 @@
     try {
       var had = !!getAiKey();
       try {
-        var r = await sb.from('profiles').select('status,ai_access').eq('id', me.uid).maybeSingle();
+        var r = await Promise.race([sb.from('profiles').select('status,ai_access').eq('id', me.uid).maybeSingle(), new Promise(function (res) { setTimeout(function () { res({}); }, 5000); })]);
         if (r.data) {
           if (r.data.status === 'blocked') { location.reload(); return; }
           me.ai = !!r.data.ai_access; lsSet(CACHE, JSON.stringify(me));
@@ -3455,6 +3460,34 @@
     } finally { accessBusy = false; }
   }
   window.__refreshAccess = refreshAccess;
+  window.__aiDiagRun = async function () {
+    var box = $('ai-diag'), btn = $('ai-diag-btn');
+    box.hidden = false; btn.disabled = true; box.innerHTML = 'Checking…';
+    function line(ok, t) { return '<div class="dg ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '✓ ' : '✗ ') + t + '</div>'; }
+    var h = '';
+    if (!sb || !me) { box.innerHTML = line(false, 'Not signed in'); btn.disabled = false; return; }
+    h += line(true, 'Signed in as ' + escapeHtml(me.email));
+    lastAiStatus = ''; accessBusy = false;
+    await refreshAccess(false);
+    var info = aiInfo;
+    if (info) {
+      h += line(info.approved, info.approved ? 'Account approved' : 'Account is not approved');
+      h += line(info.ai_access || info.allowed, info.ai_access || info.allowed ? 'AI access switch is on' : 'AI access switch is OFF for this account (admin must turn it on)');
+      h += line(info.has_row, info.has_row ? 'Key row exists on the server' : 'No key row on the server yet');
+    } else {
+      h += line(false, 'Server check function not found or failed' + (aiErr ? ': ' + escapeHtml(aiErr) : '') + '. Run the get_ai_keys SQL once in Supabase.');
+    }
+    var g = !!cloudKey('groq'), m = !!cloudKey('gemini');
+    h += line(g || m, g || m ? 'Key received on this phone (' + [g && 'Groq', m && 'Gemini'].filter(Boolean).join(' + ') + ')' : 'No key received on this phone' + (info && !info.groq_key && !info.gemini_key && (info.allowed) ? ' (the server has no key saved)' : ''));
+    if (getAiKey()) {
+      box.innerHTML = h + '<div class="dg">Testing a real AI call…</div>';
+      var t0 = Date.now(), raw = null;
+      try { raw = await aiGenerate({ contents: [{ parts: [{ text: 'Reply with the single word ok.' }] }] }, 12000); } catch (e) { raw = null; }
+      h += raw ? line(true, 'AI call worked (' + ((Date.now() - t0) / 1000).toFixed(1) + ' s)') : line(false, 'AI call failed: ' + escapeHtml(aiLastError || 'no answer'));
+    }
+    box.innerHTML = h; btn.disabled = false;
+  };
+  $('ai-diag-btn').addEventListener('click', function () { window.__aiDiagRun(); });
   setInterval(function () { if (!document.hidden) refreshAccess(false); }, 90000);
 
   // ---------- account UI ----------
