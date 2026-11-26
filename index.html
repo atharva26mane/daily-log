@@ -487,6 +487,19 @@
     body.theme-volcano .fx-drop { background: #ffb347; border-color: #5a2312; }
     .tank-num { transform-origin: 0 70%; }
     @media (prefers-reduced-motion: reduce) { .fx-drop { display: none; } }
+    /* add sheet: drawer curve, chips */
+    .overlay.open .sheet { animation: rise 0.38s cubic-bezier(0.32, 0.72, 0, 1); }
+    @keyframes rise { from { transform: translateY(100%); } }
+    #entry-modal .select-input { display: none; }
+    #entry-modal .row-2 { display: block; }
+    #entry-modal .row-2 > div + div { margin-top: 14px; }
+    .cat-chips, .again-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .again-label { margin-top: 14px; }
+    .cchip, .achip { min-height: 36px; padding: 0 13px; border-radius: 20px; border: 1px solid rgba(64,81,59,0.28); background: rgba(64,81,59,0.06); color: var(--forest); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 140ms cubic-bezier(0.23,1,0.32,1), background-color 140ms ease, color 140ms ease; }
+    .cchip:active, .achip:active { transform: scale(0.95); }
+    .cchip.on { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+    .achip { background: rgba(143,208,242,0.28); border-color: rgba(74,47,79,0.25); font-weight: 500; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    @media (prefers-reduced-motion: reduce) { .overlay.open .sheet { animation: none; } }
     /* scroll motion (GSAP ScrollTrigger) */
     #scroll-water { position: fixed; left: 0; top: 0; right: 0; height: 3px; z-index: 9000; transform: scaleX(0); transform-origin: 0 50%; background: linear-gradient(90deg, #bfe6f7, #5fb6e3); border-radius: 0 3px 3px 0; opacity: 0; pointer-events: none; transition: opacity .3s; }
     body:has(#main-screen.active) #scroll-water { opacity: .9; }
@@ -3815,6 +3828,147 @@
     });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
+<script>
+(function () {
+  // Add sheet: category chips, "again" chips from your own history, drag down to close, new-entry highlight.
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var modal = document.getElementById('entry-modal');
+  var sel = document.getElementById('entry-cat-select');
+  var input = document.getElementById('entry-text-input');
+  if (!modal || !sel || !input) return;
+
+  // --- chips ---
+  var catBox = document.createElement('div'); catBox.className = 'cat-chips'; catBox.setAttribute('role', 'radiogroup');
+  sel.parentNode.insertBefore(catBox, sel.nextSibling);
+  var againLabel = document.createElement('div'); againLabel.className = 'field-label again-label'; againLabel.textContent = 'Again';
+  var againBox = document.createElement('div'); againBox.className = 'again-chips';
+  input.parentNode.insertBefore(againLabel, input.nextSibling);
+  input.parentNode.insertBefore(againBox, againLabel.nextSibling);
+
+  function syncCats() {
+    var cur = (typeof manualCategoryLocked !== 'undefined' && !manualCategoryLocked) ? '' : sel.value; // auto mode: nothing pre-picked
+    catBox.innerHTML = '';
+    Array.prototype.forEach.call(sel.options, function (o) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'cchip' + (o.value === cur ? ' on' : '');
+      b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', o.value === cur ? 'true' : 'false');
+      b.dataset.v = o.value; b.textContent = o.textContent; catBox.appendChild(b);
+    });
+  }
+  catBox.addEventListener('click', function (e) {
+    var b = e.target.closest('.cchip'); if (!b) return;
+    sel.value = b.dataset.v; sel.dispatchEvent(new Event('change', { bubbles: true }));
+    if (window.__fx) window.__fx.buzz(8);
+    syncCats();
+  });
+  sel.addEventListener('change', syncCats);
+
+  function againList(onlyCat) {
+    var counts = {}, out = [];
+    try {
+      var keys = Object.keys(allData).sort().reverse().slice(0, 30);
+      keys.forEach(function (k, di) {
+        (allData[k] || []).forEach(function (e) {
+          if (!e || !e.text) return;
+          if (onlyCat && e.cat !== onlyCat) return;
+          var id = e.cat + '|' + e.text.trim().toLowerCase();
+          if (!counts[id]) counts[id] = { text: e.text.trim(), cat: e.cat, n: 0, recent: di };
+          counts[id].n++;
+        });
+      });
+      out = Object.keys(counts).map(function (k) { return counts[k]; })
+        .sort(function (a, b) { return b.n - a.n || a.recent - b.recent; }).slice(0, 6);
+    } catch (e) {}
+    return out;
+  }
+  function syncAgain() {
+    var adding = document.getElementById('modal-title').textContent === 'Add entry';
+    var forced = adding && /:/.test(input.placeholder) ? sel.value : null;
+    var list = adding ? againList(forced) : [];
+    againBox.innerHTML = ''; againLabel.hidden = againBox.hidden = !list.length;
+    list.forEach(function (it) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'achip'; b.textContent = it.text;
+      b.dataset.cat = it.cat; againBox.appendChild(b);
+    });
+  }
+  againBox.addEventListener('click', function (e) {
+    var b = e.target.closest('.achip'); if (!b) return;
+    input.value = b.textContent;
+    sel.value = b.dataset.cat; sel.dispatchEvent(new Event('change', { bubbles: true }));
+    if (window.__fx) window.__fx.buzz(8);
+    input.focus(); syncCats();
+  });
+
+  new MutationObserver(function () { if (modal.classList.contains('open')) { syncCats(); syncAgain(); } })
+    .observe(modal, { attributes: true, attributeFilter: ['class'] });
+  // categories can change in settings; rebuild when the select's options change
+  new MutationObserver(syncCats).observe(sel, { childList: true });
+
+  // --- drag down to close (all sheets) ---
+  var drag = null;
+  function closeOf(ov) {
+    var b = ov.querySelector('#cancel-entry-btn, #settings-close-btn, #insights-close-btn, #cats-close-btn, #adm-close, #fb-close, #rem-close');
+    if (b) b.click(); else ov.classList.remove('open');
+  }
+  function scrolledInside(t, sheet) {
+    for (var n = t; n && n !== sheet; n = n.parentNode) if (n.scrollTop > 0) return true;
+    return sheet.scrollTop > 0;
+  }
+  document.addEventListener('touchstart', function (e) {
+    var sheet = e.target.closest && e.target.closest('.overlay.open .sheet');
+    if (!sheet || e.touches.length !== 1) { drag = null; return; }
+    if (e.target.closest('input, select, textarea, button, a, label')) { drag = null; return; }
+    if (scrolledInside(e.target, sheet)) { drag = null; return; }
+    drag = { sheet: sheet, ov: sheet.closest('.overlay'), x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now(), on: false, dy: 0 };
+  }, { passive: true });
+  document.addEventListener('touchmove', function (e) {
+    if (!drag) return;
+    var t = e.touches[0], dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+    if (!drag.on) {
+      if (Math.abs(dy) < 8) return;
+      if (dy < 0 || Math.abs(dx) > Math.abs(dy)) { drag = null; return; }
+      drag.on = true; drag.sheet.style.animation = 'none'; drag.sheet.style.transition = 'none';
+    }
+    e.preventDefault();
+    drag.dy = Math.max(0, dy);
+    drag.sheet.style.transform = 'translateY(' + drag.dy + 'px)';
+  }, { passive: false });
+  function endDrag() {
+    if (!drag || !drag.on) { drag = null; return; }
+    var d = drag; drag = null;
+    var v = d.dy / Math.max(1, Date.now() - d.t); // px per ms
+    var s = d.sheet;
+    if (d.dy > 110 || v > 0.6) {
+      s.style.transition = 'transform 200ms cubic-bezier(0.32,0.72,0,1)';
+      s.style.transform = 'translateY(105%)';
+      setTimeout(function () { closeOf(d.ov); s.style.transform = ''; s.style.transition = ''; s.style.animation = ''; }, 190);
+    } else {
+      s.style.transition = 'transform 260ms cubic-bezier(0.32,0.72,0,1)';
+      s.style.transform = 'translateY(0)';
+      setTimeout(function () { s.style.transform = ''; s.style.transition = ''; s.style.animation = ''; }, 270);
+    }
+  }
+  document.addEventListener('touchend', endDrag, { passive: true });
+  document.addEventListener('touchcancel', endDrag, { passive: true });
+
+  // --- new entries slide in with a soft highlight ---
+  var cards = document.getElementById('cards-container');
+  var seen = null, seenDay = '';
+  function dayKey() { var h = document.getElementById('header-date'); return h ? h.textContent : ''; }
+  new MutationObserver(function () {
+    var rows = Array.prototype.slice.call(cards.querySelectorAll('.entry-item'));
+    var ids = rows.map(function (r) { return r.dataset.id; });
+    var dk = dayKey();
+    if (seen === null || dk !== seenDay) { seen = ids.slice(); seenDay = dk; return; }
+    var fresh = rows.filter(function (r) { return seen.indexOf(r.dataset.id) < 0; });
+    seen = ids.slice();
+    if (calm || !window.gsap || !fresh.length || fresh.length > 3) return;
+    fresh.forEach(function (r) {
+      gsap.fromTo(r, { x: -14, opacity: 0, backgroundColor: 'rgba(143,208,242,0.55)' },
+        { x: 0, opacity: 1, backgroundColor: 'rgba(143,208,242,0)', duration: 0.9, ease: 'power3.out', clearProps: 'transform,opacity,backgroundColor' });
+    });
+  }).observe(cards, { childList: true });
 })();
 </script>
 </body>
