@@ -8,9 +8,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Daily Log" />
   <title>Daily Log</title>
-  <link id="app-icon" rel="icon" href="" />
-  <link id="apple-icon" rel="apple-touch-icon" href="" />
-  <link id="pwa-manifest" rel="manifest" href="" />
+  <link id="app-icon" rel="icon" type="image/png" href="icon-192.png" />
+  <link id="apple-icon" rel="apple-touch-icon" href="icon-192.png" />
+  <link id="pwa-manifest" rel="manifest" href="manifest.webmanifest" />
   <style>
     :root {
       --bg: #0d1117;
@@ -617,6 +617,7 @@
       <p class="backup-note">
         Your logs are saved only on this phone. Export a JSON file regularly to keep a backup.
       </p>
+      <p class="backup-note" id="storage-status"></p>
       <div class="backup-stack">
         <button class="btn-primary" id="export-btn">Export JSON Backup</button>
         <button class="btn-secondary" id="import-trigger-btn">Import JSON Backup</button>
@@ -801,6 +802,73 @@
       } catch (e) {
         showToast('Could not save data (storage full)');
       }
+      mirrorSet(STORAGE_KEY, JSON.stringify(allData));
+    }
+
+    // ---- Second safety copy in IndexedDB (survives when localStorage is wiped) ----
+    function idbOpen() {
+      return new Promise((resolve, reject) => {
+        try {
+          const req = indexedDB.open('daily_log_mirror', 1);
+          req.onupgradeneeded = () => req.result.createObjectStore('kv');
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        } catch (e) { reject(e); }
+      });
+    }
+    function mirrorSet(key, value) {
+      idbOpen().then(db => {
+        const tx = db.transaction('kv', 'readwrite');
+        if (value) tx.objectStore('kv').put(value, key);
+        else tx.objectStore('kv').delete(key);
+        tx.oncomplete = () => db.close();
+      }).catch(() => {});
+    }
+    function mirrorGet(key) {
+      return idbOpen().then(db => new Promise(resolve => {
+        const r = db.transaction('kv', 'readonly').objectStore('kv').get(key);
+        r.onsuccess = () => { db.close(); resolve(r.result || null); };
+        r.onerror = () => { db.close(); resolve(null); };
+      })).catch(() => null);
+    }
+
+    // If the browser wiped localStorage, bring data and key back from the safety copy.
+    async function restoreFromMirror() {
+      let restored = false;
+      try {
+        if (!localStorage.getItem(STORAGE_KEY)) {
+          const raw = await mirrorGet(STORAGE_KEY);
+          if (raw) {
+            localStorage.setItem(STORAGE_KEY, raw);
+            allData = loadData();
+            restored = true;
+          }
+        } else {
+          // keep the safety copy fresh
+          mirrorSet(STORAGE_KEY, localStorage.getItem(STORAGE_KEY));
+        }
+        if (!localStorage.getItem(AI_KEY_STORAGE)) {
+          const k = await mirrorGet(AI_KEY_STORAGE);
+          if (k) { localStorage.setItem(AI_KEY_STORAGE, k); restored = true; }
+        } else {
+          mirrorSet(AI_KEY_STORAGE, localStorage.getItem(AI_KEY_STORAGE));
+        }
+      } catch (e) {}
+      if (restored) {
+        renderMain();
+        showToast('Your saved data was restored');
+      }
+    }
+
+    // Ask the browser not to delete this site's data.
+    async function protectStorage() {
+      try {
+        if (navigator.storage && navigator.storage.persist) {
+          if (await navigator.storage.persisted()) return true;
+          return await navigator.storage.persist();
+        }
+      } catch (e) {}
+      return false;
     }
 
     function getDayEntries(key) {
@@ -913,6 +981,7 @@
         if (v) localStorage.setItem(AI_KEY_STORAGE, v);
         else localStorage.removeItem(AI_KEY_STORAGE);
       } catch (e) {}
+      mirrorSet(AI_KEY_STORAGE, v || null);
     }
 
     // Returns a category id, or null if AI could not answer.
@@ -1533,8 +1602,13 @@
 
     // Backup Modal
     const backupModal = document.getElementById('backup-modal');
-    document.getElementById('open-backup-btn').addEventListener('click', () => {
+    document.getElementById('open-backup-btn').addEventListener('click', async () => {
       backupModal.classList.add('open');
+      let kept = false;
+      try { kept = !!(navigator.storage && navigator.storage.persisted && await navigator.storage.persisted()); } catch (e) {}
+      document.getElementById('storage-status').textContent = kept
+        ? 'Storage protection: ON (the browser will not auto-delete your data).'
+        : 'Storage protection: not guaranteed. Add this app to your home screen and keep exporting backups.';
     });
     document.getElementById('close-backup-btn').addEventListener('click', () => {
       backupModal.classList.remove('open');
@@ -1608,52 +1682,7 @@
     // 12. PWA SETUP (Inline Icon + Dynamic Manifest + Optional Service Worker)
     // =========================================================================
     function initPWA() {
-      // Generate a crisp PNG icon for Android & iOS Home Screen
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#0d1117';
-      ctx.fillRect(0, 0, 512, 512);
-
-      // Rounded inner badge
-      ctx.fillStyle = '#38bdf8';
-      ctx.beginPath();
-      ctx.roundRect(64, 64, 384, 384, 88);
-      ctx.fill();
-
-      // Checkmark / Log lines icon
-      ctx.strokeStyle = '#06131f';
-      ctx.lineWidth = 34;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.beginPath();
-      ctx.moveTo(156, 200); ctx.lineTo(356, 200);
-      ctx.moveTo(156, 270); ctx.lineTo(316, 270);
-      ctx.moveTo(156, 340); ctx.lineTo(260, 340);
-      ctx.stroke();
-
-      const pngIcon = canvas.toDataURL('image/png');
-      document.getElementById('app-icon').href = pngIcon;
-      document.getElementById('apple-icon').href = pngIcon;
-
-      // Inline Web App Manifest
-      const manifest = {
-        name: 'Daily Log',
-        short_name: 'Daily Log',
-        start_url: window.location.href,
-        display: 'standalone',
-        background_color: '#0d1117',
-        theme_color: '#0d1117',
-        icons: [
-          { src: pngIcon, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
-        ]
-      };
-      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
-      document.getElementById('pwa-manifest').href = URL.createObjectURL(manifestBlob);
-
-      // Register sw.js if present (for full offline launch without internet)
+      // Real manifest + icon files are linked in <head>. Here we only start the offline helper.
       if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
       }
@@ -1663,6 +1692,8 @@
     populateCategorySelect();
     renderMain();
     try { initPWA(); } catch (e) {}
+    restoreFromMirror();
+    protectStorage();
   </script>
 </body>
 </html>
