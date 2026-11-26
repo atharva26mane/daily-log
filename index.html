@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0f1f24" />
+  <meta name="theme-color" content="#fefae0" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Daily Log" />
   <title>Daily Log</title>
   <link id="app-icon" rel="icon" type="image/png" href="icon-192.png" />
@@ -16,20 +16,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet" />
   <style>
-    /* Deep Tide: a water-first diary. Aqua belongs to water and the main action; each category keeps one small colour. */
+    /* Forest to Shore. Greens from the forest palette, sand and sea from the seashore palette. */
     :root {
-      --bg: #0f1f24;
-      --surface: #16292f;
-      --raised: #1e3841;
-      --line: #2b464f;
-      --text: #ecf4f1;
-      --muted: #94aaa8;
-      --water: #5fd4c8;
-      --water-ink: #062a29;
-      --ok: #9be28f;
-      --danger: #ff8f85;
-      --paper: #ecf4f1;
-      --paper-ink: #0f1f24;
+      --forest: #40513b;
+      --fern: #609966;
+      --leaf: #9dc08b;
+      --mist: #edf1d6;
+      --moss: #5f6f52;
+      --sage: #a9b388;
+      --cream: #fefae0;
+      --driftwood: #b99470;
+      --sand: #eee0c9;
+      --foam: #f1f0e8;
+      --sea: #96b6c5;
+      --sea-light: #adc4ce;
+      --ink: #2c3828;
+      --text: var(--ink);
+      --muted: var(--moss);
       --radius: 20px;
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --display: "Bricolage Grotesque", "Avenir Next", "Trebuchet MS", system-ui, sans-serif;
@@ -37,285 +40,215 @@
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--body);
-      font-size: 16px;
-      line-height: 1.45;
-      min-height: 100%;
-    }
-
-    body { padding-bottom: calc(104px + var(--safe-bottom)); }
-
+    html, body { margin: 0; padding: 0; background: var(--sand); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.45; min-height: 100%; }
     button { font-family: inherit; color: inherit; }
-    :focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
-
+    :focus-visible { outline: 3px solid var(--forest); outline-offset: 2px; }
     svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
-    .container { max-width: 560px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top, 0px)) 16px 24px; }
+    .container { max-width: 560px; margin: 0 auto; padding: 0 16px; }
 
-    /* Header */
-    .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-    .top h1 { font-family: var(--display); font-size: 34px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
-    .top-sub { color: var(--muted); font-size: 15px; margin-top: 4px; }
+    /* ---------- Sky + forest ---------- */
+    .sky { background: linear-gradient(180deg, var(--cream) 0%, var(--mist) 100%); padding-top: env(safe-area-inset-top, 0px); }
+    .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 0 10px; }
+    .top h1 { font-family: var(--display); font-size: 36px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; margin: 0; color: var(--forest); }
+    .top-sub { color: var(--moss); font-size: 15px; margin-top: 4px; }
     .top-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
-    .icon-btn {
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      cursor: pointer;
-      color: var(--text);
-    }
-    .icon-btn:active { background: var(--raised); }
+    .icon-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(64,81,59,0.08); border: 1px solid rgba(64,81,59,0.22); border-radius: 14px; cursor: pointer; color: var(--forest); }
+    .icon-btn:active { background: rgba(64,81,59,0.2); }
+    .pill-btn { min-height: 44px; background: rgba(64,81,59,0.08); border: 1px solid rgba(64,81,59,0.22); border-radius: 14px; padding: 0 14px; font-size: 15px; font-weight: 600; color: var(--forest); cursor: pointer; }
+    .pill-btn:active { background: rgba(64,81,59,0.2); }
 
-    .pill-btn {
-      min-height: 44px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 0 14px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .pill-btn:active { background: var(--raised); }
+    .forest { position: relative; height: 170px; overflow: hidden; cursor: pointer; }
+    .f-layer { position: absolute; left: 0; right: 0; bottom: 0; top: 0; will-change: transform; }
+    .f-svg, .f-svg * { stroke: none; }
+    .f-svg { width: 100%; height: 100%; display: block; transform-origin: 50% 100%; animation: sway 9s ease-in-out infinite; }
+    .f-layer:nth-child(2) .f-svg { animation-duration: 7.5s; animation-delay: -2s; }
+    .f-layer:nth-child(3) .f-svg { animation-duration: 6s; animation-delay: -4s; }
+    @keyframes sway { 0%, 100% { transform: skewX(-0.5deg); } 50% { transform: skewX(0.5deg); } }
+    .forest.sway .f-svg { animation: rustle 0.9s ease-in-out; }
+    @keyframes rustle { 0% { transform: skewX(0); } 20% { transform: skewX(2.4deg); } 45% { transform: skewX(-2deg); } 70% { transform: skewX(1deg); } 100% { transform: skewX(0); } }
 
-    /* Water tank */
-    .tank {
-      position: relative;
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 22px 20px 18px;
-      margin-bottom: 14px;
-      isolation: isolate;
-      --fillc: rgba(95, 212, 200, 0.30);
-    }
-    .tank.done { --fillc: rgba(155, 226, 143, 0.30); }
-    .tank-fill {
-      position: absolute; left: 0; right: 0; bottom: 0; height: 100%;
-      transform: translateY(var(--drop, 120%));
-      transition: transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-      z-index: -1;
-      color: var(--fillc);
-    }
-    .wave { position: absolute; top: -1px; left: 0; width: 200%; height: 22px; fill: currentColor; stroke: none; animation: drift 7s linear infinite; }
-    .fill-body { position: absolute; top: 20px; left: 0; right: 0; bottom: 0; background: currentColor; }
+    /* ---------- Forest floor to meadow ---------- */
+    .ground { background-color: var(--mist); background-image: linear-gradient(180deg, #40513b 0, #609966 150px, #9dc08b 520px, #edf1d6 900px); padding: 18px 0 40px; }
+
+    /* Water tank (the hero) */
+    .tank { position: relative; overflow: hidden; background: var(--foam); border-radius: 28px; padding: 22px 20px 18px; margin-bottom: 14px; isolation: isolate; box-shadow: 0 14px 34px rgba(26,38,24,0.35); --fillc: var(--sea-light); --wavec: var(--sea); }
+    .tank.done { --fillc: #b6d3a6; --wavec: var(--leaf); }
+    .tank-fill { position: absolute; left: 0; right: 0; bottom: 0; height: 100%; transform: translateY(var(--drop, 120%)); transition: transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: -1; }
+    .wave { position: absolute; top: -8px; left: 0; width: 200%; height: 24px; fill: var(--wavec); stroke: none; animation: drift 7s linear infinite; }
+    .wave.w2 { top: -14px; fill: var(--fillc); animation-duration: 11s; animation-direction: reverse; }
+    .fill-body { position: absolute; top: 12px; left: 0; right: 0; bottom: 0; background: var(--fillc); }
     @keyframes drift { to { transform: translateX(-50%); } }
 
-    .tank-num { font-family: var(--display); font-weight: 800; font-size: 84px; line-height: 0.95; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-    .tank-num small { font-size: 26px; font-weight: 600; margin-left: 6px; color: var(--muted); letter-spacing: 0; }
-    .tank-sub { color: var(--muted); font-size: 15px; margin-top: 8px; }
-    .tank.done .tank-sub { color: var(--ok); font-weight: 600; }
+    .tank-num { font-family: var(--display); font-weight: 800; font-size: 84px; line-height: 0.95; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--forest); }
+    .tank-num small { font-size: 26px; font-weight: 600; margin-left: 6px; color: var(--moss); letter-spacing: 0; }
+    .tank-sub { color: var(--moss); font-size: 15px; margin-top: 8px; font-weight: 500; }
+    .tank.done .tank-sub { color: var(--forest); font-weight: 700; }
 
     .tank-quick { display: flex; gap: 8px; margin-top: 18px; }
-    .quick-btn {
-      flex: 1;
-      min-height: 46px;
-      background: rgba(15, 31, 36, 0.55);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      font-variant-numeric: tabular-nums;
-    }
-    .quick-btn:active { background: var(--water); color: var(--water-ink); border-color: var(--water); }
+    .quick-btn { flex: 1; min-height: 46px; background: rgba(254,250,224,0.9); border: 1px solid rgba(64,81,59,0.25); border-radius: 14px; font-size: 16px; font-weight: 700; color: var(--forest); cursor: pointer; font-variant-numeric: tabular-nums; }
+    .quick-btn:active { background: var(--forest); color: var(--cream); }
 
-    /* Main actions */
     .actions { display: grid; grid-template-columns: 1.6fr 1fr; gap: 10px; margin-bottom: 18px; }
-    .act {
-      min-height: 56px;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      border-radius: 18px;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-      border: 1px solid var(--line);
-      background: var(--surface);
-    }
-    .act:active { background: var(--raised); }
-    .act.primary { background: var(--water); color: var(--water-ink); border-color: var(--water); }
-    .act.primary:active { background: #49bfb3; }
+    .act { min-height: 56px; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 18px; font-size: 17px; font-weight: 700; cursor: pointer; border: 1px solid rgba(254,250,224,0.35); background: var(--forest); color: var(--cream); }
+    .act:active { opacity: 0.85; }
+    .act.primary { background: var(--cream); color: var(--forest); border-color: var(--cream); box-shadow: 0 6px 18px rgba(26,38,24,0.25); }
 
     /* Category cards */
     .cards { display: flex; flex-direction: column; gap: 12px; }
-    .card { background: var(--surface); border-radius: var(--radius); padding: 14px 16px 6px; }
+    .card { background: rgba(254,250,224,0.97); border-radius: var(--radius); padding: 14px 16px 6px; box-shadow: 0 4px 16px rgba(44,56,40,0.14); }
     .card-header { display: flex; align-items: center; gap: 10px; min-height: 40px; }
-    .card-title { font-family: var(--display); font-size: 19px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; letter-spacing: -0.01em; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex-shrink: 0; display: inline-block; }
+    .card-title { font-family: var(--display); font-size: 19px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; letter-spacing: -0.01em; color: var(--forest); }
+    .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--c); flex-shrink: 0; display: inline-block; }
     .card-total { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--c); }
-    .card-add-btn {
-      width: 40px; height: 40px; border-radius: 12px;
-      background: var(--raised); border: none; color: var(--text);
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-    }
+    .card-add-btn { width: 40px; height: 40px; border-radius: 12px; background: var(--mist); border: 1px solid rgba(64,81,59,0.18); color: var(--forest); display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .card-add-btn svg { width: 20px; height: 20px; }
-    .card-add-btn:active { background: var(--c); color: var(--bg); }
-    .card-note { margin: 4px 0 2px; font-size: 14px; color: var(--muted); }
-
+    .card-add-btn:active { background: var(--forest); color: var(--cream); }
+    .card-note { margin: 4px 0 2px; font-size: 14px; color: var(--moss); }
     .entries { list-style: none; margin: 6px 0 0; padding: 0; }
-    .entry-item { display: flex; gap: 14px; align-items: baseline; padding: 11px 0; border-top: 1px solid var(--line); cursor: pointer; }
-    .entry-item:active { opacity: 0.7; }
-    .entry-time { font-variant-numeric: tabular-nums; font-size: 14px; color: var(--muted); width: 44px; flex-shrink: 0; }
-    .entry-text { font-size: 16px; flex: 1; word-break: break-word; }
+    .entry-item { display: flex; gap: 14px; align-items: baseline; padding: 11px 0; border-top: 1px solid rgba(64,81,59,0.16); cursor: pointer; }
+    .entry-item:active { opacity: 0.6; }
+    .entry-time { font-variant-numeric: tabular-nums; font-size: 14px; color: var(--moss); width: 44px; flex-shrink: 0; }
+    .entry-text { font-size: 16px; flex: 1; word-break: break-word; color: var(--ink); }
 
     .more { margin-top: 8px; }
-    .more-title { font-size: 15px; font-weight: 600; color: var(--muted); margin: 6px 2px 10px; }
+    .more-title { font-size: 15px; font-weight: 700; color: var(--ink); margin: 6px 2px 10px; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip-add {
-      min-height: 44px;
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 0 16px;
-      background: transparent;
-      border: 1px dashed var(--line);
-      border-radius: 999px;
-      font-size: 15px; font-weight: 600;
-      cursor: pointer;
-    }
-    .chip-add:active { background: var(--surface); border-style: solid; }
+    .chip-add { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; padding: 0 16px; background: rgba(254,250,224,0.6); border: 1px dashed rgba(64,81,59,0.5); border-radius: 999px; font-size: 15px; font-weight: 600; color: var(--forest); cursor: pointer; }
+    .chip-add:active { background: var(--cream); border-style: solid; }
+    .empty-state { color: var(--ink); font-size: 15px; padding: 4px 2px 14px; max-width: 34ch; font-weight: 500; }
+    .empty-state b { font-weight: 800; }
 
-    .empty-state { color: var(--muted); font-size: 15px; padding: 4px 2px 14px; max-width: 34ch; }
-    .empty-state b { color: var(--text); }
+    /* ---------- Shore ---------- */
+    .shore { position: relative; overflow: hidden; min-height: 660px; padding: 70px 0 0; --tide: 0;
+      background-color: var(--sand);
+      background-image: radial-gradient(rgba(185,148,112,0.28) 1px, transparent 1.6px), linear-gradient(180deg, #edf1d6 0, #eee0c9 170px);
+      background-size: 15px 15px, 100% 100%; }
+    .shore-inner { position: relative; z-index: 3; max-width: 560px; margin: 0 auto; padding: 0 16px; }
+    .shore-title { font-family: var(--display); font-size: 22px; font-weight: 700; margin: 0 0 4px; color: var(--forest); letter-spacing: -0.01em; }
+    .shore-sub { margin: 0 0 18px; color: var(--moss); font-size: 14px; max-width: 38ch; }
+    .shells { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .shell { background: none; border: none; padding: 6px 0 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; border-radius: 14px; min-height: 76px; transition: transform 0.2s ease; }
+    .shell svg { width: 38px; height: 40px; stroke-width: 1; }
+    .shell:active { transform: scale(0.92) rotate(-6deg); }
+    .sh-body { fill: var(--cream); stroke: var(--driftwood); stroke-width: 1.6; }
+    .sh-rib { stroke: var(--driftwood); stroke-width: 1.3; fill: none; opacity: 0.8; }
+    .sh-base { fill: var(--driftwood); stroke: none; }
+    .shell.met .sh-body { fill: var(--driftwood); }
+    .shell.met .sh-rib { stroke: var(--cream); }
+    .shell.empty svg { opacity: 0.45; }
+    .s-day { font-size: 13px; font-weight: 700; color: var(--forest); padding: 1px 8px; border-radius: 999px; }
+    .s-ml { font-size: 11px; color: var(--moss); font-variant-numeric: tabular-nums; }
+    .shell.sel .s-day { background: var(--forest); color: var(--cream); }
 
-    /* Bottom dock */
-    .bottom-bar {
-      position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-      padding: 12px 16px calc(12px + var(--safe-bottom));
-      background: linear-gradient(to top, var(--bg) 62%, rgba(15, 31, 36, 0));
-      pointer-events: none;
-    }
-    .bottom-inner { max-width: 528px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px; pointer-events: auto; }
-    .btn-primary, .btn-secondary {
-      min-height: 54px; border-radius: 18px; font-size: 16px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .btn-primary { background: var(--paper); color: var(--paper-ink); border: none; }
-    .btn-secondary { background: var(--surface); border: 1px solid var(--line); color: var(--text); }
-    .btn-primary:active, .btn-secondary:active { opacity: 0.85; }
+    .deco { position: absolute; z-index: 2; stroke: none; fill: var(--driftwood); opacity: 0.85; pointer-events: none; }
+
+    .sea { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; height: calc(200px + var(--tide, 0) * 1.4px); transition: height 1.8s cubic-bezier(0.2, 0.8, 0.2, 1); overflow: hidden; cursor: pointer; }
+    .wl { position: absolute; left: 0; width: 200%; height: 60px; animation: drift 12s linear infinite; --c: var(--sea-light); }
+    .wl svg { width: 100%; height: 60px; display: block; stroke: none; fill: var(--c); }
+    .wl::after { content: ""; position: absolute; left: 0; right: 0; top: 59px; height: 900px; background: var(--c); }
+    .wl.foam { top: 0; --c: var(--foam); animation-duration: 15s; }
+    .wl.l1 { top: 12px; --c: var(--sea-light); }
+    .wl.l2 { top: 40px; --c: var(--sea); animation-duration: 9s; animation-direction: reverse; }
+    .wl.l3 { top: 74px; --c: #7fa4b6; animation-duration: 7s; }
+    .wash { position: absolute; inset: 0; animation: wash 7s ease-in-out infinite; }
+    @keyframes wash { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    .ripple { position: absolute; width: 20px; height: 20px; margin: -10px 0 0 -10px; border: 2px solid rgba(241,240,232,0.9); border-radius: 50%; animation: ripple 1.3s ease-out forwards; pointer-events: none; }
+    @keyframes ripple { to { transform: scale(7); opacity: 0; } }
+
+    /* ---------- Dock ---------- */
+    .bottom-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 0 16px calc(12px + var(--safe-bottom)); pointer-events: none; }
+    .bottom-inner { max-width: 528px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; pointer-events: auto; background: rgba(44,56,40,0.94); border-radius: 24px; padding: 8px; box-shadow: 0 10px 30px rgba(26,38,24,0.4); backdrop-filter: blur(8px); }
+    .btn-primary, .btn-secondary { min-height: 52px; border-radius: 17px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-primary { background: var(--cream); color: var(--forest); border: none; }
+    .btn-secondary { background: transparent; border: 1px solid rgba(254,250,224,0.35); color: var(--cream); }
+    .btn-primary:active, .btn-secondary:active { opacity: 0.8; }
     .btn-primary svg, .btn-secondary svg { width: 20px; height: 20px; }
 
-    /* Sheets */
-    .overlay { position: fixed; inset: 0; background: rgba(5, 14, 17, 0.7); display: none; align-items: flex-end; justify-content: center; z-index: 50; padding: 0; }
+    /* ---------- Sheets ---------- */
+    .overlay { position: fixed; inset: 0; background: rgba(34,46,32,0.6); display: none; align-items: flex-end; justify-content: center; z-index: 50; }
     .overlay.open { display: flex; animation: fade 0.18s ease-out; }
     .overlay.open .sheet { animation: rise 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
     @keyframes fade { from { opacity: 0; } }
     @keyframes rise { from { transform: translateY(40px); opacity: 0; } }
-
-    .sheet {
-      position: relative;
-      width: 100%; max-width: 560px;
-      background: var(--surface);
-      border: 1px solid var(--line); border-bottom: none;
-      border-radius: 28px 28px 0 0;
-      padding: 26px 18px calc(20px + var(--safe-bottom));
-      max-height: 92vh; overflow-y: auto;
-    }
-    .sheet::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px; margin-left: -20px; border-radius: 4px; background: var(--line); }
-    .sheet-title { font-family: var(--display); font-size: 24px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.01em; }
-
-    .field-label { display: block; font-size: 14px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
-    .text-input, .select-input, .time-input {
-      width: 100%; min-height: 50px;
-      background: var(--bg); color: var(--text);
-      border: 1px solid var(--line); border-radius: 14px;
-      padding: 12px 14px; font-size: 16px; font-family: inherit; outline: none;
-    }
-    .text-input:focus, .select-input:focus, .time-input:focus { border-color: var(--water); }
+    .sheet { position: relative; width: 100%; max-width: 560px; background: var(--cream); color: var(--ink); border-radius: 28px 28px 0 0; padding: 26px 18px calc(20px + var(--safe-bottom)); max-height: 92vh; overflow-y: auto; }
+    .sheet::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px; margin-left: -20px; border-radius: 4px; background: rgba(64,81,59,0.3); }
+    .sheet-title { font-family: var(--display); font-size: 24px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.01em; color: var(--forest); }
+    .field-label { display: block; font-size: 14px; color: var(--moss); margin-bottom: 6px; font-weight: 600; }
+    .text-input, .select-input, .time-input { width: 100%; min-height: 50px; background: var(--foam); color: var(--ink); border: 1px solid rgba(64,81,59,0.3); border-radius: 14px; padding: 12px 14px; font-size: 16px; font-family: inherit; outline: none; }
+    .text-input:focus, .select-input:focus, .time-input:focus { border-color: var(--fern); box-shadow: 0 0 0 3px rgba(96,153,102,0.25); }
     .row-2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; margin-top: 14px; }
-    .auto-tag { font-size: 13px; color: var(--water); font-weight: 600; margin-left: 6px; }
-
+    .auto-tag { font-size: 13px; color: var(--fern); font-weight: 700; margin-left: 6px; }
     .sheet-actions { display: flex; gap: 10px; margin-top: 18px; }
     .sheet-actions button { flex: 1; min-height: 52px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; }
-    .btn-save { background: var(--water); color: var(--water-ink); border: none; }
+    .btn-save { background: var(--forest); color: var(--cream); border: none; }
     .btn-save:disabled { opacity: 0.6; }
-    .btn-cancel { background: var(--raised); color: var(--text); border: 1px solid var(--line); }
-    .btn-delete { background: transparent; color: var(--danger); border: 1px solid rgba(255, 143, 133, 0.5); flex: 0.8; }
-
-    .backup-note { font-size: 14px; color: var(--muted); margin: 0 0 10px; max-width: 46ch; }
+    .btn-cancel { background: var(--mist); color: var(--forest); border: 1px solid rgba(64,81,59,0.25); }
+    .btn-delete { background: transparent; color: #a8392f; border: 1px solid rgba(168,57,47,0.5); flex: 0.8; }
+    .backup-note { font-size: 14px; color: var(--moss); margin: 0 0 10px; max-width: 46ch; }
     .backup-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .backup-stack .btn-primary { background: var(--forest); color: var(--cream); }
+    .backup-stack .btn-secondary { background: var(--mist); color: var(--forest); border-color: rgba(64,81,59,0.25); }
     .backup-stack .btn-cancel { min-height: 52px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; }
 
-    /* Screens + history */
+    /* ---------- Screens + history ---------- */
     .screen { display: none; }
     .screen.active { display: block; }
     .history-list { display: flex; flex-direction: column; gap: 10px; }
-    .history-item {
-      width: 100%; text-align: left; cursor: pointer;
-      background: var(--surface); border: none; border-radius: var(--radius);
-      padding: 16px; display: flex; justify-content: space-between; align-items: center; gap: 16px;
-    }
-    .history-item:active { background: var(--raised); }
-    .h-day { font-family: var(--display); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
-    .h-date { font-size: 14px; color: var(--muted); margin-top: 2px; }
+    .history-item { width: 100%; text-align: left; cursor: pointer; background: rgba(254,250,224,0.97); border: none; border-radius: var(--radius); padding: 16px; display: flex; justify-content: space-between; align-items: center; gap: 16px; box-shadow: 0 4px 16px rgba(44,56,40,0.14); color: var(--ink); }
+    .history-item:active { background: var(--mist); }
+    .h-day { font-family: var(--display); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; color: var(--forest); }
+    .h-date { font-size: 14px; color: var(--moss); margin-top: 2px; }
     .h-side { width: 104px; text-align: right; flex-shrink: 0; }
-    .h-water { font-family: var(--display); font-weight: 700; font-size: 20px; font-variant-numeric: tabular-nums; }
-    .h-water span { font-size: 13px; color: var(--muted); font-weight: 500; }
-    .h-bar { height: 5px; background: var(--raised); border-radius: 5px; overflow: hidden; margin: 6px 0 5px; }
-    .h-bar i { display: block; height: 100%; background: var(--water); border-radius: 5px; }
-    .h-count { font-size: 13px; color: var(--muted); }
+    .h-water { font-family: var(--display); font-weight: 700; font-size: 20px; font-variant-numeric: tabular-nums; color: var(--forest); }
+    .h-water span { font-size: 13px; color: var(--moss); font-weight: 500; }
+    .h-bar { height: 6px; background: rgba(64,81,59,0.15); border-radius: 6px; overflow: hidden; margin: 6px 0 5px; }
+    .h-bar i { display: block; height: 100%; background: var(--fern); border-radius: 6px; }
+    .h-count { font-size: 13px; color: var(--moss); }
+    #history-screen .ground { min-height: 70vh; padding-bottom: 120px; }
 
     /* Toast */
-    .toast {
-      position: fixed; left: 50%; bottom: calc(96px + var(--safe-bottom));
-      transform: translateX(-50%) translateY(16px);
-      background: var(--paper); color: var(--paper-ink);
-      padding: 11px 18px; border-radius: 999px;
-      font-size: 15px; font-weight: 700;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      z-index: 100; max-width: 90vw; text-align: center;
-    }
+    .toast { position: fixed; left: 50%; bottom: calc(96px + var(--safe-bottom)); transform: translateX(-50%) translateY(16px); background: var(--forest); color: var(--cream); padding: 11px 18px; border-radius: 999px; font-size: 15px; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; z-index: 100; max-width: 90vw; text-align: center; box-shadow: 0 8px 22px rgba(26,38,24,0.35); }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* Chat */
+    /* ---------- Chat ---------- */
     .chat-sheet { display: flex; flex-direction: column; height: 90vh; overflow: hidden; padding-bottom: calc(14px + var(--safe-bottom)); }
     .chat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .chat-head .sheet-title { margin: 0; }
     .chat-head-btns { display: flex; gap: 6px; }
-    .chat-head button { min-height: 40px; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .chat-head button { min-height: 40px; background: var(--mist); color: var(--forest); border: 1px solid rgba(64,81,59,0.25); border-radius: 12px; padding: 0 14px; font-size: 14px; font-weight: 600; cursor: pointer; }
     .chat-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 4px 2px 8px; }
-    .chat-hint { color: var(--muted); font-size: 15px; padding: 14px; border: 1px dashed var(--line); border-radius: 16px; max-width: 40ch; }
+    .chat-hint { color: var(--moss); font-size: 15px; padding: 14px; border: 1px dashed rgba(64,81,59,0.4); border-radius: 16px; max-width: 40ch; }
     .bubble { max-width: 92%; padding: 11px 14px; border-radius: 18px; font-size: 16px; word-break: break-word; }
-    .bubble.user { align-self: flex-end; background: var(--water); color: var(--water-ink); border-bottom-right-radius: 6px; }
-    .bubble.ai { align-self: flex-start; background: var(--raised); border-bottom-left-radius: 6px; }
-    .bubble.thinking { color: var(--muted); }
+    .bubble.user { align-self: flex-end; background: var(--forest); color: var(--cream); border-bottom-right-radius: 6px; }
+    .bubble.ai { align-self: flex-start; background: var(--mist); color: var(--ink); border-bottom-left-radius: 6px; }
+    .bubble.thinking { color: var(--moss); }
     .prop-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
-    .prop { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg); border-radius: 14px; padding: 10px 12px; }
+    .prop { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--cream); border-radius: 14px; padding: 10px 12px; border: 1px solid rgba(64,81,59,0.15); }
     .prop-main { min-width: 0; flex: 1; }
-    .prop-cat { font-size: 13px; color: var(--water); font-weight: 700; }
+    .prop-cat { font-size: 13px; color: var(--forest); font-weight: 800; }
     .prop-text { font-size: 15px; }
     .prop-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
-    .prop-btn { min-height: 40px; border-radius: 12px; padding: 0 14px; font-size: 15px; font-weight: 700; cursor: pointer; border: 1px solid var(--line); }
-    .prop-btn.add { background: var(--ok); color: #10300f; border: none; }
-    .prop-btn.skip { background: transparent; color: var(--muted); }
-    .prop-state { font-size: 14px; color: var(--muted); font-weight: 600; }
-    .prop-all { min-height: 46px; background: var(--ok); color: #10300f; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; }
+    .prop-btn { min-height: 40px; border-radius: 12px; padding: 0 14px; font-size: 15px; font-weight: 700; cursor: pointer; border: 1px solid rgba(64,81,59,0.25); }
+    .prop-btn.add { background: var(--leaf); color: var(--ink); border: none; }
+    .prop-btn.skip { background: transparent; color: var(--moss); }
+    .prop-state { font-size: 14px; color: var(--moss); font-weight: 600; }
+    .prop-all { min-height: 46px; background: var(--leaf); color: var(--ink); border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; }
     .chat-input-row { display: flex; gap: 8px; margin-top: 8px; }
     .chat-input-row .text-input { flex: 1; }
-    .chat-send { min-width: 76px; background: var(--water); color: var(--water-ink); border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; }
+    .chat-send { min-width: 76px; background: var(--forest); color: var(--cream); border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; }
     .chat-send:disabled { opacity: 0.5; }
 
     @media (min-width: 700px) {
-      .container { padding-top: 36px; }
       .overlay { align-items: center; }
-      .sheet { border-radius: 28px; border-bottom: 1px solid var(--line); }
+      .sheet { border-radius: 28px; }
       .chat-sheet { height: 80vh; }
     }
-
     @media (prefers-reduced-motion: reduce) {
-      .wave { animation: none; }
-      .tank-fill { transition: none; }
+      .wave, .wl, .wash, .f-svg, .forest.sway .f-svg { animation: none; }
+      .tank-fill, .sea, .toast { transition: none; }
       .overlay.open, .overlay.open .sheet { animation: none; }
-      .toast { transition: none; }
     }
   </style>
 </head>
@@ -323,45 +256,73 @@
 
   <!-- MAIN SCREEN (Today or Selected Past Day) -->
   <div id="main-screen" class="screen active">
-    <div class="container">
-      <header class="top">
-        <div>
-          <h1 id="header-date"></h1>
-          <div id="header-label" class="top-sub"></div>
-        </div>
-        <div class="top-actions" id="today-actions">
-          <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
-          <button class="icon-btn" id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg></button>
-          <button class="icon-btn" id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5l1.9 5.6 5.6 1.9-5.6 1.9L11 18.5l-1.9-5.6L3.5 11l5.6-1.9z"/><path d="M18.5 15.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z"/></svg></button>
-        </div>
-        <div class="top-actions" id="past-actions" style="display:none;">
-          <button class="pill-btn" id="back-to-history-btn">History</button>
-          <button class="pill-btn" id="back-to-today-btn">Today</button>
-        </div>
-      </header>
-
-      <section class="tank" id="tank" aria-label="Water today">
-        <div class="tank-fill" id="tank-fill" aria-hidden="true">
-          <svg class="wave" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 0 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
-          <div class="fill-body"></div>
-        </div>
-        <div class="tank-num"><span id="tank-ml">0</span><small>ml</small></div>
-        <div class="tank-sub" id="tank-sub"></div>
-        <div class="tank-quick" id="tank-quick">
-          <button class="quick-btn" data-ml="100">+100</button>
-          <button class="quick-btn" data-ml="200">+200</button>
-          <button class="quick-btn" data-ml="250">+250</button>
-          <button class="quick-btn" data-ml="500">+500</button>
-        </div>
-      </section>
-
-      <div class="actions">
-        <button class="act primary" id="open-chat-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H10l-4.5 3.8V16h-1z"/></svg><span>Talk to AI</span></button>
-        <button class="act" id="big-add-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add</span></button>
+    <div class="sky">
+      <div class="container">
+        <header class="top">
+          <div>
+            <h1 id="header-date"></h1>
+            <div id="header-label" class="top-sub"></div>
+          </div>
+          <div class="top-actions" id="today-actions">
+            <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
+            <button class="icon-btn" id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg></button>
+            <button class="icon-btn" id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5l1.9 5.6 5.6 1.9-5.6 1.9L11 18.5l-1.9-5.6L3.5 11l5.6-1.9z"/><path d="M18.5 15.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z"/></svg></button>
+          </div>
+          <div class="top-actions" id="past-actions" style="display:none;">
+            <button class="pill-btn" id="back-to-history-btn">History</button>
+            <button class="pill-btn" id="back-to-today-btn">Today</button>
+          </div>
+        </header>
       </div>
-
-      <div id="cards-container" class="cards"></div>
+      <div class="forest" aria-hidden="true"></div>
     </div>
+
+    <div class="ground">
+      <div class="container">
+        <section class="tank" id="tank" aria-label="Water today">
+          <div class="tank-fill" id="tank-fill" aria-hidden="true">
+            <svg class="wave w2" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 2 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
+            <svg class="wave" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 0 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
+            <div class="fill-body"></div>
+          </div>
+          <div class="tank-num"><span id="tank-ml">0</span><small>ml</small></div>
+          <div class="tank-sub" id="tank-sub"></div>
+          <div class="tank-quick" id="tank-quick">
+            <button class="quick-btn" data-ml="100">+100</button>
+            <button class="quick-btn" data-ml="200">+200</button>
+            <button class="quick-btn" data-ml="250">+250</button>
+            <button class="quick-btn" data-ml="500">+500</button>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button class="act primary" id="open-chat-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H10l-4.5 3.8V16h-1z"/></svg><span>Talk to AI</span></button>
+          <button class="act" id="big-add-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add</span></button>
+        </div>
+
+        <div id="cards-container" class="cards"></div>
+      </div>
+    </div>
+
+    <section class="shore" id="shore">
+      <svg class="deco" style="left:6%;top:250px;width:46px;height:46px;transform:rotate(-14deg)" viewBox="0 0 40 40"><polygon points="20.0,2.0 24.7,14.5 38.1,15.1 27.6,23.5 31.2,36.4 20.0,29.0 8.8,36.4 12.4,23.5 1.9,15.1 15.3,14.5"/></svg>
+      <svg class="deco" style="right:9%;top:330px;width:34px;height:34px;transform:rotate(22deg);opacity:.7" viewBox="0 0 40 40"><polygon points="20.0,2.0 24.7,14.5 38.1,15.1 27.6,23.5 31.2,36.4 20.0,29.0 8.8,36.4 12.4,23.5 1.9,15.1 15.3,14.5"/></svg>
+      <svg class="deco" style="left:38%;top:285px;width:14px;height:14px;opacity:.55" viewBox="0 0 10 10"><ellipse cx="5" cy="5" rx="5" ry="4"/></svg>
+      <svg class="deco" style="left:72%;top:262px;width:10px;height:10px;opacity:.5" viewBox="0 0 10 10"><ellipse cx="5" cy="5" rx="5" ry="4"/></svg>
+      <div class="shore-inner">
+        <h2 class="shore-title">Your week on the shore</h2>
+        <p class="shore-sub">A filled shell means you reached your water target that day. Tap a shell to open the day.</p>
+        <div class="shells" id="shells"></div>
+      </div>
+      <div class="sea" id="sea" aria-hidden="true">
+        <div class="wash">
+          <div class="wl foam"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 26 C75 20 225 32 300 26 C375 20 525 32 600 26 C675 20 825 32 900 26 C975 20 1125 32 1200 26 V60 H0Z"/></svg></div>
+          <div class="wl l1"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 28 C75 19 225 37 300 28 C375 19 525 37 600 28 C675 19 825 37 900 28 C975 19 1125 37 1200 28 V60 H0Z"/></svg></div>
+          <div class="wl l2"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 30 C75 22 225 38 300 30 C375 22 525 38 600 30 C675 22 825 38 900 30 C975 22 1125 38 1200 30 V60 H0Z"/></svg></div>
+          <div class="wl l3"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 30 C75 23 225 37 300 30 C375 23 525 37 600 30 C675 23 825 37 900 30 C975 23 1125 37 1200 30 V60 H0Z"/></svg></div>
+        </div>
+      </div>
+    </section>
 
     <div class="bottom-bar" id="today-bottom-bar">
       <div class="bottom-inner">
@@ -379,17 +340,24 @@
 
   <!-- HISTORY SCREEN -->
   <div id="history-screen" class="screen">
-    <div class="container">
-      <header class="top">
-        <div>
-          <h1>History</h1>
-          <div class="top-sub">Tap a day to open it</div>
-        </div>
-        <div class="top-actions">
-          <button class="pill-btn" id="close-history-btn">Today</button>
-        </div>
-      </header>
-      <div id="history-list" class="history-list"></div>
+    <div class="sky">
+      <div class="container">
+        <header class="top">
+          <div>
+            <h1>History</h1>
+            <div class="top-sub">Tap a day to open it</div>
+          </div>
+          <div class="top-actions">
+            <button class="pill-btn" id="close-history-btn">Today</button>
+          </div>
+        </header>
+      </div>
+      <div class="forest" aria-hidden="true"></div>
+    </div>
+    <div class="ground">
+      <div class="container">
+        <div id="history-list" class="history-list"></div>
+      </div>
     </div>
   </div>
 
@@ -594,8 +562,8 @@
     }
 
     const CAT_COLORS = {
-      water: '#5fd4c8', food: '#f4b860', fibre: '#9be28f', gudlax: '#c4a7f5', stool: '#d6a077',
-      medicines: '#ff9fb0', symptoms: '#ff8f85', sleep: '#8fa8ff', weight: '#7fd0f5', notes: '#b4c2c0'
+      water: '#4f8ea8', food: '#b99470', fibre: '#609966', gudlax: '#8a7bb5', stool: '#8a6a4a',
+      medicines: '#c0707f', symptoms: '#c4584c', sleep: '#5a76b8', weight: '#4f8ea8', notes: '#5f6f52'
     };
 
     function formatDisplayDate(key) {
@@ -1262,6 +1230,9 @@
       const fill = document.getElementById('tank-fill');
       requestAnimationFrame(() => requestAnimationFrame(() => fill.style.setProperty('--drop', drop + '%')));
 
+      document.getElementById('shore').style.setProperty('--tide', Math.round(waterPct));
+      renderShells();
+
       const yesterdayKey = shiftDateKey(activeDateKey, -1);
       const yesterdayGudlax = sortEntries(
         getDayEntries(yesterdayKey).filter(e => e.cat === 'gudlax')
@@ -1360,6 +1331,82 @@
       renderMain();
       showToast('Added ' + ml + ' ml');
     }
+
+    // =========================================================================
+    // 8b. THE WORLD: forest at the top, shore at the bottom
+    // =========================================================================
+    const FOREST_HTML = "<div class=\"f-layer\" data-speed=\"0.42\"><svg class=\"f-svg\" aria-hidden=\"true\"><defs><pattern id=\"pb%S%\" width=\"330\" height=\"170\" patternUnits=\"userSpaceOnUse\"><g fill=\"#A9B388\" opacity=\"1\"><polygon points=\"-298.1,87.8 -313.7,124.8 -282.6,124.8\"/><polygon points=\"-298.1,109.2 -319.4,146.2 -276.9,146.2\"/><polygon points=\"-298.1,130.6 -325.0,167.5 -271.2,167.5\"/><rect x=\"-301.0\" y=\"158.5\" width=\"5.7\" height=\"13.5\"/><polygon points=\"31.9,87.8 16.3,124.8 47.4,124.8\"/><polygon points=\"31.9,109.2 10.6,146.2 53.1,146.2\"/><polygon points=\"31.9,130.6 5.0,167.5 58.8,167.5\"/><rect x=\"29.0\" y=\"158.5\" width=\"5.7\" height=\"13.5\"/><polygon points=\"361.9,87.8 346.3,124.8 377.4,124.8\"/><polygon points=\"361.9,109.2 340.6,146.2 383.1,146.2\"/><polygon points=\"361.9,130.6 335.0,167.5 388.8,167.5\"/><rect x=\"359.0\" y=\"158.5\" width=\"5.7\" height=\"13.5\"/><polygon points=\"-230.8,86.9 -242.7,124.3 -218.9,124.3\"/><polygon points=\"-230.8,108.5 -247.1,145.9 -214.6,145.9\"/><polygon points=\"-230.8,130.1 -251.4,167.5 -210.2,167.5\"/><rect x=\"-233.0\" y=\"158.4\" width=\"4.3\" height=\"13.6\"/><polygon points=\"99.2,86.9 87.3,124.3 111.1,124.3\"/><polygon points=\"99.2,108.5 82.9,145.9 115.4,145.9\"/><polygon points=\"99.2,130.1 78.6,167.5 119.8,167.5\"/><rect x=\"97.0\" y=\"158.4\" width=\"4.3\" height=\"13.6\"/><polygon points=\"429.2,86.9 417.3,124.3 441.1,124.3\"/><polygon points=\"429.2,108.5 412.9,145.9 445.4,145.9\"/><polygon points=\"429.2,130.1 408.6,167.5 449.8,167.5\"/><rect x=\"427.0\" y=\"158.4\" width=\"4.3\" height=\"13.6\"/><polygon points=\"-161.9,79.5 -173.4,120.2 -150.4,120.2\"/><polygon points=\"-161.9,103.0 -177.5,143.7 -146.3,143.7\"/><polygon points=\"-161.9,126.5 -181.7,167.3 -142.1,167.3\"/><rect x=\"-164.0\" y=\"157.3\" width=\"4.2\" height=\"14.7\"/><polygon points=\"168.1,79.5 156.6,120.2 179.6,120.2\"/><polygon points=\"168.1,103.0 152.5,143.7 183.7,143.7\"/><polygon points=\"168.1,126.5 148.3,167.3 187.9,167.3\"/><rect x=\"166.0\" y=\"157.3\" width=\"4.2\" height=\"14.7\"/><polygon points=\"498.1,79.5 486.6,120.2 509.6,120.2\"/><polygon points=\"498.1,103.0 482.5,143.7 513.7,143.7\"/><polygon points=\"498.1,126.5 478.3,167.3 517.9,167.3\"/><rect x=\"496.0\" y=\"157.3\" width=\"4.2\" height=\"14.7\"/><polygon points=\"-108.7,78.9 -123.2,119.9 -94.3,119.9\"/><polygon points=\"-108.7,102.6 -128.4,143.6 -89.0,143.6\"/><polygon points=\"-108.7,126.2 -133.7,167.3 -83.8,167.3\"/><rect x=\"-111.3\" y=\"157.2\" width=\"5.2\" height=\"14.8\"/><polygon points=\"221.3,78.9 206.8,119.9 235.7,119.9\"/><polygon points=\"221.3,102.6 201.6,143.6 241.0,143.6\"/><polygon points=\"221.3,126.2 196.3,167.3 246.2,167.3\"/><rect x=\"218.7\" y=\"157.2\" width=\"5.2\" height=\"14.8\"/><polygon points=\"551.3,78.9 536.8,119.9 565.7,119.9\"/><polygon points=\"551.3,102.6 531.6,143.6 571.0,143.6\"/><polygon points=\"551.3,126.2 526.3,167.3 576.2,167.3\"/><rect x=\"548.7\" y=\"157.2\" width=\"5.2\" height=\"14.8\"/><polygon points=\"-21.5,73.3 -35.8,116.8 -7.3,116.8\"/><polygon points=\"-21.5,98.4 -41.0,141.9 -2.1,141.9\"/><polygon points=\"-21.5,123.6 -46.1,167.1 3.0,167.1\"/><rect x=\"-24.1\" y=\"156.5\" width=\"5.2\" height=\"15.5\"/><polygon points=\"308.5,73.3 294.2,116.8 322.7,116.8\"/><polygon points=\"308.5,98.4 289.0,141.9 327.9,141.9\"/><polygon points=\"308.5,123.6 283.9,167.1 333.0,167.1\"/><rect x=\"305.9\" y=\"156.5\" width=\"5.2\" height=\"15.5\"/><polygon points=\"638.5,73.3 624.2,116.8 652.7,116.8\"/><polygon points=\"638.5,98.4 619.0,141.9 657.9,141.9\"/><polygon points=\"638.5,123.6 613.9,167.1 663.0,167.1\"/><rect x=\"635.9\" y=\"156.5\" width=\"5.2\" height=\"15.5\"/></g></pattern></defs><rect width=\"100%\" height=\"100%\" fill=\"url(#pb%S%)\"/></svg></div><div class=\"f-layer\" data-speed=\"0.26\"><svg class=\"f-svg\" aria-hidden=\"true\"><defs><pattern id=\"pm%S%\" width=\"290\" height=\"170\" patternUnits=\"userSpaceOnUse\"><g fill=\"#609966\" opacity=\"1\"><polygon points=\"-242.7,42.0 -263.5,99.6 -221.9,99.6\"/><polygon points=\"-242.7,75.2 -271.0,132.9 -214.3,132.9\"/><polygon points=\"-242.7,108.5 -278.6,166.2 -206.7,166.2\"/><rect x=\"-246.4\" y=\"152.1\" width=\"7.6\" height=\"19.9\"/><polygon points=\"47.3,42.0 26.5,99.6 68.1,99.6\"/><polygon points=\"47.3,75.2 19.0,132.9 75.7,132.9\"/><polygon points=\"47.3,108.5 11.4,166.2 83.3,166.2\"/><rect x=\"43.6\" y=\"152.1\" width=\"7.6\" height=\"19.9\"/><polygon points=\"337.3,42.0 316.5,99.6 358.1,99.6\"/><polygon points=\"337.3,75.2 309.0,132.9 365.7,132.9\"/><polygon points=\"337.3,108.5 301.4,166.2 373.3,166.2\"/><rect x=\"333.6\" y=\"152.1\" width=\"7.6\" height=\"19.9\"/><polygon points=\"-178.8,61.9 -197.5,110.5 -160.2,110.5\"/><polygon points=\"-178.8,90.0 -204.2,138.7 -153.5,138.7\"/><polygon points=\"-178.8,118.1 -211.0,166.8 -146.7,166.8\"/><rect x=\"-182.2\" y=\"154.9\" width=\"6.8\" height=\"17.1\"/><polygon points=\"111.2,61.9 92.5,110.5 129.8,110.5\"/><polygon points=\"111.2,90.0 85.8,138.7 136.5,138.7\"/><polygon points=\"111.2,118.1 79.0,166.8 143.3,166.8\"/><rect x=\"107.8\" y=\"154.9\" width=\"6.8\" height=\"17.1\"/><polygon points=\"401.2,61.9 382.5,110.5 419.8,110.5\"/><polygon points=\"401.2,90.0 375.8,138.7 426.5,138.7\"/><polygon points=\"401.2,118.1 369.0,166.8 433.3,166.8\"/><rect x=\"397.8\" y=\"154.9\" width=\"6.8\" height=\"17.1\"/><polygon points=\"-116.8,61.1 -133.5,110.1 -100.1,110.1\"/><polygon points=\"-116.8,89.4 -139.6,138.4 -94.0,138.4\"/><polygon points=\"-116.8,117.7 -145.7,166.7 -87.9,166.7\"/><rect x=\"-119.8\" y=\"154.8\" width=\"6.1\" height=\"17.2\"/><polygon points=\"173.2,61.1 156.5,110.1 189.9,110.1\"/><polygon points=\"173.2,89.4 150.4,138.4 196.0,138.4\"/><polygon points=\"173.2,117.7 144.3,166.7 202.1,166.7\"/><rect x=\"170.2\" y=\"154.8\" width=\"6.1\" height=\"17.2\"/><polygon points=\"463.2,61.1 446.5,110.1 479.9,110.1\"/><polygon points=\"463.2,89.4 440.4,138.4 486.0,138.4\"/><polygon points=\"463.2,117.7 434.3,166.7 492.1,166.7\"/><rect x=\"460.2\" y=\"154.8\" width=\"6.1\" height=\"17.2\"/><polygon points=\"-48.7,74.7 -68.3,117.6 -29.0,117.6\"/><polygon points=\"-48.7,99.5 -75.5,142.4 -21.8,142.4\"/><polygon points=\"-48.7,124.3 -82.7,167.1 -14.6,167.1\"/><rect x=\"-52.2\" y=\"156.7\" width=\"7.2\" height=\"15.3\"/><polygon points=\"241.3,74.7 221.7,117.6 261.0,117.6\"/><polygon points=\"241.3,99.5 214.5,142.4 268.2,142.4\"/><polygon points=\"241.3,124.3 207.3,167.1 275.4,167.1\"/><rect x=\"237.8\" y=\"156.7\" width=\"7.2\" height=\"15.3\"/><polygon points=\"531.3,74.7 511.7,117.6 551.0,117.6\"/><polygon points=\"531.3,99.5 504.5,142.4 558.2,142.4\"/><polygon points=\"531.3,124.3 497.3,167.1 565.4,167.1\"/><rect x=\"527.8\" y=\"156.7\" width=\"7.2\" height=\"15.3\"/></g></pattern></defs><rect width=\"100%\" height=\"100%\" fill=\"url(#pm%S%)\"/></svg></div><div class=\"f-layer\" data-speed=\"0.1\"><svg class=\"f-svg\" aria-hidden=\"true\"><defs><pattern id=\"pf%S%\" width=\"360\" height=\"170\" patternUnits=\"userSpaceOnUse\"><g fill=\"#40513B\" opacity=\"1\"><circle cx=\"-292.1\" cy=\"82.0\" r=\"43.6\"/><circle cx=\"-318.3\" cy=\"99.4\" r=\"30.6\"/><circle cx=\"-265.9\" cy=\"99.4\" r=\"30.6\"/><rect x=\"-296.5\" y=\"103.8\" width=\"8.7\" height=\"58.2\"/><circle cx=\"67.9\" cy=\"82.0\" r=\"43.6\"/><circle cx=\"41.7\" cy=\"99.4\" r=\"30.6\"/><circle cx=\"94.1\" cy=\"99.4\" r=\"30.6\"/><rect x=\"63.5\" y=\"103.8\" width=\"8.7\" height=\"58.2\"/><circle cx=\"427.9\" cy=\"82.0\" r=\"43.6\"/><circle cx=\"401.7\" cy=\"99.4\" r=\"30.6\"/><circle cx=\"454.1\" cy=\"99.4\" r=\"30.6\"/><rect x=\"423.5\" y=\"103.8\" width=\"8.7\" height=\"58.2\"/><polygon points=\"-165.5,21.4 -189.7,83.8 -141.4,83.8\"/><polygon points=\"-165.5,57.4 -198.4,119.8 -132.7,119.8\"/><polygon points=\"-165.5,93.5 -207.2,155.8 -123.9,155.8\"/><rect x=\"-169.9\" y=\"140.6\" width=\"8.8\" height=\"21.4\"/><polygon points=\"194.5,21.4 170.3,83.8 218.6,83.8\"/><polygon points=\"194.5,57.4 161.6,119.8 227.3,119.8\"/><polygon points=\"194.5,93.5 152.8,155.8 236.1,155.8\"/><rect x=\"190.1\" y=\"140.6\" width=\"8.8\" height=\"21.4\"/><polygon points=\"554.5,21.4 530.3,83.8 578.6,83.8\"/><polygon points=\"554.5,57.4 521.6,119.8 587.3,119.8\"/><polygon points=\"554.5,93.5 512.8,155.8 596.1,155.8\"/><rect x=\"550.1\" y=\"140.6\" width=\"8.8\" height=\"21.4\"/><polygon points=\"-58.8,37.7 -83.3,92.7 -34.3,92.7\"/><polygon points=\"-58.8,69.5 -92.2,124.5 -25.4,124.5\"/><polygon points=\"-58.8,101.3 -101.1,156.3 -16.5,156.3\"/><rect x=\"-63.2\" y=\"142.9\" width=\"8.9\" height=\"19.1\"/><polygon points=\"301.2,37.7 276.7,92.7 325.7,92.7\"/><polygon points=\"301.2,69.5 267.8,124.5 334.6,124.5\"/><polygon points=\"301.2,101.3 258.9,156.3 343.5,156.3\"/><rect x=\"296.8\" y=\"142.9\" width=\"8.9\" height=\"19.1\"/><polygon points=\"661.2,37.7 636.7,92.7 685.7,92.7\"/><polygon points=\"661.2,69.5 627.8,124.5 694.6,124.5\"/><polygon points=\"661.2,101.3 618.9,156.3 703.5,156.3\"/><rect x=\"656.8\" y=\"142.9\" width=\"8.9\" height=\"19.1\"/><rect x=\"0\" y=\"156\" width=\"360\" height=\"14\"/></g></pattern></defs><rect width=\"100%\" height=\"100%\" fill=\"url(#pf%S%)\"/></svg></div>";
+
+    function renderShells() {
+      const todayKey = getTodayKey();
+      const box = document.getElementById('shells');
+      let out = '';
+      for (let i = 6; i >= 0; i--) {
+        const key = shiftDateKey(todayKey, -i);
+        const entries = getDayEntries(key);
+        const water = getWaterTotal(entries);
+        const met = water >= WATER_TARGET_ML;
+        const cls = 'shell' + (met ? ' met' : '') + (entries.length === 0 ? ' empty' : '') + (key === activeDateKey ? ' sel' : '');
+        const label = DAYS[keyToDate(key).getDay()];
+        const note = entries.length === 0 ? 'nothing logged' : (water + ' ml water' + (met ? ', target reached' : ''));
+        out += '<button class="' + cls + '" data-date="' + key + '" aria-label="' + label + ', ' + note + '">' +
+          '<svg viewBox="0 0 40 42" aria-hidden="true"><path class="sh-body" d="M20 36 C8 33 3 22 7 13 C10 7 16 4 20 4 C24 4 30 7 33 13 C37 22 32 33 20 36Z"/>' +
+          '<path class="sh-rib" d="M20 36 L20 7 M20 36 L11 10 M20 36 L29 10 M20 36 L6 19 M20 36 L34 19"/>' +
+          '<path class="sh-base" d="M15 36 h10 l-2 4 h-6z"/></svg>' +
+          '<span class="s-day">' + label + '</span>' +
+          '<span class="s-ml">' + (entries.length === 0 ? '-' : water) + '</span></button>';
+      }
+      box.innerHTML = out;
+    }
+
+    // Parallax: trees drift at different speeds as you scroll
+    const calmMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let scrollTick = false;
+    function onWorldScroll() {
+      if (scrollTick || calmMotion) return;
+      scrollTick = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY || 0;
+        document.querySelectorAll('.screen.active .f-layer').forEach(el => {
+          const sp = Number(el.dataset.speed) || 0;
+          el.style.transform = 'translateY(' + Math.min(y * sp, 150).toFixed(1) + 'px)';
+        });
+        scrollTick = false;
+      });
+    }
+    window.addEventListener('scroll', onWorldScroll, { passive: true });
+
+    document.querySelectorAll('.forest').forEach((el, i) => {
+      el.innerHTML = FOREST_HTML.replace(/%S%/g, String(i));
+      // tap the trees and they sway
+      el.addEventListener('click', () => {
+        el.classList.remove('sway');
+        void el.offsetWidth;
+        el.classList.add('sway');
+      });
+    });
+
+    // Tap the sea and a ripple spreads
+    document.getElementById('sea').addEventListener('click', e => {
+      const sea = e.currentTarget;
+      const r = sea.getBoundingClientRect();
+      const dot = document.createElement('span');
+      dot.className = 'ripple';
+      dot.style.left = (e.clientX - r.left) + 'px';
+      dot.style.top = (e.clientY - r.top) + 'px';
+      sea.appendChild(dot);
+      setTimeout(() => dot.remove(), 1400);
+    });
+
+    // Tap a shell on the shore to open that day
+    document.getElementById('shells').addEventListener('click', e => {
+      const b = e.target.closest('.shell');
+      if (!b) return;
+      activeDateKey = b.dataset.date;
+      viewingPastDay = activeDateKey !== getTodayKey();
+      renderMain();
+      window.scrollTo({ top: 0, behavior: calmMotion ? 'auto' : 'smooth' });
+    });
 
     // =========================================================================
     // 9. MODALS & ACTIONS
