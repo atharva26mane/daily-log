@@ -279,6 +279,32 @@
     .stepper { display: inline-flex; align-items: center; gap: 4px; }
     .stepper button { width: 44px; height: 44px; border-radius: 14px; border: 1px solid rgba(64,81,59,.2); background: #fff; font-size: 22px; font-weight: 700; color: var(--forest); }
     .stepper output { min-width: 64px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    /* insights */
+    .ins-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 14px; }
+    .ins-stat { padding: 12px 14px; border-radius: 16px; background: rgba(255,255,255,.6); border: 1px solid rgba(64,81,59,.14); }
+    .ins-stat b { display: block; font-family: var(--display); font-size: 28px; line-height: 1.1; color: var(--forest); font-variant-numeric: tabular-nums; }
+    .ins-stat span { font-size: 13px; opacity: .7; }
+    .ins-chart { position: relative; display: flex; align-items: flex-end; gap: 8px; height: 150px; padding: 8px 6px 0; border-radius: 16px; background: rgba(255,255,255,.5); border: 1px solid rgba(64,81,59,.14); }
+    .ins-goal { position: absolute; left: 6px; right: 6px; border-top: 2px dashed rgba(64,81,59,.45); pointer-events: none; }
+    .ins-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; }
+    .ins-bar { width: 100%; max-width: 34px; border-radius: 10px 10px 4px 4px; background: #a9c3b3; min-height: 3px; }
+    .ins-col.met .ins-bar { background: var(--moss); }
+    .ins-col.today .ins-day { font-weight: 800; }
+    .ins-day { font-size: 12px; margin: 4px 0 6px; opacity: .8; }
+    .ins-heat { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .ins-cell { aspect-ratio: 1; border-radius: 9px; border: 0; padding: 0; background: rgba(64,81,59,.08); }
+    .ins-cell.h1 { background: rgba(96,153,102,.28); } .ins-cell.h2 { background: rgba(96,153,102,.55); } .ins-cell.h3 { background: var(--moss); }
+    .ins-cell.now { outline: 2px solid var(--forest); outline-offset: 1px; }
+    .ins-cell.empty { visibility: hidden; }
+    .ins-legend { display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 4px 4px; font-size: 12px; opacity: .8; }
+    .ins-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 5px; vertical-align: -1px; background: rgba(64,81,59,.08); }
+    .ins-legend i.h1 { background: rgba(96,153,102,.28); } .ins-legend i.h2 { background: rgba(96,153,102,.55); } .ins-legend i.h3 { background: var(--moss); }
+    body.theme-volcano .ins-stat b { color: #b4400e; }
+    body.theme-volcano .ins-col.met .ins-bar, body.theme-volcano .ins-cell.h3, body.theme-volcano .ins-legend i.h3 { background: #e8641a; }
+    body.theme-volcano .ins-bar { background: #e8c7b0; } body.theme-volcano .ins-goal { border-color: rgba(180,64,14,.55); }
+    body.theme-volcano .ins-cell.h1 { background: rgba(232,100,26,.22); } body.theme-volcano .ins-cell.h2, body.theme-volcano .ins-legend i.h2 { background: rgba(232,100,26,.5); }
+    body.theme-volcano .ins-legend i.h1 { background: rgba(232,100,26,.22); }
     /* past days: no live sun, moon or night sky */
     body.past-day .orb, body.past-day .star, body.past-day .fly { display: none !important; }
     .sky-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -439,6 +465,7 @@
           </div>
           <div class="top-actions" id="today-actions">
             <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
+            <button class="icon-btn" id="open-insights-btn" aria-label="Insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg></button>
             <button class="icon-btn" id="open-settings-btn" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></button>
             <button class="icon-btn" hidden id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg></button>
             <button class="icon-btn" hidden id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.4 0 2-.9 2-1.8 0-1.3-1-1.6-1-2.7 0-1 .8-1.6 1.8-1.6H17a3.5 3.5 0 0 0 3.5-3.5C20.5 6.6 16.8 3.5 12 3.5z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.8" r="1"/><circle cx="16" cy="10" r="1"/></svg></button>
@@ -652,6 +679,20 @@
         <button class="set-row set-link" id="set-ai-row"><span class="set-name">AI helper</span><span class="set-val" id="set-ai-val">Off</span></button>
         <button class="set-row set-link" id="set-backup-row"><span class="set-name">Backup and restore</span><span class="set-val">Export / import</span></button>
       </div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS MODAL -->
+  <div id="insights-modal" class="overlay">
+    <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Insights">
+      <div class="chat-head"><h2 class="sheet-title">Insights</h2><div class="chat-head-btns"><button id="insights-close-btn">Done</button></div></div>
+      <div class="ins-stats" id="ins-stats"></div>
+      <div class="set-label">Water, last 7 days</div>
+      <div class="ins-chart" id="ins-chart"></div>
+      <p class="set-note" id="ins-chart-note"></p>
+      <div class="set-label" style="margin-top:12px;">Last 5 weeks</div>
+      <div class="ins-heat" id="ins-heat"></div>
+      <div class="ins-legend"><span><i class="h3"></i>Goal met</span><span><i class="h2"></i>Some water</span><span><i class="h1"></i>Logged</span><span><i class="h0"></i>Nothing</span></div>
     </div>
   </div>
 
@@ -2383,6 +2424,61 @@
     document.getElementById('set-ai-row').addEventListener('click', via('open-ai-btn'));
     document.getElementById('set-backup-row').addEventListener('click', via('open-backup-btn'));
     tickClock();
+  })();
+</script>
+<script>
+  (function(){
+    var m = document.getElementById('insights-modal');
+    function wml(key) { return getWaterTotal(getDayEntries(key)); }
+    function metDay(key) { return wml(key) >= WATER_TARGET_ML; }
+    function computeStreaks() {
+      var today = getTodayKey(), cur = 0, k = today;
+      if (!metDay(k)) k = shiftDateKey(k, -1);            // today is still in progress
+      while (metDay(k)) { cur++; k = shiftDateKey(k, -1); }
+      var keys = Object.keys(allData).filter(function(x){ return metDay(x); }).sort(), best = 0, run = 0, prev = null;
+      keys.forEach(function(x){ run = (prev && shiftDateKey(prev, 1) === x) ? run + 1 : 1; if (run > best) best = run; prev = x; });
+      return { cur: cur, best: Math.max(best, cur) };
+    }
+    function render() {
+      var today = getTodayKey(), st = computeStreaks(), days = [], i;
+      for (i = 6; i >= 0; i--) days.push(shiftDateKey(today, -i));
+      var vals = days.map(wml), sum = vals.reduce(function(a,b){return a+b;}, 0);
+      var logged = days.filter(function(d){ return getDayEntries(d).length > 0; }).length;
+      var avg = logged ? Math.round(sum / logged) : 0;
+      document.getElementById('ins-stats').innerHTML =
+        '<div class="ins-stat"><b>' + st.cur + '</b><span>Day streak</span></div>' +
+        '<div class="ins-stat"><b>' + st.best + '</b><span>Best streak</span></div>' +
+        '<div class="ins-stat"><b>' + avg + '</b><span>Avg ml (logged days)</span></div>' +
+        '<div class="ins-stat"><b>' + logged + '/7</b><span>Days logged this week</span></div>';
+      var max = Math.max(WATER_TARGET_ML * 1.15, Math.max.apply(null, vals) * 1.05), H = 112;
+      var bars = days.map(function(d, idx){
+        var h = Math.round(vals[idx] / max * H), met = vals[idx] >= WATER_TARGET_ML;
+        return '<button class="ins-col' + (met ? ' met' : '') + (d === today ? ' today' : '') + '" data-date="' + d + '" aria-label="' + DAYS[keyToDate(d).getDay()] + ' ' + vals[idx] + ' ml">' +
+          '<div class="ins-bar" style="height:' + h + 'px"></div><div class="ins-day">' + DAYS[keyToDate(d).getDay()] + '</div></button>';
+      }).join('');
+      var goalBottom = 24 + Math.round(WATER_TARGET_ML / max * H);
+      document.getElementById('ins-chart').innerHTML = '<div class="ins-goal" style="bottom:' + goalBottom + 'px"></div>' + bars;
+      document.getElementById('ins-chart-note').textContent = 'Dashed line is your goal (' + WATER_TARGET_ML + ' ml). Tap a bar to open that day.';
+      // 5 weeks heat map, Monday first
+      var t = keyToDate(today), dow = (t.getDay() + 6) % 7, cells = '', total = 35 - (6 - dow) ;
+      var start = shiftDateKey(today, -(28 + dow));
+      for (i = 0; i < 35; i++) {
+        var k = shiftDateKey(start, i);
+        if (k > today) { cells += '<span class="ins-cell empty"></span>'; continue; }
+        var ml = wml(k), n = getDayEntries(k).length, lvl = ml >= WATER_TARGET_ML ? 3 : (ml > 0 ? 2 : (n > 0 ? 1 : 0));
+        cells += '<button class="ins-cell h' + lvl + (k === today ? ' now' : '') + '" data-date="' + k + '" aria-label="' + shortDate(k) + ', ' + ml + ' ml"></button>';
+      }
+      document.getElementById('ins-heat').innerHTML = cells;
+    }
+    document.getElementById('open-insights-btn').addEventListener('click', function(){ render(); m.classList.add('open'); });
+    document.getElementById('insights-close-btn').addEventListener('click', function(){ m.classList.remove('open'); });
+    m.addEventListener('click', function(e){
+      if (e.target === m) { m.classList.remove('open'); return; }
+      var b = e.target.closest('[data-date]'); if (!b) return;
+      m.classList.remove('open');
+      activeDateKey = b.dataset.date; viewingPastDay = activeDateKey !== getTodayKey();
+      renderMain(); showScreen('main');
+    });
   })();
 </script>
 </body>
