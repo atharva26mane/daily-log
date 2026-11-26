@@ -412,6 +412,51 @@
     .cat-swatches button { width: 36px; height: 36px; border-radius: 50%; border: 3px solid transparent; }
     .cat-swatches button.on { border-color: var(--forest); box-shadow: 0 0 0 2px #fff inset; }
     body.theme-volcano .switch input:checked + span { background: #e8641a; }
+        /* ---------- sign-in gate and admin ---------- */
+    .set-row[hidden] { display: none !important; }
+    #acc-email { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 62%; }
+    body.auth-open { overflow: hidden; }
+    .auth-gate { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 28px 26px calc(28px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(180deg, #f6f3df 0%, #e4ecd0 100%); color: #2c3828; overflow-y: auto; }
+    .auth-gate[hidden] { display: none; }
+    .auth-inner { width: 100%; max-width: 360px; }
+    .auth-brand { font-family: var(--display); font-size: 40px; font-weight: 700; letter-spacing: -.02em; line-height: 1.05; margin-bottom: 12px; }
+    .auth-sub { font-size: 16px; line-height: 1.5; margin: 0 0 22px; color: #4c5b46; }
+    .auth-h { font-family: var(--display); font-size: 24px; margin: 0 0 8px; }
+    .auth-gate [data-s] { display: none; }
+    .auth-gate[data-st="loading"] [data-s="loading"], .auth-gate[data-st="signin"] [data-s="signin"], .auth-gate[data-st="pending"] [data-s="pending"], .auth-gate[data-st="blocked"] [data-s="blocked"], .auth-gate[data-st="error"] [data-s="error"] { display: block; }
+    .auth-google { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 54px; border: 1px solid rgba(44,56,40,.2); border-radius: 16px; background: #fff; color: #2c3828; font: 600 16px var(--body); cursor: pointer; }
+    .auth-google svg { width: 22px; height: 22px; }
+    .auth-google:active, .auth-btn:active { transform: scale(.98); }
+    .auth-btn { display: block; width: 100%; min-height: 52px; border: 0; border-radius: 16px; background: #40513b; color: #fefae0; font: 600 16px var(--body); cursor: pointer; }
+    .auth-link { display: block; margin: 14px auto 0; padding: 10px 14px; border: 0; background: none; color: #4c5b46; font: 500 15px var(--body); text-decoration: underline; cursor: pointer; }
+    .auth-points { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+    .auth-points li { font-size: 14px; line-height: 1.45; color: #5f6f52; padding-left: 14px; border-left: 2px solid rgba(96,153,102,.5); }
+    .auth-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid rgba(64,81,59,.18); border-top-color: #609966; animation: authspin .9s linear infinite; margin: 6px 0 16px; }
+    @keyframes authspin { to { transform: rotate(360deg); } }
+    body.theme-volcano .auth-gate { background: linear-gradient(180deg, #1b120e 0%, #0f0908 100%); color: #f6ebe0; }
+    body.theme-volcano .auth-sub { color: #d2ae93; }
+    body.theme-volcano .auth-points li { color: #c49d84; border-left-color: rgba(255,138,61,.5); }
+    body.theme-volcano .auth-btn { background: #e8641a; color: #1b120e; }
+    body.theme-volcano .auth-link { color: #d2ae93; }
+    body.theme-volcano .auth-spin { border-color: rgba(255,138,61,.2); border-top-color: #e8641a; }
+    @media (prefers-reduced-motion: reduce) { .auth-spin { animation-duration: 3s; } }
+    .adm-card { border: 1px solid rgba(128,128,128,.25); background: rgba(128,128,128,.09); border-radius: 16px; padding: 12px 14px; margin: 0 0 8px; }
+    .adm-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+    .adm-top b { display: block; font-size: 15px; }
+    .adm-mail { display: block; font-size: 13px; opacity: .72; overflow-wrap: anywhere; }
+    .adm-chip { flex: none; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(128,128,128,.2); }
+    .adm-chip.st-pending { background: #f1c453; color: #3a2b00; }
+    .adm-chip.st-approved { background: #609966; color: #fff; }
+    .adm-chip.st-blocked { background: #b5483a; color: #fff; }
+    .adm-meta { font-size: 13px; opacity: .7; margin: 6px 0 0; }
+    .adm-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+    .adm-btn { min-height: 40px; padding: 0 14px; border-radius: 12px; border: 1px solid rgba(128,128,128,.4); background: transparent; color: inherit; font: 600 14px var(--body); cursor: pointer; }
+    .adm-btn.main { background: #609966; border-color: #609966; color: #fff; }
+    body.theme-volcano .adm-btn.main { background: #e8641a; border-color: #e8641a; color: #1b120e; }
+    #adm-save-keys { width: 100%; min-height: 50px; margin: 4px 0 8px; }
+    #acc-email { max-width: 72%; }
+    .adm-ai { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; margin-left: auto; }
+
     /* past days: no live sun, moon or night sky */
     body.past-day .orb, body.past-day .star, body.past-day .fly { display: none !important; }
     .sky-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -773,6 +818,13 @@
     <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Settings">
       <div class="chat-head"><h2 class="sheet-title">Settings</h2><div class="chat-head-btns"><button id="settings-close-btn">Done</button></div></div>
 
+      <div class="set-group" id="set-account">
+        <div class="set-label">Account</div>
+        <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
+        <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
+        <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
+      </div>
+
       <div class="set-group">
         <div class="set-label">Profile</div>
         <label class="set-row"><span class="set-name">Your name</span>
@@ -842,6 +894,58 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <!-- SIGN-IN GATE -->
+  <div id="auth-gate" class="auth-gate" data-st="loading">
+    <div class="auth-inner">
+      <div class="auth-brand">Daily Log</div>
+      <div data-s="loading"><div class="auth-spin" aria-hidden="true"></div><p class="auth-sub">Opening your log</p></div>
+      <div data-s="signin">
+        <p class="auth-sub">A calm place for water, food, sleep and the small things you want to remember.</p>
+        <button class="auth-google" id="auth-google" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23 12.27c0-.8-.07-1.56-.2-2.3H12v4.35h6.17a5.3 5.3 0 0 1-2.3 3.47v2.88h3.7C21.8 18.7 23 15.7 23 12.27z"/><path fill="#34A853" d="M12 23.5c3.1 0 5.7-1.03 7.6-2.8l-3.7-2.88c-1.03.7-2.35 1.1-3.9 1.1-3 0-5.5-2.02-6.4-4.75H1.8v2.97A11.5 11.5 0 0 0 12 23.5z"/><path fill="#FBBC05" d="M5.6 14.17a6.9 6.9 0 0 1 0-4.34V6.86H1.8a11.5 11.5 0 0 0 0 10.28l3.8-2.97z"/><path fill="#EA4335" d="M12 5.08c1.7 0 3.2.58 4.4 1.72l3.3-3.3A11.4 11.4 0 0 0 12 .5C7.5.5 3.7 3.1 1.8 6.86l3.8 2.97C6.5 7.1 9 5.08 12 5.08z"/></svg><span>Continue with Google</span></button>
+        <ul class="auth-points">
+          <li>Your logs are private. The person who runs this app sees your name, email and when you were last active. Never your logs.</li>
+          <li>New accounts wait for approval before they can start.</li>
+          <li>This is a tracker, not medical advice.</li>
+        </ul>
+      </div>
+      <div data-s="pending">
+        <h2 class="auth-h">Waiting for approval</h2>
+        <p class="auth-sub">You are signed in as <b id="auth-email"></b>. Once you are approved, this page opens by itself.</p>
+        <button class="auth-btn" id="auth-check" type="button">Check again</button>
+        <button class="auth-link" id="auth-out" type="button">Sign out</button>
+      </div>
+      <div data-s="blocked">
+        <h2 class="auth-h">No access</h2>
+        <p class="auth-sub">This account can't use the app. Ask the person who shared the link.</p>
+        <button class="auth-link" id="auth-out2" type="button">Sign out</button>
+      </div>
+      <div data-s="error">
+        <h2 class="auth-h">Can't connect</h2>
+        <p class="auth-sub" id="auth-msg">Check your internet and try again.</p>
+        <button class="auth-btn" id="auth-retry" type="button">Try again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN MODAL -->
+  <div id="admin-modal" class="overlay">
+    <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Admin">
+      <div class="chat-head"><h2 class="sheet-title">Admin</h2><div class="chat-head-btns"><button id="adm-close">Done</button></div></div>
+      <div class="set-group">
+        <div class="set-label">People</div>
+        <div id="adm-list"><p class="set-note">Loading...</p></div>
+        <p class="set-note">You see name, email and last active. Never anyone's logs.</p>
+      </div>
+      <div class="set-group">
+        <div class="set-label">AI keys you share</div>
+        <label class="set-row"><span class="set-name">Groq key</span><input id="adm-groq" class="set-input" type="password" autocomplete="off" placeholder="Not set" /></label>
+        <label class="set-row"><span class="set-name">Gemini key</span><input id="adm-gemini" class="set-input" type="password" autocomplete="off" placeholder="Not set" /></label>
+        <button class="btn-primary" id="adm-save-keys" type="button">Save keys</button>
+        <p class="set-note" id="adm-key-note">Only people you give AI access can use these.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
     // =========================================================================
     // 1. EASY-TO-EDIT KEYWORD LIST (case-insensitive)
@@ -899,18 +1003,19 @@
     function saveSettings() {
       try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(SETTINGS)); } catch (e) {}
       mirrorSet(SETTINGS_KEY, JSON.stringify(SETTINGS));
+      try { if (window.__cloud) window.__cloud.dirty(); } catch (e) {}
     }
     let WATER_TARGET_ML = Math.min(6000, Math.max(500, Number(SETTINGS.waterTarget) || 2500));
     const NEW_DAY_HOUR = 4; // New day starts automatically at 04:00 AM
 
     const BASE_CATEGORIES = [
-      { id: 'water',     name: 'Water',                   copyLabel: 'WATER',     hint: 'target 2500 ml' },
+      { id: 'water',     name: 'Water',                   copyLabel: 'WATER',     hint: 'ml and time' },
       { id: 'food',      name: 'Food',                    copyLabel: 'FOOD',      hint: 'breakfast / lunch / snack / dinner' },
-      { id: 'fibre',     name: 'Fibre',                   copyLabel: 'FIBRE',     hint: 'Sunfiber, isabgol, chia' },
+      { id: 'fibre',     name: 'Fibre',                   copyLabel: 'FIBRE',     hint: 'fibre supplements, chia, psyllium' },
       { id: 'gudlax',    name: 'Gudlax',                  copyLabel: 'GUDLAX',    hint: 'ml and time' },
       { id: 'stool',     name: 'Stool',                   copyLabel: 'STOOL',     hint: 'time, softness, pain, blood yes/no' },
-      { id: 'medicines', name: 'Medicines / supplements', copyLabel: 'MEDICINES', hint: 'iron, Elwin, Escot, others' },
-      { id: 'symptoms',  name: 'Symptoms',                copyLabel: 'SYMPTOMS',  hint: 'ulcer, tongue, acne, gas, itch, pain, burn' },
+      { id: 'medicines', name: 'Medicines / supplements', copyLabel: 'MEDICINES', hint: 'vitamins, tablets, supplements' },
+      { id: 'symptoms',  name: 'Symptoms',                copyLabel: 'SYMPTOMS',  hint: 'headache, gas, itch, pain, anything off' },
       { id: 'sleep',     name: 'Sleep',                   copyLabel: 'SLEEP',     hint: 'sleep time, wake time' },
       { id: 'weight',    name: 'Weight',                  copyLabel: 'WEIGHT',    hint: '' },
       { id: 'notes',     name: 'Notes',                   copyLabel: 'NOTES',     hint: 'anything else' }
@@ -1036,6 +1141,7 @@
         showToast('Could not save data (storage full)');
       }
       mirrorSet(STORAGE_KEY, JSON.stringify(allData));
+      try { if (window.__cloud) window.__cloud.dirty(); } catch (e) {}
     }
 
     // ---- Second safety copy in IndexedDB (survives when localStorage is wiped) ----
@@ -1218,11 +1324,15 @@
 
     const GROQ_KEY_STORAGE = 'daily_log_groq_key_v1';
     const GROQ_MODELS = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'];
+    // Keys the admin has shared with this person (kept apart from their own keys)
+    function cloudKey(n) {
+      try { return ((JSON.parse(localStorage.getItem('daily_log_cloud_ai_v1') || '{}') || {})[n] || '').trim(); } catch (e) { return ''; }
+    }
     function getGeminiKey() {
-      try { return (localStorage.getItem(AI_KEY_STORAGE) || '').trim(); } catch (e) { return ''; }
+      try { return (localStorage.getItem(AI_KEY_STORAGE) || '').trim() || cloudKey('gemini'); } catch (e) { return ''; }
     }
     function getGroqKey() {
-      try { return (localStorage.getItem(GROQ_KEY_STORAGE) || '').trim(); } catch (e) { return ''; }
+      try { return (localStorage.getItem(GROQ_KEY_STORAGE) || '').trim() || cloudKey('groq'); } catch (e) { return ''; }
     }
     // "Is any AI key saved?" (the rest of the app only asks this)
     function getAiKey() { return getGroqKey() || getGeminiKey(); }
@@ -2809,6 +2919,304 @@
   })();
 </script>
 <script>
+// =========================================================================
+// SIGN-IN, APPROVAL, SYNC AND ADMIN (Supabase)
+// =========================================================================
+(function(){
+  var SB_URL = 'https://xapgfsajjmrtdboukjoc.supabase.co';
+  var SB_KEY = 'sb_publishable_8baqXhNVSa2w2jZS1VtCnA_n3QLIYc3';
+  var ADMIN = 'atharva26mane@gmail.com';
+  var CACHE = 'daily_log_auth_v1', UIDK = 'daily_log_uid_v1', SYNCK = 'daily_log_sync_v1', CLOUDAI = 'daily_log_cloud_ai_v1';
+  var gate = document.getElementById('auth-gate');
+  var sb = null, me = null, dirty = false, timer = null, lastPull = 0, ready = false, queue = [], mute = false, poll = null, booting = false;
+  function $(id) { return document.getElementById(id); }
+  function ls(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+  window.__whenAuthed = function(fn) { if (ready) setTimeout(fn, 300); else queue.push(fn); };
+  function markReady() { if (ready) return; ready = true; queue.splice(0).forEach(function(f){ setTimeout(f, 300); }); }
+
+  function setGate(st, msg) {
+    gate.hidden = false; gate.dataset.st = st; document.body.classList.add('auth-open');
+    if (msg) $('auth-msg').textContent = msg;
+  }
+  function openApp() { gate.hidden = true; document.body.classList.remove('auth-open'); }
+  function getCache() { try { return JSON.parse(ls(CACHE) || 'null'); } catch (e) { return null; } }
+  function hasData() { return Object.keys(allData).some(function(k){ return Array.isArray(allData[k]) && allData[k].length; }); }
+  function timeout(ms, v) { return new Promise(function(r){ setTimeout(function(){ r(v); }, ms); }); }
+
+  function loadLib() {
+    return new Promise(function(res, rej) {
+      if (window.supabase && window.supabase.createClient) return res();
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+      s.onload = res; s.onerror = function(){ rej(new Error('lib')); };
+      document.head.appendChild(s);
+      setTimeout(function(){ rej(new Error('slow')); }, 9000);
+    });
+  }
+
+  // ---------- boot ----------
+  async function boot() {
+    if (booting) return; booting = true;
+    setGate('loading');
+    try { await loadLib(); } catch (e) { booting = false; return offline(); }
+    try {
+      if (!sb) sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce' } });
+      sb.auth.onAuthStateChange(function(ev) { if (ev === 'SIGNED_OUT' && ready && !signingOut) { setGate('signin'); } });
+      var r = await sb.auth.getSession();
+      if (/[?&]code=|access_token=/.test(location.search + location.hash)) { try { history.replaceState(null, '', location.pathname); } catch (e) {} }
+      if (!r.data || !r.data.session) { booting = false; return setGate('signin'); }
+      await afterSession(r.data.session);
+    } catch (e) { offline(); }
+    booting = false;
+  }
+  function offline() {
+    var c = getCache();
+    if (c && c.status === 'approved') { me = c; openApp(); setupUi(); markReady(); }
+    else setGate('error', "Can't reach sign-in. Check your internet and try again.");
+  }
+
+  var signingOut = false;
+  async function afterSession(session) {
+    var u = session.user, uid = u.id, meta = u.user_metadata || {};
+    var name = meta.full_name || meta.name || '';
+    var prev = ls(UIDK);
+    if (prev && prev !== uid) { wipeLocal(true); location.reload(); return; }
+    var prof;
+    try {
+      var r = await sb.rpc('touch_me', { p_name: name });
+      if (r.error) throw r.error;
+      prof = Array.isArray(r.data) ? r.data[0] : r.data;
+      if (!prof) throw new Error('no profile');
+    } catch (e) {
+      var c = getCache();
+      if (c && c.uid === uid && c.status === 'approved') { me = c; openApp(); setupUi(); markReady(); return; }
+      return setGate('error', 'Could not reach the server. Try again in a moment.');
+    }
+    var mail = (prof.email || u.email || '').toLowerCase();
+    me = { uid: uid, email: mail, name: prof.name || name, status: prof.status, ai: !!prof.ai_access, admin: mail === ADMIN };
+    lsSet(CACHE, JSON.stringify(me));
+    if (me.status === 'approved') { stopPoll(); await enter(); }
+    else if (me.status === 'blocked') { stopPoll(); setGate('blocked'); }
+    else { $('auth-email').textContent = me.email; setGate('pending'); startPoll(); }
+  }
+  async function enter() {
+    setGate('loading');
+    setupUi();
+    await Promise.race([syncOnLogin(), timeout(8000)]);
+    await Promise.race([loadCloudKeys(), timeout(4000)]);
+    lsSet(UIDK, me.uid);
+    openApp(); markReady();
+    if (me.admin) refreshPending();
+  }
+  function startPoll() { stopPoll(); poll = setInterval(recheck, 15000); }
+  function stopPoll() { if (poll) { clearInterval(poll); poll = null; } }
+  async function recheck() {
+    if (!sb) return;
+    var r = await sb.auth.getSession();
+    if (r.data && r.data.session) await afterSession(r.data.session);
+  }
+
+  // ---------- sync ----------
+  function applyLocal() {
+    mute = true;
+    try { saveData(); saveSettings(); } catch (e) {}
+    mute = false;
+    WATER_TARGET_ML = Math.min(6000, Math.max(500, Number(SETTINGS.waterTarget) || 2500));
+    try { applyCategorySettings(); populateCategorySelect(); renderMain(); if (typeof tickClock === 'function') tickClock(); } catch (e) {}
+  }
+  function mergeFrom(row) {
+    var cd = row.data || {};
+    Object.keys(cd).forEach(function(k) {
+      var c = cd[k], l = allData[k];
+      if (!Array.isArray(l)) { allData[k] = c; return; }
+      if (!Array.isArray(c)) return;
+      var ids = {}; l.forEach(function(e){ if (e && e.id) ids[e.id] = 1; });
+      c.forEach(function(e){ if (!e || !e.id || !ids[e.id]) l.push(e); });
+    });
+    SETTINGS = Object.assign({}, SETTINGS, row.settings || {});
+  }
+  function replaceWith(row) { allData = row.data || {}; SETTINGS = row.settings || {}; }
+  async function push() {
+    if (!sb || !me || me.status !== 'approved') return;
+    clearTimeout(timer);
+    try {
+      var r = await sb.from('user_data').upsert({ user_id: me.uid, data: allData, settings: SETTINGS }).select('updated_at').single();
+      if (r.error) throw r.error;
+      lsSet(SYNCK, String(Date.parse(r.data.updated_at)));
+      dirty = false; setSync('Synced');
+    } catch (e) { dirty = true; setSync('Waiting for internet'); }
+  }
+  async function syncOnLogin() {
+    var r;
+    try { r = await sb.from('user_data').select('data,settings,updated_at').eq('user_id', me.uid).maybeSingle(); } catch (e) { return; }
+    if (r.error) return;
+    var row = r.data, firstHere = ls(UIDK) !== me.uid || !ls(SYNCK);
+    if (!row) {
+      if (!hasData() && !SETTINGS.onboarded) {
+        // a brand new person: start clean, without the personal categories
+        var h = SETTINGS.catHidden || []; if (h.indexOf('gudlax') < 0) h.push('gudlax'); SETTINGS.catHidden = h;
+        applyLocal();
+      }
+      await push(); return;
+    }
+    var cloudTs = Date.parse(row.updated_at);
+    if (firstHere) { mergeFrom(row); applyLocal(); await push(); }
+    else if (cloudTs > (Number(ls(SYNCK)) || 0)) {
+      if (dirty) { mergeFrom(row); applyLocal(); await push(); } else { replaceWith(row); applyLocal(); lsSet(SYNCK, String(cloudTs)); }
+    } else if (dirty) await push();
+    setSync('Synced');
+  }
+  async function pull() {
+    if (!sb || !me || me.status !== 'approved' || Date.now() - lastPull < 20000) return;
+    lastPull = Date.now();
+    try {
+      var r = await sb.from('user_data').select('data,settings,updated_at').eq('user_id', me.uid).maybeSingle();
+      if (r.error || !r.data) return;
+      var ts = Date.parse(r.data.updated_at);
+      if (ts > (Number(ls(SYNCK)) || 0)) {
+        if (dirty) { mergeFrom(r.data); applyLocal(); await push(); }
+        else { replaceWith(r.data); applyLocal(); lsSet(SYNCK, String(ts)); }
+        setSync('Synced');
+      }
+    } catch (e) {}
+  }
+  window.__cloud = { dirty: function() {
+    if (mute || !me || me.status !== 'approved') return;
+    dirty = true; setSync('Saving'); clearTimeout(timer); timer = setTimeout(push, 2500);
+  } };
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') { if (dirty) push(); }
+    else { if (gate && !gate.hidden && gate.dataset.st === 'pending') recheck(); else pull(); }
+  });
+  window.addEventListener('online', function(){ if (dirty) push(); });
+
+  async function loadCloudKeys() {
+    try {
+      var r = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
+      if (r.error) return;
+      var d = r.data;
+      if (d && (d.groq_key || d.gemini_key)) lsSet(CLOUDAI, JSON.stringify({ groq: d.groq_key || '', gemini: d.gemini_key || '' }));
+      else lsDel(CLOUDAI);
+      var a = $('set-ai-val'); if (a) { var on = [getGroqKey() && 'Groq', getGeminiKey() && 'Gemini'].filter(Boolean); a.textContent = on.length ? 'On (' + on.join(' + ') + ')' : 'Off'; }
+    } catch (e) {}
+  }
+
+  // ---------- account UI ----------
+  function setSync(t) { var el = $('acc-sync'); if (el) el.textContent = t; }
+  function setupUi() {
+    $('acc-email').textContent = me.email || 'Signed in';
+    $('set-admin-row').hidden = !me.admin;
+    setSync(dirty ? 'Saving' : 'Synced');
+  }
+  function wipeLocal(withKeys) {
+    [STORAGE_KEY, SETTINGS_KEY, UIDK, SYNCK, CLOUDAI, CACHE].forEach(function(k){ lsDel(k); try { mirrorSet(k, null); } catch (e) {} });
+    if (withKeys) { [GROQ_KEY_STORAGE, AI_KEY_STORAGE].forEach(function(k){ lsDel(k); try { mirrorSet(k, null); } catch (e) {} }); }
+  }
+  var soTimer = null;
+  async function signOut() {
+    var v = $('so-val');
+    if (v.dataset.arm !== '1') {
+      v.dataset.arm = '1'; v.textContent = 'Tap again to confirm';
+      soTimer = setTimeout(function(){ v.dataset.arm = ''; v.textContent = 'This device'; }, 4000); return;
+    }
+    clearTimeout(soTimer); v.textContent = 'Signing out...';
+    signingOut = true;
+    try { if (dirty) await push(); } catch (e) {}
+    try { await sb.auth.signOut(); } catch (e) {}
+    wipeLocal(false);
+    location.reload();
+  }
+  async function plainSignOut() { signingOut = true; try { await sb.auth.signOut(); } catch (e) {} wipeLocal(false); location.reload(); }
+
+  $('auth-google').addEventListener('click', async function() {
+    if (!sb) return boot();
+    var r = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname, queryParams: { prompt: 'select_account' } } });
+    if (r.error) setGate('error', 'Google sign-in did not start. Try again.');
+  });
+  $('auth-check').addEventListener('click', recheck);
+  $('auth-out').addEventListener('click', plainSignOut);
+  $('auth-out2').addEventListener('click', plainSignOut);
+  $('auth-retry').addEventListener('click', function(){ booting = false; boot(); });
+  $('set-signout-row').addEventListener('click', signOut);
+
+  // ---------- admin ----------
+  var adm = $('admin-modal');
+  function ago(iso) {
+    if (!iso) return 'never';
+    var s = Math.max(0, (Date.now() - Date.parse(iso)) / 1000);
+    if (s < 90) return 'just now'; if (s < 3600) return Math.round(s / 60) + ' min ago';
+    if (s < 86400) return Math.round(s / 3600) + ' h ago'; return Math.round(s / 86400) + ' days ago';
+  }
+  var CHIP = { pending: 'Waiting', approved: 'Approved', blocked: 'Blocked' };
+  async function loadPeople() {
+    var list = $('adm-list');
+    var r = await sb.from('profiles').select('id,email,name,status,ai_access,created_at,last_seen');
+    if (r.error) { list.innerHTML = '<p class="set-note">Could not load people. Try again.</p>'; return; }
+    var rank = { pending: 0, approved: 1, blocked: 2 };
+    var rows = r.data.sort(function(a, b){ return (rank[a.status] - rank[b.status]) || (Date.parse(b.last_seen || 0) - Date.parse(a.last_seen || 0)); });
+    var waiting = rows.filter(function(p){ return p.status === 'pending'; }).length;
+    var badge = $('adm-badge'); badge.textContent = waiting ? waiting + ' waiting' : 'People and AI keys';
+    list.innerHTML = rows.map(function(p) {
+      var you = p.id === me.uid, acts = '';
+      if (!you) {
+        if (p.status === 'pending') acts = '<button class="adm-btn main" data-a="approve" data-id="' + p.id + '">Approve</button><button class="adm-btn main" data-a="approve-ai" data-id="' + p.id + '">Approve with AI</button><button class="adm-btn" data-a="block" data-id="' + p.id + '">Block</button>';
+        else if (p.status === 'approved') acts = '<button class="adm-btn" data-a="block" data-id="' + p.id + '">Block</button><label class="adm-ai">AI access<span class="switch"><input type="checkbox" data-a="ai" data-id="' + p.id + '" ' + (p.ai_access ? 'checked' : '') + ' /><span></span></span></label>';
+        else acts = '<button class="adm-btn main" data-a="approve" data-id="' + p.id + '">Approve</button>';
+      }
+      return '<div class="adm-card"><div class="adm-top"><div><b>' + escapeHtml(p.name || 'No name') + (you ? ' (you)' : '') + '</b><span class="adm-mail">' + escapeHtml(p.email || '') + '</span></div><span class="adm-chip st-' + p.status + '">' + CHIP[p.status] + '</span></div><div class="adm-meta">Last active ' + ago(p.last_seen) + '. Joined ' + ago(p.created_at) + '.</div>' + (acts ? '<div class="adm-actions">' + acts + '</div>' : '') + '</div>';
+    }).join('') || '<p class="set-note">Nobody yet.</p>';
+  }
+  async function refreshPending() {
+    try {
+      var r = await sb.from('profiles').select('id', { count: 'exact', head: true }).eq('status', 'pending');
+      if (!r.error) $('adm-badge').textContent = r.count ? r.count + ' waiting' : 'People and AI keys';
+    } catch (e) {}
+  }
+  $('adm-list').addEventListener('click', async function(e) {
+    var b = e.target.closest('[data-a]'); if (!b || b.tagName === 'INPUT') return;
+    var id = b.dataset.id, a = b.dataset.a, patch = null;
+    if (a === 'approve') patch = { status: 'approved' };
+    else if (a === 'approve-ai') patch = { status: 'approved', ai_access: true };
+    else if (a === 'block') patch = { status: 'blocked', ai_access: false };
+    if (!patch) return;
+    var r = await sb.from('profiles').update(patch).eq('id', id);
+    if (r.error) showToast('Could not save'); else showToast('Saved');
+    loadPeople();
+  });
+  $('adm-list').addEventListener('change', async function(e) {
+    var i = e.target; if (i.dataset.a !== 'ai') return;
+    var r = await sb.from('profiles').update({ ai_access: i.checked }).eq('id', i.dataset.id);
+    if (r.error) { showToast('Could not save'); i.checked = !i.checked; } else showToast(i.checked ? 'AI access on' : 'AI access off');
+  });
+  async function keyStatus() {
+    var r = await sb.from('app_config').select('groq_key,gemini_key').eq('id', 1).maybeSingle();
+    if (r.error || !r.data) return;
+    $('adm-groq').placeholder = r.data.groq_key ? 'Saved (type to replace)' : 'Not set';
+    $('adm-gemini').placeholder = r.data.gemini_key ? 'Saved (type to replace)' : 'Not set';
+  }
+  $('adm-save-keys').addEventListener('click', async function() {
+    var patch = { id: 1 }, g = $('adm-groq').value.trim(), m = $('adm-gemini').value.trim();
+    if (g) patch.groq_key = g; if (m) patch.gemini_key = m;
+    if (!g && !m) { showToast('Paste a key first'); return; }
+    var r = await sb.from('app_config').upsert(patch);
+    if (r.error) { showToast('Could not save keys'); return; }
+    $('adm-groq').value = ''; $('adm-gemini').value = '';
+    showToast('Keys saved'); keyStatus(); loadCloudKeys();
+  });
+  $('set-admin-row').addEventListener('click', function() {
+    $('settings-modal').classList.remove('open');
+    adm.classList.add('open'); loadPeople(); keyStatus();
+  });
+  $('adm-close').addEventListener('click', function(){ adm.classList.remove('open'); });
+  adm.addEventListener('click', function(e){ if (e.target === adm) adm.classList.remove('open'); });
+
+  boot();
+})();
+</script>
+<script>
   (function(){
     // =============== Water nudge (rules, uses your meal times) ===============
     var DEF_MEALS = { breakfast: '08:30', lunch: '13:00', dinner: '20:30' };
@@ -2936,12 +3344,12 @@
     btnAll.addEventListener('click', function(){ close('skipped'); });
     document.getElementById('set-plan-row').addEventListener('click', function(){ document.getElementById('settings-modal').classList.remove('open'); setTimeout(function(){ open(); }, 150); });
     // first run: only for a brand new person with nothing logged
-    setTimeout(function(){
+    (window.__whenAuthed || function(f){ setTimeout(f, 400); })(function(){
       if (SETTINGS.onboarded) return;
       var has = Object.keys(allData).some(function(k){ return Array.isArray(allData[k]) && allData[k].length; });
       if (has) { SETTINGS.onboarded = 'existing'; saveSettings(); return; }
       open();
-    }, 400);
+    });
     window.__openOnboarding = open;
   })();
 </script>
