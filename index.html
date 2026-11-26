@@ -527,6 +527,7 @@
         <div class="header-actions" id="today-actions">
           <button class="pill-btn" id="open-history-btn">History</button>
           <button class="pill-btn" id="open-backup-btn">Backup</button>
+          <button class="pill-btn" id="open-ai-btn">AI</button>
         </div>
         <div class="header-actions" id="past-actions" style="display:none;">
           <button class="pill-btn" id="back-to-history-btn">← History</button>
@@ -621,6 +622,24 @@
         <button class="btn-secondary" id="import-trigger-btn">Import JSON Backup</button>
         <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;" />
         <button class="btn-cancel" id="close-backup-btn" style="padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI SETTINGS MODAL -->
+  <div id="ai-modal" class="overlay">
+    <div class="sheet">
+      <div class="sheet-title">AI Sorting (Gemini)</div>
+      <p class="backup-note">
+        AI reads what you type and picks the category. Your key is saved only on this phone. If AI fails, the normal keyword sorting is used.
+      </p>
+      <label class="field-label" for="ai-key-input">Gemini API key</label>
+      <input id="ai-key-input" class="text-input" type="password" autocomplete="off" placeholder="Paste key here" />
+      <p class="backup-note" id="ai-status" style="margin-top:10px;"></p>
+      <div class="backup-stack">
+        <button class="btn-primary" id="ai-save-btn">Save &amp; Test</button>
+        <button class="btn-secondary" id="ai-remove-btn">Remove key (turn AI off)</button>
+        <button class="btn-cancel" id="ai-close-btn" style="padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Close</button>
       </div>
     </div>
   </div>
@@ -877,6 +896,82 @@
       return entries
         .filter(e => e.cat === 'water')
         .reduce((sum, e) => sum + extractWaterMl(e.text), 0);
+    }
+
+    // =========================================================================
+    // 6b. AI SORTING (Gemini). Key is kept only in this phone's browser.
+    // =========================================================================
+    const AI_KEY_STORAGE = 'daily_log_gemini_key_v1';
+    const AI_MODEL = 'gemini-flash-latest'; // change here if Google renames the model
+    const AI_TIMEOUT_MS = 8000;
+
+    function getAiKey() {
+      try { return (localStorage.getItem(AI_KEY_STORAGE) || '').trim(); } catch (e) { return ''; }
+    }
+    function setAiKey(v) {
+      try {
+        if (v) localStorage.setItem(AI_KEY_STORAGE, v);
+        else localStorage.removeItem(AI_KEY_STORAGE);
+      } catch (e) {}
+    }
+
+    // Returns a category id, or null if AI could not answer.
+    async function aiClassify(text) {
+      const key = getAiKey();
+      if (!key) return null;
+      const ids = CATEGORIES.map(c => c.id);
+      const prompt =
+        'You sort short personal health-diary lines into ONE category.\n' +
+        'Categories:\n' +
+        '- water: drinking water (e.g. "water 200", "1 glass")\n' +
+        '- food: meals, snacks, fruit, milk, curd, any eating\n' +
+        '- fibre: fibre supplements (Sunfiber, isabgol, psyllium, chia, Trulo, Lactifiber)\n' +
+        '- gudlax: Gudlax syrup / laxative syrup\n' +
+        '- stool: toilet / motion / stool details\n' +
+        '- medicines: medicines, tablets, iron, vitamins, probiotics, ointments, supplements (not fibre)\n' +
+        '- symptoms: pain, ulcer, acne, gas, bloating, itching, burning, blood, headache, anything feeling wrong\n' +
+        '- sleep: sleep or wake times\n' +
+        '- weight: body weight\n' +
+        '- notes: anything else\n' +
+        'Line: "' + text.replace(/"/g, "'") + '"';
+
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), AI_TIMEOUT_MS);
+      try {
+        const res = await fetch(
+          'https://generativelanguage.googleapis.com/v1beta/models/' + AI_MODEL + ':generateContent',
+          {
+            method: 'POST',
+            signal: ctrl.signal,
+            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                temperature: 0,
+                responseMimeType: 'application/json',
+                responseSchema: {
+                  type: 'OBJECT',
+                  properties: { category: { type: 'STRING', enum: ids } },
+                  required: ['category']
+                }
+              }
+            })
+          }
+        );
+        if (!res.ok) return null;
+        const data = await res.json();
+        const raw = data && data.candidates && data.candidates[0] &&
+          data.candidates[0].content && data.candidates[0].content.parts &&
+          data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+        if (!raw) return null;
+        let cat = '';
+        try { cat = JSON.parse(raw).category; } catch (e) { cat = String(raw).trim().toLowerCase(); }
+        return ids.includes(cat) ? cat : null;
+      } catch (e) {
+        return null;
+      } finally {
+        clearTimeout(timer);
+      }
     }
 
     // =========================================================================
@@ -1161,31 +1256,55 @@
       editingEntryId = null;
     }
 
-    function saveEntry() {
+    let savingNow = false;
+
+    async function saveEntry() {
+      if (savingNow) return;
       const text = textInput.value.trim();
       if (!text) {
         textInput.focus();
         return;
       }
-      const cat = catSelect.value;
+      const dateKey = activeDateKey;
+      const editId = editingEntryId;
       const time = timeInput.value || getCurrentHHMM();
 
-      if (!Array.isArray(allData[activeDateKey])) {
-        allData[activeDateKey] = [];
+      // AI sorting: only for new entries where the category was not picked by hand
+      let aiUsed = false;
+      if (!editId && !manualCategoryLocked && getAiKey()) {
+        savingNow = true;
+        const saveBtn = document.getElementById('save-entry-btn');
+        saveBtn.textContent = 'Sorting…';
+        saveBtn.disabled = true;
+        const aiCat = await aiClassify(text);
+        saveBtn.textContent = 'Save';
+        saveBtn.disabled = false;
+        savingNow = false;
+        if (aiCat) {
+          catSelect.value = aiCat;
+          aiUsed = true;
+        } else {
+          showToast('AI not available, used keywords');
+        }
+      }
+      const cat = catSelect.value;
+
+      if (!Array.isArray(allData[dateKey])) {
+        allData[dateKey] = [];
       }
 
-      if (editingEntryId) {
-        const idx = allData[activeDateKey].findIndex(e => e.id === editingEntryId);
+      if (editId) {
+        const idx = allData[dateKey].findIndex(e => e.id === editId);
         if (idx !== -1) {
-          allData[activeDateKey][idx] = {
-            ...allData[activeDateKey][idx],
+          allData[dateKey][idx] = {
+            ...allData[dateKey][idx],
             text,
             cat,
             time
           };
         }
       } else {
-        allData[activeDateKey].push({
+        allData[dateKey].push({
           id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
           text,
           cat,
@@ -1197,6 +1316,10 @@
       saveData();
       closeEntryModal();
       renderMain();
+      if (aiUsed) {
+        const c = CATEGORIES.find(x => x.id === cat);
+        showToast('AI sorted into ' + (c ? c.name : cat));
+      }
     }
 
     function deleteEntry() {
@@ -1430,6 +1553,40 @@
       if (e.target.files && e.target.files[0]) {
         importJsonFile(e.target.files[0]);
       }
+    });
+
+    // AI Settings Modal
+    const aiModal = document.getElementById('ai-modal');
+    const aiKeyInput = document.getElementById('ai-key-input');
+    const aiStatus = document.getElementById('ai-status');
+    function refreshAiStatus() {
+      aiStatus.textContent = getAiKey() ? 'AI is ON.' : 'AI is OFF (no key saved).';
+    }
+    document.getElementById('open-ai-btn').addEventListener('click', () => {
+      aiKeyInput.value = '';
+      refreshAiStatus();
+      aiModal.classList.add('open');
+    });
+    document.getElementById('ai-close-btn').addEventListener('click', () => aiModal.classList.remove('open'));
+    aiModal.addEventListener('click', e => { if (e.target === aiModal) aiModal.classList.remove('open'); });
+    document.getElementById('ai-remove-btn').addEventListener('click', () => {
+      setAiKey('');
+      aiKeyInput.value = '';
+      refreshAiStatus();
+      showToast('AI turned off');
+    });
+    document.getElementById('ai-save-btn').addEventListener('click', async () => {
+      const typed = aiKeyInput.value.trim();
+      if (typed) setAiKey(typed);
+      if (!getAiKey()) {
+        aiStatus.textContent = 'Please paste your key first.';
+        return;
+      }
+      aiStatus.textContent = 'Testing…';
+      const r = await aiClassify('idli 3 sambar');
+      aiStatus.textContent = r
+        ? 'Works! Test line "idli 3 sambar" went to: ' + r + '. AI is ON.'
+        : 'Test failed. Check the key and internet, then try again.';
     });
 
     // Auto-refresh when crossing 4 AM
