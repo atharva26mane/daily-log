@@ -564,13 +564,15 @@
   <div id="ai-modal" class="overlay">
     <div class="sheet" role="dialog" aria-modal="true" aria-label="AI settings">
       <h2 class="sheet-title">AI settings</h2>
-      <p class="backup-note">AI sorts what you type and powers the chat. The key stays on this phone. If AI fails, normal keyword sorting is used.</p>
-      <label class="field-label" for="ai-key-input">Gemini API key</label>
-      <input id="ai-key-input" class="text-input" type="password" autocomplete="off" placeholder="Paste key here" />
+      <p class="backup-note">AI sorts what you type and powers the chat. Keys stay on this phone. You can save one or both; Groq is tried first, then Gemini. If AI fails, normal keyword sorting is used.</p>
+      <label class="field-label" for="groq-key-input">Groq API key (tried first, free)</label>
+      <input id="groq-key-input" class="text-input" type="password" autocomplete="off" placeholder="Paste Groq key here" />
+      <label class="field-label" for="ai-key-input" style="margin-top:10px;">Gemini API key (backup)</label>
+      <input id="ai-key-input" class="text-input" type="password" autocomplete="off" placeholder="Paste Gemini key here" />
       <p class="backup-note" id="ai-status" style="margin-top:10px;"></p>
       <div class="backup-stack">
         <button class="btn-primary" id="ai-save-btn">Save and test</button>
-        <button class="btn-secondary" id="ai-remove-btn">Remove key and turn AI off</button>
+        <button class="btn-secondary" id="ai-remove-btn">Remove keys and turn AI off</button>
         <button class="btn-cancel" id="ai-close-btn">Close</button>
       </div>
     </div>
@@ -820,6 +822,12 @@
           // keep the safety copy fresh
           mirrorSet(STORAGE_KEY, localStorage.getItem(STORAGE_KEY));
         }
+        if (!localStorage.getItem(GROQ_KEY_STORAGE)) {
+          const g = await mirrorGet(GROQ_KEY_STORAGE);
+          if (g) { localStorage.setItem(GROQ_KEY_STORAGE, g); restored = true; }
+        } else {
+          mirrorSet(GROQ_KEY_STORAGE, localStorage.getItem(GROQ_KEY_STORAGE));
+        }
         if (!localStorage.getItem(AI_KEY_STORAGE)) {
           const k = await mirrorGet(AI_KEY_STORAGE);
           if (k) { localStorage.setItem(AI_KEY_STORAGE, k); restored = true; }
@@ -950,9 +958,16 @@
     const CHAT_TIMEOUT_MS = 25000;
     let aiLastError = '';
 
-    function getAiKey() {
+    const GROQ_KEY_STORAGE = 'daily_log_groq_key_v1';
+    const GROQ_MODELS = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'];
+    function getGeminiKey() {
       try { return (localStorage.getItem(AI_KEY_STORAGE) || '').trim(); } catch (e) { return ''; }
     }
+    function getGroqKey() {
+      try { return (localStorage.getItem(GROQ_KEY_STORAGE) || '').trim(); } catch (e) { return ''; }
+    }
+    // "Is any AI key saved?" (the rest of the app only asks this)
+    function getAiKey() { return getGroqKey() || getGeminiKey(); }
     function setAiKey(v) {
       try {
         if (v) localStorage.setItem(AI_KEY_STORAGE, v);
@@ -960,51 +975,94 @@
       } catch (e) {}
       mirrorSet(AI_KEY_STORAGE, v || null);
     }
-
-    // Sends one request to Gemini (tries the models in order). Returns the answer text or null.
-    async function aiGenerate(body, timeoutMs) {
-      const key = getAiKey();
-      aiLastError = '';
-      if (!key) { aiLastError = 'No key saved'; return null; }
-      let order = AI_MODELS.slice();
+    function setGroqKey(v) {
       try {
-        const good = localStorage.getItem(AI_MODEL_STORAGE);
-        if (good && order.includes(good)) order = [good, ...order.filter(m => m !== good)];
+        if (v) localStorage.setItem(GROQ_KEY_STORAGE, v);
+        else localStorage.removeItem(GROQ_KEY_STORAGE);
       } catch (e) {}
+      mirrorSet(GROQ_KEY_STORAGE, v || null);
+    }
 
-      for (const model of order) {
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), timeoutMs || AI_TIMEOUT_MS);
-        try {
-          const res = await fetch(
-            'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent',
-            {
-              method: 'POST',
-              signal: ctrl.signal,
-              headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-              body: JSON.stringify(body)
-            }
-          );
-          if (!res.ok) {
-            let msg = '';
-            try { msg = ((await res.json()).error || {}).message || ''; } catch (e) {}
-            aiLastError = model + ': error ' + res.status + (msg ? ' - ' + msg.slice(0, 160) : '');
-            if (res.status === 404) continue; // model not available for this key, try next one
-            return null;
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    // Turns the Gemini-style request into the OpenAI-style one that Groq uses.
+    function toGroqBody(body, model) {
+      const msgs = [];
+      let sys = body.systemInstruction && body.systemInstruction.parts ? body.systemInstruction.parts.map(p => p.text).join('\n') : '';
+      const gc = body.generationConfig || {};
+      if (gc.responseSchema) sys += '\nReply with ONLY a JSON object that follows this schema (no other text):\n' + JSON.stringify(gc.responseSchema);
+      if (sys) msgs.push({ role: 'system', content: sys.trim() });
+      (body.contents || []).forEach(c => {
+        msgs.push({ role: c.role === 'model' ? 'assistant' : 'user', content: (c.parts || []).map(p => p.text || '').join('\n') });
+      });
+      const out = { model, messages: msgs, temperature: gc.temperature == null ? 0.2 : gc.temperature };
+      if (gc.responseMimeType === 'application/json') out.response_format = { type: 'json_object' };
+      return out;
+    }
+
+    // One call to one provider. Returns { text } or { error, retry }.
+    async function callProvider(kind, model, key, body, timeoutMs) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), timeoutMs || AI_TIMEOUT_MS);
+      try {
+        const isGroq = kind === 'groq';
+        const res = await fetch(
+          isGroq ? 'https://api.groq.com/openai/v1/chat/completions'
+                 : 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent',
+          {
+            method: 'POST',
+            signal: ctrl.signal,
+            headers: isGroq ? { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key }
+                            : { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+            body: JSON.stringify(isGroq ? toGroqBody(body, model) : body)
           }
-          const data = await res.json();
-          const raw = data && data.candidates && data.candidates[0] &&
-            data.candidates[0].content && data.candidates[0].content.parts &&
-            data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
-          if (!raw) { aiLastError = model + ': empty answer'; continue; }
-          try { localStorage.setItem(AI_MODEL_STORAGE, model); } catch (e) {}
-          return raw;
-        } catch (e) {
-          aiLastError = model + ': ' + (e && e.name === 'AbortError' ? 'took too long' : 'no internet or blocked');
-          return null;
-        } finally {
-          clearTimeout(timer);
+        );
+        if (!res.ok) {
+          let msg = '';
+          try { const j = await res.json(); msg = (j.error || {}).message || ''; } catch (e) {}
+          return { error: kind + ' ' + model + ': error ' + res.status + (msg ? ' - ' + msg.slice(0, 120) : ''),
+                   retry: res.status === 429 || res.status >= 500, next: res.status === 404 || res.status === 400 };
         }
+        const data = await res.json();
+        const raw = isGroq
+          ? (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content)
+          : (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts &&
+             data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text);
+        if (!raw) return { error: kind + ' ' + model + ': empty answer', next: true };
+        return { text: raw };
+      } catch (e) {
+        return { error: kind + ': ' + (e && e.name === 'AbortError' ? 'took too long' : 'no internet or blocked'), retry: true };
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    // Tries Groq first, then Gemini. Retries once when a service is busy. Returns the answer text or null.
+    async function aiGenerate(body, timeoutMs) {
+      aiLastError = '';
+      const plan = [];
+      const gq = getGroqKey(), gm = getGeminiKey();
+      if (gq) GROQ_MODELS.forEach(m => plan.push(['groq', m, gq]));
+      if (gm) {
+        let order = AI_MODELS.slice();
+        try {
+          const good = localStorage.getItem(AI_MODEL_STORAGE);
+          if (good && order.includes(good)) order = [good, ...order.filter(m => m !== good)];
+        } catch (e) {}
+        order.forEach(m => plan.push(['gemini', m, gm]));
+      }
+      if (!plan.length) { aiLastError = 'No key saved'; return null; }
+      let skipKind = '';
+      for (const [kind, model, key] of plan) {
+        if (kind === skipKind) continue;
+        let r = await callProvider(kind, model, key, body, timeoutMs);
+        if (r.error && r.retry) { aiLastError = r.error; await sleep(900); r = await callProvider(kind, model, key, body, timeoutMs); }
+        if (r.text) {
+          if (kind === 'gemini') { try { localStorage.setItem(AI_MODEL_STORAGE, model); } catch (e) {} }
+          return r.text;
+        }
+        aiLastError = r.error || aiLastError;
+        if (!r.next) skipKind = kind; // busy, wrong key or offline: skip this service, go to the next one
       }
       return null;
     }
@@ -2100,25 +2158,30 @@
     const aiModal = document.getElementById('ai-modal');
     const aiKeyInput = document.getElementById('ai-key-input');
     const aiStatus = document.getElementById('ai-status');
+    const groqKeyInput = document.getElementById('groq-key-input');
     function refreshAiStatus() {
-      aiStatus.textContent = getAiKey() ? 'AI is ON.' : 'AI is OFF (no key saved).';
+      const on = [getGroqKey() && 'Groq', getGeminiKey() && 'Gemini'].filter(Boolean);
+      aiStatus.textContent = on.length ? 'AI is ON (' + on.join(' + ') + ').' : 'AI is OFF (no key saved).';
     }
     document.getElementById('open-ai-btn').addEventListener('click', () => {
       aiKeyInput.value = '';
+      groqKeyInput.value = '';
       refreshAiStatus();
       aiModal.classList.add('open');
     });
     document.getElementById('ai-close-btn').addEventListener('click', () => aiModal.classList.remove('open'));
     aiModal.addEventListener('click', e => { if (e.target === aiModal) aiModal.classList.remove('open'); });
     document.getElementById('ai-remove-btn').addEventListener('click', () => {
-      setAiKey('');
-      aiKeyInput.value = '';
+      setAiKey(''); setGroqKey('');
+      aiKeyInput.value = ''; groqKeyInput.value = '';
       refreshAiStatus();
       showToast('AI turned off');
     });
     document.getElementById('ai-save-btn').addEventListener('click', async () => {
       const typed = aiKeyInput.value.trim();
       if (typed) setAiKey(typed);
+      const typedG = groqKeyInput.value.trim();
+      if (typedG) setGroqKey(typedG);
       if (!getAiKey()) {
         aiStatus.textContent = 'Please paste your key first.';
         return;
