@@ -310,12 +310,103 @@
       .cloud, .bird, .leaf, .fly, .star, .crab, .crab .legs, .glint { animation: none !important; }
       .cloud.c1 { left: 20%; } .cloud.c2 { left: 60%; } .cloud.c3 { left: 40%; }
     }
+    /* ===== Volcano theme ===== */
+    .theme-bg, .theme-end { display: none; }
+    body.theme-volcano { background: #1c1411; }
+    body.theme-volcano #main-screen { position: relative; min-height: calc(min(100vw, 640px) * 5.8278 + 96px); padding-bottom: 96px; }
+    body.theme-volcano .theme-bg { display: flex; flex-direction: column; position: absolute; top: 0; bottom: 96px; left: 0; right: 0; max-width: 640px; margin: 0 auto; z-index: 0; pointer-events: none; overflow: hidden; }
+    body.theme-volcano #main-screen > :not(.theme-bg):not(.bottom-bar) { position: relative; z-index: 1; }
+    body.theme-volcano .theme-end { display: block; height: calc(min(100vw, 640px) * 1.5898 * 0.64); }
+    .tl { position: relative; width: 100%; background-repeat: no-repeat; background-size: 100% 100%; overflow: hidden; }
+    .tl-top { flex: none; aspect-ratio: 1080 / 1466; background-image: url(top.webp); }
+    .tl-mid { flex: 1 1 auto; background-image: url(mid.webp); }
+    .tl-bot { flex: none; aspect-ratio: 1080 / 1717; background-image: url(bot.webp); }
+    /* glow that breathes inside the lava shapes, and a soft shimmer that runs down them */
+    .lv { position: absolute; inset: 0; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; overflow: hidden; }
+    .tl-top .lv { -webkit-mask-image: url(top-mask.png); mask-image: url(top-mask.png); }
+    .tl-mid .lv { -webkit-mask-image: url(mid-mask.png); mask-image: url(mid-mask.png); }
+    .tl-bot .lv { -webkit-mask-image: url(bot-mask.png); mask-image: url(bot-mask.png); }
+    .lv-glow { background: #ff6a1a; mix-blend-mode: overlay; animation: lvBreathe 3.2s ease-in-out infinite; }
+    .lv-flow i { position: absolute; left: 0; right: 0; top: -320px; bottom: -320px; mix-blend-mode: screen; opacity: .55;
+      background: repeating-linear-gradient(180deg, rgba(255,225,140,0) 0, rgba(255,225,140,.75) 110px, rgba(255,225,140,0) 220px, rgba(255,225,140,0) 320px);
+      animation: lvRun 4.2s linear infinite; will-change: transform; }
+    @keyframes lvBreathe { 0%,100% { opacity: .12 } 50% { opacity: .5 } }
+    @keyframes lvRun { from { transform: translateY(0) } to { transform: translateY(320px) } }
+    /* smoke from the crater, embers, core and mold glow */
+    .puff { position: absolute; left: 75.8%; top: 50.9%; width: 15%; aspect-ratio: 1; margin: -7% 0 0 -7%; border-radius: 50%;
+      background: radial-gradient(circle, rgba(150,140,135,.5), rgba(150,140,135,0) 70%); filter: blur(5px); opacity: 0; animation: lvRise 7s ease-out infinite; }
+    .puff:nth-of-type(2) { animation-delay: -2.3s; } .puff:nth-of-type(3) { animation-delay: -4.6s; }
+    @keyframes lvRise { 0% { transform: translate(0,0) scale(.5); opacity: 0 } 15% { opacity: .65 } 100% { transform: translate(-6%,-520%) scale(2.2); opacity: 0 } }
+    .glow { position: absolute; transform: translate(-50%,-50%); border-radius: 50%; mix-blend-mode: screen; animation: lvPulse 3.4s ease-in-out infinite; }
+    .glow.core { left: 50%; top: 87.2%; width: 80%; aspect-ratio: 1.3; background: radial-gradient(closest-side, rgba(255,235,150,.55), rgba(255,160,40,.2) 60%, transparent 100%); }
+    .glow.mold { left: 33.4%; top: 64.7%; width: 34%; aspect-ratio: 1; background: radial-gradient(closest-side, rgba(255,200,90,.45), rgba(255,120,30,.15) 60%, transparent 100%); animation-duration: 1.7s; }
+    @keyframes lvPulse { 0%,100% { opacity: .45; transform: translate(-50%,-50%) scale(.96) } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.05) } }
+    .ember { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #ffb347; box-shadow: 0 0 7px 2px #ff7a1a; opacity: 0; left: 33%; top: 64.7%; animation: lvEmber 2.6s ease-out infinite; }
+    .ember:nth-of-type(1) { left: 32%; animation-delay: 0s } .ember:nth-of-type(2) { left: 34.5%; animation-delay: -.9s } .ember:nth-of-type(3) { left: 31%; animation-delay: -1.7s } .ember:nth-of-type(4) { left: 35.5%; animation-delay: -2.2s }
+    @keyframes lvEmber { 0% { transform: translate(0,0); opacity: 0 } 12% { opacity: 1 } 100% { transform: translate(-18px,-110px); opacity: 0 } }
+    /* page chrome over the picture */
+    body.theme-volcano .sky, body.theme-volcano .ground, body.theme-volcano .shore { background: transparent !important; }
+    body.theme-volcano .sky-fx, body.theme-volcano .forest-fx, body.theme-volcano .sea, body.theme-volcano .shore .deco, body.theme-volcano .crab { display: none !important; }
+    body.theme-volcano .forest { visibility: hidden; height: 330px; }
+    body.theme-volcano, body.theme-volcano[data-mood] { --head: #2c2622; --head-sub: #4d3f35; --head-bg: rgba(255,255,255,.55); --head-line: rgba(44,38,34,.25); }
+    body.theme-volcano .shore::before { display: none !important; }
+    body.theme-volcano .shore { min-height: 0; padding: 10px 0 0; }
+    body.theme-volcano .shore-inner { border-radius: 22px; padding: 18px 16px 12px; max-width: 528px; margin: 0 16px; }
+    @media (min-width: 560px) { body.theme-volcano .shore-inner { margin: 0 auto; } }
+    body.theme-volcano .more { border-radius: 22px; padding: 12px 14px 14px; }
+    body.theme-volcano .more-title { margin-top: 2px; }
+    /* ---- Volcano colours: basalt cards, ash text, ember buttons ---- */
+    body.theme-volcano #main-screen {
+      --ink: #f6ebe0; --moss: #d2ae93; --forest: #ffe3c8; --mist: rgba(255,122,47,0.14);
+      --ember: #ff7a2f; --ember-deep: #e8590c; --basalt: rgba(32,22,18,0.84); --edge: rgba(255,138,61,0.24);
+    }
+    body.theme-volcano :focus-visible { outline-color: #ff7a2f; }
+    body.theme-volcano .clock { color: #b4400e; }
+    body.theme-volcano .card, body.theme-volcano .more, body.theme-volcano .shore-inner, body.theme-volcano .tank {
+      background: var(--basalt); border: 1px solid var(--edge); box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+      -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2); }
+    body.theme-volcano .entry-item { border-top-color: rgba(255,210,170,0.12); }
+    body.theme-volcano .card-add-btn { border-color: rgba(255,122,47,0.45); color: #ffb07a; }
+    body.theme-volcano .card-add-btn:active { background: var(--ember); color: #1f120c; }
+    body.theme-volcano .tank { --fillc: rgba(255,106,26,0.32); --wavec: rgba(255,140,60,0.75); }
+    body.theme-volcano .tank.done { --fillc: rgba(255,190,80,0.4); --wavec: #ffb347; }
+    body.theme-volcano .tank-num { color: #fff1e2; text-shadow: 0 0 24px rgba(255,122,47,0.35); }
+    body.theme-volcano .quick-btn { background: rgba(255,255,255,0.07); border-color: rgba(255,160,100,0.38); color: #ffe3c8; }
+    body.theme-volcano .quick-btn:active { background: var(--ember); color: #1f120c; }
+    body.theme-volcano .act { background: var(--basalt); color: #ffe3c8; border-color: var(--edge); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+    body.theme-volcano .act.primary { background: linear-gradient(180deg, #ff8f45, #e8590c); color: #1f120c; border: none; box-shadow: 0 8px 22px rgba(232,89,12,0.45); }
+    body.theme-volcano .chip-add { background: rgba(255,255,255,0.06); border-color: rgba(255,160,100,0.5); color: #f6ebe0; }
+    body.theme-volcano .chip-add:active { background: rgba(255,122,47,0.25); }
+    body.theme-volcano .sh-body { fill: rgba(255,255,255,0.06); stroke: #c98a5e; }
+    body.theme-volcano .sh-rib { stroke: #c98a5e; }
+    body.theme-volcano .sh-base { fill: #c98a5e; }
+    body.theme-volcano .shell.met .sh-body { fill: var(--ember); stroke: #ffb07a; }
+    body.theme-volcano .shell.met .sh-rib { stroke: #2a1a12; }
+    body.theme-volcano .shell.empty svg { opacity: 0.55; }
+    body.theme-volcano .shell.sel .s-day { background: var(--ember); color: #1f120c; }
+    body.theme-volcano .bottom-inner { background: rgba(26,16,12,0.92); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--edge); }
+    body.theme-volcano .btn-primary { background: linear-gradient(180deg, #ff8f45, #e8590c); color: #1f120c; }
+    body.theme-volcano .btn-secondary { border-color: rgba(255,210,170,0.35); color: #ffe3c8; }
+    @media (prefers-reduced-motion: reduce) { .tl * { animation: none !important; } }
+    /* theme picker */
+    .theme-opts { display: grid; gap: 10px; margin: 6px 0 14px; }
+    .theme-opt { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px 14px; border-radius: 16px; border: 2px solid rgba(0,0,0,.12); background: rgba(255,255,255,.6); font: inherit; color: inherit; cursor: pointer; }
+    .theme-opt.on { border-color: #e8641a; }
+    .theme-opt .sw { width: 38px; height: 38px; border-radius: 12px; flex: none; }
+    .theme-opt .sw.f { background: linear-gradient(160deg,#9ec5e8,#6a9a55 60%,#40513b); }
+    .theme-opt .sw.v { background: linear-gradient(160deg,#8fc4ec,#7a5a4a 45%,#e8541a); }
+    .theme-opt b { display: block; font-size: 16px; } .theme-opt small { opacity: .7; }
   </style>
 </head>
 <body>
 
   <!-- MAIN SCREEN (Today or Selected Past Day) -->
   <div id="main-screen" class="screen active">
+    <div class="theme-bg" aria-hidden="true">
+      <div class="tl tl-top"><div class="lv lv-glow"></div><div class="lv lv-flow"><i></i></div><i class="puff"></i><i class="puff"></i><i class="puff"></i></div>
+      <div class="tl tl-mid"><div class="lv lv-glow"></div><div class="lv lv-flow"><i></i></div><div class="glow core"></div></div>
+      <div class="tl tl-bot"><div class="lv lv-glow"></div><div class="lv lv-flow"><i></i></div><div class="glow mold"></div><i class="ember"></i><i class="ember"></i><i class="ember"></i><i class="ember"></i></div>
+    </div>
     <div class="sky">
       <div class="container">
         <header class="top">
@@ -327,6 +418,7 @@
           <div class="top-actions" id="today-actions">
             <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
             <button class="icon-btn" id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg></button>
+            <button class="icon-btn" id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.4 0 2-.9 2-1.8 0-1.3-1-1.6-1-2.7 0-1 .8-1.6 1.8-1.6H17a3.5 3.5 0 0 0 3.5-3.5C20.5 6.6 16.8 3.5 12 3.5z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.8" r="1"/><circle cx="16" cy="10" r="1"/></svg></button>
             <button class="icon-btn" id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5l1.9 5.6 5.6 1.9-5.6 1.9L11 18.5l-1.9-5.6L3.5 11l5.6-1.9z"/><path d="M18.5 15.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z"/></svg></button>
           </div>
           <div class="top-actions" id="past-actions" style="display:none;">
@@ -386,6 +478,7 @@
         </div>
       </div>
     </section>
+    <div class="theme-end" aria-hidden="true"></div>
 
     <div class="bottom-bar" id="today-bottom-bar">
       <div class="bottom-inner">
@@ -498,6 +591,18 @@
         <input id="chat-input" class="text-input" type="text" autocomplete="off" placeholder="Tell me what you did..." />
         <button id="chat-send-btn" class="chat-send">Send</button>
       </div>
+    </div>
+  </div>
+
+  <!-- THEME MODAL -->
+  <div id="theme-modal" class="overlay">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Choose theme">
+      <h2 class="sheet-title">Theme</h2>
+      <div class="theme-opts">
+        <button class="theme-opt" data-theme="forest"><span class="sw f"></span><span><b>Forest</b><small>Trees, hills and the sea</small></span></button>
+        <button class="theme-opt" data-theme="volcano"><span class="sw v"></span><span><b>Volcano</b><small>Down into the earth to a foundry</small></span></button>
+      </div>
+      <div class="backup-stack"><button class="btn-cancel" id="theme-close-btn">Close</button></div>
     </div>
   </div>
 
@@ -2060,5 +2165,28 @@
     restoreFromMirror();
     protectStorage();
   </script>
+<script>
+  (function(){
+    var KEY='daily_log_theme_v1', body=document.body;
+    var t=document.querySelector('.shore-title'), sub=document.querySelector('.shore-sub');
+    var t0=t&&t.textContent, s0=sub&&sub.textContent;
+    function apply(n){
+      body.classList.toggle('theme-volcano', n==='volcano');
+      if(t) t.textContent = n==='volcano' ? 'Your week' : t0;
+      if(sub) sub.textContent = n==='volcano' ? 'A glowing shell means you reached your water target that day. Tap one to open that day.' : s0;
+      document.querySelectorAll('.theme-opt').forEach(function(b){ b.classList.toggle('on', b.dataset.theme===n); });
+    }
+    var cur='forest'; try { cur=localStorage.getItem(KEY)||'forest'; } catch(e){}
+    apply(cur);
+    var m=document.getElementById('theme-modal');
+    document.getElementById('open-theme-btn').addEventListener('click',function(){ m.classList.add('open'); });
+    document.getElementById('theme-close-btn').addEventListener('click',function(){ m.classList.remove('open'); });
+    m.addEventListener('click',function(e){ if(e.target===m) m.classList.remove('open'); });
+    document.querySelectorAll('.theme-opt').forEach(function(b){ b.addEventListener('click',function(){
+      try { localStorage.setItem(KEY,b.dataset.theme); } catch(e){}
+      apply(b.dataset.theme); m.classList.remove('open'); window.scrollTo(0,0);
+    }); });
+  })();
+</script>
 </body>
 </html>
