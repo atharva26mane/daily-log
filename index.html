@@ -320,6 +320,9 @@
     body.theme-volcano .edge-blur { --eb-tint: rgba(18,10,7,.78); }
     @media (prefers-reduced-transparency: reduce) { .edge-blur i { display: none; } }
 
+    .ins-copy { margin: 16px 0 8px; }
+    .ins-copy .btn-primary { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; border: 0; border-radius: 16px; background: #2e3c2a; color: #fefae0; font: inherit; font-weight: 700; }
+    body.theme-volcano .ins-copy .btn-primary { background: #e8641a; color: #fff; }
     /* categories sheet */
     .cat-row { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 6px 10px 6px 12px; margin: 0 0 6px; border: 1px solid rgba(64,81,59,.14); border-radius: 16px; background: rgba(255,255,255,.55); }
     .cat-row.off { opacity: .55; }
@@ -728,6 +731,12 @@
       <div class="set-label" style="margin-top:12px;">Last 5 weeks</div>
       <div class="ins-heat" id="ins-heat"></div>
       <div class="ins-legend"><span><i class="h3"></i>Goal met</span><span><i class="h2"></i>Some water</span><span><i class="h1"></i>Logged</span><span><i class="h0"></i>Nothing</span></div>
+      <div class="ins-copy">
+        <div class="set-label">Weekly summary</div>
+        <p class="set-note" id="ins-week-note" style="margin:0 4px 8px"></p>
+        <button class="btn-primary" id="ins-copy-week">Copy last 7 days</button>
+        <p class="set-note" style="margin:8px 4px 0">Paste it into Claude to review your week.</p>
+      </div>
     </div>
   </div>
 
@@ -2617,6 +2626,35 @@
     m.addEventListener('click', function(e){ if (e.target === m) close(); });
     document.getElementById('open-settings-btn').addEventListener('click', function(){ draw(); });
     populateCategorySelect(); draw();
+  })();
+</script>
+<script>
+  (function(){
+    function weekKeys() { var t = getTodayKey(), a = [], i; for (i = 6; i >= 0; i--) a.push(shiftDateKey(t, -i)); return a; }
+    function stats() {
+      var keys = weekKeys(), ml = keys.map(function(k){ return getWaterTotal(getDayEntries(k)); });
+      var logged = keys.filter(function(k){ return getDayEntries(k).length > 0; });
+      var met = ml.filter(function(v){ return v >= WATER_TARGET_ML; }).length;
+      var waterDays = ml.filter(function(v){ return v > 0; });
+      var avg = waterDays.length ? Math.round(waterDays.reduce(function(a, b){ return a + b; }, 0) / waterDays.length) : 0;
+      return { keys: keys, logged: logged, met: met, avg: avg, nWater: waterDays.length };
+    }
+    document.getElementById('open-insights-btn').addEventListener('click', function(){
+      var st = stats();
+      document.getElementById('ins-week-note').textContent = st.logged.length
+        ? st.logged.length + ' of 7 days logged. Goal met on ' + st.met + ' day' + (st.met === 1 ? '' : 's') + '. Average ' + st.avg + ' ml on days with water.'
+        : 'Nothing logged in the last 7 days yet.';
+    });
+    document.getElementById('ins-copy-week').addEventListener('click', async function(){
+      var st = stats(), t = getTodayKey();
+      if (!st.logged.length) { showToast('Nothing logged in the last 7 days'); return; }
+      var head = 'WEEK SUMMARY: ' + formatDisplayDate(st.keys[0]) + ' to ' + formatDisplayDate(st.keys[6]) + '\n' +
+        'Days logged: ' + st.logged.length + '/7. Water goal ' + WATER_TARGET_ML + ' ml met on ' + st.met + ' day(s). ' +
+        'Average water on days with water: ' + st.avg + ' ml.';
+      var blocks = st.keys.filter(function(k){ return getDayEntries(k).length > 0; }).map(formatDayForCopy);
+      var ok = await copyText(head + '\n\n' + blocks.join('\n\n'));
+      showToast(ok ? 'Copied your week!' : 'Copy failed');
+    });
   })();
 </script>
 </body>
