@@ -3,630 +3,320 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0d1117" />
+  <meta name="theme-color" content="#0f1f24" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Daily Log" />
   <title>Daily Log</title>
   <link id="app-icon" rel="icon" type="image/png" href="icon-192.png" />
   <link id="apple-icon" rel="apple-touch-icon" href="icon-192.png" />
   <link id="pwa-manifest" rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet" />
   <style>
+    /* Deep Tide: a water-first diary. Aqua belongs to water and the main action; each category keeps one small colour. */
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --surface-2: #1f2630;
-      --border: #2b3340;
-      --text: #f0f4f8;
-      --muted: #8b949e;
-      --accent: #38bdf8;
-      --accent-dark: #0284c7;
-      --green: #34d399;
-      --danger: #f87171;
-      --radius: 14px;
+      --bg: #0f1f24;
+      --surface: #16292f;
+      --raised: #1e3841;
+      --line: #2b464f;
+      --text: #ecf4f1;
+      --muted: #94aaa8;
+      --water: #5fd4c8;
+      --water-ink: #062a29;
+      --ok: #9be28f;
+      --danger: #ff8f85;
+      --paper: #ecf4f1;
+      --paper-ink: #0f1f24;
+      --radius: 20px;
       --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --display: "Bricolage Grotesque", "Avenir Next", "Trebuchet MS", system-ui, sans-serif;
+      --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     html, body {
       margin: 0;
       padding: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: var(--body);
       font-size: 16px;
-      line-height: 1.4;
+      line-height: 1.45;
       min-height: 100%;
     }
 
-    body {
-      padding-bottom: calc(96px + var(--safe-bottom));
-    }
+    body { padding-bottom: calc(104px + var(--safe-bottom)); }
 
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 14px 14px 24px;
-    }
+    button { font-family: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+
+    svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+    .container { max-width: 560px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top, 0px)) 16px 24px; }
 
     /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
+    .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .top h1 { font-family: var(--display); font-size: 34px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+    .top-sub { color: var(--muted); font-size: 15px; margin-top: 4px; }
+    .top-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
-    .app-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      font-weight: 600;
+    .icon-btn {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      cursor: pointer;
+      color: var(--text);
     }
-
-    .date-title {
-      font-size: 21px;
-      font-weight: 700;
-      margin: 2px 0 0;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-    }
+    .icon-btn:active { background: var(--raised); }
 
     .pill-btn {
+      min-height: 44px;
       background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0 14px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
     }
+    .pill-btn:active { background: var(--raised); }
 
-    .pill-btn:active {
-      background: var(--surface-2);
-    }
-
-    /* Big Quick Add Button */
-    .big-add-btn {
-      width: 100%;
-      background: var(--accent);
-      color: #06131f;
-      border: none;
-      border-radius: var(--radius);
-      padding: 16px 18px;
-      font-size: 19px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.22);
-    }
-
-    .big-add-btn:active {
-      background: var(--accent-dark);
-      color: #fff;
-      transform: scale(0.99);
-    }
-
-    .big-plus {
-      font-size: 26px;
-      line-height: 1;
-    }
-
-    /* Category Cards */
-    .cards {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .card-title-wrap {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .card-title-row {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin: 0;
-    }
-
-    .card-hint {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .water-badge {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .water-badge.done {
-      color: var(--green);
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 6px;
-      background: var(--surface-2);
-      border-radius: 999px;
+    /* Water tank */
+    .tank {
+      position: relative;
       overflow: hidden;
-      margin-top: 8px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 999px;
-      transition: width 0.2s ease;
-    }
-
-    .progress-fill.done {
-      background: var(--green);
-    }
-
-    .card-add-btn {
-      width: 38px;
-      height: 38px;
-      flex-shrink: 0;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface-2);
-      color: var(--accent);
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .card-add-btn:active {
-      background: var(--accent);
-      color: #06131f;
-    }
-
-    .entries {
-      list-style: none;
-      margin: 10px 0 0;
-      padding: 8px 0 0;
-      border-top: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .entry-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: var(--surface-2);
-      cursor: pointer;
-    }
-
-    .entry-item:active {
-      opacity: 0.8;
-    }
-
-    .entry-time {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 13px;
-      color: var(--muted);
-      padding-top: 2px;
-      flex-shrink: 0;
-    }
-
-    .entry-text {
-      font-size: 15px;
-      word-break: break-word;
-      flex: 1;
-    }
-
-    .yesterday-note {
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--muted);
-      background: rgba(56, 189, 248, 0.08);
-      border-radius: 8px;
-      padding: 6px 10px;
-    }
-
-    /* Sticky Bottom Bar */
-    .bottom-bar {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(13, 17, 23, 0.95);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid var(--border);
-      padding: 10px 14px calc(10px + var(--safe-bottom));
-      z-index: 20;
-    }
-
-    .bottom-inner {
-      max-width: 600px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 10px;
-    }
-
-    .btn-primary {
-      background: var(--green);
-      color: #052014;
-      border: none;
-      border-radius: 12px;
-      padding: 15px 14px;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .btn-secondary {
       background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 15px 12px;
-      font-size: 15px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px 20px 18px;
+      margin-bottom: 14px;
+      isolation: isolate;
+      --fillc: rgba(95, 212, 200, 0.30);
+    }
+    .tank.done { --fillc: rgba(155, 226, 143, 0.30); }
+    .tank-fill {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 100%;
+      transform: translateY(var(--drop, 120%));
+      transition: transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: -1;
+      color: var(--fillc);
+    }
+    .wave { position: absolute; top: -1px; left: 0; width: 200%; height: 22px; fill: currentColor; stroke: none; animation: drift 7s linear infinite; }
+    .fill-body { position: absolute; top: 20px; left: 0; right: 0; bottom: 0; background: currentColor; }
+    @keyframes drift { to { transform: translateX(-50%); } }
+
+    .tank-num { font-family: var(--display); font-weight: 800; font-size: 84px; line-height: 0.95; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+    .tank-num small { font-size: 26px; font-weight: 600; margin-left: 6px; color: var(--muted); letter-spacing: 0; }
+    .tank-sub { color: var(--muted); font-size: 15px; margin-top: 8px; }
+    .tank.done .tank-sub { color: var(--ok); font-weight: 600; }
+
+    .tank-quick { display: flex; gap: 8px; margin-top: 18px; }
+    .quick-btn {
+      flex: 1;
+      min-height: 46px;
+      background: rgba(15, 31, 36, 0.55);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font-size: 16px;
       font-weight: 700;
       cursor: pointer;
+      font-variant-numeric: tabular-nums;
     }
+    .quick-btn:active { background: var(--water); color: var(--water-ink); border-color: var(--water); }
 
-    .btn-primary:active,
-    .btn-secondary:active {
-      opacity: 0.85;
+    /* Main actions */
+    .actions { display: grid; grid-template-columns: 1.6fr 1fr; gap: 10px; margin-bottom: 18px; }
+    .act {
+      min-height: 56px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      border-radius: 18px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      background: var(--surface);
     }
+    .act:active { background: var(--raised); }
+    .act.primary { background: var(--water); color: var(--water-ink); border-color: var(--water); }
+    .act.primary:active { background: #49bfb3; }
 
-    /* Modal / Bottom Sheet */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.68);
-      display: none;
-      align-items: flex-end;
-      justify-content: center;
-      z-index: 50;
-      padding: 12px;
+    /* Category cards */
+    .cards { display: flex; flex-direction: column; gap: 12px; }
+    .card { background: var(--surface); border-radius: var(--radius); padding: 14px 16px 6px; }
+    .card-header { display: flex; align-items: center; gap: 10px; min-height: 40px; }
+    .card-title { font-family: var(--display); font-size: 19px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; letter-spacing: -0.01em; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex-shrink: 0; display: inline-block; }
+    .card-total { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--c); }
+    .card-add-btn {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: var(--raised); border: none; color: var(--text);
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
+    .card-add-btn svg { width: 20px; height: 20px; }
+    .card-add-btn:active { background: var(--c); color: var(--bg); }
+    .card-note { margin: 4px 0 2px; font-size: 14px; color: var(--muted); }
 
-    .overlay.open {
-      display: flex;
+    .entries { list-style: none; margin: 6px 0 0; padding: 0; }
+    .entry-item { display: flex; gap: 14px; align-items: baseline; padding: 11px 0; border-top: 1px solid var(--line); cursor: pointer; }
+    .entry-item:active { opacity: 0.7; }
+    .entry-time { font-variant-numeric: tabular-nums; font-size: 14px; color: var(--muted); width: 44px; flex-shrink: 0; }
+    .entry-text { font-size: 16px; flex: 1; word-break: break-word; }
+
+    .more { margin-top: 8px; }
+    .more-title { font-size: 15px; font-weight: 600; color: var(--muted); margin: 6px 2px 10px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip-add {
+      min-height: 44px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 0 16px;
+      background: transparent;
+      border: 1px dashed var(--line);
+      border-radius: 999px;
+      font-size: 15px; font-weight: 600;
+      cursor: pointer;
     }
+    .chip-add:active { background: var(--surface); border-style: solid; }
+
+    .empty-state { color: var(--muted); font-size: 15px; padding: 4px 2px 14px; max-width: 34ch; }
+    .empty-state b { color: var(--text); }
+
+    /* Bottom dock */
+    .bottom-bar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+      padding: 12px 16px calc(12px + var(--safe-bottom));
+      background: linear-gradient(to top, var(--bg) 62%, rgba(15, 31, 36, 0));
+      pointer-events: none;
+    }
+    .bottom-inner { max-width: 528px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px; pointer-events: auto; }
+    .btn-primary, .btn-secondary {
+      min-height: 54px; border-radius: 18px; font-size: 16px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary { background: var(--paper); color: var(--paper-ink); border: none; }
+    .btn-secondary { background: var(--surface); border: 1px solid var(--line); color: var(--text); }
+    .btn-primary:active, .btn-secondary:active { opacity: 0.85; }
+    .btn-primary svg, .btn-secondary svg { width: 20px; height: 20px; }
+
+    /* Sheets */
+    .overlay { position: fixed; inset: 0; background: rgba(5, 14, 17, 0.7); display: none; align-items: flex-end; justify-content: center; z-index: 50; padding: 0; }
+    .overlay.open { display: flex; animation: fade 0.18s ease-out; }
+    .overlay.open .sheet { animation: rise 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    @keyframes fade { from { opacity: 0; } }
+    @keyframes rise { from { transform: translateY(40px); opacity: 0; } }
 
     .sheet {
-      width: 100%;
-      max-width: 560px;
+      position: relative;
+      width: 100%; max-width: 560px;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px 16px calc(18px + var(--safe-bottom));
-      max-height: 90vh;
-      overflow-y: auto;
+      border: 1px solid var(--line); border-bottom: none;
+      border-radius: 28px 28px 0 0;
+      padding: 26px 18px calc(20px + var(--safe-bottom));
+      max-height: 92vh; overflow-y: auto;
     }
+    .sheet::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px; margin-left: -20px; border-radius: 4px; background: var(--line); }
+    .sheet-title { font-family: var(--display); font-size: 24px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.01em; }
 
-    .sheet-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0 0 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .field-label { display: block; font-size: 14px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+    .text-input, .select-input, .time-input {
+      width: 100%; min-height: 50px;
+      background: var(--bg); color: var(--text);
+      border: 1px solid var(--line); border-radius: 14px;
+      padding: 12px 14px; font-size: 16px; font-family: inherit; outline: none;
     }
+    .text-input:focus, .select-input:focus, .time-input:focus { border-color: var(--water); }
+    .row-2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; margin-top: 14px; }
+    .auto-tag { font-size: 13px; color: var(--water); font-weight: 600; margin-left: 6px; }
 
-    .field-label {
-      display: block;
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
+    .sheet-actions { display: flex; gap: 10px; margin-top: 18px; }
+    .sheet-actions button { flex: 1; min-height: 52px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .btn-save { background: var(--water); color: var(--water-ink); border: none; }
+    .btn-save:disabled { opacity: 0.6; }
+    .btn-cancel { background: var(--raised); color: var(--text); border: 1px solid var(--line); }
+    .btn-delete { background: transparent; color: var(--danger); border: 1px solid rgba(255, 143, 133, 0.5); flex: 0.8; }
 
-    .text-input,
-    .select-input,
-    .time-input {
-      width: 100%;
-      background: var(--bg);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 13px 14px;
-      font-size: 16px;
-      font-family: inherit;
-      outline: none;
-    }
+    .backup-note { font-size: 14px; color: var(--muted); margin: 0 0 10px; max-width: 46ch; }
+    .backup-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .backup-stack .btn-cancel { min-height: 52px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; }
 
-    .text-input:focus,
-    .select-input:focus,
-    .time-input:focus {
-      border-color: var(--accent);
-    }
-
-    .row-2 {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .auto-tag {
-      font-size: 12px;
-      color: var(--accent);
-      font-weight: 600;
-      margin-left: 6px;
-    }
-
-    .sheet-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .sheet-actions button {
-      flex: 1;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn-save {
-      background: var(--accent);
-      color: #06131f;
-      border: none;
-    }
-
-    .btn-cancel {
-      background: var(--surface-2);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .btn-delete {
-      background: transparent;
-      color: var(--danger);
-      border: 1px solid rgba(248, 113, 113, 0.45);
-      flex: 0.7;
-    }
-
-    /* History Screen */
-    .screen {
-      display: none;
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    .history-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
+    /* Screens + history */
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .history-list { display: flex; flex-direction: column; gap: 10px; }
     .history-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
+      width: 100%; text-align: left; cursor: pointer;
+      background: var(--surface); border: none; border-radius: var(--radius);
+      padding: 16px; display: flex; justify-content: space-between; align-items: center; gap: 16px;
     }
-
-    .history-item:active {
-      background: var(--surface-2);
-    }
-
-    .history-date {
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .history-meta {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    .empty-msg {
-      text-align: center;
-      color: var(--muted);
-      padding: 36px 16px;
-      font-size: 15px;
-    }
-
-    .backup-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .backup-note {
-      font-size: 13px;
-      color: var(--muted);
-      margin: 0 0 8px;
-    }
+    .history-item:active { background: var(--raised); }
+    .h-day { font-family: var(--display); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+    .h-date { font-size: 14px; color: var(--muted); margin-top: 2px; }
+    .h-side { width: 104px; text-align: right; flex-shrink: 0; }
+    .h-water { font-family: var(--display); font-weight: 700; font-size: 20px; font-variant-numeric: tabular-nums; }
+    .h-water span { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .h-bar { height: 5px; background: var(--raised); border-radius: 5px; overflow: hidden; margin: 6px 0 5px; }
+    .h-bar i { display: block; height: 100%; background: var(--water); border-radius: 5px; }
+    .h-count { font-size: 13px; color: var(--muted); }
 
     /* Toast */
     .toast {
-      position: fixed;
-      left: 50%;
-      bottom: calc(90px + var(--safe-bottom));
-      transform: translateX(-50%) translateY(20px);
-      background: #f0f4f8;
-      color: #0d1117;
-      padding: 10px 18px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 700;
-      opacity: 0;
-      pointer-events: none;
+      position: fixed; left: 50%; bottom: calc(96px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(16px);
+      background: var(--paper); color: var(--paper-ink);
+      padding: 11px 18px; border-radius: 999px;
+      font-size: 15px; font-weight: 700;
+      opacity: 0; pointer-events: none;
       transition: opacity 0.2s ease, transform 0.2s ease;
-      z-index: 100;
+      z-index: 100; max-width: 90vw; text-align: center;
     }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* Chat with AI */
-    .chat-btn {
-      width: 100%;
-      background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 14px 18px;
-      font-size: 17px;
-      font-weight: 800;
-      cursor: pointer;
-      margin-bottom: 16px;
-    }
-    .chat-btn:active { background: var(--surface-2); }
-    .chat-sheet {
-      display: flex;
-      flex-direction: column;
-      height: 88vh;
-      overflow: hidden;
-      padding-bottom: calc(14px + var(--safe-bottom));
-    }
-    .chat-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .chat-head button {
-      background: var(--surface-2);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-left: 6px;
-    }
-    .chat-log {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 4px 2px;
-    }
-    .chat-hint {
-      color: var(--muted);
-      font-size: 14px;
-      padding: 12px;
-      border: 1px dashed var(--border);
-      border-radius: 12px;
-    }
-    .bubble {
-      max-width: 92%;
-      padding: 10px 12px;
-      border-radius: 14px;
-      font-size: 15px;
-      word-break: break-word;
-    }
-    .bubble.user { align-self: flex-end; background: var(--accent); color: #06131f; }
-    .bubble.ai { align-self: flex-start; background: var(--surface-2); }
+    /* Chat */
+    .chat-sheet { display: flex; flex-direction: column; height: 90vh; overflow: hidden; padding-bottom: calc(14px + var(--safe-bottom)); }
+    .chat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .chat-head .sheet-title { margin: 0; }
+    .chat-head-btns { display: flex; gap: 6px; }
+    .chat-head button { min-height: 40px; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .chat-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 4px 2px 8px; }
+    .chat-hint { color: var(--muted); font-size: 15px; padding: 14px; border: 1px dashed var(--line); border-radius: 16px; max-width: 40ch; }
+    .bubble { max-width: 92%; padding: 11px 14px; border-radius: 18px; font-size: 16px; word-break: break-word; }
+    .bubble.user { align-self: flex-end; background: var(--water); color: var(--water-ink); border-bottom-right-radius: 6px; }
+    .bubble.ai { align-self: flex-start; background: var(--raised); border-bottom-left-radius: 6px; }
     .bubble.thinking { color: var(--muted); }
-    .prop-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
-    .prop {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 10px;
-    }
+    .prop-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .prop { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg); border-radius: 14px; padding: 10px 12px; }
     .prop-main { min-width: 0; flex: 1; }
-    .prop-cat { font-size: 12px; color: var(--accent); font-weight: 700; }
-    .prop-text { font-size: 14px; }
+    .prop-cat { font-size: 13px; color: var(--water); font-weight: 700; }
+    .prop-text { font-size: 15px; }
     .prop-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
-    .prop-btn {
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      border: 1px solid var(--border);
-    }
-    .prop-btn.add { background: var(--green); color: #052014; border: none; }
+    .prop-btn { min-height: 40px; border-radius: 12px; padding: 0 14px; font-size: 15px; font-weight: 700; cursor: pointer; border: 1px solid var(--line); }
+    .prop-btn.add { background: var(--ok); color: #10300f; border: none; }
     .prop-btn.skip { background: transparent; color: var(--muted); }
-    .prop-state { font-size: 13px; color: var(--muted); font-weight: 600; }
-    .prop-all {
-      background: var(--green);
-      color: #052014;
-      border: none;
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .chat-input-row { display: flex; gap: 8px; margin-top: 10px; }
+    .prop-state { font-size: 14px; color: var(--muted); font-weight: 600; }
+    .prop-all { min-height: 46px; background: var(--ok); color: #10300f; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; }
+    .chat-input-row { display: flex; gap: 8px; margin-top: 8px; }
     .chat-input-row .text-input { flex: 1; }
-    .chat-send {
-      background: var(--accent);
-      color: #06131f;
-      border: none;
-      border-radius: 12px;
-      padding: 0 18px;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
-    }
+    .chat-send { min-width: 76px; background: var(--water); color: var(--water-ink); border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; }
     .chat-send:disabled { opacity: 0.5; }
+
+    @media (min-width: 700px) {
+      .container { padding-top: 36px; }
+      .overlay { align-items: center; }
+      .sheet { border-radius: 28px; border-bottom: 1px solid var(--line); }
+      .chat-sheet { height: 80vh; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .wave { animation: none; }
+      .tank-fill { transition: none; }
+      .overlay.open, .overlay.open .sheet { animation: none; }
+      .toast { transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -634,42 +324,55 @@
   <!-- MAIN SCREEN (Today or Selected Past Day) -->
   <div id="main-screen" class="screen active">
     <div class="container">
-      <header class="header">
+      <header class="top">
         <div>
-          <div id="header-label" class="app-label">Daily Log</div>
-          <h1 id="header-date" class="date-title"></h1>
+          <h1 id="header-date"></h1>
+          <div id="header-label" class="top-sub"></div>
         </div>
-        <div class="header-actions" id="today-actions">
-          <button class="pill-btn" id="open-history-btn">History</button>
-          <button class="pill-btn" id="open-backup-btn">Backup</button>
-          <button class="pill-btn" id="open-ai-btn">AI</button>
+        <div class="top-actions" id="today-actions">
+          <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
+          <button class="icon-btn" id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg></button>
+          <button class="icon-btn" id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5l1.9 5.6 5.6 1.9-5.6 1.9L11 18.5l-1.9-5.6L3.5 11l5.6-1.9z"/><path d="M18.5 15.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z"/></svg></button>
         </div>
-        <div class="header-actions" id="past-actions" style="display:none;">
-          <button class="pill-btn" id="back-to-history-btn">← History</button>
+        <div class="top-actions" id="past-actions" style="display:none;">
+          <button class="pill-btn" id="back-to-history-btn">History</button>
           <button class="pill-btn" id="back-to-today-btn">Today</button>
         </div>
       </header>
 
-      <button class="big-add-btn" id="big-add-btn">
-        <span class="big-plus">+</span>
-        <span>Add Entry</span>
-      </button>
+      <section class="tank" id="tank" aria-label="Water today">
+        <div class="tank-fill" id="tank-fill" aria-hidden="true">
+          <svg class="wave" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 0 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
+          <div class="fill-body"></div>
+        </div>
+        <div class="tank-num"><span id="tank-ml">0</span><small>ml</small></div>
+        <div class="tank-sub" id="tank-sub"></div>
+        <div class="tank-quick" id="tank-quick">
+          <button class="quick-btn" data-ml="100">+100</button>
+          <button class="quick-btn" data-ml="200">+200</button>
+          <button class="quick-btn" data-ml="250">+250</button>
+          <button class="quick-btn" data-ml="500">+500</button>
+        </div>
+      </section>
 
-      <button class="chat-btn" id="open-chat-btn">💬 Chat with AI</button>
+      <div class="actions">
+        <button class="act primary" id="open-chat-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H10l-4.5 3.8V16h-1z"/></svg><span>Talk to AI</span></button>
+        <button class="act" id="big-add-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add</span></button>
+      </div>
 
       <div id="cards-container" class="cards"></div>
     </div>
 
     <div class="bottom-bar" id="today-bottom-bar">
       <div class="bottom-inner">
-        <button class="btn-primary" id="copy-today-btn">Copy Today</button>
-        <button class="btn-secondary" id="copy-3days-btn">Copy Last 3 Days</button>
+        <button class="btn-primary" id="copy-today-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg>Copy today</button>
+        <button class="btn-secondary" id="copy-3days-btn">Last 3 days</button>
       </div>
     </div>
 
     <div class="bottom-bar" id="past-bottom-bar" style="display:none;">
       <div class="bottom-inner" style="grid-template-columns: 1fr;">
-        <button class="btn-primary" id="copy-viewed-day-btn">Copy This Day</button>
+        <button class="btn-primary" id="copy-viewed-day-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg>Copy this day</button>
       </div>
     </div>
   </div>
@@ -677,13 +380,13 @@
   <!-- HISTORY SCREEN -->
   <div id="history-screen" class="screen">
     <div class="container">
-      <header class="header">
+      <header class="top">
         <div>
-          <div class="app-label">Daily Log</div>
-          <h1 class="date-title">History</h1>
+          <h1>History</h1>
+          <div class="top-sub">Tap a day to open it</div>
         </div>
-        <div class="header-actions">
-          <button class="pill-btn" id="close-history-btn">← Today</button>
+        <div class="top-actions">
+          <button class="pill-btn" id="close-history-btn">Today</button>
         </div>
       </header>
       <div id="history-list" class="history-list"></div>
@@ -692,25 +395,16 @@
 
   <!-- ADD / EDIT ENTRY MODAL -->
   <div id="entry-modal" class="overlay">
-    <div class="sheet">
-      <div class="sheet-title">
-        <span id="modal-title">Add Entry</span>
-      </div>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 class="sheet-title" id="modal-title">Add entry</h2>
 
       <label class="field-label" for="entry-text-input">What happened?</label>
-      <input
-        id="entry-text-input"
-        class="text-input"
-        type="text"
-        autocomplete="off"
-        placeholder="e.g. water 200, idli 3 sambar, stool medium soft pain 2"
-      />
+      <input id="entry-text-input" class="text-input" type="text" autocomplete="off"
+             placeholder="e.g. water 200 or idli 3 sambar" />
 
       <div class="row-2">
         <div>
-          <label class="field-label" for="entry-cat-select">
-            Category <span id="auto-tag" class="auto-tag"></span>
-          </label>
+          <label class="field-label" for="entry-cat-select">Category <span id="auto-tag" class="auto-tag"></span></label>
           <select id="entry-cat-select" class="select-input"></select>
         </div>
         <div>
@@ -729,50 +423,46 @@
 
   <!-- BACKUP MODAL -->
   <div id="backup-modal" class="overlay">
-    <div class="sheet">
-      <div class="sheet-title">Backup &amp; Restore</div>
-      <p class="backup-note">
-        Your logs are saved only on this phone. Export a JSON file regularly to keep a backup.
-      </p>
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Backup and restore">
+      <h2 class="sheet-title">Backup and restore</h2>
+      <p class="backup-note">Your logs live only on this phone. Export a file now and then so you never lose them.</p>
       <p class="backup-note" id="storage-status"></p>
       <div class="backup-stack">
-        <button class="btn-primary" id="export-btn">Export JSON Backup</button>
-        <button class="btn-secondary" id="import-trigger-btn">Import JSON Backup</button>
+        <button class="btn-primary" id="export-btn">Export backup file</button>
+        <button class="btn-secondary" id="import-trigger-btn">Import backup file</button>
         <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;" />
-        <button class="btn-cancel" id="close-backup-btn" style="padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Close</button>
+        <button class="btn-cancel" id="close-backup-btn">Close</button>
       </div>
     </div>
   </div>
 
   <!-- AI SETTINGS MODAL -->
   <div id="ai-modal" class="overlay">
-    <div class="sheet">
-      <div class="sheet-title">AI Sorting (Gemini)</div>
-      <p class="backup-note">
-        AI reads what you type and picks the category. Your key is saved only on this phone. If AI fails, the normal keyword sorting is used.
-      </p>
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="AI settings">
+      <h2 class="sheet-title">AI settings</h2>
+      <p class="backup-note">AI sorts what you type and powers the chat. The key stays on this phone. If AI fails, normal keyword sorting is used.</p>
       <label class="field-label" for="ai-key-input">Gemini API key</label>
       <input id="ai-key-input" class="text-input" type="password" autocomplete="off" placeholder="Paste key here" />
       <p class="backup-note" id="ai-status" style="margin-top:10px;"></p>
       <div class="backup-stack">
-        <button class="btn-primary" id="ai-save-btn">Save &amp; Test</button>
-        <button class="btn-secondary" id="ai-remove-btn">Remove key (turn AI off)</button>
-        <button class="btn-cancel" id="ai-close-btn" style="padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Close</button>
+        <button class="btn-primary" id="ai-save-btn">Save and test</button>
+        <button class="btn-secondary" id="ai-remove-btn">Remove key and turn AI off</button>
+        <button class="btn-cancel" id="ai-close-btn">Close</button>
       </div>
     </div>
   </div>
 
   <!-- CHAT MODAL -->
   <div id="chat-modal" class="overlay">
-    <div class="sheet chat-sheet">
+    <div class="sheet chat-sheet" role="dialog" aria-modal="true" aria-label="Talk to AI">
       <div class="chat-head">
-        <span>Chat with AI</span>
-        <span>
+        <h2 class="sheet-title">Talk to AI</h2>
+        <div class="chat-head-btns">
           <button id="chat-clear-btn">Clear</button>
           <button id="chat-close-btn">Close</button>
-        </span>
+        </div>
       </div>
-      <div id="chat-log" class="chat-log"></div>
+      <div id="chat-log" class="chat-log" aria-live="polite"></div>
       <div class="chat-input-row">
         <input id="chat-input" class="text-input" type="text" autocomplete="off" placeholder="Tell me what you did..." />
         <button id="chat-send-btn" class="chat-send">Send</button>
@@ -780,7 +470,7 @@
     </div>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
     // =========================================================================
@@ -895,6 +585,18 @@
       const now = new Date();
       return `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
     }
+
+    const WEEKDAYS_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    function weekdayLong(key) { return WEEKDAYS_LONG[keyToDate(key).getDay()]; }
+    function shortDate(key) {
+      const d = keyToDate(key);
+      return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    const CAT_COLORS = {
+      water: '#5fd4c8', food: '#f4b860', fibre: '#9be28f', gudlax: '#c4a7f5', stool: '#d6a077',
+      medicines: '#ff9fb0', symptoms: '#ff8f85', sleep: '#8fa8ff', weight: '#7fd0f5', notes: '#b4c2c0'
+    };
 
     function formatDisplayDate(key) {
       const d = keyToDate(key);
@@ -1533,70 +1235,88 @@
         activeDateKey = todayKey;
       }
 
-      document.getElementById('header-date').textContent = formatDisplayDate(activeDateKey);
-      document.getElementById('header-label').textContent = viewingPastDay ? 'Past Day' : 'Daily Log';
+      document.getElementById('header-date').textContent = weekdayLong(activeDateKey);
+      document.getElementById('header-label').textContent = viewingPastDay
+        ? 'Past day, ' + shortDate(activeDateKey)
+        : shortDate(activeDateKey);
       document.getElementById('today-actions').style.display = viewingPastDay ? 'none' : 'flex';
       document.getElementById('past-actions').style.display = viewingPastDay ? 'flex' : 'none';
       document.getElementById('today-bottom-bar').style.display = viewingPastDay ? 'none' : 'block';
       document.getElementById('past-bottom-bar').style.display = viewingPastDay ? 'block' : 'none';
+      document.getElementById('tank-quick').style.display = viewingPastDay ? 'none' : 'flex';
+      document.getElementById('open-chat-btn').style.display = viewingPastDay ? 'none' : 'flex';
 
       const entries = sortEntries(getDayEntries(activeDateKey));
       const waterTotal = getWaterTotal(entries);
-      const waterPct = Math.min(100, Math.round((waterTotal / WATER_TARGET_ML) * 100));
+      const waterPct = Math.min(100, (waterTotal / WATER_TARGET_ML) * 100);
       const waterDone = waterTotal >= WATER_TARGET_ML;
+
+      // Water tank (the hero)
+      const tank = document.getElementById('tank');
+      tank.classList.toggle('done', waterDone);
+      document.getElementById('tank-ml').textContent = waterTotal;
+      document.getElementById('tank-sub').textContent = waterDone
+        ? 'Target reached (' + WATER_TARGET_ML + ' ml)'
+        : (WATER_TARGET_ML - waterTotal) + ' ml to go of ' + WATER_TARGET_ML;
+      const drop = waterPct === 0 ? 120 : 100 - waterPct;
+      const fill = document.getElementById('tank-fill');
+      requestAnimationFrame(() => requestAnimationFrame(() => fill.style.setProperty('--drop', drop + '%')));
 
       const yesterdayKey = shiftDateKey(activeDateKey, -1);
       const yesterdayGudlax = sortEntries(
         getDayEntries(yesterdayKey).filter(e => e.cat === 'gudlax')
       );
 
-      const container = document.getElementById('cards-container');
-      container.innerHTML = CATEGORIES.map(cat => {
+      const cards = [];
+      const emptyCats = [];
+      for (const cat of CATEGORIES) {
         const catEntries = entries.filter(e => e.cat === cat.id);
-
-        let extraHeader = '';
-        let progressHtml = '';
-        if (cat.id === 'water') {
-          extraHeader = `<span class="water-badge ${waterDone ? 'done' : ''}">${waterTotal} / ${WATER_TARGET_ML} ml</span>`;
-          progressHtml = `
-            <div class="progress-track">
-              <div class="progress-fill ${waterDone ? 'done' : ''}" style="width:${waterPct}%"></div>
-            </div>`;
-        } else if (cat.hint) {
-          extraHeader = `<span class="card-hint">${escapeHtml(cat.hint)}</span>`;
+        const hasYesterday = cat.id === 'gudlax' && yesterdayGudlax.length > 0;
+        if (catEntries.length === 0 && !hasYesterday) {
+          if (cat.id !== 'water') emptyCats.push(cat);
+          continue;
         }
 
-        let yesterdayHtml = '';
-        if (cat.id === 'gudlax' && yesterdayGudlax.length > 0) {
-          const txt = yesterdayGudlax.map(e => `${e.text} at ${e.time}`).join(', ');
-          yesterdayHtml = `<div class="yesterday-note">Last night: ${escapeHtml(txt)}</div>`;
-        }
-
-        const listHtml = catEntries.length > 0
-          ? `<ul class="entries">${catEntries.map(e => `
-              <li class="entry-item" data-id="${escapeHtml(e.id)}">
-                <span class="entry-time">${escapeHtml(e.time)}</span>
-                <span class="entry-text">${escapeHtml(e.text)}</span>
-              </li>`).join('')}
-            </ul>`
+        const color = CAT_COLORS[cat.id] || '#b4c2c0';
+        const extra = cat.id === 'water'
+          ? '<span class="card-total">' + waterTotal + ' ml</span>'
+          : '';
+        const note = hasYesterday
+          ? '<div class="card-note">Last night: ' + escapeHtml(yesterdayGudlax.map(e => e.text + ' at ' + e.time).join(', ')) + '</div>'
+          : '';
+        const rows = catEntries.length > 0
+          ? '<ul class="entries">' + catEntries.map(e =>
+              '<li class="entry-item" data-id="' + escapeHtml(e.id) + '">' +
+              '<span class="entry-time">' + escapeHtml(e.time) + '</span>' +
+              '<span class="entry-text">' + escapeHtml(e.text) + '</span></li>').join('') + '</ul>'
           : '';
 
-        return `
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title-wrap">
-                <div class="card-title-row">
-                  <h2 class="card-title">${escapeHtml(cat.name)}</h2>
-                  ${extraHeader}
-                </div>
-                ${progressHtml}
-              </div>
-              <button class="card-add-btn" data-cat="${cat.id}" aria-label="Add to ${escapeHtml(cat.name)}">+</button>
-            </div>
-            ${yesterdayHtml}
-            ${listHtml}
-          </section>`;
-      }).join('');
+        cards.push(
+          '<section class="card" style="--c:' + color + '">' +
+            '<div class="card-header">' +
+              '<h2 class="card-title"><i class="dot"></i>' + escapeHtml(cat.name) + '</h2>' +
+              extra +
+              '<button class="card-add-btn" data-cat="' + cat.id + '" aria-label="Add to ' + escapeHtml(cat.name) + '">' +
+                '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>' +
+            '</div>' + note + rows +
+          '</section>');
+      }
+
+      let html = '';
+      if (entries.length === 0) {
+        html += '<div class="empty-state">' + (viewingPastDay
+          ? 'Nothing was logged on this day.'
+          : 'Nothing logged yet today. Tap <b>Talk to AI</b> and say what you did, or add a line yourself.') + '</div>';
+      }
+      html += cards.join('');
+      if (emptyCats.length > 0) {
+        html += '<section class="more"><h2 class="more-title">Add to another category</h2><div class="chips">' +
+          emptyCats.map(c =>
+            '<button class="chip-add" data-cat="' + c.id + '" style="--c:' + (CAT_COLORS[c.id] || '#b4c2c0') + '"><i class="dot"></i>' +
+            escapeHtml(c.name) + '</button>').join('') +
+          '</div></section>';
+      }
+      document.getElementById('cards-container').innerHTML = html;
     }
 
     function renderHistory() {
@@ -1607,23 +1327,38 @@
         .sort((a, b) => b.localeCompare(a));
 
       if (keys.length === 0) {
-        listEl.innerHTML = `<div class="empty-msg">No saved days yet. Start logging on the main page!</div>`;
+        listEl.innerHTML = '<div class="empty-state">No saved days yet. Log something on the main page and it will show up here.</div>';
         return;
       }
 
       listEl.innerHTML = keys.map(key => {
         const entries = allData[key];
         const water = getWaterTotal(entries);
-        const tag = key === todayKey ? ' · Today' : '';
-        return `
-          <div class="history-item" data-date="${key}">
-            <div>
-              <div class="history-date">${formatDisplayDate(key)}${tag}</div>
-              <div class="history-meta">${entries.length} ${entries.length === 1 ? 'entry' : 'entries'} · Water ${water} ml</div>
-            </div>
-            <span style="color:var(--muted);font-size:20px;">›</span>
-          </div>`;
+        const pct = Math.min(100, Math.round((water / WATER_TARGET_ML) * 100));
+        const n = entries.length;
+        return '<button class="history-item" data-date="' + key + '">' +
+          '<div class="h-main"><div class="h-day">' + weekdayLong(key) + (key === todayKey ? ' (today)' : '') + '</div>' +
+          '<div class="h-date">' + shortDate(key) + '</div></div>' +
+          '<div class="h-side"><div class="h-water">' + water + '<span> ml</span></div>' +
+          '<div class="h-bar"><i style="width:' + pct + '%"></i></div>' +
+          '<div class="h-count">' + n + (n === 1 ? ' entry' : ' entries') + '</div></div>' +
+          '</button>';
       }).join('');
+    }
+
+    function addQuickWater(ml) {
+      const key = activeDateKey;
+      if (!Array.isArray(allData[key])) allData[key] = [];
+      allData[key].push({
+        id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+        text: 'water ' + ml + 'ml',
+        cat: 'water',
+        time: getCurrentHHMM(),
+        createdAt: Date.now()
+      });
+      saveData();
+      renderMain();
+      showToast('Added ' + ml + ' ml');
     }
 
     // =========================================================================
@@ -1644,7 +1379,7 @@
 
     function openAddModal(forcedCat = null) {
       editingEntryId = null;
-      document.getElementById('modal-title').textContent = 'Add Entry';
+      document.getElementById('modal-title').textContent = 'Add entry';
       textInput.value = '';
       timeInput.value = getCurrentHHMM();
       deleteBtn.style.display = 'none';
@@ -1653,10 +1388,13 @@
         catSelect.value = forcedCat;
         manualCategoryLocked = true;
         autoTag.textContent = '';
+        const fc = CATEGORIES.find(c => c.id === forcedCat);
+        textInput.placeholder = fc && fc.hint ? fc.name + ': ' + fc.hint : 'Type a line';
       } else {
         catSelect.value = 'food';
         manualCategoryLocked = false;
-        autoTag.textContent = '(auto)';
+        autoTag.textContent = getAiKey() ? '(AI will pick)' : '(auto)';
+        textInput.placeholder = 'e.g. water 200 or idli 3 sambar';
       }
 
       entryModal.classList.add('open');
@@ -1670,7 +1408,7 @@
 
       editingEntryId = entryId;
       manualCategoryLocked = true;
-      document.getElementById('modal-title').textContent = 'Edit Entry';
+      document.getElementById('modal-title').textContent = 'Edit entry';
       textInput.value = item.text;
       catSelect.value = item.cat;
       timeInput.value = item.time || getCurrentHHMM();
@@ -1714,7 +1452,7 @@
           catSelect.value = aiCat;
           aiUsed = true;
         } else {
-          showToast('AI not available, used keywords');
+          showToast('AI not available, used keyword sorting');
         }
       }
       const cat = catSelect.value;
@@ -1853,8 +1591,13 @@
     // =========================================================================
     document.getElementById('big-add-btn').addEventListener('click', () => openAddModal(null));
 
+    document.getElementById('tank-quick').addEventListener('click', e => {
+      const b = e.target.closest('[data-ml]');
+      if (b) addQuickWater(Number(b.dataset.ml));
+    });
+
     document.getElementById('cards-container').addEventListener('click', e => {
-      const addBtn = e.target.closest('.card-add-btn');
+      const addBtn = e.target.closest('.card-add-btn, .chip-add');
       if (addBtn) {
         openAddModal(addBtn.dataset.cat);
         return;
