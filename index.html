@@ -71,7 +71,7 @@
     @keyframes rustle { 0% { transform: skewX(0); } 20% { transform: skewX(2.4deg); } 45% { transform: skewX(-2deg); } 70% { transform: skewX(1deg); } 100% { transform: skewX(0); } }
 
     /* ---------- Forest floor to meadow ---------- */
-    .ground { background-color: var(--mist); background-image: linear-gradient(180deg, #40513b 0, #609966 150px, #9dc08b 520px, #edf1d6 900px); padding: 18px 0 40px; }
+    .ground { background-color: var(--mist); background-image: linear-gradient(180deg, var(--f4) 0, var(--g2) 150px, var(--g3) 520px, var(--g4) 900px); padding: 18px 0 40px; }
 
     /* Water tank (the hero) */
     .tank { position: relative; overflow: hidden; background: var(--foam); border-radius: 28px; padding: 22px 20px 18px; margin-bottom: 14px; isolation: isolate; box-shadow: 0 14px 34px rgba(26,38,24,0.35); --fillc: var(--sea-light); --wavec: var(--sea); }
@@ -153,8 +153,24 @@
     .wl.l1 { top: 12px; --c: var(--sea-light); }
     .wl.l2 { top: 40px; --c: var(--sea); animation-duration: 9s; animation-direction: reverse; }
     .wl.l3 { top: 74px; --c: #7fa4b6; animation-duration: 7s; }
-    .wash { position: absolute; inset: 0; animation: wash 7s ease-in-out infinite; }
-    @keyframes wash { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    /* tide: the water rushes up the sand, hits, then slides back leaving wet sand and drips. One 11 s cycle, everything in step. */
+    .shore { --sea-h: calc(200px + var(--tide, 0) * 1.4px); }
+    .wash { position: absolute; inset: 0; animation: tide 11s infinite; }
+    @keyframes tide {
+      0% { transform: translateY(74px); animation-timing-function: cubic-bezier(0.18, 0.72, 0.22, 1); }
+      21% { transform: translateY(-18px); animation-timing-function: cubic-bezier(0.3, 0, 0.4, 1); }
+      28% { transform: translateY(-12px); animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1); }
+      100% { transform: translateY(74px); }
+    }
+    .wet { position: absolute; left: 0; right: 0; z-index: 1; bottom: calc(var(--sea-h) - 74px); height: 98px; pointer-events: none; opacity: 0; transition: bottom 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      background: linear-gradient(180deg, rgba(112,84,56,0) 0, rgba(112,84,56,0.36) 16px, rgba(112,84,56,0.44) 100%); animation: wet 11s infinite; }
+    @keyframes wet { 0%, 17% { opacity: 0; } 23% { opacity: 1; } 38% { opacity: 0.9; } 90%, 100% { opacity: 0; } }
+    .hitfoam { position: absolute; left: 0; right: 0; z-index: 3; bottom: calc(var(--sea-h) + 2px); height: 14px; pointer-events: none; opacity: 0; transition: bottom 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      background: radial-gradient(circle at 10px 9px, rgba(255,255,255,0.95) 0 3.5px, transparent 4.5px) 0 0 / 22px 14px repeat-x, radial-gradient(circle at 21px 5px, rgba(255,255,255,0.8) 0 2.5px, transparent 3.5px) 0 0 / 31px 14px repeat-x; animation: hitfoam 11s infinite; }
+    @keyframes hitfoam { 0%, 18% { opacity: 0; } 23% { opacity: 1; } 48% { opacity: 0; } 100% { opacity: 0; } }
+    .drip { position: absolute; z-index: 1; width: 2px; height: 20px; border-radius: 2px; opacity: 0; pointer-events: none; transition: bottom 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      background: linear-gradient(180deg, rgba(112,84,56,0), rgba(112,84,56,0.55) 70%, rgba(173,196,206,0.9)); animation: drip 11s infinite; }
+    @keyframes drip { 0%, 29% { opacity: 0; transform: translateY(-10px) scaleY(0.3); } 36% { opacity: 0.7; } 70% { opacity: 0.45; transform: translateY(30px) scaleY(1); } 88%, 100% { opacity: 0; transform: translateY(40px) scaleY(1); } }
     .ripple { position: absolute; width: 20px; height: 20px; margin: -10px 0 0 -10px; border: 2px solid rgba(241,240,232,0.9); border-radius: 50%; animation: ripple 1.3s ease-out forwards; pointer-events: none; }
     @keyframes ripple { to { transform: scale(7); opacity: 0; } }
 
@@ -247,7 +263,7 @@
       .chat-sheet { height: 80vh; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .wave, .wl, .wash, .f-svg, .forest.sway .f-svg { animation: none; }
+      .wave, .wl, .wash, .f-svg, .forest.sway .f-svg, .wet, .hitfoam, .drip { animation: none; }
       .tank-fill, .sea, .toast { transition: none; }
       .overlay.open, .overlay.open .sheet { animation: none; }
     }
@@ -255,7 +271,12 @@
     body { --sky-top: #adc4ce; --sky-bottom: #edf1d6; --head: #40513b; --head-sub: #5f6f52; --head-bg: rgba(64,81,59,0.08); --head-line: rgba(64,81,59,0.22); --cloud: rgba(241,240,232,0.96); --sun-c: #f3dba6; }
     body[data-mood="dawn"] { --sky-top: #eee0c9; --sky-bottom: #f1f0e8; --cloud: rgba(254,250,224,0.95); --sun-c: #e2bf8f; }
     body[data-mood="dusk"] { --sky-top: #96b6c5; --sky-bottom: #eee0c9; --cloud: rgba(238,224,201,0.92); --sun-c: #d9b48c; }
-    body[data-mood="night"] { --sky-top: #232e21; --sky-bottom: #40513b; --head: #fefae0; --head-sub: #a9b388; --head-bg: rgba(254,250,224,0.1); --head-line: rgba(254,250,224,0.3); --cloud: rgba(173,196,206,0.16); }
+    /* forest + ground colours per time of day (back layers are lighter and hazier) */
+    body { --f1: #a9c19a; --f2: #77a37c; --f3: #4c7e5d; --f4: #34604a; --hl: rgba(255,255,226,0.20); --fmist: #eef1d6; --g2: #609966; --g3: #9dc08b; --g4: #edf1d6; }
+    body[data-mood="dawn"] { --f1: #cdc7a2; --f2: #98b48a; --f3: #628b68; --f4: #3b6651; --hl: rgba(255,236,200,0.26); --fmist: #f5e6cb; --g2: #66996a; --g3: #a6c492; }
+    body[data-mood="dusk"] { --f1: #93aaa2; --f2: #648e82; --f3: #437066; --f4: #2c524d; --hl: rgba(255,214,160,0.22); --fmist: #e8d4b8; --g2: #4f8268; --g3: #8db38f; }
+    body[data-mood="night"] { --sky-top: #16242e; --sky-bottom: #32535a; --f1: #44696f; --f2: #335359; --f3: #233f46; --f4: #172d34; --hl: rgba(176,226,240,0.22); --fmist: #78a7ad; --g2: #27474a; --g3: #3d6a5b; --g4: #8fb59b; }
+    body[data-mood="night"] { --sky-top: #16242e; --sky-bottom: #32535a; --head: #fefae0; --head-sub: #a9b388; --head-bg: rgba(254,250,224,0.1); --head-line: rgba(254,250,224,0.3); --cloud: rgba(173,196,206,0.16); }
 
     .clock { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: 0.005em; font-variant-numeric: tabular-nums; color: var(--head); margin-top: 6px; }
 
@@ -500,6 +521,41 @@
     .cchip.on { background: var(--forest); color: var(--cream); border-color: var(--forest); }
     .achip { background: rgba(143,208,242,0.28); border-color: rgba(74,47,79,0.25); font-weight: 500; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     @media (prefers-reduced-motion: reduce) { .overlay.open .sheet { animation: none; } }
+    /* swipe on entries */
+    .entry-item { position: relative; overflow: hidden; touch-action: pan-y; }
+    .entry-item > * { transform: translateX(var(--sx, 0px)); transition: transform 230ms cubic-bezier(0.32, 0.72, 0, 1); }
+    .entry-item.drag > * { transition: none; }
+    .entry-item.swiping { cursor: grabbing; }
+    .entry-item.swiping::after { position: absolute; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 700; pointer-events: none; }
+    .entry-item[data-dir="del"].swiping { background: rgba(224,112,96,0.2); }
+    .entry-item[data-dir="del"].swiping::after { content: "Delete"; right: 6px; color: #a5402f; }
+    .entry-item[data-dir="del"].armed { background: rgba(224,112,96,0.38); }
+    .entry-item[data-dir="edit"].swiping { background: rgba(143,208,242,0.28); }
+    .entry-item[data-dir="edit"].swiping::after { content: "Edit"; left: 6px; color: #2c6f93; }
+    .entry-item[data-dir="edit"].armed { background: rgba(143,208,242,0.5); }
+    #undo-bar { position: fixed; left: 50%; bottom: calc(96px + var(--safe-bottom)); transform: translateX(-50%) translateY(16px); display: flex; align-items: center; gap: 14px; background: #40513b; color: #fefae0; padding: 8px 8px 8px 18px; border-radius: 999px; font-size: 15px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; z-index: 9100; transition: opacity 200ms ease, transform 260ms cubic-bezier(0.32, 0.72, 0, 1); box-shadow: 0 8px 22px rgba(0,0,0,0.3); }
+    #undo-bar.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+    #undo-bar button { min-height: 36px; padding: 0 16px; border: none; border-radius: 999px; background: #fefae0; color: #40513b; font: inherit; font-weight: 700; cursor: pointer; }
+    /* weather sky */
+    .wx-rain, .wx-snow, .wx-fog, .wx-flash { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+    .wx-rain i { position: absolute; top: -20px; width: 1.5px; height: 16px; background: linear-gradient(180deg, rgba(255,255,255,0), rgba(235,245,252,0.75)); transform: rotate(12deg); animation: rainfall linear infinite; }
+    @keyframes rainfall { to { transform: translate(-30px, 300px) rotate(12deg); } }
+    .wx-snow i { position: absolute; top: -10px; width: 5px; height: 5px; border-radius: 50%; background: #fff; opacity: 0.9; animation: snowfall linear infinite; }
+    @keyframes snowfall { 0% { transform: translate(0, 0); } 50% { transform: translate(14px, 150px); } 100% { transform: translate(-8px, 300px); } }
+    .wx-fog { background: linear-gradient(180deg, rgba(238,241,230,0.15), rgba(238,241,230,0.62)); }
+    .wx-flash { background: #fff; }
+    body[data-wx="rain"] .wx-rain, body[data-wx="drizzle"] .wx-rain, body[data-wx="storm"] .wx-rain { opacity: 1; }
+    body[data-wx="drizzle"] .wx-rain i:nth-child(2n) { display: none; }
+    body[data-wx="snow"] .wx-snow, body[data-wx="fog"] .wx-fog { opacity: 1; }
+    body[data-wx="storm"] .wx-flash { animation: flash 9s infinite; }
+    @keyframes flash { 0%, 91%, 94%, 100% { opacity: 0; } 92% { opacity: 0.55; } 93% { opacity: 0.1; } 93.6% { opacity: 0.4; } }
+    body[data-wx="rain"][data-mood="day"], body[data-wx="storm"][data-mood="day"], body[data-wx="drizzle"][data-mood="day"], body[data-wx="rain"][data-mood="dawn"], body[data-wx="rain"][data-mood="dusk"] { --sky-top: #7f929b; --sky-bottom: #c3ccc6; --cloud: rgba(120,134,142,0.95); }
+    body[data-wx="storm"][data-mood="day"] { --sky-top: #55646d; --sky-bottom: #8d9a9d; }
+    body[data-wx="cloud"][data-mood="day"], body[data-wx="fog"][data-mood="day"], body[data-wx="snow"][data-mood="day"] { --sky-top: #a3b4bb; --sky-bottom: #e2e6d6; --cloud: rgba(226,231,232,0.98); }
+    body[data-wx="rain"] .sun, body[data-wx="storm"] .sun, body[data-wx="drizzle"] .sun, body[data-wx="cloud"] .sun, body[data-wx="fog"] .sun, body[data-wx="snow"] .sun { opacity: 0.25; }
+    body[data-wx="rain"] .bird, body[data-wx="storm"] .bird, body[data-wx="drizzle"] .bird, body[data-wx="snow"] .bird { display: none; }
+    body[data-wx="rain"] .star, body[data-wx="storm"] .star, body[data-wx="cloud"] .star, body[data-wx="fog"] .star, body[data-wx="drizzle"] .star { opacity: 0.2 !important; }
+    @media (prefers-reduced-motion: reduce) { .wx-rain i, .wx-snow i, body[data-wx="storm"] .wx-flash { animation: none; } #undo-bar { transition: none; } }
     /* scroll motion (GSAP ScrollTrigger) */
     #scroll-water { position: fixed; left: 0; top: 0; right: 0; height: 3px; z-index: 9000; transform: scaleX(0); transform-origin: 0 50%; background: linear-gradient(90deg, #bfe6f7, #5fb6e3); border-radius: 0 3px 3px 0; opacity: 0; pointer-events: none; transition: opacity .3s; }
     body:has(#main-screen.active) #scroll-water { opacity: .9; }
@@ -551,8 +607,6 @@
     @keyframes hop { 40% { transform: translateY(-16px) rotate(-8deg); } 100% { transform: translateY(0); } }
 
     .glint { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #f1f0e8; opacity: 0; animation: twinkle 3.5s ease-in-out infinite; }
-    body[data-mood="night"] .shore::before { content: ""; position: absolute; inset: 0; z-index: 3; background: rgba(35,46,33,0.32); pointer-events: none; }
-    body[data-mood="dusk"] .shore::before { content: ""; position: absolute; inset: 0; z-index: 3; background: rgba(185,148,112,0.14); pointer-events: none; }
 
     @media (prefers-reduced-motion: reduce) {
       .cloud, .bird, .leaf, .fly, .star, .crab, .crab .legs, .glint { animation: none !important; }
@@ -594,7 +648,7 @@
     @keyframes lvEmber { 0% { transform: translate(0,0); opacity: 0 } 12% { opacity: 1 } 100% { transform: translate(-18px,-110px); opacity: 0 } }
     /* page chrome over the picture */
     body.theme-volcano .sky, body.theme-volcano .ground, body.theme-volcano .shore { background: transparent !important; }
-    body.theme-volcano .sky-fx, body.theme-volcano .forest-fx, body.theme-volcano .sea, body.theme-volcano .shore .deco, body.theme-volcano .crab { display: none !important; }
+    body.theme-volcano .wet, body.theme-volcano .hitfoam, body.theme-volcano .drip, body.theme-volcano .sky-fx, body.theme-volcano .forest-fx, body.theme-volcano .sea, body.theme-volcano .shore .deco, body.theme-volcano .crab { display: none !important; }
     body.theme-volcano .forest { visibility: hidden; height: 330px; }
     body.theme-volcano, body.theme-volcano[data-mood] { --head: #2c2622; --head-sub: #4d3f35; --head-bg: rgba(255,255,255,.55); --head-line: rgba(44,38,34,.25); }
     body.theme-volcano .shore::before { display: none !important; }
@@ -721,6 +775,7 @@
         <p class="shore-sub">A filled shell means you reached your water target that day. Tap a shell to open the day.</p>
         <div class="shells" id="shells"></div>
       </div>
+      <div class="wet" aria-hidden="true"></div><div class="hitfoam" aria-hidden="true"></div><i class="drip" style="left:83%;bottom:calc(var(--sea-h) + -26px);animation-delay:1.2s"></i><i class="drip" style="left:92%;bottom:calc(var(--sea-h) + -4px);animation-delay:1.3s"></i><i class="drip" style="left:87%;bottom:calc(var(--sea-h) + -5px);animation-delay:0.8s"></i><i class="drip" style="left:63%;bottom:calc(var(--sea-h) + -10px);animation-delay:1.5s"></i><i class="drip" style="left:87%;bottom:calc(var(--sea-h) + -33px);animation-delay:1.4s"></i><i class="drip" style="left:18%;bottom:calc(var(--sea-h) + -23px);animation-delay:0.8s"></i><i class="drip" style="left:35%;bottom:calc(var(--sea-h) + -22px);animation-delay:0.9s"></i><i class="drip" style="left:77%;bottom:calc(var(--sea-h) + -27px);animation-delay:0.0s"></i><i class="drip" style="left:31%;bottom:calc(var(--sea-h) + -21px);animation-delay:0.4s"></i><i class="drip" style="left:53%;bottom:calc(var(--sea-h) + -29px);animation-delay:1.2s"></i><i class="drip" style="left:13%;bottom:calc(var(--sea-h) + -30px);animation-delay:1.0s"></i>
       <div class="sea" id="sea" aria-hidden="true">
         <div class="wash">
           <div class="wl foam"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 26 C75 20 225 32 300 26 C375 20 525 32 600 26 C675 20 825 32 900 26 C975 20 1125 32 1200 26 V60 H0Z"/></svg></div>
@@ -2106,7 +2161,66 @@
     // =========================================================================
     // 8b. THE WORLD: forest at the top, shore at the bottom
     // =========================================================================
-    const FOREST_HTML = "<div class=\"f-layer\" data-speed=\"0.42\"><svg class=\"f-svg\" aria-hidden=\"true\"><defs><pattern id=\"pb%S%\" width=\"330\" height=\"170\" patternUnits=\"userSpaceOnUse\"><g fill=\"#A9B388\" opacity=\"1\"><polygon points=\"-298.1,87.8 -313.7,124.8 -282.6,124.8\"/><polygon points=\"-298.1,109.2 -319.4,146.2 -276.9,146.2\"/><polygon points=\"-298.1,130.6 -325.0,167.5 -271.2,167.5\"/><rect x=\"-301.0\" y=\"158.5\" width=\"5.7\" height=\"13.5\"/><polygon points=\"31.9,87.8 16.3,124.8 47.4,124.8\"/><polygon points=\"31.9,109.2 10.6,146.2 53.1,146.2\"/><polygon points=\"31.9,130.6 5.0,167.5 58.8,167.5\"/><rect x=\"29.0\" y=\"158.5\" width=\"5.7\" height=\"13.5\"/><polygon points=\"361.9,87.8 346.3,124.8 377.4,124.8\"/><polygon points=\"361.9,109.2 340.6,146.2 383.1,146.2\"/><polygon points=\"361.9,130.6 335.0,167.5 388.8,167.5\"/><rect x=\"359.0\" y=\"158.5\" width=\"5.7\" height=\"13.5\"/><polygon points=\"-230.8,86.9 -242.7,124.3 -218.9,124.3\"/><polygon points=\"-230.8,108.5 -247.1,145.9 -214.6,145.9\"/><polygon points=\"-230.8,130.1 -251.4,167.5 -210.2,167.5\"/><rect x=\"-233.0\" y=\"158.4\" width=\"4.3\" height=\"13.6\"/><polygon points=\"99.2,86.9 87.3,124.3 111.1,124.3\"/><polygon points=\"99.2,108.5 82.9,145.9 115.4,145.9\"/><polygon points=\"99.2,130.1 78.6,167.5 119.8,167.5\"/><rect x=\"97.0\" y=\"158.4\" width=\"4.3\" height=\"13.6\"/><polygon points=\"429.2,86.9 417.3,124.3 441.1,124.3\"/><polygon points=\"429.2,108.5 412.9,145.9 445.4,145.9\"/><polygon points=\"429.2,130.1 408.6,167.5 449.8,167.5\"/><rect x=\"427.0\" y=\"158.4\" width=\"4.3\" height=\"13.6\"/><polygon points=\"-161.9,79.5 -173.4,120.2 -150.4,120.2\"/><polygon points=\"-161.9,103.0 -177.5,143.7 -146.3,143.7\"/><polygon points=\"-161.9,126.5 -181.7,167.3 -142.1,167.3\"/><rect x=\"-164.0\" y=\"157.3\" width=\"4.2\" height=\"14.7\"/><polygon points=\"168.1,79.5 156.6,120.2 179.6,120.2\"/><polygon points=\"168.1,103.0 152.5,143.7 183.7,143.7\"/><polygon points=\"168.1,126.5 148.3,167.3 187.9,167.3\"/><rect x=\"166.0\" y=\"157.3\" width=\"4.2\" height=\"14.7\"/><polygon points=\"498.1,79.5 486.6,120.2 509.6,120.2\"/><polygon points=\"498.1,103.0 482.5,143.7 513.7,143.7\"/><polygon points=\"498.1,126.5 478.3,167.3 517.9,167.3\"/><rect x=\"496.0\" y=\"157.3\" width=\"4.2\" height=\"14.7\"/><polygon points=\"-108.7,78.9 -123.2,119.9 -94.3,119.9\"/><polygon points=\"-108.7,102.6 -128.4,143.6 -89.0,143.6\"/><polygon points=\"-108.7,126.2 -133.7,167.3 -83.8,167.3\"/><rect x=\"-111.3\" y=\"157.2\" width=\"5.2\" height=\"14.8\"/><polygon points=\"221.3,78.9 206.8,119.9 235.7,119.9\"/><polygon points=\"221.3,102.6 201.6,143.6 241.0,143.6\"/><polygon points=\"221.3,126.2 196.3,167.3 246.2,167.3\"/><rect x=\"218.7\" y=\"157.2\" width=\"5.2\" height=\"14.8\"/><polygon points=\"551.3,78.9 536.8,119.9 565.7,119.9\"/><polygon points=\"551.3,102.6 531.6,143.6 571.0,143.6\"/><polygon points=\"551.3,126.2 526.3,167.3 576.2,167.3\"/><rect x=\"548.7\" y=\"157.2\" width=\"5.2\" height=\"14.8\"/><polygon points=\"-21.5,73.3 -35.8,116.8 -7.3,116.8\"/><polygon points=\"-21.5,98.4 -41.0,141.9 -2.1,141.9\"/><polygon points=\"-21.5,123.6 -46.1,167.1 3.0,167.1\"/><rect x=\"-24.1\" y=\"156.5\" width=\"5.2\" height=\"15.5\"/><polygon points=\"308.5,73.3 294.2,116.8 322.7,116.8\"/><polygon points=\"308.5,98.4 289.0,141.9 327.9,141.9\"/><polygon points=\"308.5,123.6 283.9,167.1 333.0,167.1\"/><rect x=\"305.9\" y=\"156.5\" width=\"5.2\" height=\"15.5\"/><polygon points=\"638.5,73.3 624.2,116.8 652.7,116.8\"/><polygon points=\"638.5,98.4 619.0,141.9 657.9,141.9\"/><polygon points=\"638.5,123.6 613.9,167.1 663.0,167.1\"/><rect x=\"635.9\" y=\"156.5\" width=\"5.2\" height=\"15.5\"/></g></pattern></defs><rect width=\"100%\" height=\"100%\" fill=\"url(#pb%S%)\"/></svg></div><div class=\"f-layer\" data-speed=\"0.26\"><svg class=\"f-svg\" aria-hidden=\"true\"><defs><pattern id=\"pm%S%\" width=\"290\" height=\"170\" patternUnits=\"userSpaceOnUse\"><g fill=\"#609966\" opacity=\"1\"><polygon points=\"-242.7,42.0 -263.5,99.6 -221.9,99.6\"/><polygon points=\"-242.7,75.2 -271.0,132.9 -214.3,132.9\"/><polygon points=\"-242.7,108.5 -278.6,166.2 -206.7,166.2\"/><rect x=\"-246.4\" y=\"152.1\" width=\"7.6\" height=\"19.9\"/><polygon points=\"47.3,42.0 26.5,99.6 68.1,99.6\"/><polygon points=\"47.3,75.2 19.0,132.9 75.7,132.9\"/><polygon points=\"47.3,108.5 11.4,166.2 83.3,166.2\"/><rect x=\"43.6\" y=\"152.1\" width=\"7.6\" height=\"19.9\"/><polygon points=\"337.3,42.0 316.5,99.6 358.1,99.6\"/><polygon points=\"337.3,75.2 309.0,132.9 365.7,132.9\"/><polygon points=\"337.3,108.5 301.4,166.2 373.3,166.2\"/><rect x=\"333.6\" y=\"152.1\" width=\"7.6\" height=\"19.9\"/><polygon points=\"-178.8,61.9 -197.5,110.5 -160.2,110.5\"/><polygon points=\"-178.8,90.0 -204.2,138.7 -153.5,138.7\"/><polygon points=\"-178.8,118.1 -211.0,166.8 -146.7,166.8\"/><rect x=\"-182.2\" y=\"154.9\" width=\"6.8\" height=\"17.1\"/><polygon points=\"111.2,61.9 92.5,110.5 129.8,110.5\"/><polygon points=\"111.2,90.0 85.8,138.7 136.5,138.7\"/><polygon points=\"111.2,118.1 79.0,166.8 143.3,166.8\"/><rect x=\"107.8\" y=\"154.9\" width=\"6.8\" height=\"17.1\"/><polygon points=\"401.2,61.9 382.5,110.5 419.8,110.5\"/><polygon points=\"401.2,90.0 375.8,138.7 426.5,138.7\"/><polygon points=\"401.2,118.1 369.0,166.8 433.3,166.8\"/><rect x=\"397.8\" y=\"154.9\" width=\"6.8\" height=\"17.1\"/><polygon points=\"-116.8,61.1 -133.5,110.1 -100.1,110.1\"/><polygon points=\"-116.8,89.4 -139.6,138.4 -94.0,138.4\"/><polygon points=\"-116.8,117.7 -145.7,166.7 -87.9,166.7\"/><rect x=\"-119.8\" y=\"154.8\" width=\"6.1\" height=\"17.2\"/><polygon points=\"173.2,61.1 156.5,110.1 189.9,110.1\"/><polygon points=\"173.2,89.4 150.4,138.4 196.0,138.4\"/><polygon points=\"173.2,117.7 144.3,166.7 202.1,166.7\"/><rect x=\"170.2\" y=\"154.8\" width=\"6.1\" height=\"17.2\"/><polygon points=\"463.2,61.1 446.5,110.1 479.9,110.1\"/><polygon points=\"463.2,89.4 440.4,138.4 486.0,138.4\"/><polygon points=\"463.2,117.7 434.3,166.7 492.1,166.7\"/><rect x=\"460.2\" y=\"154.8\" width=\"6.1\" height=\"17.2\"/><polygon points=\"-48.7,74.7 -68.3,117.6 -29.0,117.6\"/><polygon points=\"-48.7,99.5 -75.5,142.4 -21.8,142.4\"/><polygon points=\"-48.7,124.3 -82.7,167.1 -14.6,167.1\"/><rect x=\"-52.2\" y=\"156.7\" width=\"7.2\" height=\"15.3\"/><polygon points=\"241.3,74.7 221.7,117.6 261.0,117.6\"/><polygon points=\"241.3,99.5 214.5,142.4 268.2,142.4\"/><polygon points=\"241.3,124.3 207.3,167.1 275.4,167.1\"/><rect x=\"237.8\" y=\"156.7\" width=\"7.2\" height=\"15.3\"/><polygon points=\"531.3,74.7 511.7,117.6 551.0,117.6\"/><polygon points=\"531.3,99.5 504.5,142.4 558.2,142.4\"/><polygon points=\"531.3,124.3 497.3,167.1 565.4,167.1\"/><rect x=\"527.8\" y=\"156.7\" width=\"7.2\" height=\"15.3\"/></g></pattern></defs><rect width=\"100%\" height=\"100%\" fill=\"url(#pm%S%)\"/></svg></div><div class=\"f-layer\" data-speed=\"0.1\"><svg class=\"f-svg\" aria-hidden=\"true\"><defs><pattern id=\"pf%S%\" width=\"360\" height=\"170\" patternUnits=\"userSpaceOnUse\"><g fill=\"#40513B\" opacity=\"1\"><circle cx=\"-292.1\" cy=\"82.0\" r=\"43.6\"/><circle cx=\"-318.3\" cy=\"99.4\" r=\"30.6\"/><circle cx=\"-265.9\" cy=\"99.4\" r=\"30.6\"/><rect x=\"-296.5\" y=\"103.8\" width=\"8.7\" height=\"58.2\"/><circle cx=\"67.9\" cy=\"82.0\" r=\"43.6\"/><circle cx=\"41.7\" cy=\"99.4\" r=\"30.6\"/><circle cx=\"94.1\" cy=\"99.4\" r=\"30.6\"/><rect x=\"63.5\" y=\"103.8\" width=\"8.7\" height=\"58.2\"/><circle cx=\"427.9\" cy=\"82.0\" r=\"43.6\"/><circle cx=\"401.7\" cy=\"99.4\" r=\"30.6\"/><circle cx=\"454.1\" cy=\"99.4\" r=\"30.6\"/><rect x=\"423.5\" y=\"103.8\" width=\"8.7\" height=\"58.2\"/><polygon points=\"-165.5,21.4 -189.7,83.8 -141.4,83.8\"/><polygon points=\"-165.5,57.4 -198.4,119.8 -132.7,119.8\"/><polygon points=\"-165.5,93.5 -207.2,155.8 -123.9,155.8\"/><rect x=\"-169.9\" y=\"140.6\" width=\"8.8\" height=\"21.4\"/><polygon points=\"194.5,21.4 170.3,83.8 218.6,83.8\"/><polygon points=\"194.5,57.4 161.6,119.8 227.3,119.8\"/><polygon points=\"194.5,93.5 152.8,155.8 236.1,155.8\"/><rect x=\"190.1\" y=\"140.6\" width=\"8.8\" height=\"21.4\"/><polygon points=\"554.5,21.4 530.3,83.8 578.6,83.8\"/><polygon points=\"554.5,57.4 521.6,119.8 587.3,119.8\"/><polygon points=\"554.5,93.5 512.8,155.8 596.1,155.8\"/><rect x=\"550.1\" y=\"140.6\" width=\"8.8\" height=\"21.4\"/><polygon points=\"-58.8,37.7 -83.3,92.7 -34.3,92.7\"/><polygon points=\"-58.8,69.5 -92.2,124.5 -25.4,124.5\"/><polygon points=\"-58.8,101.3 -101.1,156.3 -16.5,156.3\"/><rect x=\"-63.2\" y=\"142.9\" width=\"8.9\" height=\"19.1\"/><polygon points=\"301.2,37.7 276.7,92.7 325.7,92.7\"/><polygon points=\"301.2,69.5 267.8,124.5 334.6,124.5\"/><polygon points=\"301.2,101.3 258.9,156.3 343.5,156.3\"/><rect x=\"296.8\" y=\"142.9\" width=\"8.9\" height=\"19.1\"/><polygon points=\"661.2,37.7 636.7,92.7 685.7,92.7\"/><polygon points=\"661.2,69.5 627.8,124.5 694.6,124.5\"/><polygon points=\"661.2,101.3 618.9,156.3 703.5,156.3\"/><rect x=\"656.8\" y=\"142.9\" width=\"8.9\" height=\"19.1\"/><rect x=\"0\" y=\"156\" width=\"360\" height=\"14\"/></g></pattern></defs><rect width=\"100%\" height=\"100%\" fill=\"url(#pf%S%)\"/></svg></div>";
+    // Forest: four layers of hand-built pines, deeper layers hazier. Colours come from CSS variables so every time of day tints it.
+    function buildForest(idx) {
+      var W = 360, H = 170;
+      function rng(seed) { return function () { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }; }
+      function pine(cx, by, h, w, r) {
+        var t = 4 + Math.floor(r() * 2), ay = by - h, hs = h * 0.58 / (t - 1), tw = Math.max(2, w * 0.06);
+        var P = [[cx, ay]], segs = [];
+        function add(type, c, p) { segs.push({ t: type, c: c, p: p }); P.push(p); }
+        for (var j = 0; j < t; j++) {
+          var tipY = ay + h * (0.3 + 0.58 * j / (t - 1)), hw = w / 2 * (0.38 + 0.62 * j / (t - 1)) * (0.92 + r() * 0.16);
+          var from = P[P.length - 1];
+          add('Q', [cx + hw * 0.3, from[1] + (tipY - from[1]) * (j ? 0.25 : 0.55)], [cx + hw, tipY]);
+          if (j < t - 1) add('L', null, [cx + hw * 0.46, tipY - hs * 0.12]);
+        }
+        var nTier = segs.length, lastTipY = P[P.length - 1][1];
+        add('L', null, [cx + tw, lastTipY - 1]); add('L', null, [cx + tw, by + 8]);
+        function mx(p) { return [2 * cx - p[0], p[1]]; }
+        var d = 'M' + cx.toFixed(1) + ',' + ay.toFixed(1);
+        segs.forEach(function (s) { d += s.t === 'Q' ? 'Q' + s.c[0].toFixed(1) + ',' + s.c[1].toFixed(1) + ' ' + s.p[0].toFixed(1) + ',' + s.p[1].toFixed(1) : 'L' + s.p[0].toFixed(1) + ',' + s.p[1].toFixed(1); });
+        d += 'L' + (cx - tw).toFixed(1) + ',' + (by + 8).toFixed(1);
+        for (var k = segs.length; k >= 1; k--) {
+          var s2 = segs[k - 1], to = mx(P[k - 1]);
+          d += s2.t === 'Q' ? 'Q' + mx(s2.c)[0].toFixed(1) + ',' + s2.c[1].toFixed(1) + ' ' + to[0].toFixed(1) + ',' + to[1].toFixed(1) : 'L' + to[0].toFixed(1) + ',' + to[1].toFixed(1);
+        }
+        d += 'Z';
+        // lit side (left, toward the moon / sun) as a slim wedge along the edge
+        var hl = 'M' + cx.toFixed(1) + ',' + ay.toFixed(1);
+        for (var q = 0; q < nTier; q++) {
+          var s3 = segs[q], p3 = mx(s3.p);
+          hl += s3.t === 'Q' ? 'Q' + mx(s3.c)[0].toFixed(1) + ',' + s3.c[1].toFixed(1) + ' ' + p3[0].toFixed(1) + ',' + p3[1].toFixed(1) : 'L' + p3[0].toFixed(1) + ',' + p3[1].toFixed(1);
+        }
+        hl += 'L' + (cx - w * 0.04).toFixed(1) + ',' + lastTipY.toFixed(1) + 'L' + (cx + w * 0.02).toFixed(1) + ',' + (ay + h * 0.5).toFixed(1) + 'Z';
+        return { d: d, hl: hl };
+      }
+      var layers = [
+        { n: 11, h: [50, 72], w: [0.5, 0.62], by: H - 30, v: 'f1', fog: 0.6, sp: 0.42 },
+        { n: 8, h: [66, 94], w: [0.5, 0.62], by: H - 16, v: 'f2', fog: 0.42, sp: 0.3 },
+        { n: 6, h: [90, 124], w: [0.5, 0.64], by: H - 4, v: 'f3', fog: 0.26, sp: 0.18 },
+        { n: 4, h: [118, 158], w: [0.52, 0.66], by: H + 6, v: 'f4', fog: 0, sp: 0.08 }
+      ];
+      var out = '';
+      layers.forEach(function (L, li) {
+        var r = rng(17 + li * 101 + 7), trees = '', gid = 'g' + idx + '_' + li;
+        for (var i = 0; i < L.n; i++) {
+          var h = L.h[0] + r() * (L.h[1] - L.h[0]), w = h * (L.w[0] + r() * (L.w[1] - L.w[0])) * 0.62;
+          var cx = (i + 0.5) * W / L.n + (r() - 0.5) * W / L.n * 0.7;
+          [-W, 0, W].forEach(function (off) {
+            var p = pine(cx + off, L.by + (r() - 0.5) * 6, h, w * 1.9, r);
+            trees += '<path d="' + p.d + '" fill="var(--' + L.v + ')"/><path d="' + p.hl + '" fill="var(--hl)"/>';
+          });
+        }
+        var fog = L.fog ? '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0.3" style="stop-color:var(--fmist);stop-opacity:0"/><stop offset="1" style="stop-color:var(--fmist);stop-opacity:' + L.fog + '"/></linearGradient>' : '';
+        var fogRect = L.fog ? '<rect width="' + W + '" height="' + H + '" fill="url(#' + gid + ')"/>' : '';
+        var ground = li === 3 ? '<rect x="0" y="' + (H - 12) + '" width="' + W + '" height="14" fill="var(--f4)"/>' : '';
+        out += '<div class="f-layer" data-speed="' + L.sp + '"><svg class="f-svg" aria-hidden="true"><defs>' + fog +
+          '<pattern id="pf' + idx + '_' + li + '" width="' + W + '" height="' + H + '" patternUnits="userSpaceOnUse">' + trees + fogRect + ground + '</pattern></defs>' +
+          '<rect width="100%" height="100%" fill="url(#pf' + idx + '_' + li + ')"/></svg></div>';
+      });
+      return out;
+    }
 
     function renderShells() {
       const todayKey = getTodayKey();
@@ -2148,7 +2262,7 @@
     window.addEventListener('scroll', onWorldScroll, { passive: true });
 
     document.querySelectorAll('.forest').forEach((el, i) => {
-      el.innerHTML = FOREST_HTML.replace(/%S%/g, String(i));
+      el.innerHTML = buildForest(i);
       // tap the trees and they sway
       el.addEventListener('click', () => {
         el.classList.remove('sway');
@@ -3785,9 +3899,7 @@
       gsap.to('.tank-num', { y: -26, opacity: 0.35, ease: 'none',
         scrollTrigger: { trigger: '#tank', start: 'top 25%', end: 'bottom top', scrub: 0.6 } });
 
-      // 3) shore: tide rises in, sand decorations drift at different speeds, title fades up
-      gsap.fromTo('#sea', { y: 70 }, { y: 0, ease: 'none',
-        scrollTrigger: { trigger: '#shore', start: 'top 85%', end: 'top 25%', scrub: 0.8 } });
+      // 3) shore: sand decorations drift at different speeds, title fades up
       gsap.utils.toArray('#shore .deco').forEach(function (d, i) {
         gsap.fromTo(d, { y: 0 }, { y: (i % 2 ? -1 : 1) * (30 + i * 12), ease: 'none',
           scrollTrigger: { trigger: '#shore', start: 'top bottom', end: 'bottom top', scrub: 0.5 } });
@@ -3969,6 +4081,135 @@
         { x: 0, opacity: 1, backgroundColor: 'rgba(143,208,242,0)', duration: 0.9, ease: 'power3.out', clearProps: 'transform,opacity,backgroundColor' });
     });
   }).observe(cards, { childList: true });
+})();
+</script>
+<script>
+(function () {
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cards = document.getElementById('cards-container');
+
+  // ---------- swipe on entries: left = delete (with undo), right = edit ----------
+  var st = null, lastSwipe = 0, buzzed = false, undoTimer = null;
+  var bar = document.createElement('div'); bar.id = 'undo-bar'; bar.innerHTML = '<span>Entry deleted</span><button type="button">Undo</button>';
+  document.body.appendChild(bar);
+  var undoData = null;
+  bar.querySelector('button').addEventListener('click', function () {
+    if (!undoData) return;
+    var d = undoData; undoData = null; clearTimeout(undoTimer); bar.classList.remove('show');
+    if (!Array.isArray(allData[d.key])) allData[d.key] = [];
+    allData[d.key].splice(Math.min(d.idx, allData[d.key].length), 0, d.entry);
+    saveData(); renderMain();
+  });
+  function deleteById(id) {
+    var arr = allData[activeDateKey] || [], i = arr.findIndex(function (e) { return e.id === id; });
+    if (i < 0) return;
+    undoData = { key: activeDateKey, idx: i, entry: arr[i] };
+    arr.splice(i, 1); saveData(); renderMain();
+    bar.classList.add('show'); clearTimeout(undoTimer); undoTimer = setTimeout(function () { bar.classList.remove('show'); undoData = null; }, 5000);
+  }
+  cards.addEventListener('touchstart', function (e) {
+    var li = e.target.closest('.entry-item');
+    if (!li || e.touches.length !== 1) { st = null; return; }
+    st = { li: li, x: e.touches[0].clientX, y: e.touches[0].clientY, dx: 0, on: false }; buzzed = false;
+  }, { passive: true });
+  cards.addEventListener('touchmove', function (e) {
+    if (!st) return;
+    var dx = e.touches[0].clientX - st.x, dy = e.touches[0].clientY - st.y;
+    if (!st.on) {
+      if (Math.abs(dx) < 10) return;
+      if (Math.abs(dy) > Math.abs(dx)) { st = null; return; }
+      st.on = true; st.li.classList.add('swiping', 'drag');
+    }
+    e.preventDefault();
+    st.dx = Math.max(-150, Math.min(150, dx));
+    st.li.dataset.dir = st.dx < 0 ? 'del' : 'edit';
+    st.li.style.setProperty('--sx', st.dx + 'px');
+    var armed = Math.abs(st.dx) > 88;
+    st.li.classList.toggle('armed', armed);
+    if (armed && !buzzed) { buzzed = true; if (window.__fx) window.__fx.buzz(8); } else if (!armed) buzzed = false;
+  }, { passive: false });
+  function endSwipe() {
+    if (!st || !st.on) { st = null; return; }
+    var s = st; st = null; lastSwipe = Date.now();
+    s.li.classList.remove('drag');
+    var act = Math.abs(s.dx) > 88 ? (s.dx < 0 ? 'del' : 'edit') : null, id = s.li.dataset.id;
+    s.li.style.setProperty('--sx', act === 'del' ? '-110%' : '0px');
+    setTimeout(function () {
+      s.li.classList.remove('swiping', 'armed'); s.li.style.removeProperty('--sx'); delete s.li.dataset.dir;
+      if (act === 'del') deleteById(id); else if (act === 'edit') openEditModal(id);
+    }, act ? 180 : 230);
+  }
+  cards.addEventListener('touchend', endSwipe, { passive: true });
+  cards.addEventListener('touchcancel', endSwipe, { passive: true });
+  cards.addEventListener('click', function (e) { if (Date.now() - lastSwipe < 400) { e.stopPropagation(); e.preventDefault(); } }, true);
+
+  // ---------- weather sky (opt-in, Open-Meteo, no key) ----------
+  var WX_KEY = 'daily_log_wx_v1', wxTimer = null;
+  function wxKind(c) {
+    if (c === 0 || c === 1) return 'clear';
+    if (c === 2 || c === 3) return 'cloud';
+    if (c === 45 || c === 48) return 'fog';
+    if ((c >= 51 && c <= 57)) return 'drizzle';
+    if ((c >= 61 && c <= 67) || (c >= 80 && c <= 82)) return 'rain';
+    if ((c >= 71 && c <= 77) || c === 85 || c === 86) return 'snow';
+    if (c >= 95) return 'storm';
+    return 'clear';
+  }
+  function layer() {
+    document.querySelectorAll('.sky-fx').forEach(function (fx) {
+      if (fx.querySelector('.wx-rain')) return;
+      var r = '<div class="wx-rain">', n = 46, i;
+      for (i = 0; i < n; i++) r += '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;animation-delay:-' + (Math.random() * 1.2).toFixed(2) + 's;animation-duration:' + (0.55 + Math.random() * 0.4).toFixed(2) + 's"></i>';
+      r += '</div><div class="wx-snow">';
+      for (i = 0; i < 30; i++) r += '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;animation-delay:-' + (Math.random() * 8).toFixed(1) + 's;animation-duration:' + (5 + Math.random() * 5).toFixed(1) + 's"></i>';
+      r += '</div><div class="wx-fog"></div><div class="wx-flash"></div>';
+      fx.insertAdjacentHTML('beforeend', r);
+    });
+  }
+  function applyWx(kind) { layer(); if (kind) document.body.dataset.wx = kind; else delete document.body.dataset.wx; }
+  function readWx() { try { return JSON.parse(localStorage.getItem(WX_KEY) || 'null'); } catch (e) { return null; } }
+  function wxOn() { return !!(SETTINGS && SETTINGS.weather && SETTINGS.weather.on); }
+  async function fetchWx(lat, lon) {
+    try {
+      var r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat.toFixed(2) + '&longitude=' + lon.toFixed(2) + '&current=weather_code,temperature_2m');
+      var j = await r.json(), c = j.current;
+      var o = { lat: lat, lon: lon, code: c.weather_code, temp: c.temperature_2m, t: Date.now() };
+      localStorage.setItem(WX_KEY, JSON.stringify(o)); return o;
+    } catch (e) { return null; }
+  }
+  async function refreshWx() {
+    if (!wxOn()) { applyWx(null); label(); return; }
+    var w = readWx();
+    if (!w) { applyWx(null); label(); return; }
+    if (Date.now() - w.t > 30 * 60 * 1000) { var n = await fetchWx(w.lat, w.lon); if (n) w = n; }
+    applyWx(wxKind(w.code)); label(w);
+  }
+  function label(w) {
+    var v = document.querySelector('#set-wx-row .set-val'); if (!v) return;
+    v.textContent = wxOn() ? (w ? Math.round(w.temp) + '° · ' + wxKind(w.code) : 'On') : 'Off';
+  }
+  function setWx(on) {
+    SETTINGS.weather = { on: on }; saveSettings();
+    if (!on) { refreshWx(); return; }
+    if (!navigator.geolocation) { showToast('This phone cannot share its location'); SETTINGS.weather = { on: false }; saveSettings(); return; }
+    showToast('Allow location to see your weather');
+    navigator.geolocation.getCurrentPosition(async function (pos) {
+      var o = await fetchWx(pos.coords.latitude, pos.coords.longitude);
+      if (!o) { showToast('Could not get weather'); return; }
+      refreshWx();
+    }, function () { SETTINGS.weather = { on: false }; saveSettings(); label(); showToast('Location was not allowed'); }, { timeout: 12000, maximumAge: 3600000 });
+  }
+  var row = document.getElementById('set-rem-row');
+  if (row) {
+    var b = document.createElement('button'); b.className = 'set-row set-link'; b.id = 'set-wx-row';
+    b.innerHTML = '<span class="set-name">Weather sky</span><span class="set-val">Off</span>';
+    row.parentNode.insertBefore(b, row);
+    b.addEventListener('click', function () { setWx(!wxOn()); });
+  }
+  window.__wx = { apply: applyWx, refresh: refreshWx };
+  // wait for sign-in / cloud settings before the first read
+  setTimeout(refreshWx, 1500); setInterval(refreshWx, 10 * 60 * 1000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) refreshWx(); });
 })();
 </script>
 </body>
