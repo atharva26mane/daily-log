@@ -1,6 +1,6 @@
 // Daily Log service worker: lets the app open offline.
 // Network first (so new versions show up), cache as backup.
-const CACHE = 'daily-log-v13';
+const CACHE = 'daily-log-v14';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
