@@ -512,6 +512,121 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+
+    /* Chat with AI */
+    .chat-btn {
+      width: 100%;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .chat-btn:active { background: var(--surface-2); }
+    .chat-sheet {
+      display: flex;
+      flex-direction: column;
+      height: 88vh;
+      overflow: hidden;
+      padding-bottom: calc(14px + var(--safe-bottom));
+    }
+    .chat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .chat-head button {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+    .chat-log {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 4px 2px;
+    }
+    .chat-hint {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+    .bubble {
+      max-width: 92%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 15px;
+      word-break: break-word;
+    }
+    .bubble.user { align-self: flex-end; background: var(--accent); color: #06131f; }
+    .bubble.ai { align-self: flex-start; background: var(--surface-2); }
+    .bubble.thinking { color: var(--muted); }
+    .prop-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .prop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+    .prop-main { min-width: 0; flex: 1; }
+    .prop-cat { font-size: 12px; color: var(--accent); font-weight: 700; }
+    .prop-text { font-size: 14px; }
+    .prop-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+    .prop-btn {
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+    .prop-btn.add { background: var(--green); color: #052014; border: none; }
+    .prop-btn.skip { background: transparent; color: var(--muted); }
+    .prop-state { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .prop-all {
+      background: var(--green);
+      color: #052014;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .chat-input-row { display: flex; gap: 8px; margin-top: 10px; }
+    .chat-input-row .text-input { flex: 1; }
+    .chat-send {
+      background: var(--accent);
+      color: #06131f;
+      border: none;
+      border-radius: 12px;
+      padding: 0 18px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .chat-send:disabled { opacity: 0.5; }
   </style>
 </head>
 <body>
@@ -539,6 +654,8 @@
         <span class="big-plus">+</span>
         <span>Add Entry</span>
       </button>
+
+      <button class="chat-btn" id="open-chat-btn">💬 Chat with AI</button>
 
       <div id="cards-container" class="cards"></div>
     </div>
@@ -641,6 +758,24 @@
         <button class="btn-primary" id="ai-save-btn">Save &amp; Test</button>
         <button class="btn-secondary" id="ai-remove-btn">Remove key (turn AI off)</button>
         <button class="btn-cancel" id="ai-close-btn" style="padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT MODAL -->
+  <div id="chat-modal" class="overlay">
+    <div class="sheet chat-sheet">
+      <div class="chat-head">
+        <span>Chat with AI</span>
+        <span>
+          <button id="chat-clear-btn">Clear</button>
+          <button id="chat-close-btn">Close</button>
+        </span>
+      </div>
+      <div id="chat-log" class="chat-log"></div>
+      <div class="chat-input-row">
+        <input id="chat-input" class="text-input" type="text" autocomplete="off" placeholder="Tell me what you did..." />
+        <button id="chat-send-btn" class="chat-send">Send</button>
       </div>
     </div>
   </div>
@@ -967,14 +1102,15 @@
     }
 
     // =========================================================================
-    // 6b. AI SORTING (Gemini). Key is kept only in this phone's browser.
+    // 6b. AI (Gemini): sorting + chat. Key is kept only in this phone's browser.
     // =========================================================================
     const AI_KEY_STORAGE = 'daily_log_gemini_key_v1';
     // Tried in this order. If Google renames models, edit this list.
     const AI_MODELS = ['gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest'];
     const AI_MODEL_STORAGE = 'daily_log_gemini_model_v1';
-    let aiLastError = '';
     const AI_TIMEOUT_MS = 8000;
+    const CHAT_TIMEOUT_MS = 25000;
+    let aiLastError = '';
 
     function getAiKey() {
       try { return (localStorage.getItem(AI_KEY_STORAGE) || '').trim(); } catch (e) { return ''; }
@@ -987,10 +1123,57 @@
       mirrorSet(AI_KEY_STORAGE, v || null);
     }
 
-    // Returns a category id, or null if AI could not answer.
-    async function aiClassify(text) {
+    // Sends one request to Gemini (tries the models in order). Returns the answer text or null.
+    async function aiGenerate(body, timeoutMs) {
       const key = getAiKey();
-      if (!key) return null;
+      aiLastError = '';
+      if (!key) { aiLastError = 'No key saved'; return null; }
+      let order = AI_MODELS.slice();
+      try {
+        const good = localStorage.getItem(AI_MODEL_STORAGE);
+        if (good && order.includes(good)) order = [good, ...order.filter(m => m !== good)];
+      } catch (e) {}
+
+      for (const model of order) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), timeoutMs || AI_TIMEOUT_MS);
+        try {
+          const res = await fetch(
+            'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent',
+            {
+              method: 'POST',
+              signal: ctrl.signal,
+              headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+              body: JSON.stringify(body)
+            }
+          );
+          if (!res.ok) {
+            let msg = '';
+            try { msg = ((await res.json()).error || {}).message || ''; } catch (e) {}
+            aiLastError = model + ': error ' + res.status + (msg ? ' - ' + msg.slice(0, 160) : '');
+            if (res.status === 404) continue; // model not available for this key, try next one
+            return null;
+          }
+          const data = await res.json();
+          const raw = data && data.candidates && data.candidates[0] &&
+            data.candidates[0].content && data.candidates[0].content.parts &&
+            data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+          if (!raw) { aiLastError = model + ': empty answer'; continue; }
+          try { localStorage.setItem(AI_MODEL_STORAGE, model); } catch (e) {}
+          return raw;
+        } catch (e) {
+          aiLastError = model + ': ' + (e && e.name === 'AbortError' ? 'took too long' : 'no internet or blocked');
+          return null;
+        } finally {
+          clearTimeout(timer);
+        }
+      }
+      return null;
+    }
+
+    // Quick sorting of one line. Returns a category id, or null.
+    async function aiClassify(text) {
+      if (!getAiKey()) return null;
       const ids = CATEGORIES.map(c => c.id);
       const prompt =
         'You sort short personal health-diary lines into ONE category.\n' +
@@ -1006,66 +1189,219 @@
         '- weight: body weight\n' +
         '- notes: anything else\n' +
         'Line: "' + text.replace(/"/g, "'") + '"';
-
-      let order = AI_MODELS.slice();
-      try {
-        const good = localStorage.getItem(AI_MODEL_STORAGE);
-        if (good && order.includes(good)) order = [good, ...order.filter(m => m !== good)];
-      } catch (e) {}
-
-      aiLastError = '';
-      for (const model of order) {
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), AI_TIMEOUT_MS);
-        try {
-          const res = await fetch(
-            'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent',
-            {
-              method: 'POST',
-              signal: ctrl.signal,
-              headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: {
-                  temperature: 0,
-                  responseMimeType: 'application/json',
-                  responseSchema: {
-                    type: 'OBJECT',
-                    properties: { category: { type: 'STRING', enum: ids } },
-                    required: ['category']
-                  }
-                }
-              })
-            }
-          );
-          if (!res.ok) {
-            let msg = '';
-            try { msg = ((await res.json()).error || {}).message || ''; } catch (e) {}
-            aiLastError = model + ': error ' + res.status + (msg ? ' - ' + msg.slice(0, 160) : '');
-            if (res.status === 404) continue; // model not available for this key, try next one
-            return null;
+      const raw = await aiGenerate({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0,
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'OBJECT',
+            properties: { category: { type: 'STRING', enum: ids } },
+            required: ['category']
           }
-          const data = await res.json();
-          const raw = data && data.candidates && data.candidates[0] &&
-            data.candidates[0].content && data.candidates[0].content.parts &&
-            data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
-          if (!raw) { aiLastError = model + ': empty answer'; continue; }
-          let cat = '';
-          try { cat = JSON.parse(raw).category; } catch (e) { cat = String(raw).trim().toLowerCase(); }
-          if (ids.includes(cat)) {
-            try { localStorage.setItem(AI_MODEL_STORAGE, model); } catch (e) {}
-            return cat;
-          }
-          aiLastError = model + ': unexpected answer';
-          return null;
-        } catch (e) {
-          aiLastError = model + ': ' + (e && e.name === 'AbortError' ? 'took too long' : 'no internet or blocked');
-          return null;
-        } finally {
-          clearTimeout(timer);
         }
-      }
+      }, AI_TIMEOUT_MS);
+      if (!raw) return null;
+      let cat = '';
+      try { cat = JSON.parse(raw).category; } catch (e) { cat = String(raw).trim().toLowerCase(); }
+      if (ids.includes(cat)) return cat;
+      aiLastError = 'unexpected answer';
       return null;
+    }
+
+    // ---------------------------------------------------------------------
+    // Chat with AI
+    // ---------------------------------------------------------------------
+    let chatHistory = []; // { role:'user'|'model', text, local?, proposals?:[{text,cat,time,day,status}] }
+    let chatBusy = false;
+
+    function buildChatSystem() {
+      const dayKey = activeDateKey;
+      const entries = sortEntries(getDayEntries(dayKey));
+      const logged = entries.map(e => '- [' + e.cat + '] ' + e.time + ' ' + e.text).join('\n') || '(nothing logged yet)';
+      const yGud = sortEntries(getDayEntries(shiftDateKey(dayKey, -1)).filter(e => e.cat === 'gudlax'))
+        .map(e => e.text + ' at ' + e.time).join(', ') || 'none';
+      const cats = CATEGORIES.map(c => '- ' + c.id + ': ' + c.name + (c.hint ? ' (' + c.hint + ')' : '')).join('\n');
+      return [
+        'You are the assistant inside the "Daily Log" phone app. The user logs their health routine here and chats with you in simple English.',
+        'Your job: understand what the user says they did (and did NOT do), and propose diary entries to save in the right category. The user confirms before anything is saved.',
+        '',
+        'CATEGORIES (use the id):',
+        cats,
+        '',
+        'Keyword hints the app also uses for sorting: ' + JSON.stringify(KEYWORDS),
+        'Water target is ' + WATER_TARGET_ML + ' ml per day. The day starts at 4 AM, so times from 00:00 to 03:59 belong to the previous day.',
+        '',
+        'RIGHT NOW: date being logged = ' + formatDisplayDate(dayKey) + ', time now = ' + getCurrentHHMM() + ' (24-hour).',
+        'Water drunk so far on this day: ' + getWaterTotal(entries) + ' ml.',
+        'ALREADY LOGGED on this day:',
+        logged,
+        'Gudlax taken last night (previous day): ' + yGud,
+        '',
+        'RULES:',
+        '1. Reply in very short, simple, friendly English. No big words. Max 3 short sentences.',
+        '2. When the user tells you things, set action="propose" and fill "entries". In your reply, say plainly where you will put it, like: "I will add idli 3 sambar to Food. Okay?"',
+        '3. If the user says yes/ok/add it/confirm about your last proposal, set action="add_pending" with empty entries. The app will save the pending ones.',
+        '4. If you only need to ask something (for example the amount or time is missing) or just chat, set action="none" with empty entries.',
+        '5. One entry per thing. Keep the user\'s own words and numbers. Never invent numbers, times or details. If the amount of water is missing, ask.',
+        '6. Water entries must look like "water 250ml". Convert: 1 glass = 200ml, 1 litre = 1000ml.',
+        '7. Things the user did NOT do or skipped must also be saved, in the right category, with clear words, e.g. "iron tablet NOT taken" in medicines, "skipped lunch" in food. Never write ml in these.',
+        '8. "time" is HH:MM in 24-hour format. Use the time the user says. If they give none, use the time now. If they say last night or yesterday, set day="yesterday", otherwise day="today".',
+        '9. Do not add anything already in the ALREADY LOGGED list unless the user clearly wants it again.',
+        '10. Use "notes" only if nothing else fits.'
+      ].join('\n');
+    }
+
+    function chatContents() {
+      const msgs = chatHistory.filter(m => !m.local).slice(-16);
+      while (msgs.length && msgs[0].role !== 'user') msgs.shift();
+      return msgs.map(m => {
+        let t = m.text;
+        if (m.role === 'model' && m.proposals && m.proposals.length) {
+          t += '\n(Entries I proposed: ' + m.proposals.map(p =>
+            p.text + ' -> ' + p.cat + ' at ' + p.time + (p.day === 'yesterday' ? ' (yesterday)' : '') + ' [' + p.status + ']'
+          ).join('; ') + ')';
+        }
+        return { role: m.role, parts: [{ text: t }] };
+      });
+    }
+
+    function addProposal(p) {
+      const ids = CATEGORIES.map(c => c.id);
+      const cat = ids.includes(p.cat) ? p.cat : 'notes';
+      const time = /^\d{1,2}:\d{2}$/.test(p.time || '') ? p.time.padStart(5, '0') : getCurrentHHMM();
+      const dateKey = p.day === 'yesterday' ? shiftDateKey(activeDateKey, -1) : activeDateKey;
+      if (!Array.isArray(allData[dateKey])) allData[dateKey] = [];
+      allData[dateKey].push({
+        id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+        text: p.text,
+        cat,
+        time,
+        createdAt: Date.now()
+      });
+      p.status = 'added';
+    }
+
+    function renderChat() {
+      const log = document.getElementById('chat-log');
+      if (chatHistory.length === 0 && !chatBusy) {
+        log.innerHTML = '<div class="chat-hint">Hi! Tell me what you did today, and what you did not do. Example: "drank 2 glasses of water, had idli 3 with sambar, forgot my iron tablet". I will suggest where to save each thing, and you tap Add.</div>';
+        return;
+      }
+      log.innerHTML = chatHistory.map((m, mi) => {
+        if (m.role === 'user') return '<div class="bubble user">' + escapeHtml(m.text) + '</div>';
+        let props = '';
+        if (m.proposals && m.proposals.length) {
+          const pending = m.proposals.filter(p => p.status === 'pending').length;
+          props = '<div class="prop-list">' + m.proposals.map((p, pi) => {
+            const c = CATEGORIES.find(x => x.id === p.cat);
+            const dayTag = p.day === 'yesterday' ? ' · yesterday' : '';
+            let right;
+            if (p.status === 'pending') {
+              right = '<button class="prop-btn add" data-m="' + mi + '" data-p="' + pi + '" data-act="add">Add</button>' +
+                      '<button class="prop-btn skip" data-m="' + mi + '" data-p="' + pi + '" data-act="skip">Skip</button>';
+            } else {
+              const label = p.status === 'added' ? '✓ Added' : (p.status === 'skipped' ? 'Skipped' : 'Replaced');
+              right = '<span class="prop-state">' + label + '</span>';
+            }
+            return '<div class="prop"><div class="prop-main"><div class="prop-cat">' +
+              escapeHtml(c ? c.name : p.cat) + ' · ' + escapeHtml(p.time) + dayTag +
+              '</div><div class="prop-text">' + escapeHtml(p.text) + '</div></div><div class="prop-actions">' + right + '</div></div>';
+          }).join('') +
+          (pending > 1 ? '<button class="prop-all" data-m="' + mi + '" data-act="all">Add all (' + pending + ')</button>' : '') +
+          '</div>';
+        }
+        return '<div class="bubble ai">' + escapeHtml(m.text).replace(/\n/g, '<br>') + props + '</div>';
+      }).join('') + (chatBusy ? '<div class="bubble ai thinking">Thinking…</div>' : '');
+      log.scrollTop = log.scrollHeight;
+    }
+
+    async function sendChat() {
+      if (chatBusy) return;
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      chatHistory.push({ role: 'user', text });
+
+      if (!getAiKey()) {
+        chatHistory.push({ role: 'model', local: true, text: 'Please add your Gemini key first. Close this, tap the AI button on the main page, and paste the key.' });
+        renderChat();
+        return;
+      }
+
+      chatBusy = true;
+      document.getElementById('chat-send-btn').disabled = true;
+      renderChat();
+
+      const ids = CATEGORIES.map(c => c.id);
+      const raw = await aiGenerate({
+        systemInstruction: { parts: [{ text: buildChatSystem() }] },
+        contents: chatContents(),
+        generationConfig: {
+          temperature: 0.2,
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'OBJECT',
+            properties: {
+              reply: { type: 'STRING' },
+              action: { type: 'STRING', enum: ['propose', 'add_pending', 'none'] },
+              entries: {
+                type: 'ARRAY',
+                items: {
+                  type: 'OBJECT',
+                  properties: {
+                    text: { type: 'STRING' },
+                    category: { type: 'STRING', enum: ids },
+                    time: { type: 'STRING' },
+                    day: { type: 'STRING', enum: ['today', 'yesterday'] }
+                  },
+                  required: ['text', 'category', 'time', 'day']
+                }
+              }
+            },
+            required: ['reply', 'action', 'entries']
+          }
+        }
+      }, CHAT_TIMEOUT_MS);
+
+      chatBusy = false;
+      document.getElementById('chat-send-btn').disabled = false;
+
+      let out = null;
+      if (raw) { try { out = JSON.parse(raw); } catch (e) { out = null; } }
+      if (!out || typeof out.reply !== 'string') {
+        chatHistory.push({ role: 'model', local: true, text: 'Sorry, I could not answer. ' + (aiLastError || 'Please try again.') });
+        renderChat();
+        return;
+      }
+
+      const entries = Array.isArray(out.entries) ? out.entries.filter(e => e && typeof e.text === 'string' && e.text.trim()) : [];
+
+      if (out.action === 'add_pending') {
+        let n = 0;
+        chatHistory.forEach(m => (m.proposals || []).forEach(p => {
+          if (p.status === 'pending') { addProposal(p); n++; }
+        }));
+        if (n > 0) { saveData(); renderMain(); showToast('Added ' + n + (n === 1 ? ' entry' : ' entries')); }
+        chatHistory.push({ role: 'model', text: out.reply });
+      } else if (entries.length > 0) {
+        chatHistory.forEach(m => (m.proposals || []).forEach(p => { if (p.status === 'pending') p.status = 'replaced'; }));
+        chatHistory.push({
+          role: 'model',
+          text: out.reply,
+          proposals: entries.map(e => ({
+            text: e.text.trim(),
+            cat: e.category,
+            time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : getCurrentHHMM(),
+            day: e.day === 'yesterday' ? 'yesterday' : 'today',
+            status: 'pending'
+          }))
+        });
+      } else {
+        chatHistory.push({ role: 'model', text: out.reply });
+      }
+      renderChat();
     }
 
     // =========================================================================
@@ -1652,6 +1988,42 @@
       if (e.target.files && e.target.files[0]) {
         importJsonFile(e.target.files[0]);
       }
+    });
+
+    // Chat modal
+    const chatModal = document.getElementById('chat-modal');
+    document.getElementById('open-chat-btn').addEventListener('click', () => {
+      chatModal.classList.add('open');
+      renderChat();
+      setTimeout(() => document.getElementById('chat-input').focus(), 80);
+    });
+    document.getElementById('chat-close-btn').addEventListener('click', () => chatModal.classList.remove('open'));
+    document.getElementById('chat-clear-btn').addEventListener('click', () => {
+      if (chatBusy) return;
+      chatHistory = [];
+      renderChat();
+    });
+    document.getElementById('chat-send-btn').addEventListener('click', sendChat);
+    document.getElementById('chat-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); sendChat(); }
+    });
+    document.getElementById('chat-log').addEventListener('click', e => {
+      const btn = e.target.closest('[data-act]');
+      if (!btn) return;
+      const m = chatHistory[Number(btn.dataset.m)];
+      if (!m || !m.proposals) return;
+      const act = btn.dataset.act;
+      if (act === 'all') {
+        let n = 0;
+        m.proposals.forEach(p => { if (p.status === 'pending') { addProposal(p); n++; } });
+        if (n) { saveData(); renderMain(); showToast('Added ' + n + ' entries'); }
+      } else {
+        const pr = m.proposals[Number(btn.dataset.p)];
+        if (!pr || pr.status !== 'pending') return;
+        if (act === 'add') { addProposal(pr); saveData(); renderMain(); showToast('Added'); }
+        else if (act === 'skip') { pr.status = 'skipped'; }
+      }
+      renderChat();
     });
 
     // AI Settings Modal
