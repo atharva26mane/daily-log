@@ -1,7 +1,7 @@
 // Daily Log service worker: lets the app open offline.
 // Network first (so new versions show up), cache as backup.
-const CACHE = 'daily-log-v18';
-const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './badge-96.png'];
+const CACHE = 'daily-log-v19';
+const FILES = ['./', './index.html', './gsap.min.js', './ScrollTrigger.min.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './badge-96.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
