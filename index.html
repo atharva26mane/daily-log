@@ -887,6 +887,7 @@
       <p class="backup-note" id="ai-status" style="margin-top:10px;"></p>
       <div id="ai-diag" class="ai-diag" hidden></div>
       <button class="btn-secondary" id="ai-diag-btn" type="button" style="margin-bottom:10px;">Check my AI access</button>
+      <button class="btn-primary" id="ai-share-btn" type="button" hidden style="margin-bottom:10px;">Share these keys with my friends</button>
       <div class="backup-stack">
         <button class="btn-primary" id="ai-save-btn">Save and test</button>
         <button class="btn-secondary" id="ai-remove-btn">Remove keys and turn AI off</button>
@@ -933,7 +934,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 28</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 29</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -3496,6 +3497,7 @@
   function setupUi() {
     $('acc-email').textContent = me.email || 'Signed in';
     $('set-admin-row').hidden = !me.admin;
+    $('ai-share-btn').hidden = !me.admin;
     setSync(dirty ? 'Saving' : 'Synced');
   }
   function wipeLocal(withKeys) {
@@ -3593,9 +3595,8 @@
     $('adm-groq').placeholder = g ? 'Saved (type to replace)' : 'Not set';
     $('adm-gemini').placeholder = m ? 'Saved (type to replace)' : 'Not set';
   }
-  $('adm-save-keys').addEventListener('click', async function() {
-    var g = $('adm-groq').value.trim(), m = $('adm-gemini').value.trim();
-    if (!g && !m) { showToast('Paste a key first'); return; }
+  async function saveSharedKeys(g, m) {
+    if (!g && !m) { showToast('Paste a key first'); return false; }
     var err = '';
     var r = await sb.rpc('set_ai_keys', { p_groq: g || null, p_gemini: m || null });
     if (r.error) {
@@ -3604,12 +3605,23 @@
       var r2 = await sb.from('app_config').upsert(patch);
       if (r2.error) err = (r2.error.message || r.error.message || 'unknown error');
     }
-    if (err) { showToast('Could not save: ' + err.slice(0, 80)); return; }
-    $('adm-groq').value = ''; $('adm-gemini').value = '';
+    if (err) { showToast('Could not save: ' + err.slice(0, 80)); return false; }
     await keyStatus();
     var ok = ($('adm-groq').placeholder + $('adm-gemini').placeholder).indexOf('Saved') >= 0;
     showToast(ok ? 'Keys saved and checked' : 'Saved, but the server shows no key. Run the set_ai_keys SQL.');
     loadCloudKeys();
+    return ok;
+  }
+  $('adm-save-keys').addEventListener('click', async function() {
+    var g = $('adm-groq').value.trim(), m = $('adm-gemini').value.trim();
+    if (await saveSharedKeys(g, m)) { $('adm-groq').value = ''; $('adm-gemini').value = ''; }
+  });
+  // admin only: share the keys already saved on this phone with everyone who has AI access
+  $('ai-share-btn').addEventListener('click', async function() {
+    var g = '', m = '';
+    try { g = (localStorage.getItem(GROQ_KEY_STORAGE) || '').trim(); m = (localStorage.getItem(AI_KEY_STORAGE) || '').trim(); } catch (e) {}
+    if (!g && !m) { showToast('Save a key above first'); return; }
+    this.disabled = true; await saveSharedKeys(g, m); this.disabled = false;
   });
   $('set-admin-row').addEventListener('click', function() {
     $('settings-modal').classList.remove('open');
