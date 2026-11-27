@@ -616,6 +616,54 @@
     @keyframes glow { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
     @keyframes wander { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(22px, -16px); } 66% { transform: translate(-14px, 10px); } }
 
+    .tank-bottle { margin-top: 12px; }
+    .tank-bottle:empty { display: none; }
+    .plan-strip { margin-top: -6px; }
+    .plan-strip .ps-ic { flex: none; width: 22px; height: 22px; fill: none; stroke: var(--forest); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .plan-strip .ps-main { flex: 1; min-width: 0; display: block; }
+    .plan-strip .ps-main b { display: block; font-size: 15px; color: var(--ink); }
+    .plan-strip .ps-main small { display: block; font-size: 13px; color: var(--moss); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .plan-strip .ps-chev { flex: none; width: 16px; height: 16px; opacity: .45; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    #chat-plan-btn[aria-pressed="true"] { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+    .pl-card { display: block; width: 100%; text-align: left; margin: 0 0 10px; padding: 14px; border-radius: 18px; border: 1px solid rgba(64,81,59,0.16); background: rgba(255,255,255,0.78); font: inherit; color: var(--ink); cursor: pointer; transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
+    .pl-card:active { transform: scale(0.985); transition-duration: 90ms; }
+    .pl-card b { display: block; font-size: 17px; color: var(--forest); margin-bottom: 2px; }
+    .pl-card small { display: block; font-size: 13px; color: var(--moss); margin-top: 6px; line-height: 1.35; }
+    .pl-bar { height: 8px; border-radius: 4px; background: rgba(64,81,59,0.14); overflow: hidden; margin-top: 10px; }
+    .pl-bar i { display: block; height: 100%; border-radius: 4px; background: var(--forest); transition: width 500ms cubic-bezier(0.16,1,0.3,1); }
+    .pl-how { margin: 0 0 12px; padding: 12px 14px; border-radius: 16px; background: rgba(64,81,59,0.08); font-size: 14.5px; line-height: 1.45; color: var(--ink); }
+    .pl-how b { display: block; margin-bottom: 4px; color: var(--forest); font-size: 13px; }
+    .pl-steps { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+    .pl-step { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 6px 8px 6px 6px; border-radius: 16px; background: rgba(255,255,255,0.78); border: 1px solid rgba(64,81,59,0.12); }
+    .pl-chk { flex: none; width: 44px; height: 44px; border: 0; background: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pl-chk i { width: 24px; height: 24px; border-radius: 8px; border: 2px solid rgba(64,81,59,0.45); display: flex; align-items: center; justify-content: center; transition: background-color 160ms ease, border-color 160ms ease, transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
+    .pl-chk i svg { width: 16px; height: 16px; fill: none; stroke: var(--cream); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+    .pl-step.done .pl-chk i { background: var(--forest); border-color: var(--forest); transform: scale(1.05); }
+    .pl-step.done .pl-chk i svg { opacity: 1; }
+    .pl-step .pl-tx { flex: 1; min-width: 0; font-size: 15px; line-height: 1.3; overflow-wrap: anywhere; }
+    .pl-step.done .pl-tx { text-decoration: line-through; opacity: .55; }
+    .pl-step .pl-tx small { display: block; font-size: 12.5px; color: var(--moss); text-decoration: none; }
+    .pl-step .pl-mini { flex: none; min-height: 40px; padding: 0 10px; border-radius: 12px; border: 1px solid rgba(64,81,59,0.3); background: transparent; color: var(--forest); font: 700 13px var(--body); cursor: pointer; }
+    .pl-step .pl-in { flex: none; font-size: 12px; font-weight: 700; color: var(--moss); padding: 0 6px; }
+    .pl-addrow { display: flex; gap: 8px; margin: 0 0 12px; }
+    .pl-addrow .lb-field { margin: 0; flex: 1; min-width: 0; }
+    .pl-addrow button { flex: none; width: 52px; border: 0; border-radius: 14px; background: var(--forest); color: var(--cream); cursor: pointer; }
+    .pl-addrow button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+    .pl-why { margin: 0 0 10px; font-size: 14px; color: var(--moss); line-height: 1.4; }
+    .prop.is-plan { display: block; }
+    .prop.is-plan .prop-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .prop-steps { margin: 6px 0 0; padding: 0 0 0 18px; font-size: 13px; color: var(--moss); line-height: 1.4; }
+    .open-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1px solid rgba(64,81,59,0.35); background: #fff; color: var(--forest); font: 700 14px var(--body); cursor: pointer; }
+    .ai-mem { display: block; margin-top: 8px; font-size: 12.5px; color: var(--moss); }
+    .bt-line { margin: 0 0 8px; font-size: 14px; font-weight: 600; color: var(--moss); font-variant-numeric: tabular-nums; line-height: 1.35; }
+    .bt-line b { color: var(--forest); }
+    .bt-row { display: flex; gap: 8px; }
+    .bt-row .quick-btn { font-size: 15px; min-width: 0; padding: 0 10px; }
+    .bt-row .quick-btn.solid { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+    .bt-row .quick-btn.small { flex: none; width: 48px; padding: 0; }
+    .bt-row .quick-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -4px; margin-right: 6px; }
+    .bt-row .quick-btn.small svg { margin: 0; }
+    .bt-undo { background: none; border: 0; padding: 4px 2px; color: var(--forest); font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; min-height: 32px; }
     .tank-since { margin-top: 6px; font-size: 14px; color: var(--moss); font-variant-numeric: tabular-nums; font-weight: 600; }
 
     /* crab on the sand */
@@ -1008,9 +1056,11 @@
             <button class="quick-btn" data-ml="250">+250</button>
             <button class="quick-btn" data-ml="500">+500</button>
           </div>
+          <div class="tank-bottle" id="tank-bottle"></div>
         </section>
 
         <button class="todo-strip" id="todo-strip" type="button" aria-label="Open to-do list"></button>
+        <button class="todo-strip plan-strip" id="plan-strip" type="button" aria-label="Open plans"></button>
 
         <div class="actions">
           <button class="act primary" id="open-chat-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H10l-4.5 3.8V16h-1z"/></svg><span>Talk to AI</span></button>
@@ -1158,6 +1208,30 @@
     </div>
   </div>
 
+  <!-- WHAT THE AI REMEMBERS -->
+  <div id="mem-modal" class="overlay">
+    <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="What the AI remembers">
+      <div class="chat-head"><h2 class="sheet-title">What the AI remembers</h2><div class="chat-head-btns"><button id="mem-close" type="button">Done</button></div></div>
+      <div id="mem-body" class="lb-body"></div>
+    </div>
+  </div>
+
+  <!-- PLANS -->
+  <div id="plan-modal" class="overlay">
+    <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="Plans">
+      <div class="chat-head"><h2 class="sheet-title" id="pl-title">Plans</h2><div class="chat-head-btns"><button id="pl-back" type="button" hidden>Back</button><button id="pl-close" type="button">Done</button></div></div>
+      <div id="pl-body" class="lb-body"></div>
+    </div>
+  </div>
+
+  <!-- WATER BOTTLE -->
+  <div id="bt-modal" class="overlay">
+    <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="Water bottle">
+      <div class="chat-head"><h2 class="sheet-title" id="bt-title">Water bottle</h2><div class="chat-head-btns"><button id="bt-close" type="button">Close</button></div></div>
+      <div id="bt-body" class="lb-body"></div>
+    </div>
+  </div>
+
   <!-- GROUP INVITE (opened by an invite link) -->
   <div id="inv-modal" class="overlay">
     <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="Group invite">
@@ -1190,6 +1264,7 @@
       <div class="chat-head">
         <h2 class="sheet-title">Talk to AI</h2>
         <div class="chat-head-btns">
+          <button id="chat-plan-btn" type="button" aria-pressed="false" aria-label="Plan mode">Plan</button>
           <button id="chat-clear-btn">Clear</button>
           <button id="chat-close-btn">Close</button>
         </div>
@@ -1223,7 +1298,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 37</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 38</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -1235,11 +1310,14 @@
         <div class="set-row"><span class="set-name">Daily water goal</span>
           <span class="stepper"><button type="button" id="set-water-minus" aria-label="Less water">-</button><output id="set-water-val">2500</output><button type="button" id="set-water-plus" aria-label="More water">+</button></span></div>
         <p class="set-note">Goal in ml. Changes by 250 each tap.</p>
+        <button class="set-row set-link" id="set-bottle-row" type="button"><span class="set-name">My water bottle</span><span class="set-val" id="set-bottle-val">Not set</span></button>
+        <p class="set-note">Tell the app your bottle size. Drink the whole bottle, tap Finished, and the water is spread across the time you took.</p>
       </div>
 
       <div class="set-group">
         <div class="set-label">App</div>
         <button class="set-row set-link" id="set-plan-row"><span class="set-name">My plan</span><span class="set-val">Redo questions</span></button>
+        <button class="set-row set-link" id="set-mem-row" type="button"><span class="set-name">What the AI remembers</span><span class="set-val" id="set-mem-val">Nothing yet</span></button>
         <button class="set-row set-link" id="set-cats-row"><span class="set-name">Categories</span><span class="set-val" id="set-cats-val">Add, rename, hide</span></button>
         <button class="set-row set-link" id="set-theme-row"><span class="set-name">Theme</span><span class="set-val" id="set-theme-val">Forest</span></button>
         <button class="set-row set-link" id="set-rem-row"><span class="set-name">Reminders</span><span class="set-val">Water and your own</span></button>
@@ -2008,6 +2086,17 @@
     let chatHistory = []; // { role:'user'|'model', text, local?, proposals?:[{text,cat,time,day,status}] }
     let chatBusy = false;
 
+    const APP_GUIDE = 'APP GUIDE (what is in this app):\n' +
+      '- Home screen: the Water card (shows ml and the goal, quick buttons +100 +200 +250 +500, and the bottle strip), the To-do card for today, the Plans strip, the "Talk to AI" button, the "Add" button, and cards for food, fibre, medicines, symptoms, stool, sleep, weight and notes. Copy today and Last 3 days copy your log as text.\n' +
+      '- Top icons: History (past days), Insights (charts), Leaderboard (trophy), Settings (gear).\n' +
+      '- Water bottle: Settings > My water bottle sets the bottle size. On the Water card tap "Start ... ml bottle", drink, then tap Finished (the whole bottle is logged and spread over the time you took) or Some left (only what you drank is logged). Undo shows for a few minutes.\n' +
+      '- To-do: tap the To-do card or strip. Pick when (today, tomorrow, this week, 2 weeks, this month) and an optional time for an alert.\n' +
+      '- Plans: the Plans strip under the to-do card. Big goals with steps, a how-to note and progress. Make one with Plan mode in this chat, or write your own. A step can be added to your to-dos.\n' +
+      '- Reminders: Settings > Reminders. Turn on "Alerts on this phone" first. Water reminders (Smart, 1h, 2h, 3h), your own reminders (tap one to change its name, time or days, or delete it; the switch turns it on or off).\n' +
+      '- Leaderboard: trophy icon. Global and Groups. Join with a nickname or as Anonymous. Score is out of 100 a day from water, to-dos, food, sleep and medicines. Make a group and share the invite link. "Leave global board" keeps your groups. "Leave this group" leaves one group. "Delete my profile" removes everything.\n' +
+      '- Settings: your name, daily water goal, My water bottle, My plan (redo the setup questions), Categories (add, rename, hide), Theme, Weather sky, Text size, Vibration, Reminders, AI helper, Share as a picture, Invite a friend, Update app (shows the version), Send feedback, Backup and restore, Sign out.\n' +
+      '- Alerts and invite links open the right screen in the app.';
+
     function buildChatSystem() {
       const dayKey = activeDateKey;
       const entries = sortEntries(getDayEntries(dayKey));
@@ -2035,6 +2124,7 @@
         'Gudlax taken last night (previous day): ' + yGud,
         'OPEN TO-DOS (not done yet):\n' + (window.__todoSummary ? window.__todoSummary() : '(none)'),
         (window.__aiCtx ? window.__aiCtx() : ''),
+        (window.__planMode ? '\nPLAN MODE IS ON. The user is here to plan a big goal, not to log. Act like a calm coach. Use rule 20: ask at most two short questions if you need the goal, the date or the starting point, otherwise build the plan now.' : ''),
         '',
         'RULES:',
         '1. Reply in very short, simple, friendly English. No big words. Max 3 short sentences.',
@@ -2064,7 +2154,12 @@
         'f) "skipped lunch" -> entries [food "skipped lunch"].\n' +
         'g) "what do I have today?" -> action none, answer from OPEN TO-DOS in one or two short lines.\n' +
         'h) "move my vitamin reminder to 9" -> reminders [label "Vitamin C", 09:00, same repeat, replaces "Vitamin C"].\n' +
-        'i) "stop the vitamin reminder" -> reminders [label "Vitamin C", replaces "Vitamin C", remove true].'
+        'i) "stop the vitamin reminder" -> reminders [label "Vitamin C", replaces "Vitamin C", remove true].',
+        '20. PLANS (big goals over weeks or months, like gaining weight, finishing a course, building a habit). When the user clearly asks for a plan for a goal, or PLAN MODE is on, fill "plan" with: "title" (2 to 5 words), "why" (one line), "how" (2 to 3 short sentences: the way to reach it), "due" (the goal date as YYYY-MM-DD, or ""), "replaces" (exact title of an existing plan in PLANS to change, else ""), and 4 to 9 "steps", each a small action with its own "due" date (YYYY-MM-DD) from today up to the goal date, the first step due today or tomorrow. Fit the steps to the user\'s real routine from their log. Never put plan steps in todos or entries. In "reply" say in one or two short lines what the plan is and ask "Add this plan?". If the goal, the date or the starting point is unclear, ask at most TWO short questions first and leave "plan" empty.',
+        '21. THE APP. You know this app well (see APP GUIDE). When the user asks how to do something or where something is, answer in one or two short steps using the exact names of buttons and screens, and set "open" to the screen that helps (todo, plans, reminders, leaderboard, settings, water, bottle) so the app shows an Open button. Otherwise set "open" to "none". Never say you cannot see the app.',
+        '22. REMEMBER. When the user tells you something lasting about their own routine or preferences that helps you help them later (wake or sleep time, bottle size, a diet like vegetarian, a usual gym day, what they call a medicine), put it in "remember" as a very short fact in their words. Never remember health conditions, diagnoses, money, passwords, ID numbers or other people. Do not remember one-time things. Usually "remember" is empty.',
+        '23. UNDERSTANDING. The user may mix English with Hindi or Marathi words (paani = water, khana = food, subah = morning, raat = night, neend = sleep, dawai or goli = medicine, pee liya = drank, kha liya = ate, nahi = no). Understand them and reply in simple English. "yes", "ok", "haan", "kar do", "add it" after your proposal all mean confirm. If a message could be DONE or PLAN, use the tense: "I will" or "need to" is a plan, "I did" or "had" is done. When you are not sure, ask one short question.',
+        APP_GUIDE
       ].filter(Boolean).join('\n');
     }
 
@@ -2085,6 +2180,7 @@
     function addProposal(p) {
       if (p.cat === 'todo') { if (window.__todoAdd) window.__todoAdd(p.text, p.when, p.time, p.due); p.status = 'added'; return; }
       if (p.cat === 'reminder') { if (window.__remAdd) window.__remAdd(p); p.status = 'added'; return; }
+      if (p.cat === 'plan') { if (window.__planAdd) window.__planAdd(Object.assign({}, p.plan, { title: p.text })); p.status = 'added'; return; }
       const ids = CATEGORIES.filter(c => !c.hidden).map(c => c.id);
       const cat = ids.includes(p.cat) ? p.cat : 'notes';
       const time = /^\d{1,2}:\d{2}$/.test(p.time || '') ? p.time.padStart(5, '0') : getCurrentHHMM();
@@ -2102,6 +2198,10 @@
 
     function renderChat() {
       const log = document.getElementById('chat-log');
+      if (chatHistory.length === 0 && !chatBusy && window.__planMode) {
+        log.innerHTML = '<div class="chat-hint">Plan mode is on. Tell me a big goal and I will build a plan with steps and dates, and you tap Add. I may ask one or two quick questions first.</div><div class="chat-suggs"><button type="button" data-sugg="I want to gain 3 kg in 3 months">Gain 3 kg in 3 months</button><button type="button" data-sugg="I want to sleep before 11 pm every day">Sleep before 11 pm</button><button type="button" data-sugg="I want to finish my course in 6 weeks">Finish a course</button><button type="button" data-sugg="I want to drink my full water goal every day for a month">Water goal for a month</button></div>';
+        return;
+      }
       if (chatHistory.length === 0 && !chatBusy) {
         log.innerHTML = '<div class="chat-hint">Hi! Tell me what you did today, and what you did not do. Example: "drank 2 glasses of water, had idli 3 with sambar, forgot my iron tablet". I will suggest where to save each thing, and you tap Add.</div><div class="chat-suggs"><button type="button" data-sugg="Drank 500 ml water">Drank 500 ml water</button><button type="button" data-sugg="Had idli with sambar for breakfast">Idli for breakfast</button><button type="button" data-sugg="Took my vitamin tablet">Took my vitamin</button><button type="button" data-sugg="Slept 7 hours last night">Slept 7 hours</button><button type="button" data-sugg="Remind me to buy bananas tomorrow">Add a to-do</button></div>';
         return;
@@ -2122,15 +2222,18 @@
               const label = p.status === 'added' ? '✓ Added' : (p.status === 'skipped' ? 'Skipped' : 'Replaced');
               right = '<span class="prop-state">' + label + '</span>';
             }
-            return '<div class="prop' + (p.status === 'pending' ? ' editable' : '') + '"><div class="prop-main"><div class="prop-cat">' +
-              ((p.cat === 'todo' || p.cat === 'reminder') && window.__propLabel ? escapeHtml(window.__propLabel(p)) : escapeHtml(c ? c.name : p.cat) + ' · ' + escapeHtml(p.time) + dayTag) +
-              '</div><div class="prop-text">' + escapeHtml(p.text) + '</div></div><div class="prop-actions">' + right + '</div></div>';
+            return '<div class="prop' + (p.cat === 'plan' ? ' is-plan' : '') + (p.status === 'pending' ? ' editable' : '') + '"><div class="prop-main"><div class="prop-cat">' +
+              ((p.cat === 'todo' || p.cat === 'reminder' || p.cat === 'plan') && window.__propLabel ? escapeHtml(window.__propLabel(p)) : escapeHtml(c ? c.name : p.cat) + ' · ' + escapeHtml(p.time) + dayTag) +
+              '</div><div class="prop-text">' + escapeHtml(p.text) + '</div>' +
+              (p.cat === 'plan' && p.plan ? '<ol class="prop-steps">' + p.plan.steps.slice(0, 9).map(st => '<li>' + escapeHtml(st.text) + '</li>').join('') + '</ol>' : '') + '</div><div class="prop-actions">' + right + '</div></div>';
           }).join('') +
  (pending ? '<div class="prop-hint">Tap a line to fix it before adding.</div>' : '') +
           (pending > 1 ? '<button class="prop-all" data-m="' + mi + '" data-act="all">Add all (' + pending + ')</button>' : '') +
           '</div>';
         }
-        return '<div class="bubble ai">' + escapeHtml(m.text).replace(/\n/g, '<br>') + props + '</div>';
+        const openBtn = m.open && window.__openLabel ? '<button class="open-btn" type="button" data-open="' + m.open + '">' + escapeHtml(window.__openLabel(m.open)) + '</button>' : '';
+        const mem = m.noted && m.noted.length ? '<span class="ai-mem">Noted: ' + m.noted.map(escapeHtml).join('; ') + '. You can change this in Settings.</span>' : '';
+        return '<div class="bubble ai">' + escapeHtml(m.text).replace(/\n/g, '<br>') + props + openBtn + mem + '</div>';
       }).join('') + (chatBusy ? '<div class="bubble ai thinking" aria-label="Thinking"><i></i><i></i><i></i></div>' : '');
       log.scrollTop = log.scrollHeight;
     }
@@ -2142,6 +2245,8 @@
       if (!text) return;
       input.value = '';
       chatHistory.push({ role: 'user', text });
+
+      if (window.__bottleChat) { const br = window.__bottleChat(text); if (br) { chatHistory.push({ role: 'model', local: true, text: br }); renderChat(); return; } }
 
       if (!getAiKey() && window.__refreshAccess) { await Promise.race([window.__refreshAccess(false), sleep(7000)]); }
       if (!getAiKey()) {
@@ -2167,6 +2272,19 @@
             properties: {
               reply: { type: 'STRING' },
               action: { type: 'STRING', enum: ['propose', 'add_pending', 'none'] },
+              open: { type: 'STRING', enum: ['none', 'todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'bottle'] },
+              remember: { type: 'ARRAY', items: { type: 'STRING' } },
+              plan: {
+                type: 'OBJECT',
+                properties: {
+                  title: { type: 'STRING' },
+                  why: { type: 'STRING' },
+                  how: { type: 'STRING' },
+                  due: { type: 'STRING' },
+                  replaces: { type: 'STRING' },
+                  steps: { type: 'ARRAY', items: { type: 'OBJECT', properties: { text: { type: 'STRING' }, due: { type: 'STRING' } }, required: ['text', 'due'] } }
+                }
+              },
               reminders: {
                 type: 'ARRAY',
                 items: {
@@ -2233,6 +2351,11 @@
         time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : '', day: 'today', status: 'pending'
       }));
       if (window.__nlpFix) { todoProps.forEach(p => window.__nlpFix(p, text, todoProps.length)); remProps.forEach(p => window.__nlpFix(p, text, remProps.length)); }
+      const planProps = [];
+      if (out.plan && window.__planClean) { const pl = window.__planClean(out.plan); if (pl) planProps.push({ cat: 'plan', text: pl.title, plan: pl, day: 'today', time: '', status: 'pending' }); }
+      const openT = ['todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'bottle'].includes(out.open) ? out.open : '';
+      const noted = window.__memAdd ? window.__memAdd(out.remember) : [];
+      const extra = { open: openT, noted: noted };
 
       if (out.action === 'add_pending') {
         let n = 0;
@@ -2240,8 +2363,8 @@
           if (p.status === 'pending') { addProposal(p); n++; }
         }));
         if (n > 0) { saveData(); renderMain(); showToast('Added ' + n + (n === 1 ? ' item' : ' items')); }
-        chatHistory.push({ role: 'model', text: out.reply });
-      } else if (entries.length > 0 || todoProps.length > 0 || remProps.length > 0) {
+        chatHistory.push(Object.assign({ role: 'model', text: out.reply }, extra));
+      } else if (entries.length > 0 || todoProps.length > 0 || remProps.length > 0 || planProps.length > 0) {
         chatHistory.forEach(m => (m.proposals || []).forEach(p => { if (p.status === 'pending') p.status = 'replaced'; }));
         chatHistory.push({
           role: 'model',
@@ -2252,10 +2375,11 @@
             time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : getCurrentHHMM(),
             day: e.day === 'yesterday' ? 'yesterday' : 'today',
             status: 'pending'
-          })).concat(todoProps, remProps)
+          })).concat(todoProps, remProps, planProps),
+          open: openT, noted: noted
         });
       } else {
-        chatHistory.push({ role: 'model', text: out.reply });
+        chatHistory.push(Object.assign({ role: 'model', text: out.reply }, extra));
       }
       renderChat();
     }
@@ -4080,8 +4204,11 @@
       if (nT && pmT > nowMs + 60000) out.push({ at: pmT, title: 'Still to do today', body: nT + (nT === 1 ? ' task is' : ' tasks are') + ' still open.', tag: 'todo-pm' });
       if (nM) { var amM = atMin(1, c.wake + 45); if (amM <= horizon + 3600000) out.push({ at: amM, title: 'Your to-do today', body: nM + (nM === 1 ? ' task is' : ' tasks are') + ' planned for today.', tag: 'todo-am' }); }
     } catch (e) {}
+    // an open bottle: one nudge to log it, and no water reminders while you are drinking it
+    var bo = SETTINGS.bottleOpen, bottleOn = !!(bo && bo.start && nowMs - bo.start < 6 * 3600000);
+    if (bottleOn) { var nb = bo.start + 3 * 3600000; if (nb > nowMs + 60000 && nb <= horizon) out.push({ at: nb, title: 'Your water bottle', body: 'Finished it? Tap to log it.', tag: 'bottle' }); }
     // smart water
-    if (r.water.on !== false && c.total < c.target) {
+    if (r.water.on !== false && c.total < c.target && !bottleOn) {
       var plan = modeGap(c), gap = plan.gap, amt = Math.min(300, Math.max(150, Math.round((c.target - c.total) / 6 / 50) * 50));
       var waters = sortEntries(c.entries.filter(function(e){ return e.cat === 'water' && extractWaterMl(e.text) > 0; }));
       var last = waters.length ? toMin(waters[waters.length - 1].time) : null;
@@ -5407,10 +5534,349 @@
   }
   var goAfter = fromUrl();
   function resumeInvite() { var c = pending(); if (c) wait(function () { var u = me(); return window.__lbApi && sb() && u; }, 20000, function (ok) { if (ok) showInvite(c); else if (pending()) showInvite(c); }); }
-  window.addEventListener('load', function () { setTimeout(function () { if (goAfter) go(goAfter); resumeInvite(); }, 400); });
+  window.addEventListener('load', function () { setTimeout(function () { if (goAfter) window.__go(goAfter); resumeInvite(); }, 400); });
   // a notification tapped while the app was already open
-  if (navigator.serviceWorker) navigator.serviceWorker.addEventListener('message', function (e) { var d = e.data || {}; if (d.type === 'go' && d.go) go(d.go); });
+  if (navigator.serviceWorker) navigator.serviceWorker.addEventListener('message', function (e) { var d = e.data || {}; if (d.type === 'go' && d.go) window.__go(d.go); });
   window.__showInvite = showInvite;
+})();
+</script>
+
+<script>
+// ---------- water bottle: drink a whole bottle, log it once, the app spreads it over the time you took ----------
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2h4"/><path d="M9 6h6"/><path d="M8.5 6A2.5 2.5 0 0 0 6 8.5V20a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8.5A2.5 2.5 0 0 0 15.5 6"/><path d="M6 12h12"/></svg>';
+  var SIZES = [330, 500, 650, 750, 1000, 1500];
+  var mode = 'size', afterSize = false;
+  function size() { var n = Number(SETTINGS.bottle && SETTINGS.bottle.size); return n >= 100 && n <= 5000 ? Math.round(n) : 0; }
+  function open() { var o = SETTINGS.bottleOpen; return o && o.start ? o : null; }
+  function hm(ms) { var d = new Date(ms); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); }
+  function dur(ms) { var m = Math.max(1, Math.round(ms / 60000)); return m < 60 ? m + ' min' : Math.floor(m / 60) + 'h' + (m % 60 ? ' ' + (m % 60) + 'm' : ''); }
+  function dayStartMs() { var k = getTodayKey().split('-'); return new Date(+k[0], +k[1] - 1, +k[2], NEW_DAY_HOUR, 0, 0).getTime(); }
+
+  // split ml into steps of about 100 ml, spread from start to end (the last sip is at the end)
+  function plan(total, startMs, endMs) {
+    startMs = Math.max(startMs, dayStartMs());
+    var span = endMs - startMs;
+    if (span < 20 * 60000 || total < 150) return [{ ml: total, at: endMs }];
+    var n = Math.max(2, Math.min(12, Math.round(total / 100))), out = [], base = Math.floor(total / n / 5) * 5, extra = Math.round((total - base * n) / 5), used = 0;
+    for (var i = 0; i < n; i++) {
+      var ml = i === n - 1 ? total - used : base + (i >= n - extra ? 5 : 0); used += ml;
+      out.push({ ml: ml, at: Math.round((startMs + (i + 1) * span / n) / 60000) * 60000 });
+    }
+    return out;
+  }
+  function logDrink(total, startMs) {
+    var key = getTodayKey(), parts = plan(total, startMs, Date.now()), ids = [];
+    if (!Array.isArray(allData[key])) allData[key] = [];
+    parts.forEach(function (p, i) {
+      var id = Date.now() + '-b' + i + Math.random().toString(36).slice(2, 5);
+      allData[key].push({ id: id, text: 'water ' + p.ml + 'ml', cat: 'water', time: hm(p.at), createdAt: p.at, bottle: true });
+      ids.push(id);
+    });
+    SETTINGS.bottleOpen = null; SETTINGS.bottleLast = { key: key, ids: ids, ml: total, n: parts.length, at: Date.now() };
+    saveData(); saveSettings(); renderMain();
+    if (window.__fx && $('tank')) { try { window.__fx.pour($('tank')); } catch (e) {} }
+    if (navigator.vibrate) navigator.vibrate(15);
+    if (window.__schedSoon) window.__schedSoon();
+    return parts.length;
+  }
+  function undo() {
+    var L = SETTINGS.bottleLast; if (!L) return;
+    var list = allData[L.key]; if (Array.isArray(list)) allData[L.key] = list.filter(function (e) { return L.ids.indexOf(e.id) < 0; });
+    SETTINGS.bottleLast = null; saveData(); saveSettings(); renderMain(); showToast('Bottle removed');
+  }
+  function start(atMs) { SETTINGS.bottleOpen = { start: atMs || Date.now(), size: size() }; SETTINGS.bottleLast = null; saveSettings(); renderMain(); if (window.__schedSoon) window.__schedSoon(); showToast('Bottle started at ' + hm(SETTINGS.bottleOpen.start)); }
+  function finish(ml) {
+    var o = open(), s = size(), total = ml != null ? ml : (o && o.size) || s; if (!o && !s) return;
+    var from = o ? o.start : Date.now() - 90 * 60000;
+    var n = logDrink(total, from); showToast('Logged ' + total + ' ml in ' + n + (n === 1 ? ' part' : ' parts'));
+  }
+  window.__bottle = { size: size, open: open, start: start, finish: finish, undo: undo, plan: plan, log: logDrink };
+
+  // ---------- the strip on the water card ----------
+  function draw() {
+    var el = $('tank-bottle'); if (!el) return;
+    if (viewingPastDay) { el.innerHTML = ''; return; }
+    var s = size(), o = open(), L = SETTINGS.bottleLast, h;
+    if (o) {
+      h = '<p class="bt-line"><b>' + o.size + ' ml bottle</b> open since ' + hm(o.start) + ' (' + dur(Date.now() - o.start) + ')</p><div class="bt-row"><button class="quick-btn solid" data-bt="finish" type="button">Finished</button><button class="quick-btn" data-bt="left" type="button">Some left</button><button class="quick-btn small" data-bt="cancel" type="button" aria-label="Cancel this bottle"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>';
+    } else if (L && Date.now() - L.at < 15 * 60000 && L.key === getTodayKey()) {
+      h = '<p class="bt-line">Logged <b>' + L.ml + ' ml</b> in ' + L.n + (L.n === 1 ? ' part' : ' parts') + '. <button class="bt-undo" data-bt="undo" type="button">Undo</button></p>' + startRow(s);
+    } else h = startRow(s);
+    if (el.dataset.sig !== h) { el.dataset.sig = h; el.innerHTML = h; }
+  }
+  function startRow(s) {
+    return s ? '<div class="bt-row"><button class="quick-btn" data-bt="start" type="button">' + ICON + 'Start ' + s + ' ml bottle</button><button class="quick-btn small" data-bt="size" type="button" aria-label="Change bottle size"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>'
+             : '<div class="bt-row"><button class="quick-btn" data-bt="setup" type="button">' + ICON + 'Track a whole bottle</button></div>';
+  }
+  if (typeof renderMain === 'function') { var _r = renderMain; renderMain = function () { var x = _r.apply(this, arguments); try { draw(); drawSettingsRow(); } catch (e) {} return x; }; }
+  function drawSettingsRow() { var v = $('set-bottle-val'); if (v) v.textContent = size() ? size() + ' ml' : 'Not set'; }
+  setInterval(function () { if (open()) draw(); }, 60000);
+
+  // ---------- the small sheet ----------
+  function sheet(m, after) { mode = m; afterSize = !!after; paint(); $('bt-modal').classList.add('open'); }
+  function paint() {
+    var s = size(), o = open(), b = $('bt-body');
+    if (mode === 'size') {
+      $('bt-title').textContent = 'My water bottle';
+      b.innerHTML = '<div class="lb-card"><p>How much does your bottle hold? Use the size printed on it.</p><div class="lb-chips">' + SIZES.map(function (n) { return '<button type="button" data-sz="' + n + '" class="' + (n === s ? 'on' : '') + '">' + n + ' ml</button>'; }).join('') + '</div><label class="field-label" for="bt-ml">Or type it</label><input id="bt-ml" class="lb-field" type="number" inputmode="numeric" min="100" max="5000" placeholder="For example 675" value="' + (s || '') + '" /><button class="lb-btn" id="bt-save" type="button">' + (afterSize ? 'Save and start the bottle' : 'Save') + '</button></div>';
+    } else {
+      var t = (o && o.size) || s;
+      $('bt-title').textContent = 'How much is left?';
+      b.innerHTML = '<div class="lb-card"><p>Only what you drank is logged. Your ' + t + ' ml bottle, how much is left in it?</p><div class="lb-chips">' + [[0.25, '¼ left'], [0.5, 'Half left'], [0.75, '¾ left']].map(function (c) { return '<button type="button" data-left="' + Math.round(t * c[0] / 5) * 5 + '">' + c[1] + '</button>'; }).join('') + '</div><label class="field-label" for="bt-left">Or type the ml left</label><input id="bt-left" class="lb-field" type="number" inputmode="numeric" min="0" max="' + t + '" placeholder="For example 200" /><button class="lb-btn" id="bt-drank" type="button">Log what I drank</button></div>';
+    }
+  }
+  function close() { $('bt-modal').classList.remove('open'); }
+  document.addEventListener('click', function (e) {
+    var t = e.target; if (!t.closest) return;
+    var a = t.closest('[data-bt]');
+    if (a && a.closest('#tank-bottle')) {
+      var k = a.dataset.bt;
+      if (k === 'setup') sheet('size', true);
+      else if (k === 'size') sheet('size', false);
+      else if (k === 'start') start();
+      else if (k === 'finish') finish();
+      else if (k === 'left') sheet('left');
+      else if (k === 'undo') undo();
+      else if (k === 'cancel') { if (a.dataset.sure !== '1') { a.dataset.sure = '1'; showToast('Tap the cross again to drop this bottle'); setTimeout(function () { a.dataset.sure = ''; }, 3000); } else { SETTINGS.bottleOpen = null; saveSettings(); renderMain(); showToast('Bottle dropped. Nothing was logged'); } }
+      return;
+    }
+    if (t.closest('#set-bottle-row')) { $('settings-modal').classList.remove('open'); setTimeout(function () { sheet('size', false); }, 140); return; }
+    if (t.id === 'bt-close' || t.id === 'bt-modal') { close(); return; }
+    if (!t.closest('#bt-modal')) return;
+    var sz = t.closest('[data-sz]'); if (sz) { $('bt-ml').value = sz.dataset.sz; document.querySelectorAll('#bt-body [data-sz]').forEach(function (b) { b.classList.toggle('on', b === sz); }); return; }
+    var lf = t.closest('[data-left]'); if (lf) { $('bt-left').value = lf.dataset.left; return; }
+    if (t.id === 'bt-save') {
+      var v = Math.round(Number($('bt-ml').value)); if (!(v >= 100 && v <= 5000)) { showToast('Enter a size from 100 to 5000 ml'); return; }
+      SETTINGS.bottle = { size: v }; if (open()) { SETTINGS.bottleOpen.size = v; } saveSettings(); close(); renderMain();
+      if (afterSize && !open()) start(); else showToast('Bottle size saved: ' + v + ' ml'); return;
+    }
+    if (t.id === 'bt-drank') {
+      var tot = (open() && open().size) || size(), left = Math.round(Number($('bt-left').value));
+      if (!(left >= 0 && left < tot)) { showToast('Left must be less than ' + tot + ' ml'); return; }
+      close(); finish(tot - left);
+    }
+  });
+
+  // ---------- chat: "finished my bottle", "half my bottle" ----------
+  window.__bottleChat = function (text) {
+    var t = String(text || '').toLowerCase();
+    if (!/\b(bottle|flask|tumbler)\b/.test(t)) return null;
+    var s = size(), o = open();
+    if (/\b(start|started|starting|filled|refilled|new)\b/.test(t) && !/\b(finish|finished|done|drank|drunk|completed)\b/.test(t)) {
+      if (!s) return 'Tell me your bottle size first: Settings, My water bottle. Then I can track it.';
+      if (o) return 'Your ' + o.size + ' ml bottle is already open since ' + hm(o.start) + '.';
+      start(); return 'Started your ' + s + ' ml bottle. Tell me when you finish it.';
+    }
+    if (!/\b(finish|finished|done|drank|drunk|completed|empty|emptied|had)\b/.test(t)) return null;
+    var tot = (o && o.size) || s; if (!tot) return 'Tell me your bottle size first: Settings, My water bottle. Then I can log it.';
+    var frac = /\bhalf\b/.test(t) ? 0.5 : /\b(quarter|a fourth)\b/.test(t) ? 0.25 : /\bthree[- ]quarters?\b/.test(t) ? 0.75 : 1;
+    var ml = Math.round(tot * frac / 5) * 5;
+    finish(ml);
+    return 'Logged ' + ml + ' ml' + (o ? ', spread from ' + hm(o.start) + ' to now.' : '.');
+  };
+  window.__bottleCtx = function () {
+    var s = size(), o = open();
+    return 'BOTTLE: ' + (s ? 'the user\'s bottle holds ' + s + ' ml' : 'no bottle size set') + (o ? '; one is open since ' + hm(o.start) : '') + '.';
+  };
+  window.__bottle.sheet = function () { sheet('size', false); };
+  setTimeout(function () { try { draw(); drawSettingsRow(); } catch (e) {} }, 300);
+})();
+</script>
+
+<script>
+// ---------- Plans (big goals), Plan mode in the chat, and what the AI remembers ----------
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (t) { return typeof escapeHtml === 'function' ? escapeHtml(t) : String(t); };
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], DAYN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var IC = {
+    route: '<svg class="ps-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>',
+    chev: '<svg class="ps-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>',
+    tick: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>'
+  };
+  var S = { view: 'list', id: '', form: false, sure: '' };
+  function jd(k) { var p = k.split('-'); return new Date(+p[0], +p[1] - 1, +p[2], 12); }
+  function diff(a, b) { return Math.round((jd(b) - jd(a)) / 864e5); }
+  function okDate(d) { return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && !isNaN(jd(d)); }
+  function nice(d) { if (!okDate(d)) return ''; var n = diff(getTodayKey(), d); if (n === 0) return 'today'; if (n === 1) return 'tomorrow'; if (n === -1) return 'yesterday'; if (n > 1 && n < 7) return DAYN[jd(d).getDay()]; var x = jd(d); return x.getDate() + ' ' + MON[x.getMonth()]; }
+  function list() { return Array.isArray(SETTINGS.plans) ? SETTINGS.plans : (SETTINGS.plans = []); }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function todoOf(st) { return st.todoId ? (SETTINGS.todos || []).filter(function (t) { return t && t.id === st.todoId; })[0] : null; }
+  function sd(st) { if (st.done) return true; var t = todoOf(st); if (t && t.done) { st.done = true; return true; } return false; }
+  function prog(p) { var n = p.steps.length, d = p.steps.filter(sd).length; return { n: n, d: d, pct: n ? Math.round(100 * d / n) : 0 }; }
+  function find(id) { return list().filter(function (p) { return p.id === id; })[0]; }
+  function active() { return list().filter(function (p) { return !p.doneAt; }); }
+  function save() { saveSettings(); }
+
+  // ---------- a clean plan from AI output or the form ----------
+  window.__planClean = function (o) {
+    if (!o || typeof o.title !== 'string' || !o.title.trim()) return null;
+    var steps = (Array.isArray(o.steps) ? o.steps : []).filter(function (x) { return x && typeof x.text === 'string' && x.text.trim(); }).slice(0, 10).map(function (x) { return { id: uid(), text: x.text.trim().slice(0, 100), due: okDate(x.due) ? x.due : '', done: false }; });
+    if (steps.length < 2) return null;
+    return { title: o.title.trim().slice(0, 60), why: String(o.why || '').trim().slice(0, 160), how: String(o.how || '').trim().slice(0, 320), due: okDate(o.due) ? o.due : '', replaces: String(o.replaces || '').trim(), steps: steps };
+  };
+  window.__planAdd = function (o) {
+    var c = window.__planClean(o); if (!c) { c = o && o.title && Array.isArray(o.steps) ? o : null; if (!c) return null; }
+    var ex = c.replaces ? list().filter(function (p) { return p.title.toLowerCase() === c.replaces.toLowerCase(); })[0] : null;
+    var pl;
+    if (ex) {
+      var keep = {}; ex.steps.forEach(function (st) { keep[st.text.toLowerCase()] = st; });
+      ex.steps = c.steps.map(function (st) { var k = keep[st.text.toLowerCase()]; return k ? Object.assign(st, { id: k.id, done: k.done, todoId: k.todoId }) : st; });
+      ex.title = c.title; ex.why = c.why || ex.why; ex.how = c.how || ex.how; ex.due = c.due || ex.due; ex.doneAt = 0; pl = ex;
+    } else {
+      pl = { id: uid(), title: c.title, why: c.why, how: c.how, due: c.due, steps: c.steps, created: Date.now(), doneAt: 0 };
+      list().unshift(pl); if (list().length > 12) list().length = 12;
+    }
+    var n = 0;
+    pl.steps.forEach(function (st) { if (!st.todoId && !st.done && st.due && diff(getTodayKey(), st.due) <= 1 && diff(getTodayKey(), st.due) >= 0 && window.__todoAdd) { var t = window.__todoAdd(st.text, 'today', '', st.due); if (t) { st.todoId = t.id; n++; } } });
+    save(); draw(); if (typeof renderMain === 'function') renderMain();
+    showToast('Plan added' + (n ? ' and ' + n + (n === 1 ? ' step' : ' steps') + ' in your to-dos' : '')); if (navigator.vibrate) navigator.vibrate(15);
+    return pl;
+  };
+  window.__planCtx = function () {
+    var a = active(); if (!a.length) return 'PLANS: (none)';
+    return 'PLANS:\n' + a.map(function (p) { var g = prog(p); return '- "' + p.title + '" ' + g.d + '/' + g.n + ' steps done' + (p.due ? ', goal date ' + p.due : '') + '. Next: ' + ((p.steps.filter(function (x) { return !sd(x); })[0] || {}).text || 'all done'); }).join('\n');
+  };
+  window.__propLabelPlan = function (p) {
+    var n = p.plan ? p.plan.steps.length : 0;
+    return 'Plan · ' + n + ' steps' + (p.plan && p.plan.due ? ' · by ' + nice(p.plan.due) : '') + (p.plan && p.plan.replaces ? ' · changes "' + p.plan.replaces + '"' : '');
+  };
+
+  // ---------- the strip on the home screen ----------
+  function strip() {
+    var el = $('plan-strip'); if (!el) return;
+    if (viewingPastDay) { el.hidden = true; return; } el.hidden = false;
+    var a = active(), t, sub;
+    if (!a.length) { t = 'Plans'; sub = list().length ? 'All plans done. Start a new goal' : 'Plan a big goal with the AI'; }
+    else { var p = a[0], g = prog(p), nx = p.steps.filter(function (x) { return !sd(x); })[0]; t = a.length === 1 ? p.title + ' · ' + g.pct + '%' : a.length + ' plans · ' + p.title + ' ' + g.pct + '%'; sub = nx ? 'Next: ' + nx.text : 'Every step is done'; }
+    var h = IC.route + '<span class="ps-main"><b>' + esc(t) + '</b><small>' + esc(sub) + '</small></span>' + IC.chev;
+    if (el.dataset.sig !== h) { el.dataset.sig = h; el.innerHTML = h; }
+  }
+  if (typeof renderMain === 'function') { var _r = renderMain; renderMain = function () { var x = _r.apply(this, arguments); try { strip(); } catch (e) {} return x; }; }
+
+  // ---------- the sheet ----------
+  function openSheet(id) { S.view = id ? 'detail' : 'list'; S.id = id || ''; S.form = false; S.sure = ''; draw(); $('plan-modal').classList.add('open'); }
+  window.__planOpen = openSheet;
+  function close() { $('plan-modal').classList.remove('open'); }
+  function card(p) {
+    var g = prog(p), nx = p.steps.filter(function (x) { return !sd(x); })[0];
+    return '<button type="button" class="pl-card" data-plan="' + p.id + '"><b>' + esc(p.title) + '</b>' + (p.why ? '<span>' + esc(p.why) + '</span>' : '') + '<div class="pl-bar"><i style="width:' + g.pct + '%"></i></div><small>' + g.d + ' of ' + g.n + ' steps' + (p.due ? ' · goal ' + nice(p.due) : '') + (nx ? ' · Next: ' + esc(nx.text) : '') + '</small></button>';
+  }
+  function draw() {
+    var m = $('plan-modal'), b = $('pl-body'); if (!m || !b) return;
+    var back = $('pl-back'), ttl = $('pl-title');
+    if (S.view === 'detail') {
+      var p = find(S.id); if (!p) { S.view = 'list'; return draw(); }
+      back.hidden = false; ttl.textContent = 'Plan';
+      var g = prog(p), steps = p.steps.map(function (st) {
+        var done = sd(st), t = todoOf(st);
+        return '<li class="pl-step' + (done ? ' done' : '') + '" data-sid="' + st.id + '"><button type="button" class="pl-chk" data-act="tog" aria-label="' + (done ? 'Mark not done' : 'Mark done') + '"><i>' + IC.tick + '</i></button><span class="pl-tx">' + esc(st.text) + (st.due ? '<small>' + esc(nice(st.due)) + '</small>' : '') + '</span>' +
+          (done ? '' : (st.todoId && t ? '<span class="pl-in">In to-dos</span>' : '<button type="button" class="pl-mini" data-act="todo">To-do</button>')) + '<button type="button" class="pl-mini" data-act="del" aria-label="Remove step" style="width:40px;padding:0">&times;</button></li>';
+      }).join('');
+      b.innerHTML = '<div class="lb-card"><h3 style="margin:0 0 4px">' + esc(p.title) + '</h3>' + (p.why ? '<p class="pl-why">' + esc(p.why) + '</p>' : '') + '<div class="pl-bar"><i style="width:' + g.pct + '%"></i></div><p class="pl-why" style="margin-top:8px">' + g.d + ' of ' + g.n + ' steps done' + (p.due ? ' · goal ' + esc(nice(p.due)) : '') + '</p></div>' +
+        (p.how ? '<div class="pl-how"><b>How to achieve it</b>' + esc(p.how) + '</div>' : '') +
+        '<ul class="pl-steps">' + steps + '</ul>' +
+        '<form class="pl-addrow" id="pl-addstep" autocomplete="off"><input id="pl-newstep" class="lb-field" maxlength="100" placeholder="Add a step" enterkeyhint="done" /><button type="submit" aria-label="Add step">' + IC.plus + '</button></form>' +
+        '<div class="lb-pair"><button class="lb-btn ghost row" data-act="adjust" type="button">Adjust with AI</button><button class="lb-btn danger row" data-act="delplan" type="button">' + (S.sure === 'plan' ? 'Tap again' : 'Delete plan') + '</button></div>';
+      return;
+    }
+    back.hidden = true; ttl.textContent = 'Plans';
+    var act = active(), done = list().filter(function (p) { return p.doneAt; });
+    var top = '<div class="lb-pair" style="margin:0 0 12px"><button class="lb-btn row" data-act="ai" type="button">Plan with AI</button><button class="lb-btn ghost row" data-act="mine" type="button">Write my own</button></div>';
+    if (S.form) top += '<div class="lb-card"><label class="field-label" for="pl-t">Goal</label><input id="pl-t" class="lb-field" maxlength="60" placeholder="For example: Gain 3 kg" /><label class="field-label" for="pl-d">Goal date (optional)</label><input id="pl-d" class="lb-field" type="date" /><button class="lb-btn" data-act="create" type="button">Create plan</button></div>';
+    b.innerHTML = top + (act.length ? act.map(card).join('') : (S.form ? '' : '<div class="lb-card"><p>Plans keep your big goals in one place, with small steps and dates. Tap Plan with AI and tell it what you want to achieve.</p></div>')) +
+      (done.length ? '<h4 style="margin:14px 2px 8px;font-size:13px;color:var(--moss)">Done</h4>' + done.map(card).join('') : '');
+  }
+  function setMode(on) {
+    window.__planMode = !!on; var bt = $('chat-plan-btn'); if (bt) bt.setAttribute('aria-pressed', on ? 'true' : 'false');
+    var inp = $('chat-input'); if (inp) inp.placeholder = on ? 'Tell me a goal to plan...' : 'Tell me what you did...';
+    if (typeof renderChat === 'function') renderChat();
+  }
+  window.__setPlanMode = setMode;
+  function inChat(text, plan) { close(); var c = $('chat-modal'); if (!c.classList.contains('open')) { var b = $('open-chat-btn'); if (b) b.click(); } setMode(true); var inp = $('chat-input'); if (inp && text) { inp.value = text; inp.focus(); } }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target; if (!t.closest) return;
+    if (t.closest('#plan-strip')) { openSheet(); return; }
+    if (t.closest('#chat-plan-btn')) { setMode(!window.__planMode); return; }
+    var ob = t.closest('[data-open]'); if (ob && ob.closest('#chat-log')) { var d = ob.dataset.open; if (window.__go) window.__go(d); return; }
+    if (t.closest('#set-mem-row')) { $('settings-modal').classList.remove('open'); setTimeout(openMem, 140); return; }
+    if (t.id === 'mem-close' || t.id === 'mem-modal') { $('mem-modal').classList.remove('open'); return; }
+    var md = t.closest('[data-mdel]'); if (md && md.closest('#mem-modal')) { var a = mem(); a.splice(+md.dataset.mdel, 1); save(); drawMem(); return; }
+    if (t.id === 'mem-clear') { if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again'; return; } SETTINGS.aiNotes = []; save(); drawMem(); return; }
+    if (t.id === 'pl-close' || t.id === 'plan-modal') { close(); return; }
+    if (t.id === 'pl-back') { S.view = 'list'; S.sure = ''; draw(); return; }
+    if (!t.closest('#plan-modal')) return;
+    var pc = t.closest('[data-plan]'); if (pc) { openSheet(pc.dataset.plan); return; }
+    var a2 = t.closest('[data-act]'); if (!a2) return; var act = a2.dataset.act, p = find(S.id), row = t.closest('[data-sid]'), st = row && p ? p.steps.filter(function (x) { return x.id === row.dataset.sid; })[0] : null;
+    if (act === 'ai') { inChat(''); return; }
+    if (act === 'mine') { S.form = !S.form; draw(); var f = $('pl-t'); if (f) f.focus(); return; }
+    if (act === 'create') {
+      var ti = $('pl-t').value.trim(), du = $('pl-d').value; if (ti.length < 2) { showToast('Give the plan a name'); return; }
+      var np = { id: uid(), title: ti.slice(0, 60), why: '', how: '', due: okDate(du) ? du : '', steps: [], created: Date.now(), doneAt: 0 }; list().unshift(np); save(); S.form = false; openSheet(np.id); strip(); return;
+    }
+    if (act === 'adjust' && p) { inChat('Change my plan "' + p.title + '": '); return; }
+    if (act === 'delplan' && p) { if (S.sure !== 'plan') { S.sure = 'plan'; draw(); setTimeout(function () { if (S.sure === 'plan') { S.sure = ''; if (S.view === 'detail') draw(); } }, 3000); return; } SETTINGS.plans = list().filter(function (x) { return x.id !== p.id; }); save(); S.view = 'list'; S.sure = ''; draw(); strip(); showToast('Plan deleted'); return; }
+    if (!p || !st) return;
+    if (act === 'tog') {
+      st.done = !sd(st) ? true : false; if (!st.done) { var td = todoOf(st); if (td && td.done) st.todoId = ''; }
+      var g = prog(p); if (g.n && g.d === g.n && !p.doneAt) { p.doneAt = Date.now(); showToast('Plan complete. Well done'); if (navigator.vibrate) navigator.vibrate([20, 40, 20]); } else if (g.d < g.n) p.doneAt = 0;
+      save(); draw(); strip(); return;
+    }
+    if (act === 'todo') { if (window.__todoAdd) { var due = st.due && diff(getTodayKey(), st.due) >= 0 ? st.due : getTodayKey(), tt = window.__todoAdd(st.text, 'today', '', due); if (tt) { st.todoId = tt.id; save(); draw(); showToast('Added to your to-dos for ' + nice(due)); } } return; }
+    if (act === 'del') { p.steps = p.steps.filter(function (x) { return x.id !== st.id; }); save(); draw(); strip(); return; }
+  });
+  document.addEventListener('submit', function (e) {
+    if (e.target.id !== 'pl-addstep') return; e.preventDefault();
+    var p = find(S.id), v = $('pl-newstep').value.trim(); if (!p || !v) return;
+    p.steps.push({ id: uid(), text: v.slice(0, 100), due: '', done: false }); p.doneAt = 0; save(); draw(); strip();
+    var f = $('pl-newstep'); if (f) f.focus();
+  });
+
+  // ---------- what the AI remembers ----------
+  var BAD = /diagnos|disease|cancer|diabet|\bhiv\b|depress|anxiety|suicid|password|\botp\b|aadhaar|passport|card number|salary|loan|debt|pregnan|therapy|medication for/i;
+  function mem() { return Array.isArray(SETTINGS.aiNotes) ? SETTINGS.aiNotes : (SETTINGS.aiNotes = []); }
+  window.__memAdd = function (arr) {
+    var added = []; if (!Array.isArray(arr)) return added;
+    arr.forEach(function (x) {
+      x = String(x || '').trim().replace(/\s+/g, ' ').slice(0, 80); if (x.length < 4 || BAD.test(x)) return;
+      var a = mem(); if (a.some(function (y) { return y.toLowerCase() === x.toLowerCase(); })) return;
+      a.push(x); if (a.length > 20) a.shift(); added.push(x);
+    });
+    if (added.length) { save(); drawMemRow(); }
+    return added;
+  };
+  window.__memCtx = function () { var a = mem(); return a.length ? 'WHAT THE USER TOLD YOU BEFORE (use it, do not repeat it back): ' + a.join('; ') + '.' : ''; };
+  function drawMemRow() { var v = $('set-mem-val'); if (v) { var n = mem().length; v.textContent = n ? n + (n === 1 ? ' thing' : ' things') : 'Nothing yet'; } }
+  function drawMem() {
+    var a = mem(), b = $('mem-body');
+    b.innerHTML = '<div class="lb-card"><p>' + (a.length ? 'These short notes help the AI answer better. They stay with your account. Remove any you do not want.' : 'Nothing yet. When you tell the AI something lasting, like when you wake up or your bottle size, it notes it here.') + '</p>' +
+      (a.length ? '<ul class="pl-steps">' + a.map(function (x, i) { return '<li class="pl-step"><span class="pl-tx" style="padding-left:10px">' + esc(x) + '</span><button type="button" class="pl-mini" data-mdel="' + i + '" aria-label="Remove">&times;</button></li>'; }).join('') + '</ul><button class="lb-btn danger" id="mem-clear" type="button">Forget everything</button>' : '') + '</div>';
+    drawMemRow();
+  }
+  function openMem() { drawMem(); $('mem-modal').classList.add('open'); }
+
+  // ---------- buttons the AI can show, and where they go ----------
+  var OL = { todo: 'Open my to-dos', plans: 'Open Plans', reminders: 'Open Reminders', leaderboard: 'Open the leaderboard', settings: 'Open Settings', water: 'Go to the water card', bottle: 'Open my bottle size' };
+  window.__openLabel = function (k) { return OL[k] || ''; };
+  window.__propLabelPlanFn = window.__propLabelPlan;
+  setTimeout(function () { drawMemRow(); try { strip(); } catch (e) {} }, 300);
+})();
+</script>
+
+<script>
+(function () {
+  // extra places the deep-link router can open
+  var base = window.__go;
+  window.__go = function (t) {
+    t = String(t || '').toLowerCase();
+    if (t === 'plans') { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); if (window.__planOpen) window.__planOpen(); return; }
+    if (t === 'bottle') { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); if (window.__bottle && window.__bottle.sheet) window.__bottle.sheet(); return; }
+    if (base) base(t);
+  };
 })();
 </script>
 
@@ -5467,6 +5933,7 @@
   }
   var REP = { daily: 'every day', weekdays: 'weekdays', weekends: 'weekends', today: 'today only', tomorrow: 'tomorrow only' };
   window.__propLabel = function (p) {
+    if (p.cat === 'plan') return window.__propLabelPlan ? window.__propLabelPlan(p) : 'Plan';
     if (p.cat === 'todo') return 'To-do · ' + (p.due ? friendly(p.due) : window.__todoLabel(p.when)) + (p.time ? ' · ' + p.time : '');
     if (p.remove) return 'Remove reminder · "' + (p.replaces || p.text) + '"';
     return 'Reminder · ' + p.time + ' · ' + (p.due ? friendly(p.due) : (REP[p.repeat] || 'every day')) + (p.replaces ? ' · changes "' + p.replaces + '"' : '');
@@ -5509,6 +5976,9 @@
     if (u.length) out.push('USUAL ITEMS (the user\'s own words, reuse these names): ' + u.join(' | '));
     var r = rem(), dn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     out.push('REMINDERS SET:\n' + (r.custom.length ? r.custom.map(function (x) { return '- ' + x.label + ' at ' + x.time + ' ' + (x.days && x.days.length ? x.days.map(function (d) { return dn[d]; }).join(',') : 'every day') + (x.on === false ? ' (off)' : ''); }).join('\n') : '(none)'));
+    if (window.__bottleCtx) out.push(window.__bottleCtx());
+    if (window.__planCtx) out.push(window.__planCtx());
+    if (window.__memCtx) { var mc = window.__memCtx(); if (mc) out.push(mc); }
     return out.join('\n');
   };
 

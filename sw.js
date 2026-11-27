@@ -1,6 +1,6 @@
 // Daily Log service worker: lets the app open offline.
 // Network first (so new versions show up), cache as backup.
-const CACHE = 'daily-log-v37';
+const CACHE = 'daily-log-v38';
 const FILES = ['./', './index.html', './gsap.min.js', './ScrollTrigger.min.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './badge-96.png'];
 
 self.addEventListener('install', e => {
@@ -39,7 +39,7 @@ self.addEventListener('fetch', e => {
 function targetFor(d) {
   if (d.go) return d.go;
   const tag = String(d.tag || '');
-  if (tag === 'water') return 'water';
+  if (tag === 'water' || tag === 'bottle') return 'water';
   if (tag.startsWith('todo') || /^t\d/.test(tag)) return 'todo';
   if (/^c\d/.test(tag)) return 'reminders';
   if (tag.startsWith('lb')) return 'leaderboard';
