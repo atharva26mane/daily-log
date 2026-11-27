@@ -971,6 +971,116 @@
     .lb-mini i { width: 4px; min-height: 3px; border-radius: 2px; background: rgba(64,81,59,0.5); }
     .lb-mini i.off { background: rgba(64,81,59,0.14); }
     .lb-pt { min-width: 40px; text-align: right; font-weight: 800; font-size: 16px; color: var(--forest); font-variant-numeric: tabular-nums; }
+    /* ---------- Snippets (Polaroids) ---------- */
+    .icon-btn { position: relative; }
+    .bell-n { position: absolute; top: -5px; right: -5px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #E2763A; color: #fff; font-size: 12px; font-weight: 800; line-height: 20px; text-align: center; border: 2px solid var(--cream); box-sizing: content-box; }
+    .bell-n[hidden] { display: none; }
+    @media (max-width: 430px) { .top-actions { gap: 6px; } .top-actions .icon-btn { width: 40px; height: 40px; border-radius: 13px; } }
+    .sn-strip { margin-top: -6px; position: relative; }
+    .sn-strip .ps-main { flex: 1; min-width: 0; display: block; }
+    .sn-strip .ps-main b { display: block; font-size: 15px; color: var(--ink); }
+    .sn-strip .ps-main small { display: block; font-size: 13px; color: var(--moss); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sn-strip .ps-chev { flex: none; width: 16px; height: 16px; opacity: .45; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .sn-mini { flex: none; position: relative; width: 30px; height: 30px; }
+    .sn-mini i { position: absolute; width: 22px; height: 26px; border-radius: 3px; background: #FBF6EA; border: 1px solid rgba(64,81,59,0.25); box-shadow: 0 2px 4px rgba(0,0,0,.12); }
+    .sn-mini i::after { content: ''; position: absolute; left: 2px; right: 2px; top: 2px; height: 15px; border-radius: 1px; background: #9FC7B5; }
+    .sn-mini i:nth-child(1) { left: 0; top: 3px; transform: rotate(-9deg); }
+    .sn-mini i:nth-child(2) { left: 7px; top: 0; transform: rotate(7deg); }
+    .sn-dot { flex: none; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: #E2763A; color: #fff; font-size: 12px; font-weight: 800; line-height: 22px; text-align: center; }
+    .sn-ibtn { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; border: 1px solid rgba(64,81,59,0.28); background: rgba(64,81,59,0.06); color: var(--forest); cursor: pointer; }
+    .sn-ibtn[hidden] { display: none; }
+    .sn-ibtn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .sn-ibtn:active, .sn-pol:active, .sn-sticker:active { transform: scale(0.97); }
+    .sn-cam { display: flex; align-items: center; gap: 14px; padding: 14px; margin-bottom: 14px; border-radius: 22px; background: rgba(255,255,255,0.78); border: 1px solid rgba(64,81,59,0.12); }
+    .sn-cam svg { flex: none; width: 76px; height: 64px; }
+    .sn-cam b { display: block; font-family: var(--display); font-size: 19px; color: var(--forest); }
+    .sn-cam small { display: block; font-size: 13.5px; line-height: 1.35; color: var(--moss); margin-top: 2px; }
+    .sn-add { margin-top: 0; }
+    .sn-pile { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 14px; padding: 6px 2px 4px; }
+    .sn-pile .sn-pol:nth-child(even) { margin-top: 14px; }
+    .sn-pol { --age: 0; --tilt: 0deg; position: relative; display: block; width: 100%; text-align: left; padding: 9px 9px 10px; border: 0; border-radius: 4px; font: inherit; color: #3A3427; cursor: pointer; transform: rotate(var(--tilt)); background: color-mix(in srgb, #FBF6EA calc((1 - var(--age)) * 100%), #E6D29A); box-shadow: 0 1px 1px rgba(0,0,0,.12), 0 6px 14px rgba(40,34,20,.18); transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
+    .sn-ph { position: relative; display: grid; place-items: center; aspect-ratio: 1 / 1; border-radius: 2px; overflow: hidden; background: #9FC7B5; text-align: center; }
+    .sn-ph::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.45), transparent 55%), radial-gradient(circle at 75% 80%, rgba(60,110,95,.35), transparent 60%); }
+    .sn-ph::after { content: ''; position: absolute; inset: 0; opacity: .35; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.18) 0 1px, transparent 1px 3px); }
+    .sn-ph span { position: relative; z-index: 1; padding: 0 8px; font-size: 13px; font-weight: 700; line-height: 1.25; color: #2F5446; }
+    .sn-ph svg { position: relative; z-index: 1; width: 26px; height: 26px; margin: 0 auto 4px; display: block; fill: none; stroke: #2F5446; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .st-seen .sn-ph { background: #E9E4D6; }
+    .st-seen .sn-ph::before, .st-seen .sn-ph::after { opacity: .25; }
+    .st-seen .sn-ph span, .st-seen .sn-ph svg { color: #8A8470; stroke: #8A8470; }
+    .st-mine .sn-ph { background: #C9DDD2; }
+    .sn-cap { display: block; padding: 8px 2px 0; }
+    .sn-cap b { display: block; font-family: 'Caveat', 'Segoe Print', 'Bradley Hand', 'Comic Neue', cursive; font-size: 21px; line-height: 1.1; font-weight: 700; color: #3A3427; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sn-cap small { display: block; margin-top: 2px; font-size: 12.5px; color: #7A735E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sn-stamp { display: block; margin-top: 5px; font-family: ui-monospace, 'Courier New', monospace; font-size: 11.5px; letter-spacing: .02em; font-weight: 700; color: #D8662B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sn-tape { position: absolute; top: -8px; right: 10px; z-index: 2; padding: 3px 9px; border-radius: 3px; background: #E2763A; color: #fff; font-size: 11.5px; font-weight: 800; letter-spacing: .04em; transform: rotate(4deg); box-shadow: 0 2px 4px rgba(0,0,0,.2); }
+    .sn-pol.fresh { animation: snspit 520ms cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes snspit { from { opacity: 0; transform: translateY(-46px) rotate(calc(var(--tilt) * -2)); } to { opacity: 1; transform: rotate(var(--tilt)); } }
+    .sn-note { margin: 14px 4px 0; font-size: 13.5px; line-height: 1.4; color: var(--moss); text-align: center; }
+    .sn-empty { text-align: center; padding: 26px 8px 8px; }
+    .sn-empty h3 { margin: 12px 0 6px; font-family: var(--display); font-size: 22px; color: var(--forest); }
+    .sn-empty p { margin: 0 auto 18px; max-width: 290px; font-size: 15px; line-height: 1.45; color: var(--moss); }
+    .sn-empty .sn-mini { margin: 0 auto; transform: scale(1.7); transform-origin: center; height: 40px; width: 40px; }
+    .sn-link { display: block; margin: 8px auto 0; min-height: 44px; padding: 0 14px; background: none; border: 0; font: inherit; font-size: 15px; font-weight: 600; color: var(--forest); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+    .sn-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .sn-pick button { min-height: 76px; border-radius: 18px; border: 1px dashed rgba(64,81,59,0.4); background: rgba(64,81,59,0.06); color: var(--forest); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+    .sn-pick svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .sn-prev { max-width: 250px; margin: 6px auto 14px; }
+    .sn-prev .sn-ph { background: #222; }
+    .sn-prev .sn-ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .sn-prev .sn-ph::before, .sn-prev .sn-ph::after { display: none; }
+    .sn-toggle { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; margin: 0 0 8px; padding: 6px 14px; border-radius: 16px; border: 1px solid rgba(64,81,59,0.16); background: rgba(255,255,255,0.7); font: inherit; font-size: 15px; font-weight: 600; color: var(--ink); text-align: left; cursor: pointer; }
+    .sn-toggle > span { flex: 1; min-width: 0; }
+    .sn-toggle i { position: relative; flex: none; width: 46px; height: 28px; border-radius: 14px; background: rgba(64,81,59,0.25); transition: background 160ms ease; }
+    .sn-toggle i::after { content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
+    .sn-toggle[aria-pressed="true"] i { background: var(--forest); }
+    .sn-toggle[aria-pressed="true"] i::after { transform: translateX(18px); }
+    .sn-gcard { display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin-bottom: 10px; border-radius: 18px; background: rgba(255,255,255,0.78); border: 1px solid rgba(64,81,59,0.14); }
+    .sn-gcard > div { flex: 1; min-width: 0; }
+    .sn-gcard b { display: block; font-size: 16px; color: var(--forest); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sn-gcard small { display: block; font-size: 13px; color: var(--moss); }
+    .sn-gcard button { flex: none; min-height: 44px; padding: 0 16px; border-radius: 14px; border: 1px solid rgba(64,81,59,0.3); background: rgba(64,81,59,0.07); color: var(--forest); font: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer; }
+    .sn-who { list-style: none; margin: 0 0 12px; padding: 0; }
+    .sn-who li { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 4px; border-bottom: 1px solid rgba(64,81,59,0.12); font-size: 15px; }
+    .sn-who li b { flex: 1; min-width: 0; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sn-who li span { flex: none; font-size: 13.5px; color: var(--moss); }
+    .sn-who li em { font-style: normal; font-family: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive; font-size: 19px; color: #3A3427; }
+    .sn-up-i { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; margin: 0 0 8px; padding: 8px 12px; border-radius: 16px; border: 1px solid rgba(64,81,59,0.14); background: rgba(255,255,255,0.78); font: inherit; text-align: left; color: var(--ink); cursor: pointer; }
+    .sn-up-i .ic { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: rgba(64,81,59,0.1); color: var(--forest); }
+    .sn-up-i .ic svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .sn-up-i .tx { flex: 1; min-width: 0; font-size: 15px; line-height: 1.3; }
+    .sn-up-i .tx small { display: block; font-size: 13px; color: var(--moss); }
+    .sn-up-i .go { flex: none; min-height: 36px; padding: 0 12px; border-radius: 12px; background: var(--forest); color: var(--cream); font-size: 14px; font-weight: 800; display: grid; place-items: center; }
+    .sn-up-i.new::before { content: ''; flex: none; width: 9px; height: 9px; border-radius: 50%; background: #E2763A; margin-right: -4px; }
+    .sn-up-h { margin: 14px 2px 8px; font-size: 13px; font-weight: 800; color: var(--moss); }
+    /* the viewer */
+    .sn-full { position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 30%, #2E4136 0%, #17211A 75%); color: #F4EBD8; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; padding-top: env(safe-area-inset-top); }
+    .sn-full[hidden] { display: none; }
+    .sn-v-top { display: flex; align-items: center; gap: 10px; padding: 14px 16px 6px; }
+    .sn-v-top .from { flex: 1; min-width: 0; font-family: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive; font-size: 26px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sn-once { flex: none; padding: 5px 10px; border-radius: 12px; background: rgba(244,235,216,.14); font-size: 13px; font-weight: 700; }
+    .sn-v-x { flex: none; width: 44px; height: 44px; border-radius: 14px; border: 0; background: rgba(244,235,216,.14); color: #F4EBD8; font-size: 26px; line-height: 1; cursor: pointer; }
+    .sn-v-stage { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 16px; gap: 10px; }
+    .sn-v-pol { --sep: 0; width: min(78vw, 330px, 44vh); padding: 11px 11px 12px; border-radius: 4px; background: color-mix(in srgb, #FBF6EA calc((1 - var(--sep)) * 100%), #E6D29A); color: #3A3427; box-shadow: 0 18px 40px rgba(0,0,0,.45); transform: rotate(-1.4deg); }
+    .sn-v-ph { position: relative; aspect-ratio: 1 / 1; border-radius: 2px; overflow: hidden; background: #9FC7B5; }
+    .sn-v-ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; pointer-events: none; -webkit-user-drag: none; will-change: opacity, filter; }
+    .sn-v-haze { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 14px; background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.5), transparent 55%), radial-gradient(circle at 75% 80%, rgba(60,110,95,.4), transparent 60%), #9FC7B5; font-size: 14px; font-weight: 700; line-height: 1.3; color: #2F5446; pointer-events: none; }
+    .sn-v-cap { display: flex; align-items: flex-end; gap: 8px; min-height: 52px; padding-top: 8px; }
+    .sn-v-cap .sn-stamp { flex: none; max-width: 52%; margin: 0 0 4px; white-space: normal; }
+    .sn-hand { flex: 1; min-width: 0; text-align: right; font-family: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive; font-size: 26px; line-height: 1.05; color: #2B2A6B; word-break: break-word; }
+    .sn-v-hint { margin: 0; max-width: 300px; text-align: center; font-size: 14.5px; line-height: 1.4; color: rgba(244,235,216,.82); }
+    .sn-hold { min-height: 44px; padding: 0 18px; border-radius: 22px; border: 1px solid rgba(244,235,216,.35); background: transparent; color: #F4EBD8; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; touch-action: none; }
+    .sn-hold.hot { background: rgba(244,235,216,.2); }
+    .sn-v-react { padding: 10px 14px calc(14px + var(--safe-bottom)); background: rgba(8,14,10,.55); }
+    .sn-stickers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .sn-sticker { min-height: 62px; padding: 6px 2px; border-radius: 16px; border: 2px solid transparent; background: rgba(244,235,216,.12); color: #F4EBD8; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: transform 160ms cubic-bezier(0.23,1,0.32,1); }
+    .sn-sticker svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .sn-sticker[aria-pressed="true"] { background: #F4EBD8; color: #2F4A38; border-color: #E2763A; }
+    .sn-write { display: flex; gap: 8px; margin-top: 8px; }
+    .sn-write input { flex: 1; min-width: 0; min-height: 48px; padding: 0 14px; border-radius: 14px; border: 1px solid rgba(244,235,216,.3); background: rgba(244,235,216,.1); color: #F4EBD8; font: inherit; font-size: 16px; }
+    .sn-write input::placeholder { color: rgba(244,235,216,.55); }
+    .sn-write button { flex: none; min-height: 48px; padding: 0 18px; border-radius: 14px; border: 0; background: #F4EBD8; color: #2F4A38; font: inherit; font-size: 15px; font-weight: 800; cursor: pointer; }
+    @media (prefers-reduced-motion: reduce) { .sn-pol.fresh { animation: none; } }
+    body.theme-volcano .sn-cam, body.theme-volcano .sn-gcard, body.theme-volcano .sn-up-i, body.theme-volcano .sn-toggle { background: var(--basalt); border: 1px solid var(--edge); }
     .pl-empty { text-align: center; padding: 28px 8px 8px; }
     .pl-empty-ic { width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 20px; display: grid; place-items: center; background: rgba(64,81,59,0.10); color: var(--forest); }
     .pl-empty h3 { margin: 0 0 6px; font-family: var(--display); font-size: 22px; color: var(--forest); }
@@ -1047,6 +1157,7 @@
             <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg></button>
             <button class="icon-btn" id="open-insights-btn" aria-label="Insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></button>
             <button class="icon-btn" id="open-lb-btn" aria-label="Leaderboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2"/><path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2"/><path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3"/><path d="M4 22h16"/><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/><path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3"/></svg></button>
+            <button class="icon-btn" id="open-bell-btn" aria-label="Updates"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></svg><span class="bell-n" id="bell-n" hidden>0</span></button>
             <button class="icon-btn" id="open-settings-btn" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></button>
             <button class="icon-btn" hidden id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg></button>
             <button class="icon-btn" hidden id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg></button>
@@ -1086,6 +1197,7 @@
 
         <button class="todo-strip" id="todo-strip" type="button" aria-label="Open to-do list"></button>
         <button class="todo-strip plan-strip" id="plan-strip" type="button" aria-label="Open plans"></button>
+        <button class="todo-strip sn-strip" id="sn-strip" type="button" aria-label="Open Snippets"></button>
 
         <div class="actions">
           <button class="act primary" id="open-chat-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H10l-4.5 3.8V16h-1z"/></svg><span>Talk to AI</span></button>
@@ -1249,6 +1361,42 @@
     </div>
   </div>
 
+  <!-- SNIPPETS -->
+  <div id="sn-modal" class="overlay">
+    <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="Snippets">
+      <div class="chat-head"><h2 class="sheet-title" id="sn-title">Snippets</h2><div class="chat-head-btns"><button id="sn-groups-btn" class="sn-ibtn" type="button" aria-label="Groups"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16.5 14.2a5 5 0 0 1 4.5 5.3"/></svg></button><button id="sn-back" type="button" hidden>Back</button><button id="sn-close" type="button">Done</button></div></div>
+      <div id="sn-body" class="lb-body"></div>
+      <input id="sn-file-cam" type="file" accept="image/*" capture="environment" hidden />
+      <input id="sn-file-gal" type="file" accept="image/*" hidden />
+    </div>
+  </div>
+  <div id="sn-up" class="overlay">
+    <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="Updates">
+      <div class="chat-head"><h2 class="sheet-title">Updates</h2><div class="chat-head-btns"><button id="sn-up-close" type="button">Done</button></div></div>
+      <div id="sn-up-body" class="lb-body"></div>
+    </div>
+  </div>
+  <div id="sn-view" class="sn-full" hidden role="dialog" aria-modal="true" aria-label="Snippet">
+    <div class="sn-v-top"><span class="from" id="sn-v-from"></span><span class="sn-once">Opens once</span><button class="sn-v-x" id="sn-v-x" type="button" aria-label="Close">&times;</button></div>
+    <div class="sn-v-stage">
+      <div class="sn-v-pol" id="sn-v-pol">
+        <div class="sn-v-ph"><img id="sn-v-img" alt="" draggable="false" /><div class="sn-v-haze" id="sn-v-haze">Developing...</div></div>
+        <div class="sn-v-cap"><span class="sn-stamp" id="sn-v-stamp"></span><span class="sn-hand" id="sn-v-note"></span></div>
+      </div>
+      <p class="sn-v-hint" id="sn-v-hint">Shake your phone to develop it. Stop and it fades.</p>
+      <button class="sn-hold" id="sn-v-hold" type="button">No shake? Press and hold here</button>
+    </div>
+    <div class="sn-v-react" id="sn-v-react">
+      <div class="sn-stickers">
+        <button class="sn-sticker" type="button" data-k="proud" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Proud</button>
+        <button class="sn-sticker" type="button" data-k="same" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></svg>Same</button>
+        <button class="sn-sticker" type="button" data-k="join" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg>Join me</button>
+        <button class="sn-sticker" type="button" data-k="drink" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.2 6 10.5A6 6 0 0 1 6 13.5C6 9.2 12 3 12 3z"/></svg>Drink up</button>
+      </div>
+      <form class="sn-write" id="sn-v-form" autocomplete="off"><input id="sn-v-in" maxlength="24" placeholder="Write on the border" enterkeyhint="send" aria-label="Write on the border" /><button type="submit">Stick it</button></form>
+    </div>
+  </div>
+
   <!-- WATER BOTTLE -->
   <div id="bt-modal" class="overlay">
     <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="Water bottle">
@@ -1323,7 +1471,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 41</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 42</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -2113,7 +2261,8 @@
 
     const APP_GUIDE = 'APP GUIDE (what is in this app):\n' +
       '- Home screen: the Water card (shows ml and the goal, quick buttons +100 +200 +250 +500, and the bottle strip), the To-do card for today, the Plans strip, the "Talk to AI" button, the "Add" button, and cards for food, fibre, medicines, symptoms, stool, sleep, weight and notes. Copy today and Last 3 days copy your log as text.\n' +
-      '- Top icons: History (past days), Insights (charts), Leaderboard (trophy), Settings (gear).\n' +
+      '- Top icons: History (past days), Insights (charts), Leaderboard (trophy), Updates (bell: new snippets, stamps from friends, reminders coming up today), Settings (gear).\n' +
+      '- Snippets: the Snippets strip under Plans. Share a photo Polaroid with a group of friends. Friends open it once by shaking their phone to develop it, can stamp Proud, Same, Join me or Drink up, and it disappears after 24 hours. The group icon inside Snippets makes or joins groups (same groups as the leaderboard).\n' +
       '- Water bottle: Settings > My water bottle sets the bottle size. On the Water card tap "Start ... ml bottle", drink, then tap Finished (the whole bottle is logged and spread over the time you took) or Some left (only what you drank is logged). Undo shows for a few minutes.\n' +
       '- To-do: tap the To-do card or strip. Pick when (today, tomorrow, this week, 2 weeks, this month) and an optional time for an alert.\n' +
       '- Plans: the Plans strip under the to-do card. Big goals with steps, a how-to note and progress. Make one with Plan mode in this chat, or write your own. A step can be added to your to-dos.\n' +
@@ -2302,7 +2451,7 @@
             properties: {
               reply: { type: 'STRING' },
               action: { type: 'STRING', enum: ['propose', 'add_pending', 'none'] },
-              open: { type: 'STRING', enum: ['none', 'todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'bottle'] },
+              open: { type: 'STRING', enum: ['none', 'todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'bottle', 'snippets'] },
               remember: { type: 'ARRAY', items: { type: 'STRING' } },
               plan: {
                 type: 'OBJECT',
@@ -2383,7 +2532,7 @@
       if (window.__nlpFix) { todoProps.forEach(p => window.__nlpFix(p, text, todoProps.length)); remProps.forEach(p => window.__nlpFix(p, text, remProps.length)); }
       const planProps = [];
       if (out.plan && window.__planClean) { const pl = window.__planClean(out.plan); if (pl) planProps.push({ cat: 'plan', text: pl.title, plan: pl, day: 'today', time: '', status: 'pending' }); }
-      const openT = ['todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'bottle'].includes(out.open) ? out.open : '';
+      const openT = ['todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'bottle', 'snippets'].includes(out.open) ? out.open : '';
       const noted = window.__memAdd ? window.__memAdd(out.remember) : [];
       const extra = { open: openT, noted: noted };
 
@@ -5231,6 +5380,7 @@
   });
 
   window.__todoRender = render; window.__todoAdd = add; window.__todoDueFor = dueFor; window.__todoOpen = openSheet; window.__todoDays = days;
+  window.__todoStat = function () { var t = getTodayKey(), all = items(), pend = all.filter(function (x) { return !x.done && x.due <= t; }).length, done = all.filter(function (x) { return x.done && x.due <= t && x.doneAt && dk(new Date(x.doneAt)) === dk(new Date()); }).length; return { done: done, total: done + pend }; };
   window.__todoLabel = function (w) { return LABEL[w] || w; };
   window.__todoSummary = function () {
     var t = getTodayKey(), o = items().filter(function (x) { return !x.done; }).sort(order).slice(0, 25);
@@ -5912,7 +6062,7 @@
   function openMem() { drawMem(); $('mem-modal').classList.add('open'); }
 
   // ---------- buttons the AI can show, and where they go ----------
-  var OL = { todo: 'Open my to-dos', plans: 'Open Plans', reminders: 'Open Reminders', leaderboard: 'Open the leaderboard', settings: 'Open Settings', water: 'Go to the water card', bottle: 'Open my bottle size' };
+  var OL = { todo: 'Open my to-dos', plans: 'Open Plans', reminders: 'Open Reminders', leaderboard: 'Open the leaderboard', settings: 'Open Settings', water: 'Go to the water card', bottle: 'Open my bottle size', snippets: 'Open Snippets' };
   window.__openLabel = function (k) { return OL[k] || ''; };
   window.__propLabelPlanFn = window.__propLabelPlan;
   setTimeout(function () { drawMemRow(); try { strip(); } catch (e) {} }, 300);
@@ -5926,6 +6076,7 @@
   window.__go = function (t) {
     t = String(t || '').toLowerCase();
     if (t === 'plans') { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); if (window.__planOpen) window.__planOpen(); return; }
+    if (t === 'snippets') { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); if (window.__snOpen) window.__snOpen('tray'); return; }
     if (t === 'bottle') { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); if (window.__bottle && window.__bottle.sheet) window.__bottle.sheet(); return; }
     if (base) base(t);
   };
@@ -6065,6 +6216,299 @@
     function done() { var v = inp.value.trim(); if (v) pr.text = v; var d = document.createElement('div'); d.className = 'prop-text'; d.textContent = pr.text; if (inp.parentNode) inp.replaceWith(d); }
     inp.addEventListener('blur', done); inp.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); inp.blur(); } });
   });
+})();
+</script>
+<script>
+// ---------- Snippets: Polaroids for your group ----------
+(function () {
+  function $(i) { return document.getElementById(i); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function jget(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+  function jset(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function sb() { return window.__auth && window.__auth.sb(); }
+  function usr() { return window.__auth && window.__auth.me && window.__auth.me(); }
+  function ready() { var u = usr(); return !!(sb() && u && u.status === 'approved'); }
+  var SITE = 'https://daily-log-5jbg.onrender.com', SEEN_K = 'daily_log_sn_seen_v1', LAST_G = 'daily_log_sn_group_v1';
+  var MON = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  var IC = {
+    cam: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4h-5L8 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+    img: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-4.5-4.5L5 21"/></svg>',
+    bell: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></svg>',
+    drop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.2 6 10.5A6 6 0 0 1 6 13.5C6 9.2 12 3 12 3z"/></svg>',
+    star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
+    eye: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+    chev: '<svg class="ps-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>',
+    cammain: '<svg viewBox="0 0 76 64" aria-hidden="true"><rect x="4" y="16" width="68" height="44" rx="10" fill="#FBF6EA" stroke="#40513B" stroke-width="2.5"/><rect x="4" y="34" width="68" height="5" fill="#E2763A"/><rect x="4" y="39" width="68" height="4" fill="#E3B04B"/><rect x="4" y="43" width="68" height="4" fill="#6FA8B8"/><circle cx="38" cy="30" r="11" fill="#2F4A38" stroke="#40513B" stroke-width="2.5"/><circle cx="38" cy="30" r="5" fill="#9FC7B5"/><rect x="14" y="8" width="16" height="9" rx="3" fill="#40513B"/><rect x="22" y="53" width="32" height="3" rx="1.5" fill="#40513B" opacity=".4"/></svg>'
+  };
+  var KINDS = { proud: 'Proud of you', same: 'Same here', join: 'Join me', drink: 'Drink up' };
+  var S = { view: 'tray', feed: [], groups: [], gid: 'all', loaded: false, sqlMissing: false, err: '', add: null, mine: null, fresh: {}, busy: false };
+
+  // ---------- data ----------
+  async function loadFeed() {
+    if (!ready()) return;
+    try {
+      var r = await sb().rpc('sn_feed');
+      if (r.error) { var m = String(r.error.message || ''); S.sqlMissing = /sn_feed|schema cache|does not exist|Could not find/i.test(m); S.err = S.sqlMissing ? '' : m; }
+      else { S.sqlMissing = false; S.err = ''; var old = {}; S.feed.forEach(function (x) { old[x.id] = 1; }); var nf = Array.isArray(r.data) ? r.data : []; if (S.loaded) nf.forEach(function (x) { if (!old[x.id]) S.fresh[x.id] = 1; }); S.feed = nf; S.loaded = true; }
+    } catch (e) {}
+    try { var g = await sb().rpc('lb_my_groups'); if (!g.error && Array.isArray(g.data)) S.groups = g.data; } catch (e2) {}
+    paintAll();
+  }
+  function seenAt() { var v = jget(SEEN_K); return typeof v === 'number' ? v : 0; }
+  function counts() {
+    var un = S.feed.filter(function (x) { return !x.mine && !x.seen; }).length, sa = seenAt();
+    var re = S.feed.filter(function (x) { return x.mine && x.last_react && new Date(x.last_react).getTime() > sa; }).length;
+    return { un: un, re: re, rem: dueSoon().length };
+  }
+  function dueSoon() {
+    var out = [], now = new Date(), R = (typeof SETTINGS !== 'undefined' && SETTINGS.reminders && SETTINGS.reminders.custom) || [];
+    R.forEach(function (x) {
+      if (x.on === false) return; var p = String(x.time || '0:0').split(':'), d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), +p[0] || 0, +p[1] || 0, 0);
+      if (d <= now) return; if (x.days && x.days.length && x.days.indexOf(d.getDay()) < 0) return;
+      var mins = Math.round((d - now) / 60000); out.push({ label: x.label || 'Reminder', time: x.time, mins: mins, soon: mins <= 60 });
+    });
+    out.sort(function (a, b) { return a.mins - b.mins; }); return out;
+  }
+  function left(x) { var ms = new Date(x.expires_at) - Date.now(); if (ms <= 0) return 'gone'; var m = Math.round(ms / 60000); return m < 60 ? m + ' min left' : Math.round(m / 60) + ' h left'; }
+  function age(x) { var a = new Date(x.created_at).getTime(), b = new Date(x.expires_at).getTime(); return Math.max(0, Math.min(1, (Date.now() - a) / (b - a))); }
+  function tilt(id) { var h = 0; for (var i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 997; return ((h % 9) - 4) * 0.7; }
+  function dayStamp() {
+    var d = new Date(), s = d.getDate() + ' ' + MON[d.getMonth()];
+    try { var w = getWaterTotal(getDayEntries(getTodayKey())); if (w > 0) s += ' · ' + (Math.round(w / 100) / 10).toString().replace(/\.0$/, '') + ' L'; } catch (e) {}
+    try { var t = window.__todoStat && window.__todoStat(); if (t && t.total) s += ' · ' + t.done + '/' + t.total; } catch (e2) {}
+    return s;
+  }
+
+  // ---------- badges, strip ----------
+  function paintAll() { badge(); strip(); if ($('sn-modal').classList.contains('open')) draw(); if ($('sn-up').classList.contains('open')) drawUp(); }
+  function badge() {
+    var c = counts(), n = c.un + c.re + (c.rem ? Math.min(c.rem, 1) : 0), b = $('bell-n'); if (!b) return;
+    var soon = dueSoon().filter(function (x) { return x.soon; }).length; n = c.un + c.re + soon;
+    b.hidden = !n; b.textContent = n > 9 ? '9+' : String(n);
+    var bt = $('open-bell-btn'); if (bt) bt.setAttribute('aria-label', n ? 'Updates, ' + n + ' new' : 'Updates');
+  }
+  function strip() {
+    var el = $('sn-strip'); if (!el) return;
+    if (typeof viewingPastDay !== 'undefined' && viewingPastDay) { el.hidden = true; return; } el.hidden = false;
+    var un = counts().un, sub;
+    if (!ready()) sub = 'Sign in to share moments';
+    else if (S.sqlMissing) sub = 'One setup step is needed';
+    else if (!S.groups.length && S.loaded) sub = 'Make a group, then share a moment';
+    else if (un) sub = un === 1 ? '1 new from your friends' : un + ' new from your friends';
+    else sub = 'Share a moment with your group';
+    var h = '<span class="sn-mini" aria-hidden="true"><i></i><i></i></span><span class="ps-main"><b>Snippets</b><small>' + esc(sub) + '</small></span>' + (un ? '<span class="sn-dot">' + un + '</span>' : '') + IC.chev;
+    if (el.dataset.sig !== h) { el.dataset.sig = h; el.innerHTML = h; }
+  }
+
+  // ---------- the modal ----------
+  function openModal(view) {
+    S.view = view || 'tray'; S.add = null; draw(); $('sn-modal').classList.add('open');
+    loadFeed(); if (window.__lbApi && window.__lbApi.loadMe) window.__lbApi.loadMe().then(function () { if (S.view === 'groups') draw(); });
+  }
+  function closeModal() { $('sn-modal').classList.remove('open'); }
+  function titleOf() { return { tray: 'Snippets', add: 'New snippet', groups: 'Groups', mine: 'Your snippet' }[S.view] || 'Snippets'; }
+  function visible() { return S.feed.filter(function (x) { return S.gid === 'all' || x.group_id === S.gid; }); }
+  function polHtml(x) {
+    var st = x.mine ? 'st-mine' : x.seen ? 'st-seen' : 'st-new', inner, sub = esc(x.group_name) + ' · ' + left(x);
+    if (x.mine) inner = IC.cam + '<span>' + (x.views ? 'Seen by ' + x.views : 'Not seen yet') + '</span>';
+    else if (x.seen) inner = IC.eye + '<span>Opened</span>';
+    else inner = IC.drop + '<span>Shake to develop</span>';
+    return '<button type="button" class="sn-pol ' + st + (S.fresh[x.id] ? ' fresh' : '') + '" data-sid="' + x.id + '" style="--tilt:' + tilt(x.id) + 'deg;--age:' + age(x).toFixed(2) + '">' + (!x.mine && !x.seen ? '<span class="sn-tape">NEW</span>' : '') +
+      '<span class="sn-ph">' + '<span>' + inner + '</span>' + '</span>' +
+      '<span class="sn-cap"><b>' + esc(x.mine ? 'You' : x.sender_name) + '</b><small>' + sub + '</small></span>' + (x.stamp ? '<span class="sn-stamp">' + esc(x.stamp) + '</span>' : '') + '</button>';
+  }
+  function draw() {
+    var b = $('sn-body'), back = $('sn-back'), gb = $('sn-groups-btn'); if (!b) return;
+    $('sn-title').textContent = titleOf(); back.hidden = S.view === 'tray'; gb.hidden = S.view !== 'tray';
+    if (!ready()) { b.innerHTML = '<div class="sn-empty"><span class="sn-mini"><i></i><i></i></span><h3>Sign in first</h3><p>Snippets are shared with friends in your group, so you need to be signed in.</p></div>'; return; }
+    if (S.sqlMissing) { b.innerHTML = '<div class="sn-empty"><span class="sn-mini"><i></i><i></i></span><h3>One setup step left</h3><p>The admin needs to run <b>snippets.sql</b> once in Supabase. After that Snippets work for everyone.</p></div>'; return; }
+    if (S.view === 'groups') return drawGroups(b);
+    if (S.view === 'add') return drawAdd(b);
+    if (S.view === 'mine') return drawMine(b);
+    drawTray(b);
+  }
+  function drawTray(b) {
+    if (!S.groups.length) {
+      b.innerHTML = '<div class="sn-empty"><span class="sn-mini"><i></i><i></i></span><h3>Snippets go to a group</h3><p>Make a small group with your friends. Everyone in it sees what you share, one time, for 24 hours.</p><button class="lb-btn" data-act="groups" type="button">Pick a group</button></div>'; return;
+    }
+    var list = visible();
+    var chips = S.groups.length > 1 ? '<div class="lb-chips"><button type="button" data-g="all" class="' + (S.gid === 'all' ? 'on' : '') + '">All</button>' + S.groups.map(function (g) { return '<button type="button" data-g="' + g.id + '" class="' + (S.gid === g.id ? 'on' : '') + '">' + esc(g.name) + '</button>'; }).join('') + '</div>' : '';
+    var cam = '<div class="sn-cam">' + IC.cammain + '<div><b>Your turn</b><small>One photo. Friends see it once. It is gone in 24 hours.</small></div></div><button class="lb-btn sn-add" data-act="add" type="button" style="margin:-4px 0 14px">Add a snippet</button>';
+    var pile = list.length ? '<div class="sn-pile">' + list.map(polHtml).join('') + '</div><p class="sn-note">Tap a Polaroid, then shake your phone to develop it.</p>' : '<div class="sn-empty" style="padding-top:8px"><h3>Nothing on the table</h3><p>Be the first. Take a photo of your day and send it.</p></div>';
+    b.innerHTML = chips + cam + pile;
+    S.fresh = {};
+  }
+  function drawGroups(b) {
+    var me = window.__lbApi && window.__lbApi.S && window.__lbApi.S.me, mem = me && me.member;
+    var h = '';
+    if (!mem) h += '<div class="sn-cam"><div><b>Pick a nickname first</b><small>Friends see it on your Polaroids. It is the same nickname as the leaderboard.</small></div></div><button class="lb-btn" data-act="nick" type="button" style="margin:-4px 0 14px">Choose nickname</button>';
+    h += S.groups.map(function (g) { return '<div class="sn-gcard"><div><b>' + esc(g.name) + '</b><small>' + g.members + (g.members === 1 ? ' person' : ' people') + ' · code ' + esc(g.code) + '</small></div><button type="button" data-share="' + g.id + '">Invite</button></div>'; }).join('');
+    if (mem) h += '<div class="lb-card" style="margin-top:6px"><label class="field-label" for="sn-gname">New group</label><input id="sn-gname" class="lb-field" maxlength="24" placeholder="For example: Hub Boys" autocomplete="off" /><button class="lb-btn" data-act="gnew" type="button">Create group</button></div>' +
+      '<div class="lb-card"><label class="field-label" for="sn-gcode">Have a code?</label><input id="sn-gcode" class="lb-field" maxlength="6" placeholder="6 letters" autocapitalize="characters" autocomplete="off" /><button class="lb-btn" data-act="gjoin" type="button">Join group</button></div>' +
+      '<p class="sn-note">These are the same groups as your leaderboard.</p>';
+    b.innerHTML = h;
+  }
+  function drawAdd(b) {
+    var a = S.add || (S.add = { img: '', gid: jget(LAST_G) || '', stamp: true }); if (!S.groups.some(function (g) { return g.id === a.gid; })) a.gid = S.groups[0] ? S.groups[0].id : '';
+    var gs = S.groups.length > 1 ? '<div class="lb-chips">' + S.groups.map(function (g) { return '<button type="button" data-ag="' + g.id + '" class="' + (a.gid === g.id ? 'on' : '') + '">' + esc(g.name) + '</button>'; }).join('') + '</div>' : '<p class="sn-note" style="margin:0 0 10px;text-align:left">Sending to <b>' + esc((S.groups[0] || {}).name || '') + '</b></p>';
+    if (!a.img) { b.innerHTML = gs + '<div class="sn-pick"><button type="button" data-act="cam">' + IC.cam + 'Take a photo</button><button type="button" data-act="gal">' + IC.img + 'From gallery</button></div><p class="sn-note">Friends in the group see it one time. It disappears after 24 hours.</p>'; return; }
+    var st = a.stamp ? dayStamp() : '';
+    b.innerHTML = gs + '<div class="sn-pol sn-prev" style="--tilt:-1.2deg"><span class="sn-ph"><img alt="Your photo" src="' + a.img + '" /></span><span class="sn-cap"><b>You</b><small>Gone in 24 h</small></span>' + (st ? '<span class="sn-stamp">' + esc(st) + '</span>' : '') + '</div>' +
+      '<button type="button" class="sn-toggle" data-act="stamp" aria-pressed="' + (a.stamp ? 'true' : 'false') + '"><span>Print my day on the border</span><i></i></button>' +
+      '<button class="lb-btn" data-act="send" type="button"' + (S.busy ? ' disabled' : '') + '>' + (S.busy ? 'Sending...' : 'Send to group') + '</button><button class="sn-link" data-act="retake" type="button">Choose another photo</button>';
+  }
+  async function drawMine(b) {
+    var x = S.mine; if (!x) { S.view = 'tray'; return draw(); }
+    b.innerHTML = '<div class="sn-prev sn-pol" style="--tilt:-1deg"><span class="sn-ph" id="sn-mine-ph"><span>Developing...</span></span><span class="sn-cap"><b>You</b><small>' + esc(x.group_name) + ' · ' + left(x) + '</small></span>' + (x.stamp ? '<span class="sn-stamp">' + esc(x.stamp) + '</span>' : '') + '</div><ul class="sn-who" id="sn-who"></ul><button class="lb-btn danger" data-act="del" type="button" style="background:transparent;color:#B3402B;border:1px solid rgba(179,64,43,.5)">Delete snippet</button>';
+    try {
+      var im = await sb().rpc('sn_open', { p_id: x.id }); var ph = $('sn-mine-ph');
+      if (ph && im.data) { ph.innerHTML = '<img alt="Your photo" src="' + im.data + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />'; }
+      var w = await sb().rpc('sn_who', { p_id: x.id }), ul = $('sn-who');
+      if (ul && w.data) ul.innerHTML = w.data.map(function (r) { return '<li><b>' + esc(r.name) + '</b>' + (r.kind && KINDS[r.kind] ? '<span>' + KINDS[r.kind] + '</span>' : '') + (r.note ? '<em>' + esc(r.note) + '</em>' : '') + (!r.kind && !r.note ? '<span>' + (r.viewed ? 'Saw it' : 'Not yet') + '</span>' : '') + '</li>'; }).join('') || '<li><span>Nobody else is in this group yet.</span></li>';
+    } catch (e) {}
+  }
+
+  // ---------- photo prep ----------
+  function prep(file) {
+    return new Promise(function (res, rej) {
+      var url = URL.createObjectURL(file), im = new Image();
+      im.onload = function () {
+        try {
+          var s = Math.min(im.naturalWidth, im.naturalHeight), sx = (im.naturalWidth - s) / 2, sy = (im.naturalHeight - s) / 2, size = Math.min(720, s), c = document.createElement('canvas'); c.width = c.height = size;
+          c.getContext('2d').drawImage(im, sx, sy, s, s, 0, 0, size, size);
+          var q = 0.72, out = c.toDataURL('image/jpeg', q); while (out.length > 200000 && q > 0.35) { q -= 0.08; out = c.toDataURL('image/jpeg', q); }
+          URL.revokeObjectURL(url); res(out);
+        } catch (e) { URL.revokeObjectURL(url); rej(e); }
+      };
+      im.onerror = function () { URL.revokeObjectURL(url); rej(new Error('bad image')); }; im.src = url;
+    });
+  }
+  async function onFile(e) {
+    var f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+    try { var out = await prep(f); S.add = S.add || { img: '', gid: jget(LAST_G) || '', stamp: true }; S.add.img = out; draw(); }
+    catch (er) { showToast('Could not read that photo'); }
+  }
+  async function send() {
+    var a = S.add; if (!a || !a.img || !a.gid || S.busy) return; S.busy = true; draw();
+    try {
+      var r = await sb().rpc('sn_send', { p_group: a.gid, p_img: a.img, p_stamp: a.stamp ? dayStamp() : '' });
+      if (r.error) { showToast(String(r.error.message || 'Could not send').replace(/^.*?:\s*/, '').slice(0, 80)); }
+      else { jset(LAST_G, a.gid); S.add = null; S.view = 'tray'; S.gid = 'all'; if (navigator.vibrate) navigator.vibrate(20); showToast('Sent. It disappears in 24 hours'); await loadFeed(); }
+    } catch (e) { showToast('Could not send. Check your connection'); }
+    S.busy = false; draw();
+  }
+
+  // ---------- the viewer: shake to develop ----------
+  var V = { on: false, item: null, p: 0, e: 0, lx: null, ly: null, lz: null, motion: false, hold: false, t0: 0, last: 0, raf: 0, kind: '', note: '', total: 30000 };
+  function onMotion(ev) {
+    var a = ev.accelerationIncludingGravity; if (!a || a.x == null) return; V.motion = true;
+    if (V.lx != null) { var d = Math.abs(a.x - V.lx) + Math.abs(a.y - V.ly) + Math.abs(a.z - V.lz); V.e = V.e * 0.6 + d * 0.4; }
+    V.lx = a.x; V.ly = a.y; V.lz = a.z;
+  }
+  function paintView() {
+    var img = $('sn-v-img'), hz = $('sn-v-haze'), p = V.p;
+    img.style.opacity = String(p); img.style.filter = 'blur(' + ((1 - p) * 14).toFixed(1) + 'px) saturate(' + (0.5 + p * 0.5).toFixed(2) + ')'; hz.style.opacity = String(Math.max(0, 1 - p * 1.1));
+    $('sn-v-pol').style.setProperty('--sep', Math.min(0.55, (performance.now() - V.t0) / V.total * 0.55).toFixed(3));
+  }
+  function tick(ts) {
+    if (!V.on) return; var dt = Math.min(0.1, (ts - V.last) / 1000 || 0.016); V.last = ts; V.e *= Math.max(0, 1 - dt * 2.5);
+    var push = Math.max(0, V.e - 2.5) / 7; if (V.hold) push = Math.max(push, 0.85);
+    if (push > 0.05) V.p = Math.min(1, V.p + push * dt * 1.7); else V.p = Math.max(0, V.p - 0.42 * dt);
+    paintView(); if (ts - V.t0 > V.total) { endView('time'); return; }
+    if (!V.motion && ts - V.t0 > 2200 && !V.hint2) { V.hint2 = 1; $('sn-v-hint').textContent = 'No shake sensor found. Press and hold the button below.'; }
+    V.raf = requestAnimationFrame(tick);
+  }
+  async function openView(item) {
+    if (V.on) return; if (item.seen) { showToast('You already opened this one. Snippets open once'); return; }
+    if (new Date(item.expires_at) <= Date.now()) { showToast('That snippet is gone'); loadFeed(); return; }
+    try { if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') DeviceMotionEvent.requestPermission().catch(function () {}); } catch (e) {}
+    var v = $('sn-view'); $('sn-v-from').textContent = item.sender_name; $('sn-v-stamp').textContent = item.stamp || ''; $('sn-v-note').textContent = item.my_note || ''; $('sn-v-in').value = item.my_note || '';
+    $('sn-v-hint').textContent = 'Opening...'; $('sn-v-hold').hidden = true; var im = $('sn-v-img'); im.removeAttribute('src'); im.style.opacity = '0'; $('sn-v-haze').style.opacity = '1'; $('sn-v-haze').textContent = 'Developing...';
+    V.kind = item.my_kind || ''; syncStickers(); v.hidden = false;
+    var r; try { r = await sb().rpc('sn_open', { p_id: item.id }); } catch (e) { r = { error: e }; }
+    if (r.error || !r.data) { v.hidden = true; showToast(r.error ? 'Could not open. Check your connection' : 'That one was already opened or is gone'); loadFeed(); return; }
+    item.seen = true; im.src = r.data; V.item = item; V.p = 0; V.e = 0; V.lx = V.ly = V.lz = null; V.motion = false; V.hold = false; V.hint2 = 0; V.t0 = performance.now(); V.last = V.t0; V.on = true;
+    $('sn-v-hint').textContent = 'Shake your phone to develop it. Stop and it fades.'; $('sn-v-hold').hidden = false; $('sn-v-haze').textContent = '';
+    window.addEventListener('devicemotion', onMotion); V.raf = requestAnimationFrame(tick); badge(); strip();
+  }
+  function endView(why) {
+    if (!V.on) return; V.on = false; cancelAnimationFrame(V.raf); window.removeEventListener('devicemotion', onMotion);
+    var im = $('sn-v-img'); im.removeAttribute('src'); im.style.opacity = '0'; var hz = $('sn-v-haze'); hz.style.opacity = '1'; hz.textContent = 'This snippet is gone for you';
+    $('sn-v-hint').textContent = why === 'hidden' ? 'You left the app, so it closed. You can still stick a note on it.' : why === 'time' ? 'Time is up. You can still stick a note on it.' : 'Closed. You can still stick a note on it.'; $('sn-v-hold').hidden = true; V.p = 0;
+  }
+  function closeView() { endView('x'); $('sn-view').hidden = true; V.item = null; loadFeed(); }
+  function syncStickers() { document.querySelectorAll('#sn-v-react .sn-sticker').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === V.kind ? 'true' : 'false'); }); }
+  async function react(kind, note) {
+    var it = V.item; if (!it) return;
+    try { var r = await sb().rpc('sn_react', { p_id: it.id, p_kind: kind || 'none', p_note: note || '' }); if (r.error) { showToast('Could not send that'); return false; } it.my_kind = kind || ''; it.my_note = note || ''; if (navigator.vibrate) navigator.vibrate(12); return true; }
+    catch (e) { showToast('Could not send that'); return false; }
+  }
+
+  // ---------- updates panel ----------
+  function ago(t) { var m = Math.max(1, Math.round((Date.now() - new Date(t).getTime()) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago'; }
+  function drawUp() {
+    var b = $('sn-up-body'), sa = seenAt(), h = '';
+    var news = S.feed.filter(function (x) { return !x.mine && !x.seen; }), reacts = S.feed.filter(function (x) { return x.mine && x.reacts > 0; }), rem = dueSoon().slice(0, 5);
+    if (news.length) { h += '<div class="sn-up-h">New snippets</div>' + news.map(function (x) { return '<button type="button" class="sn-up-i new" data-open="' + x.id + '"><span class="ic">' + IC.cam + '</span><span class="tx">' + esc(x.sender_name) + ' shared a snippet<small>' + esc(x.group_name) + ' · ' + left(x) + '</small></span><span class="go">Open</span></button>'; }).join(''); }
+    if (reacts.length) { h += '<div class="sn-up-h">On your snippets</div>' + reacts.map(function (x) { var nw = x.last_react && new Date(x.last_react).getTime() > sa; return '<button type="button" class="sn-up-i' + (nw ? ' new' : '') + '" data-mine="' + x.id + '"><span class="ic">' + IC.star + '</span><span class="tx">' + x.reacts + (x.reacts === 1 ? ' friend stamped' : ' friends stamped') + ' your snippet<small>' + (x.last_react ? ago(x.last_react) : '') + ' · tap to see</small></span></button>'; }).join(''); }
+    if (rem.length) { h += '<div class="sn-up-h">Reminders today</div>' + rem.map(function (x) { return '<button type="button" class="sn-up-i' + (x.soon ? ' new' : '') + '" data-rem="1"><span class="ic">' + IC.bell + '</span><span class="tx">' + esc(x.label) + '<small>' + esc(x.time) + ' · ' + (x.mins < 60 ? 'in ' + x.mins + ' min' : 'in ' + Math.floor(x.mins / 60) + ' h' + (x.mins % 60 ? ' ' + (x.mins % 60) + ' m' : '')) + '</small></span></button>'; }).join(''); }
+    if (!h) h = '<div class="sn-empty" style="padding-top:12px"><h3>All caught up</h3><p>New snippets, stamps from friends and today\'s reminders show up here.</p></div>';
+    b.innerHTML = h;
+  }
+  function openUp() { drawUp(); $('sn-up').classList.add('open'); loadFeed(); jset(SEEN_K, Date.now()); setTimeout(badge, 300); }
+
+  // ---------- events ----------
+  document.addEventListener('click', async function (e) {
+    var t = e.target; if (!t.closest) return;
+    if (t.closest('#sn-strip')) { openModal('tray'); return; }
+    if (t.closest('#open-bell-btn')) { openUp(); return; }
+    if (t.id === 'sn-close' || t.id === 'sn-modal') { closeModal(); return; }
+    if (t.id === 'sn-up-close' || t.id === 'sn-up') { $('sn-up').classList.remove('open'); return; }
+    if (t.closest('#sn-groups-btn')) { S.view = 'groups'; draw(); return; }
+    if (t.id === 'sn-back') { S.view = 'tray'; S.mine = null; draw(); return; }
+    if (t.closest('#sn-v-x')) { closeView(); return; }
+    var st = t.closest('#sn-v-react .sn-sticker');
+    if (st) { var k = st.dataset.k, nk = V.kind === k ? '' : k; V.kind = nk; syncStickers(); await react(nk, $('sn-v-in').value.trim()); return; }
+    var op = t.closest('#sn-up [data-open]'); if (op) { var it = S.feed.filter(function (x) { return x.id === op.dataset.open; })[0]; $('sn-up').classList.remove('open'); if (it) openView(it); return; }
+    var mi = t.closest('#sn-up [data-mine]'); if (mi) { var m = S.feed.filter(function (x) { return x.id === mi.dataset.mine; })[0]; $('sn-up').classList.remove('open'); if (m) { S.mine = m; S.view = 'mine'; draw(); $('sn-modal').classList.add('open'); } return; }
+    if (t.closest('#sn-up [data-rem]')) { $('sn-up').classList.remove('open'); if (window.__go) window.__go('reminders'); return; }
+    if (!t.closest('#sn-modal')) return;
+    var g = t.closest('[data-g]'); if (g) { S.gid = g.dataset.g; draw(); return; }
+    var ag = t.closest('[data-ag]'); if (ag) { S.add.gid = ag.dataset.ag; draw(); return; }
+    var pol = t.closest('.sn-pol[data-sid]');
+    if (pol) { var x = S.feed.filter(function (y) { return y.id === pol.dataset.sid; })[0]; if (!x) return; if (x.mine) { S.mine = x; S.view = 'mine'; draw(); } else openView(x); return; }
+    var sh = t.closest('[data-share]');
+    if (sh) { var gr = S.groups.filter(function (y) { return y.id === sh.dataset.share; })[0]; if (!gr) return; var link = SITE + '/?join=' + gr.code, text = 'Join my Daily Log group "' + gr.name + '". Tap the link to open it in the app: ' + link + ' (code ' + gr.code + ')'; if (navigator.share) { try { await navigator.share({ title: 'Daily Log group', text: text }); } catch (er) {} } else if (typeof copyText === 'function') { var ok = await copyText(text); showToast(ok ? 'Invite copied' : 'Could not copy'); } return; }
+    var a = t.closest('[data-act]'); if (!a) return; var act = a.dataset.act;
+    if (act === 'groups') { S.view = 'groups'; draw(); return; }
+    if (act === 'nick') { closeModal(); if (window.__lbApi) window.__lbApi.open(); return; }
+    if (act === 'add') { if (!S.groups.length) { S.view = 'groups'; draw(); return; } S.add = null; S.view = 'add'; draw(); return; }
+    if (act === 'cam') { $('sn-file-cam').click(); return; }
+    if (act === 'gal') { $('sn-file-gal').click(); return; }
+    if (act === 'retake') { S.add.img = ''; draw(); return; }
+    if (act === 'stamp') { S.add.stamp = !S.add.stamp; draw(); return; }
+    if (act === 'send') { send(); return; }
+    if (act === 'gnew') { var nm = $('sn-gname').value.trim(); if (nm.length < 2) { showToast('Give the group a name'); return; } var r = await sb().rpc('lb_create_group', { p_name: nm }); if (r.error) { showToast(String(r.error.message).slice(0, 80)); return; } showToast('Group created. Tap Invite to share it'); await loadFeed(); if (window.__lbApi) window.__lbApi.loadGroups(); draw(); return; }
+    if (act === 'gjoin') { var cd = $('sn-gcode').value.trim(); if (cd.length < 4) { showToast('Type the 6 letter code'); return; } var r2 = await sb().rpc('lb_join_group', { p_code: cd }); if (r2.error) { showToast(String(r2.error.message).slice(0, 80)); return; } showToast('Joined the group'); await loadFeed(); if (window.__lbApi) window.__lbApi.loadGroups(); S.view = 'tray'; draw(); return; }
+    if (act === 'del') { if (a.dataset.sure !== '1') { a.dataset.sure = '1'; a.textContent = 'Tap again to delete'; setTimeout(function () { a.dataset.sure = ''; a.textContent = 'Delete snippet'; }, 3000); return; } var x2 = S.mine; if (x2) { await sb().rpc('sn_delete', { p_id: x2.id }); showToast('Snippet deleted'); S.mine = null; S.view = 'tray'; await loadFeed(); } return; }
+  });
+  document.addEventListener('submit', async function (e) {
+    if (e.target.id !== 'sn-v-form') return; e.preventDefault(); var v = $('sn-v-in').value.trim(); if (!V.item) return;
+    $('sn-v-note').textContent = v; var ok = await react(V.kind, v); if (ok) showToast(v ? 'Stuck on the border' : 'Cleared'); $('sn-v-in').blur();
+  });
+  $('sn-v-in').addEventListener('input', function (e) { $('sn-v-note').textContent = e.target.value.slice(0, 24); });
+  $('sn-file-cam').addEventListener('change', onFile); $('sn-file-gal').addEventListener('change', onFile);
+  var hold = $('sn-v-hold');
+  hold.addEventListener('pointerdown', function (e) { V.hold = true; hold.classList.add('hot'); try { hold.setPointerCapture(e.pointerId); } catch (er) {} });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (n) { hold.addEventListener(n, function () { V.hold = false; hold.classList.remove('hot'); }); });
+  $('sn-view').addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) { if (V.on) endView('hidden'); } else if (ready()) loadFeed(); });
+  window.addEventListener('blur', function () { if (V.on) endView('hidden'); });
+  setInterval(function () { if (!document.hidden && ready()) loadFeed(); }, 60000);
+  setInterval(function () { if (!document.hidden) { badge(); if ($('sn-up').classList.contains('open')) drawUp(); } }, 30000);
+  var tries = 0; (function boot() { if (ready()) { loadFeed(); } else if (tries++ < 40) setTimeout(boot, 1500); strip(); badge(); })();
+  if (typeof renderMain === 'function') { var _rm = renderMain; renderMain = function () { var x = _rm.apply(this, arguments); try { strip(); badge(); } catch (e) {} return x; }; }
+  window.__snOpen = openModal; window.__snBadge = badge; window.__sn = { S: S, V: V, loadFeed: loadFeed };
 })();
 </script>
 </body>

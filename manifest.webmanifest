@@ -51,6 +51,16 @@
       ]
     },
     {
+      "name": "Snippets",
+      "url": "./?go=snippets",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
       "name": "Leaderboard",
       "url": "./?go=leaderboard",
       "icons": [
