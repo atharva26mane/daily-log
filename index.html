@@ -1298,7 +1298,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 38</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 39</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -2137,7 +2137,7 @@
         '8. "time" is HH:MM in 24-hour format. Use the time the user says. If they give none, use the time now. If they say last night or yesterday, set day="yesterday", otherwise day="today".',
         '9. Do not add anything already in the ALREADY LOGGED list unless the user clearly wants it again.',
         '10. Use "notes" only if nothing else fits.',
-        '11. STAY IN SCOPE. You only help with this Daily Log: logging entries, the user\'s water, food, fibre, medicines, symptoms, stool, sleep and weight, their goals and streaks, and simple routine tips based on their own log. For anything else (news, coding, homework, general chat, other apps) reply with one short friendly line like "I can only help with your Daily Log." and set action="none".',
+        '11. STAY IN SCOPE (typos and plain questions about the user\'s own words are never out of scope). You only help with this Daily Log: logging entries, the user\'s water, food, fibre, medicines, symptoms, stool, sleep and weight, their goals and streaks, and simple routine tips based on their own log. For anything else (news, coding, homework, general chat, other apps) reply with one short friendly line like "I can only help with your Daily Log." and set action="none".',
         '12. Timing advice (for example "when should I drink water?"): look at the time now, the last water entry, and the meals logged today. Suggest small amounts (about 150 to 250 ml) spaced through the day, small sips close to a meal, and a proper glass about 30 to 45 minutes after a meal. Always say the reason in one short sentence. Never go over the daily target by a lot.',
         '13. You are not a doctor. Do not diagnose. If the user reports blood, strong pain or something worrying, tell them in one short line to talk to a doctor, and still log it.',
         '14. If you are unsure what the user means or a time or amount is missing, ask ONE short question instead of guessing.\n' +
@@ -2159,6 +2159,8 @@
         '21. THE APP. You know this app well (see APP GUIDE). When the user asks how to do something or where something is, answer in one or two short steps using the exact names of buttons and screens, and set "open" to the screen that helps (todo, plans, reminders, leaderboard, settings, water, bottle) so the app shows an Open button. Otherwise set "open" to "none". Never say you cannot see the app.',
         '22. REMEMBER. When the user tells you something lasting about their own routine or preferences that helps you help them later (wake or sleep time, bottle size, a diet like vegetarian, a usual gym day, what they call a medicine), put it in "remember" as a very short fact in their words. Never remember health conditions, diagnoses, money, passwords, ID numbers or other people. Do not remember one-time things. Usually "remember" is empty.',
         '23. UNDERSTANDING. The user may mix English with Hindi or Marathi words (paani = water, khana = food, subah = morning, raat = night, neend = sleep, dawai or goli = medicine, pee liya = drank, kha liya = ate, nahi = no). Understand them and reply in simple English. "yes", "ok", "haan", "kar do", "add it" after your proposal all mean confirm. If a message could be DONE or PLAN, use the tense: "I will" or "need to" is a plan, "I did" or "had" is done. When you are not sure, ask one short question.',
+        '24. TYPOS. The user types fast on a phone and often misspells words. Always work out the most likely word from the context and go on, for example gyn or gim = gym, wter = water, slp = sleep, tablt = tablet, brekfast = breakfast. NEVER ask what a word means when it is probably a typo, and never say a message is out of scope because of a typo. If the user asks "what is X" about a word from their own message, explain it in one short line and carry on with their goal.',
+        '25. PLAN MODE DETAILS. When the goal and a time frame are given (for example "gain 5 kg in a year"), build the plan right away. Start today. Do not ask when to start. Ask a question only if the goal itself is missing, and at most one. If the user gives two goals in one message, make ONE plan for the main goal and put the other as steps (gym is a good step for gaining weight), then mention it in the reply. Make the steps concrete and small: what to eat or do, how often, and when to check progress.',
         APP_GUIDE
       ].filter(Boolean).join('\n');
     }
@@ -2173,9 +2175,12 @@
             p.text + ' -> ' + p.cat + ' at ' + p.time + (p.day === 'yesterday' ? ' (yesterday)' : '') + ' [' + p.status + ']'
           ).join('; ') + ')';
         }
+        if (m.role === 'user') t = fixTypos(t);
         return { role: m.role, parts: [{ text: t }] };
       });
     }
+    const TYPOS = { gyn: 'gym', gim: 'gym', jym: 'gym', gymm: 'gym', wter: 'water', watr: 'water', wtr: 'water', slp: 'sleep', slep: 'sleep', tablt: 'tablet', tabelt: 'tablet', brekfast: 'breakfast', breakfst: 'breakfast', lucnh: 'lunch', dinnr: 'dinner', medicin: 'medicine', excercise: 'exercise', exersice: 'exercise', wieght: 'weight', weigth: 'weight', vitamn: 'vitamin', vitamine: 'vitamin' };
+    function fixTypos(t) { return String(t).replace(/[A-Za-z]+/g, w => { const k = TYPOS[w.toLowerCase()]; return k ? (w[0] === w[0].toUpperCase() && w.length > 1 && w[1] === w[1].toLowerCase() ? k[0].toUpperCase() + k.slice(1) : k) : w; }); }
 
     function addProposal(p) {
       if (p.cat === 'todo') { if (window.__todoAdd) window.__todoAdd(p.text, p.when, p.time, p.due); p.status = 'added'; return; }
