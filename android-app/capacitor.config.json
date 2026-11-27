@@ -1,0 +1,14 @@
+{
+  "appId": "com.atharva.dailylog",
+  "appName": "Daily Log",
+  "webDir": "www",
+  "server": {
+    "url": "https://daily-log-5jbg.onrender.com",
+    "androidScheme": "https",
+    "allowNavigation": ["daily-log-5jbg.onrender.com", "*.supabase.co"]
+  },
+  "android": {
+    "backgroundColor": "#FDF8E3",
+    "allowMixedContent": false
+  }
+}

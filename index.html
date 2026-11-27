@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+// running inside the Android app (Capacitor)? Make sharing and sign-in work there.
+(function () {
+  var C = window.Capacitor; window.__NATIVE = !!(C && C.isNativePlatform && C.isNativePlatform());
+  if (window.__NATIVE && !navigator.share && C.Plugins && C.Plugins.Share) navigator.share = function (o) { return C.Plugins.Share.share({ title: o.title, text: o.text, url: o.url, dialogTitle: 'Share' }); };
+})();
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#fefae0" />
@@ -1473,7 +1480,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 43</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 44</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -4191,9 +4198,29 @@
   $('auth-google').addEventListener('click', async function() {
     if (!sb) return boot();
     try { await sb.auth.signOut({ scope: 'local' }); } catch (e) {}
+    if (window.__NATIVE) {
+      // Google does not allow sign-in inside an app's own browser, so use Chrome and come back through a link
+      var rn = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'com.atharva.dailylog://auth', skipBrowserRedirect: true, queryParams: { prompt: 'select_account' } } });
+      if (rn.error || !rn.data || !rn.data.url) { setGate('error', 'Google sign-in did not start. Try again.'); return; }
+      try { await window.Capacitor.Plugins.Browser.open({ url: rn.data.url }); } catch (e) { setGate('error', 'Could not open the sign-in page.'); }
+      return;
+    }
     var r = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname, queryParams: { prompt: 'select_account' } } });
     if (r.error) setGate('error', 'Google sign-in did not start. Try again.');
   });
+  if (window.__NATIVE) {
+    try {
+      window.Capacitor.Plugins.App.addListener('appUrlOpen', async function (ev) {
+        try {
+          var u = new URL(ev.url); if (u.protocol !== 'com.atharva.dailylog:') return;
+          try { await window.Capacitor.Plugins.Browser.close(); } catch (e0) {}
+          var code = u.searchParams.get('code');
+          if (code && sb) { var rr = await sb.auth.exchangeCodeForSession(code); if (rr.error) setGate('error', 'Sign-in did not finish. Try again.'); else location.reload(); }
+          else if (u.searchParams.get('error') || u.hash.indexOf('error') >= 0) setGate('error', 'Google sign-in was cancelled. Try again.');
+        } catch (e) {}
+      });
+    } catch (e) {}
+  }
   $('auth-check').addEventListener('click', recheck);
   $('auth-out').addEventListener('click', plainSignOut);
   $('auth-out2').addEventListener('click', plainSignOut);
