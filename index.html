@@ -1192,7 +1192,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 34</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 35</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -5144,7 +5144,7 @@
     if (!rows.length) return h + '<div class="lb-card"><p>' + empty + '</p></div>';
     return h + hero(rows) + podium(rows) + list(rows);
   }
-  function footer() { return '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-edit" type="button">Edit how I appear</button></div><p class="lb-note">Shown as <b>' + esc(S.me.anonymous ? 'Anonymous' : S.me.nickname) + '</b>' + (S.me.in_global ? ' on the global board.' : '. Hidden from the global board.') + '</p>' + how(); }
+  function footer() { return '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-edit" type="button">Edit how I appear</button><button class="lb-btn danger row" id="lb-leave" type="button">Remove me from the leaderboard</button></div><p class="lb-note">Shown as <b>' + esc(S.me.anonymous ? 'Anonymous' : S.me.nickname) + '</b>' + (S.me.in_global ? ' on the global board.' : '. Hidden from the global board.') + '</p>' + how(); }
   function groupsView() {
     var chips = '<div class="lb-chips">' + S.groups.map(function (g) { return '<button type="button" data-g="' + g.id + '" class="' + (g.id === S.gid && !S.form ? 'on' : '') + '">' + esc(g.name) + '</button>'; }).join('') + '<button type="button" data-form="new" class="' + (S.form === 'new' ? 'on' : '') + '">New</button><button type="button" data-form="join" class="' + (S.form === 'join' ? 'on' : '') + '">Join with code</button></div>';
     if (S.form === 'new') return chips + '<div class="lb-card"><h3>New group</h3><p>Make a group for your friends. You get a code to share.</p><input id="lb-gname" class="lb-field" maxlength="24" placeholder="Group name" /><button class="lb-btn" id="lb-gcreate" type="button">Create group</button></div>';
