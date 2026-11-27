@@ -767,6 +767,84 @@
     body[data-ts="l"] .sheet:not(.chat-sheet) > *, body[data-ts="l"] #cards-container, body[data-ts="l"] .bubble { zoom: 1.12; }
     body[data-ts="xl"] .sheet:not(.chat-sheet) > *, body[data-ts="xl"] #cards-container, body[data-ts="xl"] .bubble { zoom: 1.25; }
     @media (prefers-reduced-motion: reduce) { .bubble.pop, .bubble.thinking i, .chat-mic.live { animation: none; } #offline-bar, #offline-bar.show { transition: opacity 100ms linear; transform: none; } }
+    /* ---------- to-do ---------- */
+    .todo-card { position: relative; background: rgba(255,255,255,0.9); border: 1px solid rgba(64,81,59,0.12); border-radius: 28px; padding: 16px 14px 10px; margin-bottom: 14px; box-shadow: 0 12px 30px rgba(26,38,24,0.22); }
+    .todo-card[hidden] { display: none; }
+    .td-head { display: flex; align-items: center; gap: 8px; padding: 0 6px; }
+    .td-head > svg { width: 22px; height: 22px; fill: none; stroke: var(--forest); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .td-title { font-family: var(--display); font-weight: 800; font-size: 21px; color: var(--forest); letter-spacing: -0.01em; }
+    .td-count { margin-left: auto; font-size: 14px; font-weight: 700; color: var(--moss); font-variant-numeric: tabular-nums; }
+    .td-add { width: 44px; height: 44px; margin: -6px -4px -6px 0; border: none; background: transparent; display: flex; align-items: center; justify-content: center; color: var(--forest); cursor: pointer; border-radius: 50%; }
+    .td-add svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .td-bar { height: 6px; margin: 8px 6px 4px; border-radius: 6px; background: rgba(64,81,59,0.12); overflow: hidden; }
+    .td-bar i { display: block; height: 100%; border-radius: 6px; background: var(--fern); transition: width 500ms cubic-bezier(0.16,1,0.3,1); }
+    .td-list { list-style: none; margin: 0; padding: 0; }
+    .td-item { display: flex; align-items: center; gap: 2px; min-height: 52px; border-top: 1px solid rgba(64,81,59,0.1); }
+    .td-item:first-child { border-top: none; }
+    .td-check { flex: none; width: 44px; height: 44px; border: none; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .td-check::before { content: ""; width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(64,81,59,0.5); background: transparent; transition: background-color 160ms ease, border-color 160ms ease, transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
+    .td-check svg { position: absolute; width: 16px; height: 16px; fill: none; stroke: var(--cream); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset 220ms cubic-bezier(0.16,1,0.3,1) 60ms; }
+    .td-check:active::before { transform: scale(0.88); }
+    .td-item.is-done .td-check::before { background: var(--forest); border-color: var(--forest); animation: tdpop 260ms cubic-bezier(0.34,1.56,0.64,1); }
+    .td-item.is-done .td-check svg { stroke-dashoffset: 0; }
+    @keyframes tdpop { 40% { transform: scale(1.18); } }
+    .td-text { flex: 1; min-width: 0; font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1.3; padding: 8px 0; word-break: break-word; position: relative; transition: color 200ms ease, opacity 200ms ease; background: linear-gradient(currentColor, currentColor) 0 55% / 0 2px no-repeat; transition: background-size 260ms cubic-bezier(0.16,1,0.3,1) 80ms, opacity 240ms ease; }
+    .td-item.is-done .td-text { background-size: 100% 2px; opacity: 0.5; }
+    .td-tag { flex: none; font-size: 13px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: rgba(64,81,59,0.1); color: var(--forest); margin-left: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .td-tag.late { background: rgba(164,86,42,0.14); color: #8a4519; }
+    .td-more { display: block; width: 100%; min-height: 44px; border: none; border-top: 1px solid rgba(64,81,59,0.1); background: transparent; font: inherit; font-size: 15px; font-weight: 700; color: var(--moss); cursor: pointer; }
+    .td-alldone { display: flex; align-items: center; gap: 10px; padding: 8px 6px 10px; font-size: 16px; font-weight: 600; color: var(--ink); }
+    .td-alldone svg { width: 26px; height: 26px; padding: 5px; border-radius: 50%; background: var(--forest); fill: none; stroke: var(--cream); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; animation: tdpop 360ms cubic-bezier(0.34,1.56,0.64,1); }
+    .todo-strip { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 56px; margin: 0 0 14px; padding: 8px 14px; border-radius: 20px; border: 1px solid rgba(64,81,59,0.15); background: rgba(255,255,255,0.72); color: var(--ink); font: inherit; text-align: left; cursor: pointer; transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
+    .todo-strip:active { transform: scale(0.98); transition-duration: 90ms; }
+    .todo-strip[hidden] { display: none; }
+    .todo-strip > svg { flex: none; width: 22px; height: 22px; fill: none; stroke: var(--forest); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ts-main { font-weight: 800; font-size: 16px; color: var(--forest); }
+    .ts-sub { font-size: 14px; color: var(--moss); font-weight: 500; line-height: 1.3; }
+    .ts-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; justify-content: flex-end; }
+    .ts-chips b { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: rgba(64,81,59,0.1); color: var(--forest); white-space: nowrap; }
+    .ts-plus { margin-left: auto; }
+    .todo-sheet { padding-bottom: calc(18px + var(--safe-bottom)); }
+    .td-form { margin-bottom: 8px; }
+    .td-inputrow { display: flex; align-items: center; gap: 6px; padding: 5px 5px 5px 14px; border-radius: 28px; background: #fff; border: 1px solid rgba(64,81,59,0.25); transition: box-shadow 160ms ease, border-color 160ms ease; }
+    .td-inputrow:focus-within { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(64,81,59,0.14); }
+    .td-field { flex: 1; min-width: 0; height: 44px; border: none; background: transparent; font: inherit; font-size: 16px; color: var(--ink); outline: none; }
+    .td-addbtn { flex: none; width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--forest); color: var(--cream); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
+    .td-addbtn:active { transform: scale(0.92); transition-duration: 90ms; }
+    .td-addbtn svg, .td-timechip svg, .td-timeclear svg, .td-del svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .td-when { display: flex; gap: 6px; overflow-x: auto; padding: 10px 2px 4px; scrollbar-width: none; }
+    .td-when::-webkit-scrollbar { display: none; }
+    .td-when button, .td-mv button { flex: none; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid rgba(64,81,59,0.28); background: rgba(64,81,59,0.06); color: var(--forest); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1), background-color 140ms ease, color 140ms ease; }
+    .td-when button:active, .td-mv button:active { transform: scale(0.95); transition-duration: 90ms; }
+    .td-when button[aria-checked="true"], .td-mv button.on { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+    .td-timerow { display: flex; align-items: center; gap: 6px; }
+    .td-timechip { position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px dashed rgba(64,81,59,0.45); color: var(--forest); font-size: 15px; font-weight: 600; cursor: pointer; overflow: hidden; }
+    .td-timechip.set { border-style: solid; background: rgba(64,81,59,0.08); }
+    .td-timechip input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; font-size: 16px; }
+    .td-timeclear { width: 44px; height: 44px; border: none; background: transparent; color: var(--moss); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .td-timeclear[hidden] { display: none; }
+    .td-sections { margin-top: 6px; }
+    .td-sec { margin-top: 14px; }
+    .td-sec > h3 { display: flex; align-items: center; gap: 8px; margin: 0 4px 4px; font-size: 13px; font-weight: 800; letter-spacing: 0.04em; color: var(--moss); }
+    .td-sec > h3 span { font-weight: 700; padding: 1px 8px; border-radius: 999px; background: rgba(64,81,59,0.1); }
+    .td-sec > h3.late { color: #8a4519; }
+    .td-sec ul { list-style: none; margin: 0; padding: 0; background: rgba(255,255,255,0.7); border-radius: 20px; border: 1px solid rgba(64,81,59,0.12); overflow: hidden; }
+    .td-row { border-top: 1px solid rgba(64,81,59,0.1); }
+    .td-row:first-child { border-top: none; }
+    .td-row .td-item { border: none; }
+    .td-row .td-text { cursor: pointer; }
+    .td-row.pop { animation: tdrow 280ms cubic-bezier(0.16,1,0.3,1); }
+    @keyframes tdrow { from { opacity: 0; transform: translateY(-6px) scale(0.98); } }
+    .td-edit { display: none; padding: 0 12px 12px 48px; }
+    .td-row.open .td-edit { display: block; }
+    .td-mv { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+    .td-mv::-webkit-scrollbar { display: none; }
+    .td-del { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 22px; border: none; background: rgba(164,86,42,0.12); color: #8a4519; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .td-empty { padding: 20px 8px; text-align: center; color: var(--moss); font-size: 15px; }
+    .td-doneToggle { display: block; width: 100%; min-height: 44px; margin-top: 10px; border: none; background: transparent; color: var(--moss); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+    body.theme-volcano .todo-card, body.theme-volcano .todo-strip, body.theme-volcano .td-sec ul, body.theme-volcano .td-inputrow { background: var(--basalt); border: 1px solid var(--edge); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+    body.theme-volcano .td-check svg, body.theme-volcano .td-alldone svg { stroke: #1f120c; }
+    @media (prefers-reduced-motion: reduce) { .td-item.is-done .td-check::before, .td-alldone svg, .td-row.pop { animation: none; } .td-bar i, .td-text, .td-check svg { transition: none; } }
   </style>
 </head>
 <body>
@@ -807,6 +885,7 @@
       <div class="container">
         <aside class="proverb" id="proverb" aria-label="Proverb of the day"><p class="proverb-text" id="proverb-text"></p></aside>
         <aside class="nudge" id="nudge" aria-live="polite" hidden><i class="nudge-ic" aria-hidden="true"></i><div><div class="nudge-t" id="nudge-t"></div><div class="nudge-s" id="nudge-s"></div></div></aside>
+        <section class="todo-card" id="todo-today" aria-label="To-do today" hidden></section>
         <section class="tank" id="tank" aria-label="Water today">
           <div class="tank-fill" id="tank-fill" aria-hidden="true">
             <svg class="wave w2" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 2 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
@@ -823,6 +902,8 @@
             <button class="quick-btn" data-ml="500">+500</button>
           </div>
         </section>
+
+        <button class="todo-strip" id="todo-strip" type="button" aria-label="Open to-do list"></button>
 
         <div class="actions">
           <button class="act primary" id="open-chat-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H10l-4.5 3.8V16h-1z"/></svg><span>Talk to AI</span></button>
@@ -960,6 +1041,25 @@
 
   <div id="offline-bar" role="status" aria-live="polite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/></svg><span id="offline-msg">You are offline. Entries stay on this phone and sync when you reconnect.</span></div>
 
+  <!-- TO-DO MODAL -->
+  <div id="todo-modal" class="overlay">
+    <div class="sheet todo-sheet" role="dialog" aria-modal="true" aria-label="To-do list">
+      <div class="chat-head"><h2 class="sheet-title">To-do</h2><div class="chat-head-btns"><button id="td-close" type="button">Done</button></div></div>
+      <form id="td-form" class="td-form" autocomplete="off">
+        <div class="td-inputrow">
+          <input id="td-input" class="td-field" type="text" maxlength="140" enterkeyhint="done" placeholder="What do you want to get done?" />
+          <button class="td-addbtn" type="submit" aria-label="Add to-do"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
+        </div>
+        <div class="td-when" id="td-when" role="radiogroup" aria-label="When"></div>
+        <div class="td-timerow">
+          <label class="td-timechip" id="td-timechip"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="td-time-label">Add a time for an alert</span><input id="td-time" type="time" aria-label="Alert time" /></label>
+          <button class="td-timeclear" id="td-time-clear" type="button" aria-label="Remove time" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+        </div>
+      </form>
+      <div id="td-list" class="td-sections"></div>
+    </div>
+  </div>
+
   <!-- CHAT MODAL -->
   <div id="chat-modal" class="overlay">
     <div class="sheet chat-sheet" role="dialog" aria-modal="true" aria-label="Talk to AI">
@@ -999,7 +1099,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 31</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 32</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -1808,6 +1908,7 @@
         'ALREADY LOGGED on this day:',
         logged,
         'Gudlax taken last night (previous day): ' + yGud,
+        'OPEN TO-DOS (not done yet):\n' + (window.__todoSummary ? window.__todoSummary() : '(none)'),
         '',
         'RULES:',
         '1. Reply in very short, simple, friendly English. No big words. Max 3 short sentences.',
@@ -1824,7 +1925,8 @@
         '12. Timing advice (for example "when should I drink water?"): look at the time now, the last water entry, and the meals logged today. Suggest small amounts (about 150 to 250 ml) spaced through the day, small sips close to a meal, and a proper glass about 30 to 45 minutes after a meal. Always say the reason in one short sentence. Never go over the daily target by a lot.',
         '13. You are not a doctor. Do not diagnose. If the user reports blood, strong pain or something worrying, tell them in one short line to talk to a doctor, and still log it.',
         '14. If you are unsure what the user means or a time or amount is missing, ask ONE short question instead of guessing.\n' +
-        '15. Water needs differ by person. Dark yellow or orange urine means drink more now. Pale or clear urine means they are well hydrated, so no extra water is needed. Constipation or hard stool needs steady water through the day (plus fibre), not one big drink. Heavy activity or heat means more. Use only what the person has logged or said, and never diagnose. For anything serious, suggest seeing a doctor.'
+        '15. Water needs differ by person. Dark yellow or orange urine means drink more now. Pale or clear urine means they are well hydrated, so no extra water is needed. Constipation or hard stool needs steady water through the day (plus fibre), not one big drink. Heavy activity or heat means more. Use only what the person has logged or said, and never diagnose. For anything serious, suggest seeing a doctor.',
+        '16. TO-DO LIST. Things the user WANTS or NEEDS to do later are plans, not logs: chores, buying things, learning, appointments, "I should", "need to", "remember to", "tomorrow I will", "this week I want to". Put each one in "todos" (never in "entries"), one item per task, short plain words. "when" is one of: today, tomorrow, week (this week), 2weeks, month (this month). If they give a clock time, put it in "time" as HH:MM (24-hour), otherwise "" . Say in your reply where you will put it, like: "I will add buy bananas to your to-do for tomorrow. Okay?" Things already done go in "entries". Do not repeat tasks already in OPEN TO-DOS. If the user asks what is on their list, answer from OPEN TO-DOS in one or two short lines and set action="none" with empty entries and todos.'
       ].filter(Boolean).join('\n');
     }
 
@@ -1843,6 +1945,7 @@
     }
 
     function addProposal(p) {
+      if (p.cat === 'todo') { if (window.__todoAdd) window.__todoAdd(p.text, p.when, p.time); p.status = 'added'; return; }
       const ids = CATEGORIES.filter(c => !c.hidden).map(c => c.id);
       const cat = ids.includes(p.cat) ? p.cat : 'notes';
       const time = /^\d{1,2}:\d{2}$/.test(p.time || '') ? p.time.padStart(5, '0') : getCurrentHHMM();
@@ -1861,7 +1964,7 @@
     function renderChat() {
       const log = document.getElementById('chat-log');
       if (chatHistory.length === 0 && !chatBusy) {
-        log.innerHTML = '<div class="chat-hint">Hi! Tell me what you did today, and what you did not do. Example: "drank 2 glasses of water, had idli 3 with sambar, forgot my iron tablet". I will suggest where to save each thing, and you tap Add.</div><div class="chat-suggs"><button type="button" data-sugg="Drank 500 ml water">Drank 500 ml water</button><button type="button" data-sugg="Had idli with sambar for breakfast">Idli for breakfast</button><button type="button" data-sugg="Took my vitamin tablet">Took my vitamin</button><button type="button" data-sugg="Slept 7 hours last night">Slept 7 hours</button></div>';
+        log.innerHTML = '<div class="chat-hint">Hi! Tell me what you did today, and what you did not do. Example: "drank 2 glasses of water, had idli 3 with sambar, forgot my iron tablet". I will suggest where to save each thing, and you tap Add.</div><div class="chat-suggs"><button type="button" data-sugg="Drank 500 ml water">Drank 500 ml water</button><button type="button" data-sugg="Had idli with sambar for breakfast">Idli for breakfast</button><button type="button" data-sugg="Took my vitamin tablet">Took my vitamin</button><button type="button" data-sugg="Slept 7 hours last night">Slept 7 hours</button><button type="button" data-sugg="Remind me to buy bananas tomorrow">Add a to-do</button></div>';
         return;
       }
       log.innerHTML = chatHistory.map((m, mi) => {
@@ -1881,7 +1984,7 @@
               right = '<span class="prop-state">' + label + '</span>';
             }
             return '<div class="prop"><div class="prop-main"><div class="prop-cat">' +
-              escapeHtml(c ? c.name : p.cat) + ' · ' + escapeHtml(p.time) + dayTag +
+              (p.cat === 'todo' ? 'To-do · ' + escapeHtml((window.__todoLabel ? window.__todoLabel(p.when) : p.when) + (p.time ? ' · ' + p.time : '')) : escapeHtml(c ? c.name : p.cat) + ' · ' + escapeHtml(p.time) + dayTag) +
               '</div><div class="prop-text">' + escapeHtml(p.text) + '</div></div><div class="prop-actions">' + right + '</div></div>';
           }).join('') +
           (pending > 1 ? '<button class="prop-all" data-m="' + mi + '" data-act="all">Add all (' + pending + ')</button>' : '') +
@@ -1924,6 +2027,18 @@
             properties: {
               reply: { type: 'STRING' },
               action: { type: 'STRING', enum: ['propose', 'add_pending', 'none'] },
+              todos: {
+                type: 'ARRAY',
+                items: {
+                  type: 'OBJECT',
+                  properties: {
+                    text: { type: 'STRING' },
+                    when: { type: 'STRING', enum: ['today', 'tomorrow', 'week', '2weeks', 'month'] },
+                    time: { type: 'STRING' }
+                  },
+                  required: ['text', 'when', 'time']
+                }
+              },
               entries: {
                 type: 'ARRAY',
                 items: {
@@ -1938,7 +2053,7 @@
                 }
               }
             },
-            required: ['reply', 'action', 'entries']
+            required: ['reply', 'action', 'entries', 'todos']
           }
         }
       }, CHAT_TIMEOUT_MS);
@@ -1955,15 +2070,19 @@
       }
 
       const entries = Array.isArray(out.entries) ? out.entries.filter(e => e && typeof e.text === 'string' && e.text.trim()) : [];
+      const todoProps = (Array.isArray(out.todos) ? out.todos : []).filter(e => e && typeof e.text === 'string' && e.text.trim()).map(e => ({
+        cat: 'todo', text: e.text.trim(), when: ['today', 'tomorrow', 'week', '2weeks', 'month'].includes(e.when) ? e.when : 'today',
+        time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : '', day: 'today', status: 'pending'
+      }));
 
       if (out.action === 'add_pending') {
         let n = 0;
         chatHistory.forEach(m => (m.proposals || []).forEach(p => {
           if (p.status === 'pending') { addProposal(p); n++; }
         }));
-        if (n > 0) { saveData(); renderMain(); showToast('Added ' + n + (n === 1 ? ' entry' : ' entries')); }
+        if (n > 0) { saveData(); renderMain(); showToast('Added ' + n + (n === 1 ? ' item' : ' items')); }
         chatHistory.push({ role: 'model', text: out.reply });
-      } else if (entries.length > 0) {
+      } else if (entries.length > 0 || todoProps.length > 0) {
         chatHistory.forEach(m => (m.proposals || []).forEach(p => { if (p.status === 'pending') p.status = 'replaced'; }));
         chatHistory.push({
           role: 'model',
@@ -1974,7 +2093,7 @@
             time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : getCurrentHHMM(),
             day: e.day === 'yesterday' ? 'yesterday' : 'today',
             status: 'pending'
-          }))
+          })).concat(todoProps)
         });
       } else {
         chatHistory.push({ role: 'model', text: out.reply });
@@ -3424,7 +3543,7 @@
     try { saveData(); saveSettings(); } catch (e) {}
     mute = false;
     WATER_TARGET_ML = Math.min(6000, Math.max(500, Number(SETTINGS.waterTarget) || 2500));
-    try { applyCategorySettings(); populateCategorySelect(); renderMain(); if (typeof tickClock === 'function') tickClock(); } catch (e) {}
+    try { applyCategorySettings(); populateCategorySelect(); renderMain(); if (window.__todoRender) window.__todoRender(); if (typeof tickClock === 'function') tickClock(); } catch (e) {}
   }
   function mergeFrom(row) {
     var cd = row.data || {};
@@ -3789,6 +3908,19 @@
         out.push({ at: at, title: x.label || 'Reminder', body: 'Your reminder for ' + x.time, tag: 'c' + x.id });
       }
     });
+    // to-dos: alerts at their time, plus a morning and an evening nudge for open tasks
+    try {
+      var tk = getTodayKey(), todos = (SETTINGS.todos || []).filter(function(t){ return t && !t.done && t.due; }), dayN = window.__todoDays;
+      todos.forEach(function(t){
+        if (!t.time) return; var off = dayN(tk, t.due); if (off < 0 || off > 1) return;
+        var at = atMin(off, toMin(t.time)); if (at > nowMs + 60000 && at <= horizon) out.push({ at: at, title: 'To-do', body: t.text, tag: 't' + t.id });
+      });
+      var nT = todos.filter(function(t){ return t.due <= tk; }).length, nM = todos.filter(function(t){ return t.due === shiftDateKey(tk, 1); }).length;
+      var amT = atMin(0, c.wake + 45), pmT = atMin(0, 18 * 60 + 30);
+      if (nT && amT > nowMs + 60000) out.push({ at: amT, title: 'Your to-do today', body: nT + (nT === 1 ? ' task is' : ' tasks are') + ' waiting. Open Daily Log to see them.', tag: 'todo-am' });
+      if (nT && pmT > nowMs + 60000) out.push({ at: pmT, title: 'Still to do today', body: nT + (nT === 1 ? ' task is' : ' tasks are') + ' still open.', tag: 'todo-pm' });
+      if (nM) { var amM = atMin(1, c.wake + 45); if (amM <= horizon + 3600000) out.push({ at: amM, title: 'Your to-do today', body: nM + (nM === 1 ? ' task is' : ' tasks are') + ' planned for today.', tag: 'todo-am' }); }
+    } catch (e) {}
     // smart water
     if (r.water.on !== false && c.total < c.target) {
       var plan = modeGap(c), gap = plan.gap, amt = Math.min(300, Math.max(150, Math.round((c.target - c.total) / 6 / 50) * 50));
@@ -3811,6 +3943,7 @@
     return out.filter(function(x){ return x.at > nowMs; }).sort(function(a, b){ return a.at - b.at; }).slice(0, 14);
   }
   window.__buildSchedule = buildSchedule;
+  window.__schedSoon = function () { schedSoon(); };
 
   var schedTimer = null, lastSig = '';
   function subscribedHere() { try { return localStorage.getItem(PUSHK) === '1'; } catch (e) { return false; } }
@@ -4600,6 +4733,157 @@
     } catch (e) { showToast('Could not make the picture'); }
   });
   window.__makeCard = makeCard;
+})();
+</script>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var WHEN = [['today', 'Today'], ['tomorrow', 'Tomorrow'], ['week', 'This week'], ['2weeks', '2 weeks'], ['month', 'This month']];
+  var LABEL = { today: 'Today', tomorrow: 'Tomorrow', week: 'This week', '2weeks': 'In 2 weeks', month: 'This month' };
+  var ICON = {
+    list: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>',
+    check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+    trash: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
+  };
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function dk(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function dd(k) { return new Date(k + 'T12:00:00'); }
+  function days(a, b) { return Math.round((dd(b) - dd(a)) / 864e5); }
+  function esc(t) { return typeof escapeHtml === 'function' ? escapeHtml(t) : String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function fmtTime(t) { if (!t) return ''; var p = t.split(':'), h = +p[0]; return (h % 12 || 12) + ':' + p[1] + ' ' + (h < 12 ? 'am' : 'pm'); }
+  function dueFor(w) {
+    var t = getTodayKey();
+    if (w === 'today') return t;
+    if (w === 'tomorrow') return shiftDateKey(t, 1);
+    if (w === 'week') { var add = (7 - dd(t).getDay()) % 7; if (add < 2) add += 7; return shiftDateKey(t, add); }
+    if (w === '2weeks') return shiftDateKey(t, 14);
+    var d = dd(t), k = dk(new Date(d.getFullYear(), d.getMonth() + 1, 0));
+    if (days(t, k) < 3) k = dk(new Date(d.getFullYear(), d.getMonth() + 2, 0));
+    return k;
+  }
+  function items() { if (!Array.isArray(SETTINGS.todos)) SETTINGS.todos = []; return SETTINGS.todos; }
+  function persist() {
+    var cut = Date.now() - 14 * 864e5;
+    SETTINGS.todos = items().filter(function (t) { return !(t.done && t.doneAt && t.doneAt < cut); });
+    saveSettings(); render(); if (window.__schedSoon) window.__schedSoon();
+  }
+  var lastAdded = null;
+  function add(text, when, time) {
+    text = (text || '').trim(); if (!text) return null;
+    when = LABEL[when] ? when : 'today';
+    var t = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), text: text.slice(0, 140), when: when, due: dueFor(when), time: /^\d{1,2}:\d{2}$/.test(time || '') ? time.padStart(5, '0') : '', done: false, created: Date.now() };
+    items().unshift(t); lastAdded = t.id; persist(); return t;
+  }
+  function find(id) { return items().filter(function (t) { return t.id === id; })[0]; }
+  function order(a, b) { return (a.due < b.due ? -1 : a.due > b.due ? 1 : 0) || ((a.time || '99') < (b.time || '99') ? -1 : (a.time || '99') > (b.time || '99') ? 1 : 0) || a.created - b.created; }
+
+  var lastPct = 0, seen = null;
+  function row(t, today, card) {
+    var late = t.due < today && !t.done;
+    return '<li class="' + (card ? 'td-item' : 'td-row' + (t.id === lastAdded ? ' pop' : '') + (openId === t.id ? ' open' : '')) + '" data-id="' + t.id + '">' +
+      (card ? '' : '<div class="td-item' + (t.done ? ' is-done' : '') + '">') +
+      '<button class="td-check" type="button" aria-label="' + (t.done ? 'Mark not done' : 'Mark done') + '">' + ICON.check + '</button>' +
+      '<span class="td-text"' + (card ? '' : ' data-open="1"') + '>' + esc(t.text) + '</span>' +
+      (late ? '<span class="td-tag late">Overdue</span>' : '') + (t.time ? '<span class="td-tag">' + fmtTime(t.time) + '</span>' : '') +
+      (card ? '' : '</div><div class="td-edit"><div class="td-mv">' + WHEN.map(function (w) { return '<button type="button" data-move="' + w[0] + '"' + (t.when === w[0] && !late ? ' class="on"' : '') + '>' + w[1] + '</button>'; }).join('') + '</div><button class="td-del" type="button" data-del="1">' + ICON.trash + 'Delete</button></div>') +
+      '</li>';
+  }
+  function renderCard() {
+    var card = $('todo-today'), pa = $('past-actions'), past = pa && pa.style.display !== 'none';
+    var t = getTodayKey(), all = items();
+    var pend = all.filter(function (x) { return !x.done && x.due <= t; }).sort(order);
+    var done = all.filter(function (x) { return x.done && x.due <= t && x.doneAt && dk(new Date(x.doneAt)) === dk(new Date()); });
+    if (past || (!pend.length && !done.length)) { card.hidden = true; card.innerHTML = ''; lastPct = 0; return; }
+    var total = pend.length + done.length, pct = Math.round(done.length / total * 100);
+    var shown = pend.slice(0, 4), extra = pend.length - shown.length;
+    var html = '<div class="td-head">' + ICON.list + '<span class="td-title">' + (pend.length ? 'Today' : 'All done today') + '</span><span class="td-count">' + done.length + ' of ' + total + '</span><button class="td-add" type="button" data-open-sheet="1" aria-label="Add to-do">' + ICON.plus + '</button></div>' +
+      '<div class="td-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="width:' + lastPct + '%"></i></div>';
+    if (!pend.length) html += '<div class="td-alldone">' + ICON.check + '<span>Everything for today is done. Nice work.</span></div>';
+    html += '<ul class="td-list">' + shown.map(function (x) { return row(x, t, true); }).join('') + done.slice(0, pend.length ? 2 : 3).map(function (x) { return row(x, t, true).replace('class="td-item"', 'class="td-item is-done"'); }).join('') + '</ul>';
+    if (extra > 0) html += '<button class="td-more" type="button" data-open-sheet="1">+' + extra + ' more</button>';
+    card.hidden = false; card.innerHTML = html;
+    var bar = card.querySelector('.td-bar i'); requestAnimationFrame(function () { requestAnimationFrame(function () { bar.style.width = pct + '%'; }); });
+    lastPct = pct;
+  }
+  function renderStrip() {
+    var st = $('todo-strip'), pa = $('past-actions'), past = pa && pa.style.display !== 'none';
+    if (past) { st.hidden = true; return; } st.hidden = false;
+    var t = getTodayKey(), open = items().filter(function (x) { return !x.done; });
+    var tom = open.filter(function (x) { return x.due === shiftDateKey(t, 1); }).length;
+    var wk = open.filter(function (x) { return x.due > shiftDateKey(t, 1) && days(t, x.due) <= 7; }).length;
+    var later = open.filter(function (x) { return days(t, x.due) > 7; }).length;
+    var tod = open.filter(function (x) { return x.due <= t; }).length;
+    if (!open.length) st.innerHTML = ICON.list + '<span><span class="ts-main">Plan ahead</span><br><span class="ts-sub">Add something you want to do</span></span>' + ICON.plus.replace('<svg', '<svg class="ts-plus"');
+    else {
+      var ch = []; if (tom) ch.push('Tomorrow ' + tom); if (wk) ch.push('This week ' + wk); if (later) ch.push('Later ' + later);
+      st.innerHTML = ICON.list + '<span class="ts-main">To-do</span>' + (ch.length ? '<span class="ts-chips">' + ch.map(function (c) { return '<b>' + c + '</b>'; }).join('') + '</span>' : '<span class="ts-sub ts-plus">' + (tod ? 'Today is in the card above' : 'Nothing coming up') + '</span>');
+    }
+  }
+  var whenSel = 'today', timeSel = '', openId = null, showDone = false;
+  function renderSheet() {
+    var m = $('todo-modal'); if (!m.classList.contains('open')) return;
+    var t = getTodayKey(), all = items(), open = all.filter(function (x) { return !x.done; }).sort(order), groups = [
+      ['Overdue', open.filter(function (x) { return x.due < t; }), 'late'],
+      ['Today', open.filter(function (x) { return x.due === t; })],
+      ['Tomorrow', open.filter(function (x) { return x.due === shiftDateKey(t, 1); })],
+      ['This week', open.filter(function (x) { return x.due > shiftDateKey(t, 1) && days(t, x.due) <= 7; })],
+      ['Later', open.filter(function (x) { return days(t, x.due) > 7; })]
+    ];
+    var html = groups.filter(function (g) { return g[1].length; }).map(function (g) { return '<div class="td-sec"><h3 class="' + (g[2] || '') + '">' + g[0].toUpperCase() + ' <span>' + g[1].length + '</span></h3><ul>' + g[1].map(function (x) { return row(x, t, false); }).join('') + '</ul></div>'; }).join('');
+    if (!open.length) html = '<div class="td-empty">Nothing here yet. Write what you want to do and pick when.</div>';
+    var dn = all.filter(function (x) { return x.done; }).sort(function (a, b) { return (b.doneAt || 0) - (a.doneAt || 0); }).slice(0, 15);
+    if (dn.length) html += '<button class="td-doneToggle" type="button" id="td-done-toggle">' + (showDone ? 'Hide' : 'Show') + ' done (' + dn.length + ')</button>' + (showDone ? '<div class="td-sec"><ul>' + dn.map(function (x) { return row(x, t, false); }).join('') + '</ul></div>' : '');
+    $('td-list').innerHTML = html; lastAdded = null;
+    $('td-when').innerHTML = WHEN.map(function (w) { return '<button type="button" role="radio" data-when="' + w[0] + '" aria-checked="' + (whenSel === w[0]) + '">' + w[1] + '</button>'; }).join('');
+    var tc = $('td-timechip'); tc.classList.toggle('set', !!timeSel); $('td-time-label').textContent = timeSel ? 'Alert at ' + fmtTime(timeSel) : 'Add a time for an alert'; $('td-time-clear').hidden = !timeSel;
+  }
+  function render() { try { renderCard(); renderStrip(); renderSheet(); } catch (e) {} }
+  function openSheet() { whenSel = 'today'; timeSel = ''; $('td-time').value = ''; openId = null; $('todo-modal').classList.add('open'); renderSheet(); }
+  function closeSheet() { $('todo-modal').classList.remove('open'); }
+
+  function toggle(id, li) {
+    var t = find(id); if (!t) return;
+    t.done = !t.done; t.doneAt = t.done ? Date.now() : null;
+    if (li) { var it = li.classList.contains('td-item') ? li : li.querySelector('.td-item'); if (it) it.classList.toggle('is-done', t.done); }
+    if (navigator.vibrate) navigator.vibrate(t.done ? 12 : 6);
+    saveSettings();
+    var today = getTodayKey(), left = items().filter(function (x) { return !x.done && x.due <= today; }).length;
+    setTimeout(function () { render(); if (t.done && left === 0 && t.due <= today) showToast('All done for today. Nice work.'); if (window.__schedSoon) window.__schedSoon(); }, 620);
+  }
+  document.addEventListener('click', function (e) {
+    var tg = e.target;
+    if (tg.closest('[data-open-sheet]')) { openSheet(); return; }
+    var ck = tg.closest('.td-check'); if (ck) { var li = ck.closest('[data-id]'); if (li) toggle(li.dataset.id, li); return; }
+    var tx = tg.closest('.td-text[data-open]'); if (tx) { var l2 = tx.closest('[data-id]'); openId = openId === l2.dataset.id ? null : l2.dataset.id; renderSheet(); return; }
+    var mv = tg.closest('[data-move]'); if (mv) { var l3 = mv.closest('[data-id]'), t3 = find(l3.dataset.id); if (t3) { t3.when = mv.dataset.move; t3.due = dueFor(t3.when); openId = null; persist(); } return; }
+    var dl = tg.closest('[data-del]'); if (dl) { var l4 = dl.closest('[data-id]'); SETTINGS.todos = items().filter(function (x) { return x.id !== l4.dataset.id; }); openId = null; persist(); showToast('Deleted'); return; }
+    var wb = tg.closest('#td-when [data-when]'); if (wb) { whenSel = wb.dataset.when; renderSheet(); return; }
+    if (tg.closest('#td-done-toggle')) { showDone = !showDone; renderSheet(); return; }
+    if (tg.closest('#td-time-clear')) { timeSel = ''; $('td-time').value = ''; renderSheet(); return; }
+    if (tg.id === 'td-close') closeSheet();
+    if (tg.id === 'todo-modal') closeSheet();
+  });
+  $('todo-strip').addEventListener('click', openSheet);
+  $('td-time').addEventListener('change', function () { timeSel = this.value || ''; renderSheet(); });
+  $('td-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var inp = $('td-input'), v = inp.value.trim(); if (!v) { inp.focus(); return; }
+    add(v, whenSel, timeSel); inp.value = ''; timeSel = ''; $('td-time').value = ''; renderSheet(); inp.focus();
+    if (navigator.vibrate) navigator.vibrate(10);
+  });
+
+  window.__todoRender = render; window.__todoAdd = add; window.__todoOpen = openSheet; window.__todoDays = days;
+  window.__todoLabel = function (w) { return LABEL[w] || w; };
+  window.__todoSummary = function () {
+    var t = getTodayKey(), o = items().filter(function (x) { return !x.done; }).sort(order).slice(0, 25);
+    return o.length ? o.map(function (x) { return '- [' + (x.due < t ? 'overdue' : x.due === t ? 'today' : x.when) + '] ' + x.text + (x.time ? ' at ' + x.time : ''); }).join('\n') : '(none)';
+  };
+  if (typeof renderMain === 'function') { var _rm = renderMain; renderMain = function () { var r = _rm.apply(this, arguments); render(); return r; }; }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) render(); });
+  setInterval(render, 60000);
+  render();
 })();
 </script>
 </body>
