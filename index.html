@@ -22,7 +22,7 @@
       --fern: #609966;
       --leaf: #9dc08b;
       --mist: #edf1d6;
-      --moss: #5f6f52;
+      --moss: #526247;
       --sage: #a9b388;
       --cream: #fefae0;
       --driftwood: #b99470;
@@ -268,7 +268,7 @@
       .overlay.open, .overlay.open .sheet { animation: none; }
     }
     /* ---------- Time of day (changes the sky, sun, moon and creatures) ---------- */
-    body { --sky-top: #adc4ce; --sky-bottom: #edf1d6; --head: #40513b; --head-sub: #5f6f52; --head-bg: rgba(64,81,59,0.08); --head-line: rgba(64,81,59,0.22); --cloud: rgba(241,240,232,0.96); --sun-c: #f3dba6; }
+    body { --sky-top: #adc4ce; --sky-bottom: #edf1d6; --head: #40513b; --head-sub: #526247; --head-bg: rgba(64,81,59,0.08); --head-line: rgba(64,81,59,0.22); --cloud: rgba(241,240,232,0.96); --sun-c: #f3dba6; }
     body[data-mood="dawn"] { --sky-top: #eee0c9; --sky-bottom: #f1f0e8; --cloud: rgba(254,250,224,0.95); --sun-c: #e2bf8f; }
     body[data-mood="dusk"] { --sky-top: #96b6c5; --sky-bottom: #eee0c9; --cloud: rgba(238,224,201,0.92); --sun-c: #d9b48c; }
     /* forest + ground colours per time of day (back layers are lighter and hazier) */
@@ -706,8 +706,8 @@
     .theme-opt .sw.v { background: linear-gradient(160deg,#8fc4ec,#7a5a4a 45%,#e8541a); }
     .theme-opt b { display: block; font-size: 16px; } .theme-opt small { opacity: .7; }
     /* ---------- ux-motion pass: open slow-out, close fast-in, interruptible ---------- */
-    .overlay { display: flex; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity 140ms cubic-bezier(0.7,0,0.84,0), visibility 0s linear 160ms; }
-    .overlay.open { visibility: visible; opacity: 1; pointer-events: auto; animation: none; transition: opacity 200ms cubic-bezier(0.16,1,0.3,1), visibility 0s; }
+    .overlay { display: flex; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity 140ms cubic-bezier(0.7,0,0.84,0), visibility 0s linear 160ms, bottom 160ms cubic-bezier(0.16,1,0.3,1); }
+    .overlay.open { visibility: visible; opacity: 1; pointer-events: auto; animation: none; transition: opacity 200ms cubic-bezier(0.16,1,0.3,1), visibility 0s, bottom 160ms cubic-bezier(0.16,1,0.3,1); }
     .overlay .sheet { transform: translateY(100%); transition: transform 160ms cubic-bezier(0.7,0,0.84,0); }
     .overlay.open .sheet { transform: none; animation: none; transition: transform 340ms cubic-bezier(0.32,0.72,0,1); }
     @media (min-width: 700px) { .overlay .sheet { transform: translateY(24px) scale(0.97); } .overlay.open .sheet { transform: none; } }
@@ -728,6 +728,45 @@
       .toast, .toast.show, #undo-bar, #undo-bar.show { transition: opacity 120ms linear; }
       .quick-btn:active, .act:active, .card-add-btn:active, .chip-add:active, .icon-btn:active, .pill-btn:active, .btn-primary:active, .btn-secondary:active, .set-row:active, .cchip:active, .achip:active { transform: none; }
     }
+    /* ---------- chat redesign, keyboard, extras ---------- */
+    .overlay { bottom: var(--kb, 0px); }
+    .overlay.open .sheet { max-height: min(92vh, calc(100% - 8px)); }
+    .chat-sheet { height: min(90vh, calc(100% - 8px)); }
+    body.kb-open .chat-sheet { padding-bottom: 12px; }
+    .chat-log { gap: 8px; padding: 6px 4px 10px; scroll-behavior: smooth; overscroll-behavior: contain; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px); mask-image: linear-gradient(to bottom, transparent 0, #000 14px); }
+    .chat-hint { border: none; background: rgba(64,81,59,0.07); line-height: 1.5; max-width: 34ch; }
+    .chat-suggs { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 2px; }
+    .chat-suggs button { min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid rgba(64,81,59,0.25); background: #fff; color: var(--forest); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .bubble { line-height: 1.45; box-shadow: 0 1px 0 rgba(64,81,59,0.06); }
+    .bubble.ai { background: #fff; border: 1px solid rgba(64,81,59,0.14); }
+    .bubble.pop { animation: bpop 260ms cubic-bezier(0.16,1,0.3,1); }
+    .bubble.user.pop { transform-origin: 100% 100%; } .bubble.ai.pop { transform-origin: 0 100%; }
+    @keyframes bpop { from { opacity: 0; transform: translateY(8px) scale(0.96); } }
+    .bubble.thinking { display: inline-flex; gap: 5px; align-items: center; padding: 14px 16px; }
+    .bubble.thinking i { width: 7px; height: 7px; border-radius: 50%; background: var(--moss); animation: tdot 1s ease-in-out infinite; }
+    .bubble.thinking i:nth-child(2) { animation-delay: 0.15s; } .bubble.thinking i:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes tdot { 0%, 70%, 100% { transform: translateY(0); opacity: 0.4; } 35% { transform: translateY(-5px); opacity: 1; } }
+    .chat-input-row { align-items: center; gap: 6px; margin-top: 8px; padding: 5px; border-radius: 28px; background: #fff; border: 1px solid rgba(64,81,59,0.25); transition: box-shadow 160ms ease, border-color 160ms ease; }
+    .chat-input-row:focus-within { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(64,81,59,0.14); }
+    .chat-field { flex: 1; min-width: 0; height: 44px; border: none; background: transparent; font: inherit; font-size: 16px; color: var(--ink); padding: 0 6px; outline: none; }
+    .chat-send, .chat-mic { width: 44px; min-width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; padding: 0; transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1), opacity 140ms ease, background-color 140ms ease; }
+    .chat-send svg, .chat-mic svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .chat-send { background: var(--forest); color: var(--cream); }
+    .chat-send.empty { opacity: 0.35; transform: scale(0.9); }
+    .chat-mic { background: var(--mist); color: var(--forest); }
+    .chat-mic.live { background: #c0392b; color: #fff; animation: micp 1.1s ease-in-out infinite; }
+    @keyframes micp { 50% { box-shadow: 0 0 0 8px rgba(192,57,43,0.18); } }
+    .chat-mic[hidden] { display: none; }
+    .empty-state svg { width: 22px; height: 22px; fill: none; stroke: var(--forest); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -5px; margin-right: 6px; }
+    .empty-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .empty-btn { min-height: 44px; padding: 0 16px; border-radius: 999px; border: none; background: var(--forest); color: var(--cream); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .empty-btn.ghost { background: transparent; color: var(--forest); border: 1px solid rgba(64,81,59,0.4); }
+    #offline-bar { position: fixed; left: 12px; right: 12px; top: calc(10px + env(safe-area-inset-top, 0px)); z-index: 9200; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 16px; background: #40513b; color: #fefae0; font-size: 14px; font-weight: 600; transform: translateY(-140%); opacity: 0; pointer-events: none; transition: transform 140ms cubic-bezier(0.7,0,0.84,0), opacity 140ms ease; box-shadow: 0 8px 22px rgba(0,0,0,0.3); }
+    #offline-bar.show { transform: none; opacity: 1; transition: transform 300ms cubic-bezier(0.16,1,0.3,1), opacity 200ms ease; }
+    #offline-bar svg { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    body[data-ts="l"] .sheet:not(.chat-sheet) > *, body[data-ts="l"] #cards-container, body[data-ts="l"] .bubble { zoom: 1.12; }
+    body[data-ts="xl"] .sheet:not(.chat-sheet) > *, body[data-ts="xl"] #cards-container, body[data-ts="xl"] .bubble { zoom: 1.25; }
+    @media (prefers-reduced-motion: reduce) { .bubble.pop, .bubble.thinking i, .chat-mic.live { animation: none; } #offline-bar, #offline-bar.show { transition: opacity 100ms linear; transform: none; } }
   </style>
 </head>
 <body>
@@ -748,12 +787,12 @@
             <div id="clock" class="clock" aria-label="Greeting"></div>
           </div>
           <div class="top-actions" id="today-actions">
-            <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.2h4.2"/><path d="M12 7.5V12l3 1.8"/></svg></button>
-            <button class="icon-btn" id="open-insights-btn" aria-label="Insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg></button>
-            <button class="icon-btn" id="open-settings-btn" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></button>
-            <button class="icon-btn" hidden id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg></button>
-            <button class="icon-btn" hidden id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.4 0 2-.9 2-1.8 0-1.3-1-1.6-1-2.7 0-1 .8-1.6 1.8-1.6H17a3.5 3.5 0 0 0 3.5-3.5C20.5 6.6 16.8 3.5 12 3.5z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.8" r="1"/><circle cx="16" cy="10" r="1"/></svg></button>
-            <button class="icon-btn" hidden id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3.5l1.9 5.6 5.6 1.9-5.6 1.9L11 18.5l-1.9-5.6L3.5 11l5.6-1.9z"/><path d="M18.5 15.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z"/></svg></button>
+            <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg></button>
+            <button class="icon-btn" id="open-insights-btn" aria-label="Insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></button>
+            <button class="icon-btn" id="open-settings-btn" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="icon-btn" hidden id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg></button>
+            <button class="icon-btn" hidden id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg></button>
+            <button class="icon-btn" hidden id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg></button>
           </div>
           <div class="top-actions" id="past-actions" style="display:none;">
             <button class="pill-btn" id="back-to-history-btn">History</button>
@@ -919,6 +958,8 @@
     </div>
   </div>
 
+  <div id="offline-bar" role="status" aria-live="polite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/></svg><span id="offline-msg">You are offline. Entries stay on this phone and sync when you reconnect.</span></div>
+
   <!-- CHAT MODAL -->
   <div id="chat-modal" class="overlay">
     <div class="sheet chat-sheet" role="dialog" aria-modal="true" aria-label="Talk to AI">
@@ -931,8 +972,9 @@
       </div>
       <div id="chat-log" class="chat-log" aria-live="polite"></div>
       <div class="chat-input-row">
-        <input id="chat-input" class="text-input" type="text" autocomplete="off" placeholder="Tell me what you did..." />
-        <button id="chat-send-btn" class="chat-send">Send</button>
+        <button id="chat-mic-btn" class="chat-mic" type="button" aria-label="Speak" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg></button>
+        <input id="chat-input" class="chat-field" type="text" autocomplete="off" enterkeyhint="send" placeholder="Tell me what you did..." />
+        <button id="chat-send-btn" class="chat-send empty" type="button" aria-label="Send"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/><path d="M6 12h16"/></svg></button>
       </div>
     </div>
   </div>
@@ -957,7 +999,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 30</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 31</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -980,6 +1022,14 @@
         <button class="set-row set-link" id="set-ai-row"><span class="set-name">AI helper</span><span class="set-val" id="set-ai-val">Off</span></button>
         <button class="set-row set-link" id="set-fb-row"><span class="set-name">Send feedback</span><span class="set-val">Tell me what to fix</span></button>
         <button class="set-row set-link" id="set-backup-row"><span class="set-name">Backup and restore</span><span class="set-val">Export / import</span></button>
+        <button class="set-row set-link" id="set-ts-row" type="button"><span class="set-name">Text size</span><span class="set-val" id="set-ts-val">Normal</span></button>
+        <button class="set-row set-link" id="set-hap-row" type="button"><span class="set-name">Vibration</span><span class="set-val" id="set-hap-val">On</span></button>
+      </div>
+
+      <div class="set-group">
+        <div class="set-label">Share</div>
+        <button class="set-row set-link" id="set-share-row" type="button"><span class="set-name">Share today as a picture</span><span class="set-val">Your day and streak</span></button>
+        <button class="set-row set-link" id="set-invite-row" type="button"><span class="set-name">Invite a friend</span><span class="set-val">Send the app link</span></button>
       </div>
     </div>
   </div>
@@ -1811,7 +1861,7 @@
     function renderChat() {
       const log = document.getElementById('chat-log');
       if (chatHistory.length === 0 && !chatBusy) {
-        log.innerHTML = '<div class="chat-hint">Hi! Tell me what you did today, and what you did not do. Example: "drank 2 glasses of water, had idli 3 with sambar, forgot my iron tablet". I will suggest where to save each thing, and you tap Add.</div>';
+        log.innerHTML = '<div class="chat-hint">Hi! Tell me what you did today, and what you did not do. Example: "drank 2 glasses of water, had idli 3 with sambar, forgot my iron tablet". I will suggest where to save each thing, and you tap Add.</div><div class="chat-suggs"><button type="button" data-sugg="Drank 500 ml water">Drank 500 ml water</button><button type="button" data-sugg="Had idli with sambar for breakfast">Idli for breakfast</button><button type="button" data-sugg="Took my vitamin tablet">Took my vitamin</button><button type="button" data-sugg="Slept 7 hours last night">Slept 7 hours</button></div>';
         return;
       }
       log.innerHTML = chatHistory.map((m, mi) => {
@@ -1838,7 +1888,7 @@
           '</div>';
         }
         return '<div class="bubble ai">' + escapeHtml(m.text).replace(/\n/g, '<br>') + props + '</div>';
-      }).join('') + (chatBusy ? '<div class="bubble ai thinking">Thinking…</div>' : '');
+      }).join('') + (chatBusy ? '<div class="bubble ai thinking" aria-label="Thinking"><i></i><i></i><i></i></div>' : '');
       log.scrollTop = log.scrollHeight;
     }
 
@@ -2145,7 +2195,7 @@
       if (entries.length === 0) {
         html += '<div class="empty-state">' + (viewingPastDay
           ? 'Nothing was logged on this day.'
-          : 'Nothing logged yet today. Tap <b>Talk to AI</b> and say what you did, or add a line yourself.') + '</div>';
+          : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg><b>A fresh day.</b> Nothing logged yet.<span class="empty-actions"><button type="button" class="empty-btn" data-empty="chat">Talk to AI</button><button type="button" class="empty-btn ghost" data-empty="water">+250 ml water</button></span>') + '</div>';
       }
       html += cards.join('');
       if (emptyCats.length > 0) {
@@ -2942,7 +2992,19 @@
     function initPWA() {
       // Real manifest + icon files are linked in <head>. Here we only start the offline helper.
       if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        const hadCtl = !!navigator.serviceWorker.controller;
+        let reloaded = false, pending = false;
+        const doReload = () => { if (reloaded) return; reloaded = true; location.reload(); };
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!hadCtl) return;
+          if (document.querySelector('.overlay.open')) { pending = true; return; }
+          doReload();
+        });
+        document.addEventListener('visibilitychange', () => { if (pending && document.hidden) doReload(); });
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          reg.update().catch(() => {});
+          document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update().catch(() => {}); });
+        }).catch(() => {});
       }
     }
 
@@ -4387,6 +4449,157 @@
     } catch (e) {}
     location.replace(location.pathname + '?u=' + Date.now());
   });
+})();
+</script>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+  // --- keyboard: sheets follow the visible screen, never sit under the keyboard ---
+  var vv = window.visualViewport;
+  function fit() {
+    if (!vv) return;
+    var kb = Math.round(window.innerHeight - vv.height - vv.offsetTop);
+    var on = kb > 90;
+    document.documentElement.style.setProperty('--kb', on ? kb + 'px' : '0px');
+    document.body.classList.toggle('kb-open', on);
+    if (on) {
+      var log = $('chat-log'); if (log && $('chat-modal').classList.contains('open')) log.scrollTop = log.scrollHeight;
+      var a = document.activeElement;
+      if (a && a.closest && a.closest('.overlay.open') && a.id !== 'chat-input') setTimeout(function () { try { a.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) {} }, 120);
+    }
+  }
+  if (vv) { vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); }
+  window.__fitKb = fit;
+
+  // --- chat: send button state, new-bubble pop, suggestion chips ---
+  var inp = $('chat-input'), send = $('chat-send-btn'), log = $('chat-log');
+  function sync() { send.classList.toggle('empty', !inp.value.trim()); }
+  inp.addEventListener('input', sync); sync();
+  var seen = 0;
+  new MutationObserver(function () {
+    var kids = log.children;
+    if (kids.length < seen) seen = 0;
+    for (var i = seen; i < kids.length; i++) if (kids[i].classList.contains('bubble')) kids[i].classList.add('pop');
+    seen = kids.length;
+    sync();
+  }).observe(log, { childList: true });
+  log.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-sugg]'); if (!b) return;
+    inp.value = b.dataset.sugg; sync(); send.click();
+  });
+  $('chat-clear-btn').addEventListener('click', function () { seen = 0; });
+
+  // --- voice input ---
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition, mic = $('chat-mic-btn'), rec = null, live = false;
+  if (SR) {
+    mic.hidden = false;
+    mic.addEventListener('click', function () {
+      if (live && rec) { rec.stop(); return; }
+      try {
+        rec = new SR(); rec.lang = 'en-IN'; rec.interimResults = true; rec.continuous = false;
+        var base = inp.value ? inp.value.trim() + ' ' : '';
+        rec.onresult = function (ev) { var t = ''; for (var i = 0; i < ev.results.length; i++) t += ev.results[i][0].transcript; inp.value = base + t; sync(); };
+        rec.onstart = function () { live = true; mic.classList.add('live'); mic.setAttribute('aria-label', 'Stop'); };
+        rec.onend = function () { live = false; mic.classList.remove('live'); mic.setAttribute('aria-label', 'Speak'); inp.focus(); };
+        rec.onerror = function (ev) { if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') showToast('Allow the microphone to use voice'); else if (ev.error !== 'aborted' && ev.error !== 'no-speech') showToast('Voice did not work, try typing'); };
+        rec.start();
+      } catch (e) { showToast('Voice is not available here'); }
+    });
+  }
+
+  // --- empty state buttons ---
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-empty]'); if (!b) return;
+    if (b.dataset.empty === 'chat') $('open-chat-btn').click(); else if (typeof addQuickWater === 'function') addQuickWater(250);
+  });
+
+  // --- offline banner ---
+  var bar = $('offline-bar'), msg = $('offline-msg'), hideT;
+  function net() {
+    clearTimeout(hideT);
+    if (navigator.onLine) {
+      if (bar.classList.contains('show')) { msg.textContent = 'Back online. Syncing now.'; hideT = setTimeout(function () { bar.classList.remove('show'); }, 1800); }
+    } else { msg.textContent = 'You are offline. Entries stay on this phone and sync when you reconnect.'; bar.classList.add('show'); }
+  }
+  window.addEventListener('online', net); window.addEventListener('offline', net); if (!navigator.onLine) net();
+
+  // --- vibration setting ---
+  var HK = 'daily_log_haptics_v1', origVib = navigator.vibrate ? navigator.vibrate.bind(navigator) : null;
+  try { navigator.vibrate = function (p) { if (LS.get(HK) === 'off' || !origVib) return false; return origVib(p); }; } catch (e) {}
+  document.addEventListener('pointerdown', function (e) {
+    if (e.target.closest && e.target.closest('.quick-btn,.act,.card-add-btn,.chip-add,.btn-primary,.cchip,.prop-btn,.chat-send,.shell,.empty-btn') && navigator.vibrate) navigator.vibrate(8);
+  }, { passive: true });
+  function drawHap() { $('set-hap-val').textContent = LS.get(HK) === 'off' ? 'Off' : 'On'; }
+  $('set-hap-row').addEventListener('click', function () { LS.set(HK, LS.get(HK) === 'off' ? 'on' : 'off'); drawHap(); if (LS.get(HK) !== 'off' && navigator.vibrate) navigator.vibrate(20); });
+  drawHap();
+
+  // --- text size ---
+  var TK = 'daily_log_ts_v1', SIZES = [['', 'Normal'], ['l', 'Large'], ['xl', 'Extra large']];
+  function applyTs() { var v = LS.get(TK) || ''; if (v) document.body.dataset.ts = v; else delete document.body.dataset.ts; var f = SIZES.filter(function (x) { return x[0] === v; })[0] || SIZES[0]; $('set-ts-val').textContent = f[1]; }
+  $('set-ts-row').addEventListener('click', function () { var v = LS.get(TK) || '', i = 0; SIZES.forEach(function (x, k) { if (x[0] === v) i = k; }); LS.set(TK, SIZES[(i + 1) % SIZES.length][0]); applyTs(); });
+  applyTs();
+
+  // --- invite ---
+  var SITE = 'https://daily-log-5jbg.onrender.com';
+  function copyFallback(t) { return typeof copyText === 'function' ? copyText(t) : Promise.resolve(false); }
+  $('set-invite-row').addEventListener('click', async function () {
+    var text = 'I track my water, meals and daily routine with Daily Log. It is free and works on your phone. Try it: ' + SITE;
+    if (navigator.share) { try { await navigator.share({ title: 'Daily Log', text: text }); } catch (e) {} }
+    else { var ok = await copyFallback(text); showToast(ok ? 'Invite copied. Paste it in WhatsApp' : 'Could not copy'); }
+  });
+
+  // --- share my day as a picture ---
+  function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  function journey() {
+    var days = 0, streak = 0, today = getTodayKey(), k = today;
+    Object.keys(allData || {}).forEach(function (d) { if (/^\d{4}-\d{2}-\d{2}$/.test(d) && getDayEntries(d).length) days++; });
+    if (!getDayEntries(k).length) k = shiftDateKey(k, -1);
+    while (getDayEntries(k).length && streak < 3650) { streak++; k = shiftDateKey(k, -1); }
+    return { days: days, streak: streak };
+  }
+  async function makeCard() {
+    var key = getTodayKey(), entries = getDayEntries(key), ml = getWaterTotal(entries), goal = WATER_TARGET_ML, j = journey();
+    var cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1350; var c = cv.getContext('2d');
+    var fam = (getComputedStyle(document.body).getPropertyValue('--display') || '').trim() || 'sans-serif', body = (getComputedStyle(document.body).getPropertyValue('--body') || '').trim() || 'sans-serif';
+    try { await document.fonts.ready; } catch (e) {}
+    var g = c.createLinearGradient(0, 0, 0, 1350); g.addColorStop(0, '#C6F5DA'); g.addColorStop(1, '#edf1d6'); c.fillStyle = g; c.fillRect(0, 0, 1080, 1350);
+    c.fillStyle = 'rgba(143,208,242,0.35)'; c.beginPath(); c.arc(960, 120, 260, 0, 7); c.fill();
+    c.fillStyle = 'rgba(64,81,59,0.07)'; c.beginPath(); c.arc(90, 1250, 320, 0, 7); c.fill();
+    c.fillStyle = '#40513b'; c.textBaseline = 'alphabetic';
+    c.font = '800 46px ' + fam; c.fillText('Daily Log', 72, 120);
+    c.font = '600 36px ' + body; c.textAlign = 'right'; c.fillText(formatDisplayDate(key), 1008, 118); c.textAlign = 'left';
+    var nm = (SETTINGS.name || '').trim();
+    c.font = '800 84px ' + fam; c.fillText(nm ? nm + "'s day" : 'My day', 72, 260);
+    rr(c, 72, 320, 936, 360, 44); c.fillStyle = 'rgba(255,255,255,0.72)'; c.fill();
+    c.fillStyle = '#5f6f52'; c.font = '700 34px ' + body; c.fillText('WATER', 120, 392);
+    c.fillStyle = '#40513b'; c.font = '800 150px ' + fam; c.fillText(String(ml), 120, 548);
+    var w1 = c.measureText(String(ml)).width; c.font = '600 44px ' + body; c.fillText(' / ' + goal + ' ml', 120 + w1 + 8, 548);
+    rr(c, 120, 590, 840, 40, 20); c.fillStyle = 'rgba(64,81,59,0.14)'; c.fill();
+    var pct = Math.max(0, Math.min(1, ml / Math.max(1, goal)));
+    if (pct > 0) { rr(c, 120, 590, Math.max(40, 840 * pct), 40, 20); c.fillStyle = '#4a9fd0'; c.fill(); }
+    var rows = []; (typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).forEach(function (cat) { if (cat.hidden || cat.id === 'water') return; var n = entries.filter(function (e) { return e.cat === cat.id; }).length; if (n) rows.push([cat.name, n]); });
+    var y = 740; c.textAlign = 'left';
+    if (!rows.length) { c.fillStyle = '#5f6f52'; c.font = '600 38px ' + body; c.fillText('Just getting started today.', 72, y + 40); }
+    rows.slice(0, 5).forEach(function (r) { rr(c, 72, y, 936, 84, 42); c.fillStyle = 'rgba(255,255,255,0.6)'; c.fill(); c.fillStyle = '#40513b'; c.font = '700 38px ' + body; c.fillText(r[0], 112, y + 56); c.textAlign = 'right'; c.font = '800 38px ' + fam; c.fillText(String(r[1]), 968, y + 56); c.textAlign = 'left'; y += 100; });
+    rr(c, 72, 1130, 936, 130, 40); c.fillStyle = '#40513b'; c.fill();
+    c.fillStyle = '#fefae0'; c.font = '800 54px ' + fam; c.fillText(j.streak + (j.streak === 1 ? ' day streak' : ' day streak'), 112, 1210);
+    c.font = '600 32px ' + body; c.textAlign = 'right'; c.fillText(j.days + (j.days === 1 ? ' day logged' : ' days logged'), 968, 1208); c.textAlign = 'left';
+    c.fillStyle = '#5f6f52'; c.font = '600 30px ' + body; c.textAlign = 'center'; c.fillText('daily-log-5jbg.onrender.com', 540, 1312);
+    return new Promise(function (res) { cv.toBlob(res, 'image/png'); });
+  }
+  $('set-share-row').addEventListener('click', async function () {
+    try {
+      showToast('Making your picture…');
+      var blob = await makeCard(); if (!blob) throw 0;
+      var file = new File([blob], 'daily-log-' + getTodayKey() + '.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'My day on Daily Log', text: 'My day on Daily Log: ' + SITE }); } catch (e) {} }
+      else { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); showToast('Picture saved'); }
+    } catch (e) { showToast('Could not make the picture'); }
+  });
+  window.__makeCard = makeCard;
 })();
 </script>
 </body>
