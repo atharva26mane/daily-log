@@ -490,6 +490,20 @@
     .rem-days button.on { background: #609966; border-color: #609966; color: #fff; }
     body.theme-volcano .rem-days button.on { background: #e8641a; border-color: #e8641a; color: #1b120e; }
     .rem-item { display: flex; align-items: center; gap: 10px; border: 1px solid rgba(128,128,128,.25); background: rgba(128,128,128,.09); border-radius: 14px; padding: 8px 12px; margin: 0 0 6px; }
+    .rem-item.tap { cursor: pointer; min-height: 56px; transition: transform 160ms cubic-bezier(0.34,1.56,0.64,1), background-color 140ms ease; }
+    .rem-item.tap:active { transform: scale(0.985); }
+    .rem-item .rem-chev { flex: none; width: 16px; height: 16px; opacity: .45; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .rem-item small.rem-next { opacity: .8; color: var(--moss); font-weight: 600; }
+    .rem-item.off b, .rem-item.off > span { opacity: .5; }
+    .rem-tag { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 9px; background: rgba(96,153,102,.18); color: var(--moss); font: 700 11px var(--body); font-style: normal; vertical-align: 1px; }
+    .rem-item.editing { display: block; padding: 12px; }
+    .rem-edit { display: grid; gap: 8px; }
+    .rem-item.editing .rem-edit .set-input { width: 100%; max-width: none; flex: none; display: block; }
+    .rem-edit .set-input { border: 1px solid rgba(128,128,128,.3); border-radius: 14px; padding: 10px 12px; min-height: 46px; background: rgba(255,255,255,.5); text-align: left; width: 100%; box-sizing: border-box; font-size: 16px; }
+    .rem-edit-btns { display: flex; gap: 8px; }
+    .rem-edit-btns button { flex: 1; min-height: 46px; min-width: 0; border-radius: 14px; border: 1px solid rgba(128,128,128,.35); background: transparent; color: inherit; font: 700 14px var(--body); cursor: pointer; }
+    .rem-edit-btns .save { background: #609966; border-color: #609966; color: #fff; }
+    .rem-edit-btns .del { color: #8a4519; background: rgba(164,86,42,.12); border-color: transparent; }
     .rem-item b { flex: none; font-variant-numeric: tabular-nums; }
     .rem-item span { flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: 14px; }
     .rem-item small { display: block; opacity: .65; font-size: 12px; }
@@ -1209,7 +1223,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 36</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 37</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -2039,7 +2053,7 @@
         '14. If you are unsure what the user means or a time or amount is missing, ask ONE short question instead of guessing.\n' +
         '15. Water needs differ by person. Dark yellow or orange urine means drink more now. Pale or clear urine means they are well hydrated, so no extra water is needed. Constipation or hard stool needs steady water through the day (plus fibre), not one big drink. Heavy activity or heat means more. Use only what the person has logged or said, and never diagnose. For anything serious, suggest seeing a doctor.',
         '16. TO-DO LIST. Things the user WANTS or NEEDS to do later are plans, not logs: chores, buying things, learning, appointments, "I should", "need to", "remember to", "tomorrow I will", "this week I want to". Put each one in "todos" (never in "entries"), one item per task, short plain words. "when" is one of: today, tomorrow, week (this week), 2weeks, month (this month). If they give a clock time, put it in "time" as HH:MM (24-hour), otherwise "" . Say in your reply where you will put it, like: "I will add buy bananas to your to-do for tomorrow. Okay?" Things already done go in "entries". Do not repeat tasks already in OPEN TO-DOS. If the user asks what is on their list, answer from OPEN TO-DOS in one or two short lines and set action="none" with empty entries and todos.',
-        '17. REMINDERS. If the user asks to be reminded, says they keep forgetting something, or describes a routine they want to keep (medicine, vitamin, stretching, a water habit), put it in "reminders" with a short "label", "time" (HH:MM, 24-hour) and "repeat" (daily, weekdays, weekends, today or tomorrow; today and tomorrow mean a one-time reminder). If they give no time, pick a sensible one (morning 08:30, evening 18:30, night 21:30) and say the time in your reply so they can change it. To change an existing reminder, set "replaces" to its exact label from REMINDERS SET, otherwise "". Never create reminders the user did not ask for or hint at.',
+        '17. REMINDERS. If the user asks to be reminded, says they keep forgetting something, or describes a routine they want to keep (medicine, vitamin, stretching, a water habit), put it in "reminders" with a short "label", "time" (HH:MM, 24-hour) and "repeat" (daily, weekdays, weekends, today or tomorrow; today and tomorrow mean a one-time reminder). If they give no time, pick a sensible one (morning 08:30, evening 18:30, night 21:30) and say the time in your reply so they can change it. To change an existing reminder, set "replaces" to its exact label from REMINDERS SET, otherwise "". To stop or delete one ("stop my vitamin reminder", "remove the 9pm alert"), set "replaces" to its exact label and "remove" to true. Normally "remove" is false. Never create reminders the user did not ask for or hint at.',
         '18. FIRST decide, for each thing the user says: DONE (past or just now: entries), PLAN (future, want, need, should, will, going to: todos), REMINDER (remind me, I forget, every day at: reminders), or QUESTION (answer in the reply). One message can hold several. Never put a plan in entries or a done thing in todos.',
         '19. EXAMPLES (user says -> you return):\n' +
         'a) "had 2 idli and sambar at 8" -> entries [food "2 idli with sambar" 08:00], todos [], reminders [].\n' +
@@ -2049,7 +2063,8 @@
         'e) "drank some water, and I want to clean my room this week" -> water amount is missing so ask for it, todos [clean my room, week].\n' +
         'f) "skipped lunch" -> entries [food "skipped lunch"].\n' +
         'g) "what do I have today?" -> action none, answer from OPEN TO-DOS in one or two short lines.\n' +
-        'h) "move my vitamin reminder to 9" -> reminders [label "Vitamin C", 09:00, same repeat, replaces "Vitamin C"].'
+        'h) "move my vitamin reminder to 9" -> reminders [label "Vitamin C", 09:00, same repeat, replaces "Vitamin C"].\n' +
+        'i) "stop the vitamin reminder" -> reminders [label "Vitamin C", replaces "Vitamin C", remove true].'
       ].filter(Boolean).join('\n');
     }
 
@@ -2160,7 +2175,8 @@
                     label: { type: 'STRING' },
                     time: { type: 'STRING' },
                     repeat: { type: 'STRING', enum: ['daily', 'weekdays', 'weekends', 'today', 'tomorrow'] },
-                    replaces: { type: 'STRING' }
+                    replaces: { type: 'STRING' },
+                    remove: { type: 'BOOLEAN' }
                   },
                   required: ['label', 'time', 'repeat', 'replaces']
                 }
@@ -2210,7 +2226,7 @@
       const entries = Array.isArray(out.entries) ? out.entries.filter(e => e && typeof e.text === 'string' && e.text.trim()) : [];
       const remProps = (Array.isArray(out.reminders) ? out.reminders : []).filter(e => e && typeof e.label === 'string' && e.label.trim()).map(e => ({
         cat: 'reminder', text: e.label.trim().slice(0, 40), time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : '08:30',
-        repeat: ['daily', 'weekdays', 'weekends', 'today', 'tomorrow'].includes(e.repeat) ? e.repeat : 'daily', replaces: (e.replaces || '').trim(), day: 'today', status: 'pending'
+        repeat: ['daily', 'weekdays', 'weekends', 'today', 'tomorrow'].includes(e.repeat) ? e.repeat : 'daily', replaces: (e.replaces || '').trim(), remove: e.remove === true, day: 'today', status: 'pending'
       }));
       const todoProps = (Array.isArray(out.todos) ? out.todos : []).filter(e => e && typeof e.text === 'string' && e.text.trim()).map(e => ({
         cat: 'todo', text: e.text.trim(), when: ['today', 'tomorrow', 'week', '2weeks', 'month'].includes(e.when) ? e.when : 'today',
@@ -4144,13 +4160,34 @@
 
   // ---------- reminders screen ----------
   var rm = $('rem-modal'), days = {};
+  var DN3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], editId = '', editDays = {};
+  function nextFire(x) {
+    var now = new Date(), p = String(x.time || '0:0').split(':'), h = +p[0] || 0, mi = +p[1] || 0;
+    for (var k = 0; k < 8; k++) {
+      var d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + k, h, mi, 0);
+      if (d <= now) continue;
+      if (x.days && x.days.length && x.days.indexOf(d.getDay()) < 0) continue;
+      var mins = Math.round((d - now) / 60000);
+      if (mins < 60) return 'in ' + mins + ' min';
+      if (mins < 720) return 'in ' + Math.floor(mins / 60) + 'h' + (mins % 60 ? ' ' + (mins % 60) + 'm' : '');
+      return k === 0 ? 'today' : k === 1 ? 'tomorrow' : DN3[d.getDay()];
+    }
+    return '';
+  }
+  function daysText(x) { return x.days && x.days.length ? (x.days.length === 5 && [1, 2, 3, 4, 5].every(function (d) { return x.days.indexOf(d) >= 0; }) ? 'Weekdays' : x.days.length === 2 && x.days.indexOf(0) >= 0 && x.days.indexOf(6) >= 0 ? 'Weekends' : x.days.map(function (d) { return DN3[d]; }).join(', ')) : 'Every day'; }
   function drawList() {
     var r = R(), list = $('rem-list');
-    list.innerHTML = r.custom.length ? r.custom.map(function(x) {
-      var dn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], ds = x.days && x.days.length ? x.days.map(function(d){ return dn[d]; }).join(', ') : 'Every day';
-      return '<div class="rem-item"><b>' + escapeHtml(x.time) + '</b><span>' + escapeHtml(x.label) + '<small>' + ds + '</small></span><label class="switch"><input type="checkbox" data-t="' + x.id + '" ' + (x.on !== false ? 'checked' : '') + ' /><span></span></label><button class="adm-btn" data-del="' + x.id + '" aria-label="Delete">x</button></div>';
-    }).join('') : '<p class="set-note">None yet.</p>';
+    var items = r.custom.slice().sort(function (a, b) { return String(a.time).localeCompare(String(b.time)); });
+    list.innerHTML = items.length ? items.map(function (x) {
+      if (x.id === editId) {
+        var chips = [1, 2, 3, 4, 5, 6, 0].map(function (d) { return '<button type="button" data-ed="' + d + '" class="' + (editDays[d] ? 'on' : '') + '" aria-label="' + DN3[d] + '">' + 'MTWTFSS'.charAt([1, 2, 3, 4, 5, 6, 0].indexOf(d)) + '</button>'; }).join('');
+        return '<div class="rem-item editing" data-id="' + x.id + '"><div class="rem-edit"><input id="re-label" class="set-input" type="text" maxlength="40" value="' + escapeHtml(x.label) + '" autocomplete="off" aria-label="Reminder name" /><input id="re-time" class="set-input" type="time" value="' + escapeHtml(x.time) + '" aria-label="Time" /><div class="rem-days" id="re-days">' + chips + '</div><p class="set-note" style="margin:0">Pick the days, or leave all off for every day.</p><div class="rem-edit-btns"><button type="button" class="save" data-save="' + x.id + '">Save</button><button type="button" data-cancel="1">Cancel</button><button type="button" class="del" data-del="' + x.id + '">Delete</button></div></div></div>';
+      }
+      var on = x.on !== false, nx = on ? nextFire(x) : '';
+      return '<div class="rem-item tap' + (on ? '' : ' off') + '" data-id="' + x.id + '" role="button" tabindex="0" aria-label="Edit reminder ' + escapeHtml(x.label) + '"><b>' + escapeHtml(x.time) + '</b><span>' + escapeHtml(x.label) + (x.src === 'ai' ? '<i class="rem-tag">AI</i>' : '') + '<small>' + daysText(x) + (nx ? ' · <span class="rem-next" style="display:inline">next ' + nx + '</span>' : ' · off') + '</small></span><label class="switch"><input type="checkbox" data-t="' + x.id + '" ' + (on ? 'checked' : '') + ' aria-label="Turn on or off" /><span></span></label><svg class="rem-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></div>';
+    }).join('') : '<p class="set-note">None yet. Add one below, or tell the AI "remind me to...".</p>';
   }
+  window.__remRedraw = function () { drawList(); };
   function drawRem() {
     var r = R();
     $('rem-push').checked = subscribedHere() && ('Notification' in window) && Notification.permission === 'granted';
@@ -4180,13 +4217,30 @@
     save(); $('rem-label').value = ''; days = {}; document.querySelectorAll('#rem-days button').forEach(function(b){ b.classList.remove('on'); });
     drawList(); lastSig = ''; schedSoon(); showToast('Reminder added');
   });
+  function openEdit(id) { var x = R().custom.filter(function (c) { return c.id === id; })[0]; if (!x) return; editId = id; editDays = {}; (x.days || []).forEach(function (d) { editDays[d] = true; }); drawList(); var el = $('re-label'); if (el) { el.focus(); } }
   $('rem-list').addEventListener('click', function(e) {
-    var b = e.target.closest('[data-del]'); if (!b) return;
-    var r = R(); r.custom = r.custom.filter(function(x){ return x.id !== b.dataset.del; }); save(); drawList(); lastSig = ''; schedSoon();
+    if (e.target.closest('.switch')) return;
+    var ed = e.target.closest('[data-ed]'); if (ed) { editDays[ed.dataset.ed] = !editDays[ed.dataset.ed]; ed.classList.toggle('on', !!editDays[ed.dataset.ed]); return; }
+    if (e.target.closest('[data-cancel]')) { editId = ''; drawList(); return; }
+    var sv = e.target.closest('[data-save]');
+    if (sv) {
+      var label = $('re-label').value.trim(), time = $('re-time').value;
+      if (!label || !time) { showToast('Add a name and a time'); return; }
+      var ds = Object.keys(editDays).filter(function (k) { return editDays[k]; }).map(Number);
+      R().custom.forEach(function (x) { if (x.id === sv.dataset.save) { x.label = label; x.time = time; x.days = ds; x.on = true; } });
+      editId = ''; save(); drawList(); lastSig = ''; schedSoon(); showToast('Reminder saved'); if (navigator.vibrate) navigator.vibrate(10); return;
+    }
+    var b = e.target.closest('[data-del]');
+    if (b) {
+      if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Tap again'; setTimeout(function () { if (b.isConnected) { b.dataset.sure = ''; b.textContent = 'Delete'; } }, 3000); return; }
+      var r = R(); r.custom = r.custom.filter(function (x) { return x.id !== b.dataset.del; }); editId = ''; save(); drawList(); lastSig = ''; schedSoon(); showToast('Reminder deleted'); return;
+    }
+    var row = e.target.closest('.rem-item.tap'); if (row) openEdit(row.dataset.id);
   });
+  $('rem-list').addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('tap')) { e.preventDefault(); openEdit(e.target.dataset.id); } });
   $('rem-list').addEventListener('change', function(e) {
     var i = e.target; if (!i.dataset.t) return;
-    R().custom.forEach(function(x){ if (x.id === i.dataset.t) x.on = i.checked; }); save(); lastSig = ''; schedSoon();
+    R().custom.forEach(function(x){ if (x.id === i.dataset.t) x.on = i.checked; }); save(); drawList(); lastSig = ''; schedSoon();
   });
   $('rem-test').addEventListener('click', async function() {
     try {
@@ -5414,6 +5468,7 @@
   var REP = { daily: 'every day', weekdays: 'weekdays', weekends: 'weekends', today: 'today only', tomorrow: 'tomorrow only' };
   window.__propLabel = function (p) {
     if (p.cat === 'todo') return 'To-do · ' + (p.due ? friendly(p.due) : window.__todoLabel(p.when)) + (p.time ? ' · ' + p.time : '');
+    if (p.remove) return 'Remove reminder · "' + (p.replaces || p.text) + '"';
     return 'Reminder · ' + p.time + ' · ' + (p.due ? friendly(p.due) : (REP[p.repeat] || 'every day')) + (p.replaces ? ' · changes "' + p.replaces + '"' : '');
   };
 
@@ -5421,6 +5476,12 @@
   function rem() { var r = SETTINGS.reminders = SETTINGS.reminders || {}; r.water = r.water || { on: true, mode: 'smart' }; r.custom = r.custom || []; return r; }
   function alertsOn() { return ('Notification' in window) && Notification.permission === 'granted'; }
   window.__remAdd = function (p) {
+    if (p.remove) {
+      var rr = rem(), k0 = (p.replaces || p.text).toLowerCase(), n0 = rr.custom.length;
+      rr.custom = rr.custom.filter(function (x) { var l = (x.label || '').toLowerCase(); return !(l === k0 || l.indexOf(k0) >= 0 || k0.indexOf(l) >= 0); });
+      saveSettings(); if (window.__remRedraw) window.__remRedraw(); if (window.__schedSoon) window.__schedSoon();
+      showToast(rr.custom.length < n0 ? 'Reminder removed' : 'No reminder with that name'); return;
+    }
     var once = p.repeat === 'today' || p.repeat === 'tomorrow' || p.due || p.once;
     if (once) {
       var due = p.due || (p.repeat === 'tomorrow' ? shiftDateKey(getTodayKey(), 1) : getTodayKey());
@@ -5430,7 +5491,7 @@
     var days = p.repeat === 'weekdays' ? [1, 2, 3, 4, 5] : p.repeat === 'weekends' ? [0, 6] : [], r = rem(), key = (p.replaces || p.text).toLowerCase();
     var ex = r.custom.filter(function (x) { var l = (x.label || '').toLowerCase(); return l === key || l.indexOf(key) >= 0 || key.indexOf(l) >= 0; })[0];
     if (ex) { ex.time = p.time; ex.days = days; ex.on = true; if (p.replaces) ex.label = p.text; }
-    else r.custom.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 4), label: p.text, time: p.time, days: days, on: true });
+    else r.custom.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 4), label: p.text, time: p.time, days: days, on: true, src: 'ai' });
     saveSettings(); if (window.__remRedraw) window.__remRedraw(); if (window.__schedSoon) window.__schedSoon();
     showToast(ex ? 'Reminder updated' : (alertsOn() ? 'Reminder added' : 'Added. Turn on alerts in Settings > Reminders to get notified'));
   };
