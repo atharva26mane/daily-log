@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_water_desc">Water today with a +250 ml button</string>
+    <string name="widget_todo_desc">Your next to-dos for today</string>
+    <string name="widget_snippets_desc">New snippets from your friends</string>
+</resources>

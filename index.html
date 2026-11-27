@@ -1480,7 +1480,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 44</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 45</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -4443,7 +4443,26 @@
   var schedTimer = null, lastSig = '';
   function subscribedHere() { try { return localStorage.getItem(PUSHK) === '1'; } catch (e) { return false; } }
   function schedSoon() { clearTimeout(schedTimer); schedTimer = setTimeout(pushSchedule, 4000); }
+  // ---------- Android app: reminders are scheduled on the phone itself ----------
+  function LN() { try { return window.__NATIVE && window.Capacitor.Plugins.LocalNotifications; } catch (e) { return null; } }
+  function goFor(tag) { tag = String(tag || ''); return (tag === 'water' || tag === 'bottle') ? 'water' : (tag.indexOf('todo') === 0 || /^t\d/.test(tag)) ? 'todo' : /^c\d/.test(tag) ? 'reminders' : ''; }
+  async function nativeSchedule() {
+    var n = LN(); if (!n) return;
+    try {
+      var p = await n.getPending();
+      if (p && p.notifications && p.notifications.length) await n.cancel({ notifications: p.notifications.map(function (x) { return { id: x.id }; }) });
+      if (!subscribedHere()) return;
+      var list = buildSchedule(); if (!list.length) return;
+      await n.schedule({ notifications: list.map(function (x, i) { return { id: i + 1, title: x.title, body: x.body, schedule: { at: new Date(x.at), allowWhileIdle: true }, extra: { go: goFor(x.tag) } }; }) });
+    } catch (e) {}
+  }
+  (function () {
+    var n = LN(); if (!n) return;
+    try { n.addListener('localNotificationActionPerformed', function (e) { var g = e && e.notification && e.notification.extra && e.notification.extra.go; if (g && window.__go) window.__go(g); }); } catch (e) {}
+    setTimeout(function () { schedSoon(); }, 3000);
+  })();
   async function pushSchedule() {
+    if (LN()) { var sg = JSON.stringify(buildSchedule().map(function (r) { return [r.at, r.title, r.body]; })) + subscribedHere(); if (sg === lastSig) return; lastSig = sg; return nativeSchedule(); }
     var sb = sbc(), me = who();
     if (!sb || !me || me.status !== 'approved' || !subscribedHere()) return;
     var rows = buildSchedule().map(function(x){ return { user_id: me.uid, kind: 'sched', due_at: new Date(x.at).toISOString(), title: x.title, body: x.body, tag: x.tag }; });
@@ -4469,6 +4488,17 @@
   // ---------- push subscription ----------
   function b64(s) { var p = '='.repeat((4 - s.length % 4) % 4), b = (s + p).replace(/-/g, '+').replace(/_/g, '/'), r = atob(b), o = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) o[i] = r.charCodeAt(i); return o; }
   async function enablePush() {
+    var nl = LN();
+    if (nl) {
+      try {
+        var pr = await nl.checkPermissions();
+        if (!pr || pr.display !== 'granted') pr = await nl.requestPermissions();
+        if (!pr || pr.display !== 'granted') { showToast('Alerts are blocked. Allow notifications for Daily Log in phone settings.'); return false; }
+        try { var ex = await nl.checkExactNotificationSetting(); if (ex && ex.exact_alarm !== 'granted') await nl.changeExactNotificationSetting(); } catch (e2) {}
+        try { localStorage.setItem(PUSHK, '1'); } catch (e) {}
+        lastSig = ''; pushSchedule(); return true;
+      } catch (e) { showToast('Could not turn on alerts'); return false; }
+    }
     if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) { showToast('This browser cannot show alerts. Open the site in Chrome.'); return false; }
     var perm = await Notification.requestPermission();
     if (perm !== 'granted') { showToast('Alerts are blocked. Allow notifications for this site in Chrome settings.'); return false; }
@@ -4485,6 +4515,7 @@
     } catch (e) { showToast('Could not turn on alerts'); return false; }
   }
   async function disablePush() {
+    if (LN()) { try { localStorage.removeItem(PUSHK); } catch (e) {} lastSig = ''; await nativeSchedule(); return; }
     try {
       var reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
       if (sub) { var ep = sub.endpoint; await sub.unsubscribe(); await sbc().from('push_subscriptions').delete().eq('endpoint', ep); }
@@ -4525,7 +4556,7 @@
   window.__remRedraw = function () { drawList(); };
   function drawRem() {
     var r = R();
-    $('rem-push').checked = subscribedHere() && ('Notification' in window) && Notification.permission === 'granted';
+    $('rem-push').checked = subscribedHere() && (LN() ? true : ('Notification' in window) && Notification.permission === 'granted');
     $('rem-water').checked = r.water.on !== false;
     document.querySelectorAll('#rem-mode button').forEach(function(b){ b.classList.toggle('on', b.dataset.m === (r.water.mode || 'smart')); });
     var plan = waterGap(context());
@@ -4578,6 +4609,16 @@
     R().custom.forEach(function(x){ if (x.id === i.dataset.t) x.on = i.checked; }); save(); drawList(); lastSig = ''; schedSoon();
   });
   $('rem-test').addEventListener('click', async function() {
+    var nl = LN();
+    if (nl) {
+      try {
+        var pr = await nl.checkPermissions();
+        if (!pr || pr.display !== 'granted') { showToast('Turn on alerts first'); return; }
+        await nl.schedule({ notifications: [{ id: 9999, title: 'Daily Log', body: 'Alerts work on this phone.', schedule: { at: new Date(Date.now() + 2000), allowWhileIdle: true } }] });
+        showToast('Test alert in 2 seconds');
+      } catch (e) { showToast('Could not show the test alert'); }
+      return;
+    }
     try {
       var reg = await navigator.serviceWorker.ready;
       if (Notification.permission !== 'granted') { showToast('Turn on alerts first'); return; }
@@ -6173,7 +6214,7 @@
 
   // ---------- reminders created from chat show up in Settings and in the alert schedule ----------
   function rem() { var r = SETTINGS.reminders = SETTINGS.reminders || {}; r.water = r.water || { on: true, mode: 'smart' }; r.custom = r.custom || []; return r; }
-  function alertsOn() { return ('Notification' in window) && Notification.permission === 'granted'; }
+  function alertsOn() { try { if (window.__NATIVE) return localStorage.getItem('daily_log_push_v1') === '1'; } catch (e) {} return ('Notification' in window) && Notification.permission === 'granted'; }
   window.__remAdd = function (p) {
     if (p.remove) {
       var rr = rem(), k0 = (p.replaces || p.text).toLowerCase(), n0 = rr.custom.length;
@@ -6583,6 +6624,55 @@
   var tries = 0; (function boot() { if (ready()) { loadFeed(); } else if (tries++ < 40) setTimeout(boot, 1500); strip(); badge(); })();
   if (typeof renderMain === 'function') { var _rm = renderMain; renderMain = function () { var x = _rm.apply(this, arguments); try { strip(); badge(); } catch (e) {} return x; }; }
   window.__snOpen = openModal; window.__snBadge = badge; window.__sn = { S: S, V: V, loadFeed: loadFeed };
+})();
+</script>
+<script>
+/* Android app only: keeps the home-screen widgets up to date and locks the Snippets screen against screenshots */
+(function () {
+  function WB() { try { return window.__NATIVE && window.Capacitor.Plugins.WidgetBridge; } catch (e) { return null; } }
+  if (!WB()) return;
+  var timer = null, last = '';
+  function summary() {
+    var key = getTodayKey(), es = getDayEntries(key), st = { done: 0, total: 0 }, todos = [], sn = 0;
+    try { st = window.__todoStat() || st; } catch (e) {}
+    try {
+      todos = (SETTINGS.todos || []).filter(function (x) { return !x.done && x.due <= key; })
+        .sort(function (a, b) { return (a.due < b.due ? -1 : a.due > b.due ? 1 : 0) || String(a.time || '99').localeCompare(String(b.time || '99')); })
+        .slice(0, 3).map(function (x) { return (x.time ? x.time + '  ' : '') + String(x.text || '').slice(0, 40); });
+    } catch (e) {}
+    try { sn = window.__sn.S.feed.filter(function (x) { return !x.mine && !x.seen; }).length; } catch (e) {}
+    return { day: key, waterMl: Math.round(getWaterTotal(es)), goal: Math.round(WATER_TARGET_ML), done: st.done, total: st.total, todos: todos, snippets: sn };
+  }
+  function push() {
+    var d = summary(), sg = JSON.stringify(d);
+    if (sg === last) return; last = sg;
+    try { WB().update({ json: sg }); } catch (e) {}
+  }
+  function soon() { clearTimeout(timer); timer = setTimeout(push, 800); }
+  // water added from the widget while the app was closed
+  async function takeWater() {
+    try {
+      var r = await WB().takePending(), ml = Math.round(+(r && r.ml) || 0);
+      if (ml > 0) {
+        var key = getTodayKey(); if (!Array.isArray(allData[key])) allData[key] = [];
+        var n = Math.min(40, Math.round(ml / 250)) || 1, each = Math.round(ml / n);
+        for (var i = 0; i < n; i++) allData[key].push({ id: Date.now() + '-w' + i + Math.random().toString(36).slice(2, 5), text: 'water ' + each + 'ml', cat: 'water', time: getCurrentHHMM(), createdAt: Date.now() + i });
+        saveData(); renderMain(); showToast('Added ' + ml + ' ml from your widget');
+      }
+    } catch (e) {}
+  }
+  var rm = window.renderMain;
+  if (typeof rm === 'function') window.renderMain = function () { var r = rm.apply(this, arguments); soon(); return r; };
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') { takeWater().then(soon); } else push(); });
+  setInterval(soon, 60000);
+  setTimeout(function () { takeWater().then(push); }, 1500);
+  // Snippets screen: block screenshots and screen recording while a snippet is on screen
+  var sec = false;
+  function secure(on) { if (on === sec) return; sec = on; try { WB().secure({ on: on }); } catch (e) {} }
+  setInterval(function () {
+    var v = document.getElementById('sn-view');
+    secure(!!(v && !v.hidden));
+  }, 400);
 })();
 </script>
 </body>

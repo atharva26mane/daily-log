@@ -36,6 +36,29 @@ if 'com.atharva.dailylog' not in m:
     i = m.index('</activity>'); m = m[:i] + flt + '        ' + m[i:]
 open(mp, 'w', encoding='utf-8').write(m)
 
+
+# 3b) widgets, screenshot lock and the phone-side plugin (Java + layouts), receivers, exact alarms
+nat = os.path.join(root, 'native')
+jdst = os.path.join(app, 'src', 'main', 'java', 'com', 'atharva', 'dailylog')
+os.makedirs(jdst, exist_ok=True)
+for f in os.listdir(os.path.join(nat, 'java')):
+    shutil.copy(os.path.join(nat, 'java', f), os.path.join(jdst, f))
+for sub in ['layout', 'xml', 'drawable', 'values']:
+    d = os.path.join(res, sub); os.makedirs(d, exist_ok=True)
+    for f in os.listdir(os.path.join(nat, 'res', sub)):
+        shutil.copy(os.path.join(nat, 'res', sub, f), os.path.join(d, f))
+m = open(mp, encoding='utf-8').read()
+if 'WaterWidget' not in m:
+    recv = ''
+    for cls, info in [('WaterWidget', 'widget_water_info'), ('TodoWidget', 'widget_todo_info'), ('SnippetsWidget', 'widget_snippets_info')]:
+        recv += ('        <receiver android:name=".%s" android:exported="false">\n'
+                 '            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>\n'
+                 '            <meta-data android:name="android.appwidget.provider" android:resource="@xml/%s" />\n'
+                 '        </receiver>\n') % (cls, info)
+    m = m.replace('</application>', recv + '    </application>')
+    m = m.replace('</manifest>', '    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />\n    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />\n</manifest>')
+    open(mp, 'w', encoding='utf-8').write(m)
+
 # 4) version: every build gets a higher number so it installs over the old one
 gp = os.path.join(app, 'build.gradle')
 g = open(gp, encoding='utf-8').read()
