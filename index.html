@@ -996,6 +996,11 @@
     .sn-cam b { display: block; font-family: var(--display); font-size: 19px; color: var(--forest); }
     .sn-cam small { display: block; font-size: 13.5px; line-height: 1.35; color: var(--moss); margin-top: 2px; }
     .sn-add { margin-top: 0; }
+    .sn-stage { display: flex; justify-content: center; margin: 0 0 14px; }
+    .sn-camera { position: relative; z-index: 5; width: min(230px, 64vw); filter: drop-shadow(0 6px 8px rgba(40,34,20,.22)); }
+    .sn-camera svg { display: block; width: 100%; height: auto; }
+    .lb-btn.sn-add { margin: 0 0 10px; }
+    .sn-wm { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; background-size: 190px 100px; }
     .sn-pile { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 14px; padding: 6px 2px 4px; }
     .sn-pile .sn-pol:nth-child(even) { margin-top: 14px; }
     .sn-pol { --age: 0; --tilt: 0deg; position: relative; display: block; width: 100%; text-align: left; padding: 9px 9px 10px; border: 0; border-radius: 4px; font: inherit; color: #3A3427; cursor: pointer; transform: rotate(var(--tilt)); background: color-mix(in srgb, #FBF6EA calc((1 - var(--age)) * 100%), #E6D29A); box-shadow: 0 1px 1px rgba(0,0,0,.12), 0 6px 14px rgba(40,34,20,.18); transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
@@ -1013,8 +1018,6 @@
     .sn-cap small { display: block; margin-top: 2px; font-size: 12.5px; color: #7A735E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sn-stamp { display: block; margin-top: 5px; font-family: ui-monospace, 'Courier New', monospace; font-size: 11.5px; letter-spacing: .02em; font-weight: 700; color: #D8662B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sn-tape { position: absolute; top: -8px; right: 10px; z-index: 2; padding: 3px 9px; border-radius: 3px; background: #E2763A; color: #fff; font-size: 11.5px; font-weight: 800; letter-spacing: .04em; transform: rotate(4deg); box-shadow: 0 2px 4px rgba(0,0,0,.2); }
-    .sn-pol.fresh { animation: snspit 520ms cubic-bezier(0.22,1,0.36,1) both; }
-    @keyframes snspit { from { opacity: 0; transform: translateY(-46px) rotate(calc(var(--tilt) * -2)); } to { opacity: 1; transform: rotate(var(--tilt)); } }
     .sn-note { margin: 14px 4px 0; font-size: 13.5px; line-height: 1.4; color: var(--moss); text-align: center; }
     .sn-empty { text-align: center; padding: 26px 8px 8px; }
     .sn-empty h3 { margin: 12px 0 6px; font-family: var(--display); font-size: 22px; color: var(--forest); }
@@ -1079,7 +1082,6 @@
     .sn-write input { flex: 1; min-width: 0; min-height: 48px; padding: 0 14px; border-radius: 14px; border: 1px solid rgba(244,235,216,.3); background: rgba(244,235,216,.1); color: #F4EBD8; font: inherit; font-size: 16px; }
     .sn-write input::placeholder { color: rgba(244,235,216,.55); }
     .sn-write button { flex: none; min-height: 48px; padding: 0 18px; border-radius: 14px; border: 0; background: #F4EBD8; color: #2F4A38; font: inherit; font-size: 15px; font-weight: 800; cursor: pointer; }
-    @media (prefers-reduced-motion: reduce) { .sn-pol.fresh { animation: none; } }
     body.theme-volcano .sn-cam, body.theme-volcano .sn-gcard, body.theme-volcano .sn-up-i, body.theme-volcano .sn-toggle { background: var(--basalt); border: 1px solid var(--edge); }
     .pl-empty { text-align: center; padding: 28px 8px 8px; }
     .pl-empty-ic { width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 20px; display: grid; place-items: center; background: rgba(64,81,59,0.10); color: var(--forest); }
@@ -1380,10 +1382,10 @@
     <div class="sn-v-top"><span class="from" id="sn-v-from"></span><span class="sn-once">Opens once</span><button class="sn-v-x" id="sn-v-x" type="button" aria-label="Close">&times;</button></div>
     <div class="sn-v-stage">
       <div class="sn-v-pol" id="sn-v-pol">
-        <div class="sn-v-ph"><img id="sn-v-img" alt="" draggable="false" /><div class="sn-v-haze" id="sn-v-haze">Developing...</div></div>
+        <div class="sn-v-ph"><img id="sn-v-img" alt="" draggable="false" /><div class="sn-v-haze" id="sn-v-haze">Developing...</div><i class="sn-wm" id="sn-v-wm"></i></div>
         <div class="sn-v-cap"><span class="sn-stamp" id="sn-v-stamp"></span><span class="sn-hand" id="sn-v-note"></span></div>
       </div>
-      <p class="sn-v-hint" id="sn-v-hint">Shake your phone to develop it. Stop and it fades.</p>
+      <p class="sn-v-hint" id="sn-v-hint">Shake your phone to develop it. Then it stays until you close it.</p>
       <button class="sn-hold" id="sn-v-hold" type="button">No shake? Press and hold here</button>
     </div>
     <div class="sn-v-react" id="sn-v-react">
@@ -1471,7 +1473,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 42</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 43</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -6238,10 +6240,11 @@
     star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
     eye: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
     chev: '<svg class="ps-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>',
+    camera: '<svg viewBox="0 0 220 130" aria-hidden="true"><rect x="14" y="2" width="44" height="14" rx="5" fill="#40513B"/><circle cx="184" cy="9" r="8" fill="#E2763A" stroke="#40513B" stroke-width="2.5"/><rect x="10" y="10" width="200" height="104" rx="20" fill="#FBF6EA" stroke="#40513B" stroke-width="3"/><rect x="28" y="22" width="40" height="22" rx="6" fill="#E3B04B" stroke="#40513B" stroke-width="2.5"/><rect x="11.5" y="82" width="197" height="7" fill="#E2763A"/><rect x="11.5" y="89" width="197" height="7" fill="#E3B04B"/><rect x="11.5" y="96" width="197" height="7" fill="#6FA8B8"/><circle cx="116" cy="52" r="36" fill="#2F4A38" stroke="#40513B" stroke-width="3"/><circle cx="116" cy="52" r="27" fill="#40513B"/><circle cx="116" cy="52" r="18" fill="#6FA8B8"/><circle cx="108" cy="44" r="5" fill="#fff" fill-opacity=".65"/><circle id="sn-flash" cx="116" cy="52" r="34" fill="#fff" fill-opacity="0" opacity="0"/><rect x="38" y="106" width="144" height="9" rx="4.5" fill="#1F2B22"/></svg>',
     cammain: '<svg viewBox="0 0 76 64" aria-hidden="true"><rect x="4" y="16" width="68" height="44" rx="10" fill="#FBF6EA" stroke="#40513B" stroke-width="2.5"/><rect x="4" y="34" width="68" height="5" fill="#E2763A"/><rect x="4" y="39" width="68" height="4" fill="#E3B04B"/><rect x="4" y="43" width="68" height="4" fill="#6FA8B8"/><circle cx="38" cy="30" r="11" fill="#2F4A38" stroke="#40513B" stroke-width="2.5"/><circle cx="38" cy="30" r="5" fill="#9FC7B5"/><rect x="14" y="8" width="16" height="9" rx="3" fill="#40513B"/><rect x="22" y="53" width="32" height="3" rx="1.5" fill="#40513B" opacity=".4"/></svg>'
   };
   var KINDS = { proud: 'Proud of you', same: 'Same here', join: 'Join me', drink: 'Drink up' };
-  var S = { view: 'tray', feed: [], groups: [], gid: 'all', loaded: false, sqlMissing: false, err: '', add: null, mine: null, fresh: {}, busy: false };
+  var S = { view: 'tray', feed: [], groups: [], gid: 'all', loaded: false, sqlMissing: false, err: '', add: null, mine: null, fresh: {}, busy: false, ejected: {}, pend: {}, anim: 0, dirty: false, sig: '' };
 
   // ---------- data ----------
   async function loadFeed() {
@@ -6280,7 +6283,8 @@
   }
 
   // ---------- badges, strip ----------
-  function paintAll() { badge(); strip(); if ($('sn-modal').classList.contains('open')) draw(); if ($('sn-up').classList.contains('open')) drawUp(); }
+  function sigOf() { return S.feed.map(function (x) { return x.id + x.seen + x.views + x.reacts + x.my_kind + x.my_note; }).join('|') + '#' + S.groups.map(function (g) { return g.id + g.members; }).join(',') + '#' + S.err + S.sqlMissing; }
+  function paintAll() { badge(); strip(); var sg = sigOf(), same = sg === S.sig; S.sig = sg; if ($('sn-modal').classList.contains('open') && !(same && S.view === 'tray')) draw(); if ($('sn-up').classList.contains('open')) drawUp(); }
   function badge() {
     var c = counts(), n = c.un + c.re + (c.rem ? Math.min(c.rem, 1) : 0), b = $('bell-n'); if (!b) return;
     var soon = dueSoon().filter(function (x) { return x.soon; }).length; n = c.un + c.re + soon;
@@ -6313,12 +6317,13 @@
     if (x.mine) inner = IC.cam + '<span>' + (x.views ? 'Seen by ' + x.views : 'Not seen yet') + '</span>';
     else if (x.seen) inner = IC.eye + '<span>Opened</span>';
     else inner = IC.drop + '<span>Shake to develop</span>';
-    return '<button type="button" class="sn-pol ' + st + (S.fresh[x.id] ? ' fresh' : '') + '" data-sid="' + x.id + '" style="--tilt:' + tilt(x.id) + 'deg;--age:' + age(x).toFixed(2) + '">' + (!x.mine && !x.seen ? '<span class="sn-tape">NEW</span>' : '') +
+    return '<button type="button" class="sn-pol ' + st + '" data-sid="' + x.id + '" style="--tilt:' + tilt(x.id) + 'deg;--age:' + age(x).toFixed(2) + (S.pend && S.pend[x.id] ? ';opacity:0' : '') + '">' + (!x.mine && !x.seen ? '<span class="sn-tape">NEW</span>' : '') +
       '<span class="sn-ph">' + '<span>' + inner + '</span>' + '</span>' +
       '<span class="sn-cap"><b>' + esc(x.mine ? 'You' : x.sender_name) + '</b><small>' + sub + '</small></span>' + (x.stamp ? '<span class="sn-stamp">' + esc(x.stamp) + '</span>' : '') + '</button>';
   }
   function draw() {
     var b = $('sn-body'), back = $('sn-back'), gb = $('sn-groups-btn'); if (!b) return;
+    if (S.anim && S.view === 'tray') { S.dirty = true; return; }
     $('sn-title').textContent = titleOf(); back.hidden = S.view === 'tray'; gb.hidden = S.view !== 'tray';
     if (!ready()) { b.innerHTML = '<div class="sn-empty"><span class="sn-mini"><i></i><i></i></span><h3>Sign in first</h3><p>Snippets are shared with friends in your group, so you need to be signed in.</p></div>'; return; }
     if (S.sqlMissing) { b.innerHTML = '<div class="sn-empty"><span class="sn-mini"><i></i><i></i></span><h3>One setup step left</h3><p>The admin needs to run <b>snippets.sql</b> once in Supabase. After that Snippets work for everyone.</p></div>'; return; }
@@ -6333,10 +6338,46 @@
     }
     var list = visible();
     var chips = S.groups.length > 1 ? '<div class="lb-chips"><button type="button" data-g="all" class="' + (S.gid === 'all' ? 'on' : '') + '">All</button>' + S.groups.map(function (g) { return '<button type="button" data-g="' + g.id + '" class="' + (S.gid === g.id ? 'on' : '') + '">' + esc(g.name) + '</button>'; }).join('') + '</div>' : '';
-    var cam = '<div class="sn-cam">' + IC.cammain + '<div><b>Your turn</b><small>One photo. Friends see it once. It is gone in 24 hours.</small></div></div><button class="lb-btn sn-add" data-act="add" type="button" style="margin:-4px 0 14px">Add a snippet</button>';
-    var pile = list.length ? '<div class="sn-pile">' + list.map(polHtml).join('') + '</div><p class="sn-note">Tap a Polaroid, then shake your phone to develop it.</p>' : '<div class="sn-empty" style="padding-top:8px"><h3>Nothing on the table</h3><p>Be the first. Take a photo of your day and send it.</p></div>';
+    var pend = {}; list.filter(function (x) { return !S.ejected[x.id] && ((!x.mine && !x.seen) || S.fresh[x.id]); }).slice(0, 3).forEach(function (x) { pend[x.id] = 1; }); S.pend = pend;
+    var cam = '<button class="lb-btn sn-add" data-act="add" type="button">Add a snippet</button><div class="sn-stage"><div class="sn-camera" id="sn-camera">' + IC.camera + '</div></div>';
+    var pile = list.length ? '<div class="sn-pile">' + list.map(polHtml).join('') + '</div><p class="sn-note">Tap a Polaroid, then shake your phone to develop it. Once you close it, it is gone for you.</p>' : '<div class="sn-empty" style="padding-top:8px"><h3>Nothing on the table</h3><p>Be the first. Take a photo of your day and send it.</p></div>';
     b.innerHTML = chips + cam + pile;
-    S.fresh = {};
+    S.fresh = {}; scheduleEject();
+  }
+  // the camera spits the Polaroid out: slides from the slot, pauses, then drops onto the pile
+  function scheduleEject() {
+    var ids = Object.keys(S.pend || {}); S.pend = {}; if (!ids.length) return;
+    S.anim = ids.length; clearTimeout(S.ejT); clearTimeout(S.safeT);
+    S.ejT = setTimeout(function () { runEject(ids, 0); }, 480);
+    S.safeT = setTimeout(function () { S.anim = 0; if (S.dirty) { S.dirty = false; draw(); } }, 5000);
+  }
+  function runEject(ids, i) {
+    if (i >= ids.length || !$('sn-modal').classList.contains('open') || S.view !== 'tray') { endEject(); return; }
+    var card = document.querySelector('.sn-pol[data-sid="' + ids[i] + '"]'); S.ejected[ids[i]] = 1;
+    if (card) eject(card, function () { if (i === ids.length - 1) endEject(); });
+    else if (i === ids.length - 1) endEject();
+    setTimeout(function () { runEject(ids, i + 1); }, 440);
+  }
+  function endEject() { S.anim = 0; clearTimeout(S.safeT); if (S.dirty) { S.dirty = false; draw(); } }
+  function eject(card, done) {
+    var cam = $('sn-camera'), reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!cam || reduce || !card.animate) { card.style.opacity = ''; done(); return; }
+    var cr = cam.getBoundingClientRect(), r = card.getBoundingClientRect(), sc = 0.5, h = r.height;
+    var slotY = cr.top + cr.height * (112 / 130), cx = cr.left + cr.width / 2, fx = r.left + r.width / 2, fy = r.top + r.height / 2;
+    var x0 = cx - fx, yIn = slotY - h * sc / 2 - 4 - fy, yOut = slotY + h * sc * 0.12 - fy, tl = parseFloat(card.style.getPropertyValue('--tilt')) || 0;
+    function T(x, y, rot, k) { return 'translate(' + x + 'px,' + y + 'px) rotate(' + rot + 'deg) scale(' + k + ')'; }
+    card.style.opacity = '';
+    var a = card.animate([
+      { transform: T(x0, yIn, 0, sc), offset: 0, easing: 'cubic-bezier(0.4,0,0.2,1)' },
+      { transform: T(x0, yOut, 0, sc), offset: 0.4, easing: 'linear' },
+      { transform: T(x0, yOut, 0, sc), offset: 0.48, easing: 'cubic-bezier(0.22,1,0.36,1)' },
+      { transform: T(0, 5, tl * 1.4, 1.03), offset: 0.8, easing: 'cubic-bezier(0.3,0,0.2,1)' },
+      { transform: T(0, 0, tl, 1), offset: 1 }
+    ], { duration: 950, fill: 'backwards' });
+    cam.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(2px) rotate(-0.6deg)' }, { transform: 'translateY(0)' }], { duration: 240, easing: 'ease-out' });
+    var fl = $('sn-flash'); if (fl && fl.animate) fl.animate([{ opacity: 0 }, { opacity: 0.9, offset: 0.25 }, { opacity: 0 }], { duration: 360, easing: 'ease-out' });
+    if (navigator.vibrate) navigator.vibrate(10);
+    a.onfinish = a.oncancel = function () { done(); };
   }
   function drawGroups(b) {
     var me = window.__lbApi && window.__lbApi.S && window.__lbApi.S.me, mem = me && me.member;
@@ -6395,25 +6436,31 @@
       if (r.error) { showToast(String(r.error.message || 'Could not send').replace(/^.*?:\s*/, '').slice(0, 80)); }
       else { jset(LAST_G, a.gid); S.add = null; S.view = 'tray'; S.gid = 'all'; if (navigator.vibrate) navigator.vibrate(20); showToast('Sent. It disappears in 24 hours'); await loadFeed(); }
     } catch (e) { showToast('Could not send. Check your connection'); }
-    S.busy = false; draw();
+    S.busy = false; if (S.view === 'add') draw();
   }
 
   // ---------- the viewer: shake to develop ----------
-  var V = { on: false, item: null, p: 0, e: 0, lx: null, ly: null, lz: null, motion: false, hold: false, t0: 0, last: 0, raf: 0, kind: '', note: '', total: 30000 };
+  var V = { on: false, item: null, p: 0, e: 0, lx: null, ly: null, lz: null, motion: false, hold: false, t0: 0, last: 0, raf: 0, kind: '', note: '', total: 60000, done: 0 };
   function onMotion(ev) {
     var a = ev.accelerationIncludingGravity; if (!a || a.x == null) return; V.motion = true;
     if (V.lx != null) { var d = Math.abs(a.x - V.lx) + Math.abs(a.y - V.ly) + Math.abs(a.z - V.lz); V.e = V.e * 0.6 + d * 0.4; }
     V.lx = a.x; V.ly = a.y; V.lz = a.z;
   }
+  function wmSet() {
+    var me = window.__lbApi && window.__lbApi.S && window.__lbApi.S.me, u = usr(), nm = ((me && me.member && me.nickname) || (u && (u.name || u.email)) || 'viewer').toString().split(' ')[0].replace(/[^\w\u0900-\u097F.-]/g, '').slice(0, 14) || 'viewer', d = new Date(), hh = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='190' height='100'><text x='95' y='54' text-anchor='middle' transform='rotate(-26 95 50)' font-family='sans-serif' font-size='15' font-weight='700' fill='white' fill-opacity='.4' stroke='black' stroke-opacity='.2' stroke-width='.6'>" + nm + ' ' + hh + '</text></svg>';
+    $('sn-v-wm').style.backgroundImage = 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+  }
   function paintView() {
     var img = $('sn-v-img'), hz = $('sn-v-haze'), p = V.p;
-    img.style.opacity = String(p); img.style.filter = 'blur(' + ((1 - p) * 14).toFixed(1) + 'px) saturate(' + (0.5 + p * 0.5).toFixed(2) + ')'; hz.style.opacity = String(Math.max(0, 1 - p * 1.1));
+    img.style.opacity = String(p); img.style.filter = 'blur(' + ((1 - p) * 14).toFixed(1) + 'px) saturate(' + (0.5 + p * 0.5).toFixed(2) + ')'; hz.style.opacity = String(Math.max(0, 1 - p * 1.1)); $('sn-v-wm').style.opacity = String(Math.min(1, p * 1.2));
     $('sn-v-pol').style.setProperty('--sep', Math.min(0.55, (performance.now() - V.t0) / V.total * 0.55).toFixed(3));
   }
   function tick(ts) {
     if (!V.on) return; var dt = Math.min(0.1, (ts - V.last) / 1000 || 0.016); V.last = ts; V.e *= Math.max(0, 1 - dt * 2.5);
     var push = Math.max(0, V.e - 2.5) / 7; if (V.hold) push = Math.max(push, 0.85);
-    if (push > 0.05) V.p = Math.min(1, V.p + push * dt * 1.7); else V.p = Math.max(0, V.p - 0.42 * dt);
+    if (push > 0.05) V.p = Math.min(1, V.p + push * dt * 1.7);
+    if (V.p >= 0.98 && !V.done) { V.done = 1; $('sn-v-hint').textContent = 'Developed. It stays here until you close it.'; $('sn-v-hold').hidden = true; if (navigator.vibrate) navigator.vibrate([15, 30, 15]); }
     paintView(); if (ts - V.t0 > V.total) { endView('time'); return; }
     if (!V.motion && ts - V.t0 > 2200 && !V.hint2) { V.hint2 = 1; $('sn-v-hint').textContent = 'No shake sensor found. Press and hold the button below.'; }
     V.raf = requestAnimationFrame(tick);
@@ -6427,8 +6474,8 @@
     V.kind = item.my_kind || ''; syncStickers(); v.hidden = false;
     var r; try { r = await sb().rpc('sn_open', { p_id: item.id }); } catch (e) { r = { error: e }; }
     if (r.error || !r.data) { v.hidden = true; showToast(r.error ? 'Could not open. Check your connection' : 'That one was already opened or is gone'); loadFeed(); return; }
-    item.seen = true; im.src = r.data; V.item = item; V.p = 0; V.e = 0; V.lx = V.ly = V.lz = null; V.motion = false; V.hold = false; V.hint2 = 0; V.t0 = performance.now(); V.last = V.t0; V.on = true;
-    $('sn-v-hint').textContent = 'Shake your phone to develop it. Stop and it fades.'; $('sn-v-hold').hidden = false; $('sn-v-haze').textContent = '';
+    item.seen = true; im.src = r.data; V.item = item; V.p = 0; V.e = 0; V.lx = V.ly = V.lz = null; V.motion = false; V.hold = false; V.hint2 = 0; V.done = 0; wmSet(); V.t0 = performance.now(); V.last = V.t0; V.on = true;
+    $('sn-v-hint').textContent = 'Shake your phone to develop it. Then it stays until you close it.'; $('sn-v-hold').hidden = false; $('sn-v-haze').textContent = '';
     window.addEventListener('devicemotion', onMotion); V.raf = requestAnimationFrame(tick); badge(); strip();
   }
   function endView(why) {
