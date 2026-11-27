@@ -845,6 +845,88 @@
     body.theme-volcano .todo-card, body.theme-volcano .todo-strip, body.theme-volcano .td-sec ul, body.theme-volcano .td-inputrow { background: var(--basalt); border: 1px solid var(--edge); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
     body.theme-volcano .td-check svg, body.theme-volcano .td-alldone svg { stroke: #1f120c; }
     @media (prefers-reduced-motion: reduce) { .td-item.is-done .td-check::before, .td-alldone svg, .td-row.pop { animation: none; } .td-bar i, .td-text, .td-check svg { transition: none; } }
+    /* ---------- leaderboard ---------- */
+    .lb-sheet { padding-bottom: calc(18px + var(--safe-bottom)); }
+    .lb-week { margin: -6px 0 10px; font-size: 14px; font-weight: 600; color: var(--moss); }
+    .lb-seg { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 16px; background: rgba(64,81,59,0.1); margin-bottom: 14px; }
+    .lb-seg::before { content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 12px; background: var(--forest); transition: transform 260ms cubic-bezier(0.32,0.72,0,1); }
+    .lb-seg[data-active="groups"]::before { transform: translateX(100%); }
+    .lb-seg button { position: relative; min-height: 44px; border: none; background: transparent; font: inherit; font-size: 15px; font-weight: 700; color: var(--forest); cursor: pointer; transition: color 200ms ease; }
+    .lb-seg button[aria-selected="true"] { color: var(--cream); }
+    .lb-hero { position: relative; overflow: hidden; padding: 18px 18px 14px; border-radius: 26px; color: var(--cream); background: linear-gradient(155deg, #40513b 0%, #2f5a45 60%, #34604a 100%); box-shadow: 0 12px 28px rgba(26,38,24,0.3); margin-bottom: 14px; }
+    .lb-hero::after { content: ""; position: absolute; right: -40px; top: -50px; width: 170px; height: 170px; border-radius: 50%; background: radial-gradient(circle, rgba(226,184,86,0.38), rgba(226,184,86,0) 70%); pointer-events: none; }
+    .lb-hero-top { display: flex; align-items: flex-end; gap: 14px; position: relative; }
+    .lb-rank { font-family: var(--display); font-weight: 800; font-size: 64px; line-height: 0.9; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+    .lb-rank small { font-size: 22px; font-weight: 700; letter-spacing: 0; margin-left: 2px; opacity: 0.8; }
+    .lb-hero-pts { margin-left: auto; text-align: right; }
+    .lb-hero-pts b { display: block; font-family: var(--display); font-size: 30px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+    .lb-hero-pts span { font-size: 13px; opacity: 0.8; font-weight: 600; }
+    .lb-gap { position: relative; margin: 12px 0 10px; font-size: 15px; font-weight: 600; line-height: 1.35; opacity: 0.95; }
+    .lb-spark { display: flex; align-items: flex-end; gap: 5px; height: 34px; position: relative; }
+    .lb-spark i { flex: 1; min-height: 4px; border-radius: 4px; background: rgba(254,250,224,0.85); transform-origin: bottom; }
+    .lb-spark i.off { background: rgba(254,250,224,0.18); }
+    .lb-days { display: flex; gap: 5px; margin-top: 4px; font-size: 11px; font-weight: 700; opacity: 0.65; position: relative; }
+    .lb-days span { flex: 1; text-align: center; }
+    .lb-podium { display: grid; grid-template-columns: 1fr 1.12fr 1fr; align-items: end; gap: 8px; margin: 4px 0 14px; }
+    .lb-pod { display: flex; flex-direction: column; align-items: center; min-width: 0; text-align: center; }
+    .lb-av { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 800; font-size: 18px; color: #fff; flex: none; }
+    .lb-av svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .lb-av.anon { background: #8a948a; }
+    .lb-pod.p1 .lb-av { width: 56px; height: 56px; font-size: 22px; box-shadow: 0 0 0 3px #e2b856; }
+    .lb-pn { max-width: 100%; margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lb-pp { font-size: 13px; font-weight: 700; color: var(--moss); font-variant-numeric: tabular-nums; margin-bottom: 6px; }
+    .lb-pb { width: 100%; height: 0; border-radius: 14px 14px 6px 6px; display: flex; align-items: flex-start; justify-content: center; padding-top: 8px; font-family: var(--display); font-weight: 800; font-size: 22px; color: rgba(44,56,40,0.85); transition: height 520ms cubic-bezier(0.16,1,0.3,1); }
+    .lb-podium.go .lb-pb { height: var(--h); }
+    .lb-pod.p1 .lb-pb { background: linear-gradient(#efce7a, #d9a441); } .lb-pod.p2 .lb-pb { background: linear-gradient(#d4dbd7, #a9b4af); transition-delay: 80ms; } .lb-pod.p3 .lb-pb { background: linear-gradient(#e0b08a, #b97d4d); transition-delay: 160ms; }
+    .lb-list { list-style: none; margin: 0; padding: 0; background: rgba(255,255,255,0.7); border-radius: 22px; border: 1px solid rgba(64,81,59,0.12); overflow: hidden; }
+    .lb-row { display: flex; align-items: center; gap: 10px; min-height: 60px; padding: 8px 14px 8px 10px; border-top: 1px solid rgba(64,81,59,0.09); animation: lbrow 320ms cubic-bezier(0.16,1,0.3,1) both; animation-delay: calc(var(--i, 0) * 35ms); }
+    .lb-row:first-child { border-top: none; }
+    .lb-row.me { background: rgba(96,153,102,0.16); }
+    @keyframes lbrow { from { opacity: 0; transform: translateY(8px); } }
+    .lb-rn { width: 26px; text-align: center; font-family: var(--display); font-weight: 800; font-size: 17px; color: var(--moss); font-variant-numeric: tabular-nums; flex: none; }
+    .lb-row .lb-av { width: 38px; height: 38px; font-size: 15px; }
+    .lb-nm { flex: 1; min-width: 0; font-size: 16px; font-weight: 700; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lb-nm em { font-style: normal; font-size: 12px; font-weight: 800; padding: 2px 8px; margin-left: 6px; border-radius: 999px; background: var(--forest); color: var(--cream); vertical-align: 1px; }
+    .lb-mini { display: flex; align-items: flex-end; gap: 2px; height: 22px; flex: none; }
+    .lb-mini i { width: 4px; min-height: 3px; border-radius: 2px; background: rgba(64,81,59,0.5); }
+    .lb-mini i.off { background: rgba(64,81,59,0.14); }
+    .lb-pt { min-width: 40px; text-align: right; font-weight: 800; font-size: 16px; color: var(--forest); font-variant-numeric: tabular-nums; }
+    .lb-card { padding: 20px 18px; border-radius: 26px; background: rgba(255,255,255,0.78); border: 1px solid rgba(64,81,59,0.12); margin-bottom: 12px; }
+    .lb-card h3 { margin: 10px 0 6px; font-family: var(--display); font-size: 22px; color: var(--forest); letter-spacing: -0.01em; }
+    .lb-card p { margin: 0 0 12px; font-size: 15px; color: var(--ink); line-height: 1.45; }
+    .lb-ic { width: 52px; height: 52px; border-radius: 18px; display: flex; align-items: center; justify-content: center; background: var(--forest); color: #efce7a; }
+    .lb-ic svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .lb-field { width: 100%; height: 48px; padding: 0 14px; border-radius: 14px; border: 1px solid rgba(64,81,59,0.28); background: #fff; font: inherit; font-size: 16px; color: var(--ink); margin-bottom: 10px; }
+    .lb-opt { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 6px 2px; }
+    .lb-opt b { display: block; font-size: 15px; color: var(--ink); } .lb-opt small { display: block; font-size: 13px; color: var(--moss); line-height: 1.3; }
+    .lb-btn { width: 100%; min-height: 52px; margin-top: 8px; border: none; border-radius: 16px; background: var(--forest); color: var(--cream); font: inherit; font-size: 16px; font-weight: 800; cursor: pointer; transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
+    .lb-btn:active { transform: scale(0.97); transition-duration: 90ms; } .lb-btn:disabled { opacity: 0.5; }
+    .lb-btn.ghost { background: transparent; color: var(--forest); border: 1px solid rgba(64,81,59,0.35); }
+    .lb-btn.danger { background: rgba(164,86,42,0.12); color: #8a4519; }
+    .lb-btn.row { width: auto; flex: 1; margin-top: 0; }
+    .lb-pair { display: flex; gap: 8px; margin-top: 8px; }
+    .lb-chips { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 2px; scrollbar-width: none; }
+    .lb-chips::-webkit-scrollbar { display: none; }
+    .lb-chips button { flex: none; min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid rgba(64,81,59,0.28); background: rgba(64,81,59,0.06); color: var(--forest); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .lb-chips button.on { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+    .lb-code { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; padding: 10px 12px; border-radius: 16px; background: rgba(64,81,59,0.08); font-size: 14px; color: var(--moss); font-weight: 600; }
+    .lb-code b { font-family: var(--display); font-size: 20px; letter-spacing: 0.12em; color: var(--forest); }
+    .lb-code button { margin-left: auto; min-height: 44px; padding: 0 14px; border-radius: 14px; border: none; background: var(--forest); color: var(--cream); font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .lb-skel { height: 60px; border-radius: 0; background: linear-gradient(90deg, rgba(64,81,59,0.06), rgba(64,81,59,0.14), rgba(64,81,59,0.06)) 0 0 / 200% 100%; animation: lbsh 1.2s linear infinite; border-top: 1px solid rgba(255,255,255,0.6); }
+    @keyframes lbsh { to { background-position: -200% 0; } }
+    .lb-note { margin: 12px 4px 0; font-size: 13px; color: var(--moss); line-height: 1.45; }
+    .lb-how { margin-top: 12px; border-radius: 18px; background: rgba(64,81,59,0.06); }
+    .lb-how summary { min-height: 48px; display: flex; align-items: center; padding: 0 14px; font-weight: 700; font-size: 15px; color: var(--forest); cursor: pointer; list-style: none; }
+    .lb-how summary::-webkit-details-marker { display: none; }
+    .lb-how div { padding: 0 14px 12px; font-size: 14px; color: var(--ink); line-height: 1.5; }
+    .lb-how table { width: 100%; border-collapse: collapse; margin: 6px 0; } .lb-how td { padding: 4px 0; } .lb-how td:last-child { text-align: right; font-weight: 800; color: var(--forest); }
+    .lb-err { padding: 14px; border-radius: 16px; background: rgba(164,86,42,0.1); color: #8a4519; font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+    body.theme-volcano .lb-list, body.theme-volcano .lb-card { background: var(--basalt); border: 1px solid var(--edge); }
+    body.theme-volcano .lb-row.me { background: rgba(255,122,47,0.16); }
+    @media (prefers-reduced-motion: reduce) { .lb-row { animation: none; } .lb-pb, .lb-seg::before { transition: none; } .lb-skel { animation: none; } }
+    .prop.editable .prop-text { border-bottom: 1px dashed rgba(64,81,59,0.4); cursor: text; }
+    .prop-edit { width: 100%; font: inherit; font-size: 15px; color: var(--ink); border: 1px solid var(--forest); border-radius: 8px; padding: 6px 8px; background: #fff; }
+    .prop-hint { font-size: 13px; color: var(--moss); margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -867,6 +949,7 @@
           <div class="top-actions" id="today-actions">
             <button class="icon-btn" id="open-history-btn" aria-label="History"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg></button>
             <button class="icon-btn" id="open-insights-btn" aria-label="Insights"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></button>
+            <button class="icon-btn" id="open-lb-btn" aria-label="Leaderboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2"/><path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2"/><path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3"/><path d="M4 22h16"/><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/><path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3"/></svg></button>
             <button class="icon-btn" id="open-settings-btn" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></button>
             <button class="icon-btn" hidden id="open-backup-btn" aria-label="Backup and restore"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg></button>
             <button class="icon-btn" hidden id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg></button>
@@ -1041,6 +1124,16 @@
 
   <div id="offline-bar" role="status" aria-live="polite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/></svg><span id="offline-msg">You are offline. Entries stay on this phone and sync when you reconnect.</span></div>
 
+  <!-- LEADERBOARD MODAL -->
+  <div id="lb-modal" class="overlay">
+    <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="Leaderboard">
+      <div class="chat-head"><h2 class="sheet-title">Leaderboard</h2><div class="chat-head-btns"><button id="lb-close" type="button">Done</button></div></div>
+      <div class="lb-week" id="lb-week"></div>
+      <div class="lb-seg" id="lb-seg" data-active="global" role="tablist"><button type="button" role="tab" data-tab="global">Global</button><button type="button" role="tab" data-tab="groups">Groups</button></div>
+      <div id="lb-body" class="lb-body" aria-live="polite"></div>
+    </div>
+  </div>
+
   <!-- TO-DO MODAL -->
   <div id="todo-modal" class="overlay">
     <div class="sheet todo-sheet" role="dialog" aria-modal="true" aria-label="To-do list">
@@ -1099,7 +1192,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 32</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 34</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -1128,6 +1221,7 @@
 
       <div class="set-group">
         <div class="set-label">Share</div>
+        <button class="set-row set-link" id="set-lb-row" type="button"><span class="set-name">Leaderboard</span><span class="set-val">Compete with friends</span></button>
         <button class="set-row set-link" id="set-share-row" type="button"><span class="set-name">Share today as a picture</span><span class="set-val">Your day and streak</span></button>
         <button class="set-row set-link" id="set-invite-row" type="button"><span class="set-name">Invite a friend</span><span class="set-val">Send the app link</span></button>
       </div>
@@ -1909,6 +2003,7 @@
         logged,
         'Gudlax taken last night (previous day): ' + yGud,
         'OPEN TO-DOS (not done yet):\n' + (window.__todoSummary ? window.__todoSummary() : '(none)'),
+        (window.__aiCtx ? window.__aiCtx() : ''),
         '',
         'RULES:',
         '1. Reply in very short, simple, friendly English. No big words. Max 3 short sentences.',
@@ -1926,7 +2021,18 @@
         '13. You are not a doctor. Do not diagnose. If the user reports blood, strong pain or something worrying, tell them in one short line to talk to a doctor, and still log it.',
         '14. If you are unsure what the user means or a time or amount is missing, ask ONE short question instead of guessing.\n' +
         '15. Water needs differ by person. Dark yellow or orange urine means drink more now. Pale or clear urine means they are well hydrated, so no extra water is needed. Constipation or hard stool needs steady water through the day (plus fibre), not one big drink. Heavy activity or heat means more. Use only what the person has logged or said, and never diagnose. For anything serious, suggest seeing a doctor.',
-        '16. TO-DO LIST. Things the user WANTS or NEEDS to do later are plans, not logs: chores, buying things, learning, appointments, "I should", "need to", "remember to", "tomorrow I will", "this week I want to". Put each one in "todos" (never in "entries"), one item per task, short plain words. "when" is one of: today, tomorrow, week (this week), 2weeks, month (this month). If they give a clock time, put it in "time" as HH:MM (24-hour), otherwise "" . Say in your reply where you will put it, like: "I will add buy bananas to your to-do for tomorrow. Okay?" Things already done go in "entries". Do not repeat tasks already in OPEN TO-DOS. If the user asks what is on their list, answer from OPEN TO-DOS in one or two short lines and set action="none" with empty entries and todos.'
+        '16. TO-DO LIST. Things the user WANTS or NEEDS to do later are plans, not logs: chores, buying things, learning, appointments, "I should", "need to", "remember to", "tomorrow I will", "this week I want to". Put each one in "todos" (never in "entries"), one item per task, short plain words. "when" is one of: today, tomorrow, week (this week), 2weeks, month (this month). If they give a clock time, put it in "time" as HH:MM (24-hour), otherwise "" . Say in your reply where you will put it, like: "I will add buy bananas to your to-do for tomorrow. Okay?" Things already done go in "entries". Do not repeat tasks already in OPEN TO-DOS. If the user asks what is on their list, answer from OPEN TO-DOS in one or two short lines and set action="none" with empty entries and todos.',
+        '17. REMINDERS. If the user asks to be reminded, says they keep forgetting something, or describes a routine they want to keep (medicine, vitamin, stretching, a water habit), put it in "reminders" with a short "label", "time" (HH:MM, 24-hour) and "repeat" (daily, weekdays, weekends, today or tomorrow; today and tomorrow mean a one-time reminder). If they give no time, pick a sensible one (morning 08:30, evening 18:30, night 21:30) and say the time in your reply so they can change it. To change an existing reminder, set "replaces" to its exact label from REMINDERS SET, otherwise "". Never create reminders the user did not ask for or hint at.',
+        '18. FIRST decide, for each thing the user says: DONE (past or just now: entries), PLAN (future, want, need, should, will, going to: todos), REMINDER (remind me, I forget, every day at: reminders), or QUESTION (answer in the reply). One message can hold several. Never put a plan in entries or a done thing in todos.',
+        '19. EXAMPLES (user says -> you return):\n' +
+        'a) "had 2 idli and sambar at 8" -> entries [food "2 idli with sambar" 08:00], todos [], reminders [].\n' +
+        'b) "need to buy bananas tomorrow" -> todos [buy bananas, tomorrow], entries [], reminders [].\n' +
+        'c) "I keep forgetting vitamin C" -> reminders [label "Vitamin C", 08:30, daily], reply: "I will remind you about Vitamin C every day at 8:30. Okay?"\n' +
+        'd) "remind me to call mom at 6pm" -> reminders [label "Call mom", 18:00, today].\n' +
+        'e) "drank some water, and I want to clean my room this week" -> water amount is missing so ask for it, todos [clean my room, week].\n' +
+        'f) "skipped lunch" -> entries [food "skipped lunch"].\n' +
+        'g) "what do I have today?" -> action none, answer from OPEN TO-DOS in one or two short lines.\n' +
+        'h) "move my vitamin reminder to 9" -> reminders [label "Vitamin C", 09:00, same repeat, replaces "Vitamin C"].'
       ].filter(Boolean).join('\n');
     }
 
@@ -1945,7 +2051,8 @@
     }
 
     function addProposal(p) {
-      if (p.cat === 'todo') { if (window.__todoAdd) window.__todoAdd(p.text, p.when, p.time); p.status = 'added'; return; }
+      if (p.cat === 'todo') { if (window.__todoAdd) window.__todoAdd(p.text, p.when, p.time, p.due); p.status = 'added'; return; }
+      if (p.cat === 'reminder') { if (window.__remAdd) window.__remAdd(p); p.status = 'added'; return; }
       const ids = CATEGORIES.filter(c => !c.hidden).map(c => c.id);
       const cat = ids.includes(p.cat) ? p.cat : 'notes';
       const time = /^\d{1,2}:\d{2}$/.test(p.time || '') ? p.time.padStart(5, '0') : getCurrentHHMM();
@@ -1983,10 +2090,11 @@
               const label = p.status === 'added' ? '✓ Added' : (p.status === 'skipped' ? 'Skipped' : 'Replaced');
               right = '<span class="prop-state">' + label + '</span>';
             }
-            return '<div class="prop"><div class="prop-main"><div class="prop-cat">' +
-              (p.cat === 'todo' ? 'To-do · ' + escapeHtml((window.__todoLabel ? window.__todoLabel(p.when) : p.when) + (p.time ? ' · ' + p.time : '')) : escapeHtml(c ? c.name : p.cat) + ' · ' + escapeHtml(p.time) + dayTag) +
+            return '<div class="prop' + (p.status === 'pending' ? ' editable' : '') + '"><div class="prop-main"><div class="prop-cat">' +
+              ((p.cat === 'todo' || p.cat === 'reminder') && window.__propLabel ? escapeHtml(window.__propLabel(p)) : escapeHtml(c ? c.name : p.cat) + ' · ' + escapeHtml(p.time) + dayTag) +
               '</div><div class="prop-text">' + escapeHtml(p.text) + '</div></div><div class="prop-actions">' + right + '</div></div>';
           }).join('') +
+ (pending ? '<div class="prop-hint">Tap a line to fix it before adding.</div>' : '') +
           (pending > 1 ? '<button class="prop-all" data-m="' + mi + '" data-act="all">Add all (' + pending + ')</button>' : '') +
           '</div>';
         }
@@ -2020,13 +2128,26 @@
         systemInstruction: { parts: [{ text: buildChatSystem() }] },
         contents: chatContents(),
         generationConfig: {
-          temperature: 0.2,
+          temperature: 0.1,
           responseMimeType: 'application/json',
           responseSchema: {
             type: 'OBJECT',
             properties: {
               reply: { type: 'STRING' },
               action: { type: 'STRING', enum: ['propose', 'add_pending', 'none'] },
+              reminders: {
+                type: 'ARRAY',
+                items: {
+                  type: 'OBJECT',
+                  properties: {
+                    label: { type: 'STRING' },
+                    time: { type: 'STRING' },
+                    repeat: { type: 'STRING', enum: ['daily', 'weekdays', 'weekends', 'today', 'tomorrow'] },
+                    replaces: { type: 'STRING' }
+                  },
+                  required: ['label', 'time', 'repeat', 'replaces']
+                }
+              },
               todos: {
                 type: 'ARRAY',
                 items: {
@@ -2053,7 +2174,7 @@
                 }
               }
             },
-            required: ['reply', 'action', 'entries', 'todos']
+            required: ['reply', 'action', 'entries', 'todos', 'reminders']
           }
         }
       }, CHAT_TIMEOUT_MS);
@@ -2070,10 +2191,15 @@
       }
 
       const entries = Array.isArray(out.entries) ? out.entries.filter(e => e && typeof e.text === 'string' && e.text.trim()) : [];
+      const remProps = (Array.isArray(out.reminders) ? out.reminders : []).filter(e => e && typeof e.label === 'string' && e.label.trim()).map(e => ({
+        cat: 'reminder', text: e.label.trim().slice(0, 40), time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : '08:30',
+        repeat: ['daily', 'weekdays', 'weekends', 'today', 'tomorrow'].includes(e.repeat) ? e.repeat : 'daily', replaces: (e.replaces || '').trim(), day: 'today', status: 'pending'
+      }));
       const todoProps = (Array.isArray(out.todos) ? out.todos : []).filter(e => e && typeof e.text === 'string' && e.text.trim()).map(e => ({
         cat: 'todo', text: e.text.trim(), when: ['today', 'tomorrow', 'week', '2weeks', 'month'].includes(e.when) ? e.when : 'today',
         time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : '', day: 'today', status: 'pending'
       }));
+      if (window.__nlpFix) { todoProps.forEach(p => window.__nlpFix(p, text, todoProps.length)); remProps.forEach(p => window.__nlpFix(p, text, remProps.length)); }
 
       if (out.action === 'add_pending') {
         let n = 0;
@@ -2082,7 +2208,7 @@
         }));
         if (n > 0) { saveData(); renderMain(); showToast('Added ' + n + (n === 1 ? ' item' : ' items')); }
         chatHistory.push({ role: 'model', text: out.reply });
-      } else if (entries.length > 0 || todoProps.length > 0) {
+      } else if (entries.length > 0 || todoProps.length > 0 || remProps.length > 0) {
         chatHistory.forEach(m => (m.proposals || []).forEach(p => { if (p.status === 'pending') p.status = 'replaced'; }));
         chatHistory.push({
           role: 'model',
@@ -2093,7 +2219,7 @@
             time: /^\d{1,2}:\d{2}$/.test(e.time || '') ? e.time.padStart(5, '0') : getCurrentHHMM(),
             day: e.day === 'yesterday' ? 'yesterday' : 'today',
             status: 'pending'
-          })).concat(todoProps)
+          })).concat(todoProps, remProps)
         });
       } else {
         chatHistory.push({ role: 'model', text: out.reply });
@@ -3046,7 +3172,7 @@
         const pr = m.proposals[Number(btn.dataset.p)];
         if (!pr || pr.status !== 'pending') return;
         if (act === 'add') { addProposal(pr); saveData(); renderMain(); showToast('Added'); }
-        else if (act === 'skip') { pr.status = 'skipped'; }
+        else if (act === 'skip') { pr.status = 'skipped'; if (pr.cat === 'reminder' && window.__remSkip) window.__remSkip(pr); }
       }
       renderChat();
     });
@@ -3943,7 +4069,8 @@
     return out.filter(function(x){ return x.at > nowMs; }).sort(function(a, b){ return a.at - b.at; }).slice(0, 14);
   }
   window.__buildSchedule = buildSchedule;
-  window.__schedSoon = function () { schedSoon(); };
+  window.__schedSoon = function () { lastSig = ''; schedSoon(); };
+  window.__remRedraw = function () { try { drawList(); } catch (e) {} };
 
   var schedTimer = null, lastSig = '';
   function subscribedHere() { try { return localStorage.getItem(PUSHK) === '1'; } catch (e) { return false; } }
@@ -4767,13 +4894,14 @@
   function persist() {
     var cut = Date.now() - 14 * 864e5;
     SETTINGS.todos = items().filter(function (t) { return !(t.done && t.doneAt && t.doneAt < cut); });
-    saveSettings(); render(); if (window.__schedSoon) window.__schedSoon();
+    saveSettings(); render(); if (window.__schedSoon) window.__schedSoon(); if (window.__lbTouch) window.__lbTouch();
   }
   var lastAdded = null;
-  function add(text, when, time) {
+  function add(text, when, time, due) {
     text = (text || '').trim(); if (!text) return null;
     when = LABEL[when] ? when : 'today';
-    var t = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), text: text.slice(0, 140), when: when, due: dueFor(when), time: /^\d{1,2}:\d{2}$/.test(time || '') ? time.padStart(5, '0') : '', done: false, created: Date.now() };
+    if (due && /^\d{4}-\d{2}-\d{2}$/.test(due)) { var dn = days(getTodayKey(), due); when = dn <= 0 ? 'today' : dn === 1 ? 'tomorrow' : dn <= 7 ? 'week' : dn <= 14 ? '2weeks' : 'month'; } else due = dueFor(when);
+    var t = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), text: text.slice(0, 140), when: when, due: due, time: /^\d{1,2}:\d{2}$/.test(time || '') ? time.padStart(5, '0') : '', done: false, created: Date.now() };
     items().unshift(t); lastAdded = t.id; persist(); return t;
   }
   function find(id) { return items().filter(function (t) { return t.id === id; })[0]; }
@@ -4848,7 +4976,7 @@
     t.done = !t.done; t.doneAt = t.done ? Date.now() : null;
     if (li) { var it = li.classList.contains('td-item') ? li : li.querySelector('.td-item'); if (it) it.classList.toggle('is-done', t.done); }
     if (navigator.vibrate) navigator.vibrate(t.done ? 12 : 6);
-    saveSettings();
+    saveSettings(); if (window.__lbTouch) window.__lbTouch();
     var today = getTodayKey(), left = items().filter(function (x) { return !x.done && x.due <= today; }).length;
     setTimeout(function () { render(); if (t.done && left === 0 && t.due <= today) showToast('All done for today. Nice work.'); if (window.__schedSoon) window.__schedSoon(); }, 620);
   }
@@ -4874,7 +5002,7 @@
     if (navigator.vibrate) navigator.vibrate(10);
   });
 
-  window.__todoRender = render; window.__todoAdd = add; window.__todoOpen = openSheet; window.__todoDays = days;
+  window.__todoRender = render; window.__todoAdd = add; window.__todoDueFor = dueFor; window.__todoOpen = openSheet; window.__todoDays = days;
   window.__todoLabel = function (w) { return LABEL[w] || w; };
   window.__todoSummary = function () {
     var t = getTodayKey(), o = items().filter(function (x) { return !x.done; }).sort(order).slice(0, 25);
@@ -4884,6 +5012,348 @@
   document.addEventListener('visibilitychange', function () { if (!document.hidden) render(); });
   setInterval(render, 60000);
   render();
+})();
+</script>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var SITE = 'https://daily-log-5jbg.onrender.com', CK = 'daily_log_lb_cache_v1', MK = 'daily_log_lb_me_v1';
+  var ICON = {
+    trophy: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2"/><path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2"/><path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3"/><path d="M4 22h16"/><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/><path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3"/></svg>',
+    ghost: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 10v1"/><path d="M7.528 20.472a1.6 1.6 0 012.277 0l1.057 1.056a1.6 1.6 0 002.276 0l1.057-1.056a1.6 1.6 0 012.277 0l1.114 1.114a1.4 1.4 0 002.414-1V10a8 8 0 00-16 0v10.586a1.4 1.4 0 002.414 1z"/><path d="M9 10v1"/></svg>'
+  };
+  var COLORS = ['#3f7d58', '#2f6f8f', '#8a5a9e', '#a8623a', '#4f6f2f', '#9a4a5a', '#2f7d7a', '#7a6a2a'];
+  function esc(t) { return typeof escapeHtml === 'function' ? escapeHtml(t) : String(t); }
+  function sb() { return window.__auth && window.__auth.sb(); }
+  function usr() { return window.__auth && window.__auth.me(); }
+  function ready() { var u = usr(); return !!(sb() && u && u.status === 'approved'); }
+  function jget(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+  function jset(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function dow(k) { return new Date(k + 'T12:00:00').getDay(); }
+  function weekKey() { var t = getTodayKey(); return shiftDateKey(t, -((dow(t) + 6) % 7)); }
+  function idx() { return (dow(getTodayKey()) + 6) % 7; }
+  function ord(n) { var v = n % 100; return ['th', 'st', 'nd', 'rd'][(v - 20) % 10] || ['th', 'st', 'nd', 'rd'][v] || 'th'; }
+  function hash(str) { var h = 0; for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0; return Math.abs(h); }
+
+  // ---------- scoring: how much of what you set out to do did you complete ----------
+  function usesMeds() { var t = getTodayKey(); for (var i = 0; i < 14; i++) if (getDayEntries(shiftDateKey(t, -i)).some(function (e) { return e.cat === 'medicines'; })) return true; return false; }
+  function dayScore(k, meds) {
+    var e = getDayEntries(k), parts = [];
+    parts.push([30, Math.min(1, getWaterTotal(e) / Math.max(1, WATER_TARGET_ML))]);
+    var td = (SETTINGS.todos || []).filter(function (x) { return x && x.due === k; });
+    if (td.length) parts.push([25, td.filter(function (x) { return x.done; }).length / td.length]);
+    parts.push([15, Math.min(1, e.filter(function (x) { return x.cat === 'food'; }).length / 3)]);
+    parts.push([15, e.some(function (x) { return x.cat === 'sleep'; }) ? 1 : 0]);
+    if (meds) parts.push([15, e.some(function (x) { return x.cat === 'medicines'; }) ? 1 : 0]);
+    var w = 0, v = 0; parts.forEach(function (p) { w += p[0]; v += p[0] * p[1]; });
+    return Math.round(100 * v / w);
+  }
+  function weekScore() {
+    var wk = weekKey(), meds = usesMeds(), daily = [], n = idx();
+    for (var i = 0; i <= n; i++) daily.push(dayScore(shiftDateKey(wk, i), meds));
+    var points = daily.reduce(function (a, b) { return a + b; }, 0);
+    return { week: wk, daily: daily, points: points, perfect: daily.filter(function (d) { return d >= 90; }).length };
+  }
+  window.__lbWeekScore = weekScore;
+
+  // ---------- state ----------
+  var S = { me: jget(MK) || { member: false }, groups: [], tab: 'global', gid: null, rows: null, loading: false, err: '', form: '', edit: false, drawn: '' };
+  var subT = null, lastSub = '';
+  function submitNow() {
+    if (!ready() || !S.me.member) return Promise.resolve();
+    var w = weekScore(), sig = w.week + ':' + w.daily.join(',');
+    if (sig === lastSub) return Promise.resolve();
+    return sb().rpc('lb_submit', { p_week: w.week, p_points: w.points, p_daily: w.daily, p_perfect: w.perfect }).then(function (r) { if (!r.error) lastSub = sig; }, function () {});
+  }
+  window.__lbTouch = function () { if (!S.me.member) return; clearTimeout(subT); subT = setTimeout(submitNow, 6000); };
+  async function loadMe() {
+    if (!ready()) return;
+    try { var r = await sb().rpc('lb_me'); if (!r.error && r.data) { S.me = r.data; jset(MK, S.me); } } catch (e) {}
+  }
+  async function loadGroups() {
+    if (!ready() || !S.me.member) { S.groups = []; return; }
+    try { var r = await sb().rpc('lb_my_groups'); if (!r.error) S.groups = r.data || []; } catch (e) {}
+    if (S.groups.length && !S.groups.some(function (g) { return g.id === S.gid; })) S.gid = S.groups[0].id;
+    if (!S.groups.length) S.gid = null;
+  }
+  async function loadBoard() {
+    if (!S.me.member) { draw(); return; }
+    S.err = '';
+    var key = S.tab === 'global' ? 'global' : 'g:' + S.gid, cache = jget(CK) || {};
+    if (S.tab === 'groups' && !S.gid) { S.rows = null; draw(); return; }
+    S.rows = (cache[key] && cache[key].week === weekKey()) ? cache[key].rows : null;
+    S.loading = !S.rows; draw();
+    if (!ready()) { S.loading = false; S.err = 'Sign in to see the board.'; draw(); return; }
+    var prev = myRank(S.rows);
+    try {
+      await submitNow();
+      var r = S.tab === 'global' ? await sb().rpc('lb_global', { p_week: weekKey() }) : await sb().rpc('lb_group_board', { p_group: S.gid, p_week: weekKey() });
+      if (r.error) throw r.error;
+      S.rows = r.data || []; cache[key] = { week: weekKey(), rows: S.rows }; jset(CK, cache);
+      var now = myRank(S.rows); if (prev && now && now < prev) { try { showToast('You moved up to ' + now + ord(now)); } catch (e) {} if (navigator.vibrate) navigator.vibrate([12, 40, 12]); }
+    } catch (e) {
+      S.err = S.rows ? 'No internet. Showing the last board you saw.' : 'Could not load the board. ' + ((e && e.message) || '') + ((e && /function|does not exist|schema/i.test(e.message || '')) ? ' (The leaderboard SQL has not been run yet.)' : '');
+    }
+    S.loading = false; draw();
+  }
+  function myRank(rows) { var m = (rows || []).filter(function (r) { return r.is_me; })[0]; return m ? m.rank : null; }
+
+  // ---------- drawing ----------
+  function avatar(r) {
+    if (r.anon) return '<div class="lb-av anon">' + ICON.ghost + '</div>';
+    var nm = (r.name || '?').trim(); return '<div class="lb-av" style="background:' + COLORS[hash(nm) % COLORS.length] + '">' + esc(nm.charAt(0).toUpperCase()) + '</div>';
+  }
+  var DN = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  function bars(daily, cls) { var h = ''; for (var i = 0; i < 7; i++) { var v = daily && daily[i] !== undefined ? daily[i] : null; h += '<i class="' + (v === null ? 'off' : '') + '" style="height:' + (v === null ? 14 : Math.max(14, v)) + '%"></i>'; } return '<div class="' + cls + '" aria-hidden="true">' + h + '</div>'; }
+  function weekLine() { var l = 6 - idx(); $('lb-week').textContent = 'This week. ' + (l === 0 ? 'Last day, resets Monday' : l + (l === 1 ? ' day' : ' days') + ' left, resets Monday'); }
+  function joinForm(editing) {
+    var m = S.me, nick = editing ? m.nickname : ((SETTINGS.name || '').trim().slice(0, 20));
+    return '<div class="lb-card">' + (editing ? '' : '<div class="lb-ic">' + ICON.trophy + '</div><h3>Compete with friends</h3><p>Your score is how much of your day you complete: water, to-dos, food, sleep and medicines. Only your nickname and weekly points are shared. Your entries stay private.</p>') +
+      '<label class="field-label" for="lb-nick">Nickname</label><input id="lb-nick" class="lb-field" maxlength="20" autocomplete="off" placeholder="2 to 20 letters" value="' + esc(nick || '') + '" />' +
+      '<div class="lb-opt"><span><b>Show me as Anonymous</b><small>Others see a random animal name, not your nickname.</small></span><label class="switch"><input type="checkbox" id="lb-anon"' + (editing && m.anonymous ? ' checked' : '') + '><span></span></label></div>' +
+      '<div class="lb-opt"><span><b>Appear on the global board</b><small>Turn off to compete only inside your groups.</small></span><label class="switch"><input type="checkbox" id="lb-glob"' + (!editing || m.in_global ? ' checked' : '') + '><span></span></label></div>' +
+      '<button class="lb-btn" id="lb-save" type="button">' + (editing ? 'Save' : 'Join the leaderboard') + '</button>' +
+      (editing ? '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-cancel" type="button">Cancel</button><button class="lb-btn danger row" id="lb-leave" type="button">Leave leaderboard</button></div>' : '') + '</div>' + how();
+  }
+  function how() { return '<details class="lb-how"><summary>How points work</summary><div>Each day is scored out of 100 by how much you completed. A full week is up to 700.<table><tr><td>Water goal</td><td>30</td></tr><tr><td>To-dos due that day</td><td>25</td></tr><tr><td>Food logged (3 meals)</td><td>15</td></tr><tr><td>Sleep logged</td><td>15</td></tr><tr><td>Medicines logged</td><td>15</td></tr></table>Parts you do not use do not count against you. To-dos only count on days you had some. Scores are based on your own goals, so everyone competes fairly.</div></details>'; }
+  function hero(rows) {
+    var me = rows.filter(function (r) { return r.is_me; })[0]; if (!me) return '';
+    var i = rows.indexOf(me), above = i > 0 ? rows[i - 1] : null, below = rows[i + 1] || null, gap;
+    if (me.rank === 1 && rows.length > 1) gap = 'You are leading by ' + Math.max(0, me.points - (below ? below.points : 0)) + ' points. Keep it going.';
+    else if (me.rank === 1) gap = 'You are the first one here. Invite a friend to compete.';
+    else gap = Math.max(1, above.points - me.points + 1) + ' points to pass ' + esc(above.name) + '.';
+    var w = weekScore(), spark = '';
+    for (var d = 0; d < 7; d++) spark += '<i class="' + (w.daily[d] === undefined ? 'off' : '') + '" style="height:' + (w.daily[d] === undefined ? 14 : Math.max(14, w.daily[d])) + '%"></i>';
+    return '<div class="lb-hero"><div class="lb-hero-top"><div class="lb-rank" aria-label="Rank ' + me.rank + '">' + me.rank + '<small>' + ord(me.rank) + '</small></div><div class="lb-hero-pts"><b data-count="' + me.points + '">' + me.points + '</b><span>points this week</span></div></div><div class="lb-gap">' + gap + '</div><div class="lb-spark" aria-hidden="true">' + spark + '</div><div class="lb-days" aria-hidden="true">' + DN.map(function (x) { return '<span>' + x + '</span>'; }).join('') + '</div></div>';
+  }
+  function podium(rows) {
+    if (rows.length < 3) return '';
+    var order = [rows[1], rows[0], rows[2]], H = { 1: 96, 2: 72, 3: 56 };
+    return '<div class="lb-podium" id="lb-podium">' + order.map(function (r, k) { var p = [2, 1, 3][k]; return '<div class="lb-pod p' + p + '">' + avatar(r) + '<div class="lb-pn">' + esc(r.name) + (r.is_me ? ' (you)' : '') + '</div><div class="lb-pp">' + r.points + ' pts</div><div class="lb-pb" style="--h:' + H[p] + 'px"><b>' + r.rank + '</b></div></div>'; }).join('') + '</div>';
+  }
+  function list(rows) {
+    var start = rows.length >= 3 ? 3 : 0, rest = rows.slice(start);
+    if (!rest.length) return '';
+    return '<ul class="lb-list">' + rest.map(function (r, i) { return '<li class="lb-row' + (r.is_me ? ' me' : '') + '" style="--i:' + Math.min(i, 8) + '"><span class="lb-rn">' + r.rank + '</span>' + avatar(r) + '<span class="lb-nm">' + esc(r.name) + (r.is_me ? '<em>You</em>' : '') + '</span>' + bars(r.daily, 'lb-mini') + '<span class="lb-pt">' + r.points + '</span></li>'; }).join('') + '</ul>';
+  }
+  function board(empty) {
+    if (S.loading) return '<ul class="lb-list"><li class="lb-skel"></li><li class="lb-skel"></li><li class="lb-skel"></li><li class="lb-skel"></li></ul>';
+    var rows = S.rows || [], h = S.err ? '<div class="lb-err">' + esc(S.err) + '</div>' : '';
+    if (!rows.length) return h + '<div class="lb-card"><p>' + empty + '</p></div>';
+    return h + hero(rows) + podium(rows) + list(rows);
+  }
+  function footer() { return '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-edit" type="button">Edit how I appear</button></div><p class="lb-note">Shown as <b>' + esc(S.me.anonymous ? 'Anonymous' : S.me.nickname) + '</b>' + (S.me.in_global ? ' on the global board.' : '. Hidden from the global board.') + '</p>' + how(); }
+  function groupsView() {
+    var chips = '<div class="lb-chips">' + S.groups.map(function (g) { return '<button type="button" data-g="' + g.id + '" class="' + (g.id === S.gid && !S.form ? 'on' : '') + '">' + esc(g.name) + '</button>'; }).join('') + '<button type="button" data-form="new" class="' + (S.form === 'new' ? 'on' : '') + '">New</button><button type="button" data-form="join" class="' + (S.form === 'join' ? 'on' : '') + '">Join with code</button></div>';
+    if (S.form === 'new') return chips + '<div class="lb-card"><h3>New group</h3><p>Make a group for your friends. You get a code to share.</p><input id="lb-gname" class="lb-field" maxlength="24" placeholder="Group name" /><button class="lb-btn" id="lb-gcreate" type="button">Create group</button></div>';
+    if (S.form === 'join') return chips + '<div class="lb-card"><h3>Join a group</h3><p>Type the 6 letter code your friend shared.</p><input id="lb-gcode" class="lb-field" maxlength="6" autocapitalize="characters" autocomplete="off" placeholder="ABC123" style="letter-spacing:.2em;text-transform:uppercase" /><button class="lb-btn" id="lb-gjoin" type="button">Join group</button></div>';
+    var g = S.groups.filter(function (x) { return x.id === S.gid; })[0];
+    if (!g) return chips + '<div class="lb-card"><div class="lb-ic">' + ICON.trophy + '</div><h3>Your own league</h3><p>Create a group for your friends or family, or join one with a code. Only people in the group see the group board.</p><button class="lb-btn" data-form="new" type="button">Create a group</button><button class="lb-btn ghost" data-form="join" type="button">I have a code</button></div>';
+    return chips + '<div class="lb-code"><span>Code <b>' + g.code + '</b><br>' + g.members + (g.members === 1 ? ' member' : ' members') + '</span><button type="button" id="lb-gshare">Invite</button></div>' + board('Nobody has scored yet this week.') + '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-gleave" type="button">Leave this group</button></div>';
+  }
+  function countUp() {
+    document.querySelectorAll('#lb-body [data-count]').forEach(function (el) {
+      var to = +el.dataset.count, t0 = performance.now(); if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      (function step(t) { var p = Math.min(1, (t - t0) / 700), e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * e); if (p < 1) requestAnimationFrame(step); })(t0);
+    });
+    var pod = $('lb-podium'); if (pod) requestAnimationFrame(function () { requestAnimationFrame(function () { pod.classList.add('go'); }); });
+  }
+  function draw() {
+    var m = $('lb-modal'); if (!m.classList.contains('open')) return;
+    weekLine(); var seg = $('lb-seg'); seg.dataset.active = S.tab;
+    seg.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === S.tab); });
+    var u = usr(), html;
+    if (!ready()) html = '<div class="lb-card"><div class="lb-ic">' + ICON.trophy + '</div><h3>Sign in first</h3><p>The leaderboard works with your Daily Log account. Sign in and get approved to join.</p></div>';
+    else if (!S.me.member) { html = joinForm(false); seg.hidden = true; }
+    else if (S.edit) html = joinForm(true);
+    else { seg.hidden = false; html = S.tab === 'global' ? (S.me.in_global ? board('Nobody on the global board yet. Be the first.') : '<div class="lb-card"><p>You are hidden from the global board. Open Edit how I appear to show up here, or compete in a group.</p></div>') + footer() : groupsView() + (S.gid ? '' : '') + (S.form ? '' : ''); }
+    if (S.me.member && !S.edit && S.tab === 'groups') html += '<p class="lb-note">Shown as <b>' + esc(S.me.anonymous ? 'Anonymous' : S.me.nickname) + '</b> in your groups.</p>';
+    var key = html.length + ':' + S.tab + S.gid + S.form + (S.rows ? S.rows.length : 0) + S.loading;
+    $('lb-body').innerHTML = html; countUp();
+  }
+  async function open() {
+    S.tab = 'global'; S.form = ''; S.edit = false; $('lb-modal').classList.add('open'); draw();
+    await loadMe(); await loadGroups(); draw(); if (S.me.member) loadBoard();
+  }
+  function msg(e) { return (e && e.message) ? e.message : 'Something went wrong'; }
+  // ---------- events ----------
+  document.addEventListener('click', async function (e) {
+    var t = e.target;
+    if (t.closest('#open-lb-btn')) { open(); return; }
+    if (t.closest('#set-lb-row')) { $('settings-modal').classList.remove('open'); setTimeout(open, 140); return; }
+    if (t.id === 'lb-close' || t.id === 'lb-modal') { $('lb-modal').classList.remove('open'); return; }
+    if (!t.closest('#lb-modal')) return;
+    var tab = t.closest('[data-tab]'); if (tab) { S.tab = tab.dataset.tab; S.form = ''; draw(); loadBoard(); return; }
+    var gb = t.closest('[data-g]'); if (gb) { S.gid = gb.dataset.g; S.form = ''; loadBoard(); return; }
+    var fb = t.closest('[data-form]'); if (fb) { S.form = fb.dataset.form; draw(); return; }
+    if (t.id === 'lb-edit') { S.edit = true; draw(); return; }
+    if (t.id === 'lb-cancel') { S.edit = false; draw(); return; }
+    if (t.id === 'lb-save') {
+      var nick = $('lb-nick').value.trim(); if (nick.length < 2) { showToast('Nickname needs 2 to 20 letters'); return; }
+      t.disabled = true;
+      var r = await sb().rpc('lb_join', { p_nick: nick, p_anon: $('lb-anon').checked, p_global: $('lb-glob').checked });
+      if (r.error) { t.disabled = false; showToast(/function|does not exist/i.test(msg(r.error)) ? 'Leaderboard SQL not run yet' : msg(r.error)); return; }
+      S.edit = false; await loadMe(); await submitNow(); await loadGroups(); showToast('You are on the leaderboard'); if (navigator.vibrate) navigator.vibrate(15); loadBoard(); return;
+    }
+    if (t.id === 'lb-leave') {
+      if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to leave'; return; }
+      await sb().rpc('lb_leave'); S.me = { member: false }; jset(MK, S.me); jset(CK, {}); S.groups = []; S.gid = null; S.edit = false; lastSub = ''; showToast('You left the leaderboard'); draw(); return;
+    }
+    if (t.id === 'lb-gcreate') {
+      var n = $('lb-gname').value.trim(); if (n.length < 2) { showToast('Give the group a name'); return; }
+      t.disabled = true; var r2 = await sb().rpc('lb_create_group', { p_name: n }); t.disabled = false;
+      if (r2.error) { showToast(msg(r2.error)); return; }
+      await loadGroups(); S.gid = r2.data && r2.data[0] ? r2.data[0].id : S.gid; S.form = ''; showToast('Group created. Share the code'); loadBoard(); return;
+    }
+    if (t.id === 'lb-gjoin') {
+      var c = $('lb-gcode').value.trim(); if (c.length < 6) { showToast('The code has 6 letters'); return; }
+      t.disabled = true; var r3 = await sb().rpc('lb_join_group', { p_code: c }); t.disabled = false;
+      if (r3.error) { showToast(msg(r3.error)); return; }
+      await loadGroups(); S.gid = r3.data && r3.data[0] ? r3.data[0].id : S.gid; S.form = ''; showToast('Joined the group'); loadBoard(); return;
+    }
+    if (t.id === 'lb-gleave') {
+      if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to leave'; return; }
+      await sb().rpc('lb_leave_group', { p_group: S.gid }); await loadGroups(); S.rows = null; showToast('Left the group'); loadBoard(); return;
+    }
+    if (t.id === 'lb-gshare') {
+      var g = S.groups.filter(function (x) { return x.id === S.gid; })[0]; if (!g) return;
+      var text = 'Join my Daily Log group "' + g.name + '". Open ' + SITE + ', tap the trophy, then Groups, Join with code, and enter ' + g.code + '.';
+      if (navigator.share) { try { await navigator.share({ title: 'Daily Log group', text: text }); } catch (er) {} }
+      else if (typeof copyText === 'function') { var ok = await copyText(text); showToast(ok ? 'Invite copied' : 'Could not copy'); }
+    }
+  });
+  // keep my score fresh
+  if (typeof renderMain === 'function') { var _r = renderMain; renderMain = function () { var x = _r.apply(this, arguments); if (window.__lbTouch) window.__lbTouch(); return x; }; }
+  document.addEventListener('visibilitychange', function () { if (document.hidden) submitNow(); });
+  setInterval(function () { if (S.me.member) submitNow(); }, 120000);
+  setTimeout(function () { loadMe().then(function () { if (S.me.member) { window.__lbTouch(); } }); }, 4000);
+})();
+</script>
+
+<script>
+(function () {
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function dd(k) { return new Date(k + 'T12:00:00'); }
+  function dkey(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function dayDiff(a, b) { return Math.round((dd(b) - dd(a)) / 864e5); }
+  function toMin(t) { var p = String(t || '0:0').split(':'); return (+p[0]) * 60 + (+p[1] || 0); }
+  function jget(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+  function jset(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  var MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+  var WD = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'], NUM = { a: 1, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7 };
+
+  // ---------- dates and times are worked out by code, not guessed by the AI ----------
+  function parseWhen(text) {
+    var t = ' ' + String(text || '').toLowerCase().replace(/[.,!?]/g, ' ') + ' ', today = getTodayKey(), out = { due: null, time: '', ambiguous: false }, m;
+    if ((m = t.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b(?!\s*[ap]\.?m)/))) out.time = pad(+m[1]) + ':' + m[2];
+    if (!out.time && (m = t.match(/\b(\d{1,2})(?::([0-5]\d))?\s*([ap])\.?m\b/))) { var h = +m[1] % 12; out.time = pad(m[3] === 'p' ? h + 12 : h) + ':' + (m[2] || '00'); }
+    if (!out.time && (m = t.match(/\b(?:at|by|@)\s*(\d{1,2})(?::([0-5]\d))?\b/)) && +m[1] >= 1 && +m[1] <= 12) { var hh = +m[1]; var h24 = hh === 12 ? 12 : (hh <= 6 ? hh + 12 : hh); out.time = pad(h24) + ':' + (m[2] || '00'); out.ambiguous = true; }
+    if (!out.time && /\bnoon\b/.test(t)) out.time = '12:00';
+    if (/\bday after tomorrow\b/.test(t)) out.due = shiftDateKey(today, 2);
+    else if (/\b(tomorrow|tmrw|tomo)\b/.test(t)) out.due = shiftDateKey(today, 1);
+    else if ((m = t.match(/\bin (\d+|a|an|one|two|three|four|five|six|seven) (day|week|month)s?\b/))) { var n = NUM[m[1]] || +m[1]; out.due = m[2] === 'day' ? shiftDateKey(today, n) : m[2] === 'week' ? shiftDateKey(today, 7 * n) : shiftDateKey(today, 30 * n); }
+    else if ((m = t.match(/\b(\d{1,2})(?:st|nd|rd|th)?(?: of)? (jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b/))) {
+      var y = dd(today).getFullYear(), cand = y + '-' + pad(MONTHS.indexOf(m[2]) + 1) + '-' + pad(+m[1]); if (cand < today) cand = (y + 1) + cand.slice(4); out.due = cand;
+    }
+    else if (/\bnext week\b/.test(t)) { var d0 = dd(today).getDay(); out.due = shiftDateKey(today, ((8 - d0) % 7) || 7); }
+    else if (/\b(this weekend|weekend)\b/.test(t)) { var ds = dd(today).getDay(); out.due = shiftDateKey(today, ds === 6 ? 0 : (6 - ds + 7) % 7); }
+    else if ((m = t.match(/\b(?:on|this|next|coming|by|before) (sun|mon|tue|wed|thu|fri|sat)[a-z]*\b/))) { var diff = (WD.indexOf(m[1]) - dd(today).getDay() + 7) % 7; out.due = shiftDateKey(today, diff || 7); }
+    else if (/\bnext month\b/.test(t)) { var dn = dd(today); out.due = dkey(new Date(dn.getFullYear(), dn.getMonth() + 1, 1)); }
+    else if (/\b(this month|end of (the )?month)\b/.test(t)) out.due = window.__todoDueFor('month');
+    else if (/\bthis week\b/.test(t)) out.due = window.__todoDueFor('week');
+    else if (/\b(today|tonight|this (morning|afternoon|evening)|later)\b/.test(t)) out.due = today;
+    return out;
+  }
+  window.__nlpParse = parseWhen;
+  function bucket(due) { var n = dayDiff(getTodayKey(), due); return n <= 0 ? 'today' : n === 1 ? 'tomorrow' : n <= 7 ? 'week' : n <= 14 ? '2weeks' : 'month'; }
+  window.__nlpFix = function (p, userText, n) {
+    var words = String(p.text || '').toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length >= 3; }), best = null, bs = 0;
+    String(userText || '').split(/,|;|\band\b|\bthen\b|\balso\b/i).forEach(function (cl) { var c = cl.toLowerCase(), sc = words.filter(function (w) { return c.indexOf(w) >= 0; }).length; if (sc > bs) { bs = sc; best = cl; } });
+    var r = parseWhen(best || (n === 1 ? userText : p.text));
+    if (r.due) {
+      p.due = r.due; p.when = bucket(r.due);
+      if (p.cat === 'reminder' && (p.repeat === 'today' || p.repeat === 'tomorrow')) { var dn = dayDiff(getTodayKey(), r.due); p.repeat = dn <= 0 ? 'today' : dn === 1 ? 'tomorrow' : p.repeat; if (dn > 1) p.once = true; }
+    }
+    if (r.time) { var aiH = p.time ? toMin(p.time) / 60 | 0 : -1; if (!(r.ambiguous && aiH >= 0 && aiH % 12 === (toMin(r.time) / 60 | 0) % 12)) p.time = r.time; }
+    return p;
+  };
+  function friendly(due) {
+    var n = dayDiff(getTodayKey(), due); if (n <= 0) return 'today'; if (n === 1) return 'tomorrow';
+    var d = dd(due); return n <= 6 ? ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][d.getDay()] : d.getDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()];
+  }
+  var REP = { daily: 'every day', weekdays: 'weekdays', weekends: 'weekends', today: 'today only', tomorrow: 'tomorrow only' };
+  window.__propLabel = function (p) {
+    if (p.cat === 'todo') return 'To-do · ' + (p.due ? friendly(p.due) : window.__todoLabel(p.when)) + (p.time ? ' · ' + p.time : '');
+    return 'Reminder · ' + p.time + ' · ' + (p.due ? friendly(p.due) : (REP[p.repeat] || 'every day')) + (p.replaces ? ' · changes "' + p.replaces + '"' : '');
+  };
+
+  // ---------- reminders created from chat show up in Settings and in the alert schedule ----------
+  function rem() { var r = SETTINGS.reminders = SETTINGS.reminders || {}; r.water = r.water || { on: true, mode: 'smart' }; r.custom = r.custom || []; return r; }
+  function alertsOn() { return ('Notification' in window) && Notification.permission === 'granted'; }
+  window.__remAdd = function (p) {
+    var once = p.repeat === 'today' || p.repeat === 'tomorrow' || p.due || p.once;
+    if (once) {
+      var due = p.due || (p.repeat === 'tomorrow' ? shiftDateKey(getTodayKey(), 1) : getTodayKey());
+      window.__todoAdd(p.text, 'today', p.time, due);
+      showToast(alertsOn() ? 'Reminder set for ' + p.time : 'Saved. Turn on alerts in Settings > Reminders to get notified'); return;
+    }
+    var days = p.repeat === 'weekdays' ? [1, 2, 3, 4, 5] : p.repeat === 'weekends' ? [0, 6] : [], r = rem(), key = (p.replaces || p.text).toLowerCase();
+    var ex = r.custom.filter(function (x) { var l = (x.label || '').toLowerCase(); return l === key || l.indexOf(key) >= 0 || key.indexOf(l) >= 0; })[0];
+    if (ex) { ex.time = p.time; ex.days = days; ex.on = true; if (p.replaces) ex.label = p.text; }
+    else r.custom.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 4), label: p.text, time: p.time, days: days, on: true });
+    saveSettings(); if (window.__remRedraw) window.__remRedraw(); if (window.__schedSoon) window.__schedSoon();
+    showToast(ex ? 'Reminder updated' : (alertsOn() ? 'Reminder added' : 'Added. Turn on alerts in Settings > Reminders to get notified'));
+  };
+  var SK = 'daily_log_remsug_skip_v1';
+  window.__remSkip = function (p) { if (!p.suggest) return; var m = jget(SK) || {}; m[p.suggest] = Date.now(); jset(SK, m); };
+
+  // ---------- the AI learns your own words and what is already set ----------
+  window.__aiCtx = function () {
+    var t = getTodayKey(), freq = {}, out = [];
+    for (var i = 0; i < 30; i++) getDayEntries(shiftDateKey(t, -i)).forEach(function (e) {
+      if (['food', 'medicines', 'fibre'].indexOf(e.cat) < 0) return; var k = e.cat + '|' + e.text.toLowerCase().trim().slice(0, 40); freq[k] = (freq[k] || 0) + 1;
+    });
+    var by = {}; Object.keys(freq).sort(function (a, b) { return freq[b] - freq[a]; }).forEach(function (k) { var c = k.split('|')[0]; (by[c] = by[c] || []); if (by[c].length < 6 && freq[k] >= 2) by[c].push(k.split('|')[1]); });
+    var u = Object.keys(by).filter(function (c) { return by[c].length; }).map(function (c) { return c + ': ' + by[c].join(', '); });
+    if (u.length) out.push('USUAL ITEMS (the user\'s own words, reuse these names): ' + u.join(' | '));
+    var r = rem(), dn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    out.push('REMINDERS SET:\n' + (r.custom.length ? r.custom.map(function (x) { return '- ' + x.label + ' at ' + x.time + ' ' + (x.days && x.days.length ? x.days.map(function (d) { return dn[d]; }).join(',') : 'every day') + (x.on === false ? ' (off)' : ''); }).join('\n') : '(none)'));
+    return out.join('\n');
+  };
+
+  // ---------- spot a habit and offer a reminder (works without AI) ----------
+  function norm(tx) { return String(tx || '').toLowerCase().replace(/\b\d+(\.\d+)?\s*(mg|mcg|g|ml|iu|tablets?|tabs?|caps?|capsules?)?\b/g, '').replace(/\b(took|taken|had|my|the|a|one|two|tablet|pill|capsule|supplement)\b/g, '').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function suggest() {
+    var skip = jget(SK) || {}, t = getTodayKey(), by = {}, r = rem();
+    for (var i = 0; i < 7; i++) { var k = shiftDateKey(t, -i); getDayEntries(k).forEach(function (e) {
+      if (e.cat !== 'medicines' || /not taken|skipped|missed|forgot/i.test(e.text)) return;
+      var n = norm(e.text); if (n.length < 3) return; var o = by[n] = by[n] || { days: {}, mins: [], raw: e.text }; o.days[k] = 1; o.mins.push(toMin(e.time));
+    }); }
+    var keys = Object.keys(by).filter(function (n) { return Object.keys(by[n].days).length >= 3 && !(skip[n] && Date.now() - skip[n] < 14 * 864e5) && !r.custom.some(function (x) { var l = (x.label || '').toLowerCase(); return l.indexOf(n) >= 0 || n.indexOf(l) >= 0; }); });
+    if (!keys.length) return null;
+    var n = keys[0], mins = by[n].mins.sort(function (a, b) { return a - b; }), med = mins[Math.floor(mins.length / 2)], m5 = Math.round(med / 5) * 5, label = n.split(' ').slice(0, 3).map(function (w) { return w.length === 1 ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1); }).join(' ');
+    return { key: n, label: label, time: pad(Math.floor(m5 / 60) % 24) + ':' + pad(m5 % 60) };
+  }
+  window.__remSuggest = suggest;
+  document.getElementById('open-chat-btn').addEventListener('click', function () {
+    try {
+      if (chatHistory.length) return; var sg = suggest(); if (!sg) return;
+      chatHistory.push({ role: 'model', local: true, text: 'I noticed you take ' + sg.label + ' around ' + sg.time + ' on most days. Want a daily reminder for it?', proposals: [{ cat: 'reminder', text: sg.label, time: sg.time, repeat: 'daily', replaces: '', suggest: sg.key, day: 'today', status: 'pending' }] });
+      renderChat();
+    } catch (e) {}
+  });
+
+  // ---------- tap a proposal line to fix it before adding ----------
+  document.addEventListener('click', function (e) {
+    var tx = e.target.closest && e.target.closest('#chat-log .prop.editable .prop-text'); if (!tx) return;
+    var btn = tx.closest('.prop').querySelector('[data-act="add"]'); if (!btn) return;
+    var pr = chatHistory[+btn.dataset.m] && chatHistory[+btn.dataset.m].proposals[+btn.dataset.p]; if (!pr) return;
+    var inp = document.createElement('input'); inp.className = 'prop-edit'; inp.value = pr.text; inp.maxLength = 140; tx.replaceWith(inp); inp.focus(); inp.select();
+    function done() { var v = inp.value.trim(); if (v) pr.text = v; var d = document.createElement('div'); d.className = 'prop-text'; d.textContent = pr.text; if (inp.parentNode) inp.replaceWith(d); }
+    inp.addEventListener('blur', done); inp.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); inp.blur(); } });
+  });
 })();
 </script>
 </body>
