@@ -88,7 +88,7 @@ returns table(rank int, name text, anon boolean, points int, daily int[], perfec
 language sql security definer set search_path = public as $fn$
   select * from (
     select (rank() over (order by s.points desc, s.perfect desc))::int as rank,
-           lb_name(m.user_id, m.nickname, m.anonymous), m.anonymous, s.points, s.daily, s.perfect, (m.user_id = auth.uid())
+           lb_name(m.user_id, m.nickname, m.anonymous) as name, m.anonymous as anon, s.points as points, s.daily as daily, s.perfect as perfect, (m.user_id = auth.uid()) as is_me
     from lb_members m join lb_scores s on s.user_id = m.user_id and s.week = p_week
     where is_approved() and (m.in_global or m.user_id = auth.uid())
   ) t where t.rank <= 50 or t.is_me order by t.rank, t.name;
