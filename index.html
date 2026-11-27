@@ -903,7 +903,17 @@
     .lb-btn:active { transform: scale(0.97); transition-duration: 90ms; } .lb-btn:disabled { opacity: 0.5; }
     .lb-btn.ghost { background: transparent; color: var(--forest); border: 1px solid rgba(64,81,59,0.35); }
     .lb-btn.danger { background: rgba(164,86,42,0.12); color: #8a4519; }
-    .lb-btn.row { width: auto; flex: 1; margin-top: 0; }
+    .lb-btn.row { width: auto; flex: 1; margin-top: 0; min-width: 0; padding: 0 10px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px; line-height: 1.15; letter-spacing: -0.01em; }
+    @keyframes pulseGo { 0%,100% { transform: scale(1); } 40% { transform: scale(1.025); } }
+    .tank.pulse-go { animation: pulseGo 700ms ease-in-out 2; }
+    @media (prefers-reduced-motion: reduce) { .tank.pulse-go { animation: none; } }
+    .lb-note-sm { margin: 8px 2px 0; font-size: 13px; color: var(--moss); line-height: 1.35; }
+    .inv-card { text-align: center; padding: 6px 4px 2px; }
+    .inv-card .lb-ic { margin: 4px auto 14px; }
+    .inv-card h3 { margin: 0 0 6px; font-size: 22px; color: var(--forest); line-height: 1.2; }
+    .inv-card p { margin: 0 0 14px; font-size: 15px; color: var(--ink); line-height: 1.45; }
+    .inv-card .lb-field, .inv-card .lb-opt { text-align: left; }
+    .inv-meta { display: inline-block; margin: 0 0 14px; padding: 6px 12px; border-radius: 14px; background: rgba(64,81,59,0.08); color: var(--moss); font-size: 13px; font-weight: 700; }
     .lb-pair { display: flex; gap: 8px; margin-top: 8px; }
     .lb-chips { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 2px; scrollbar-width: none; }
     .lb-chips::-webkit-scrollbar { display: none; }
@@ -1134,6 +1144,13 @@
     </div>
   </div>
 
+  <!-- GROUP INVITE (opened by an invite link) -->
+  <div id="inv-modal" class="overlay">
+    <div class="sheet lb-sheet" role="dialog" aria-modal="true" aria-label="Group invite">
+      <div id="inv-body"></div>
+    </div>
+  </div>
+
   <!-- TO-DO MODAL -->
   <div id="todo-modal" class="overlay">
     <div class="sheet todo-sheet" role="dialog" aria-modal="true" aria-label="To-do list">
@@ -1192,7 +1209,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 35</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 36</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -5115,7 +5132,7 @@
       '<div class="lb-opt"><span><b>Show me as Anonymous</b><small>Others see a random animal name, not your nickname.</small></span><label class="switch"><input type="checkbox" id="lb-anon"' + (editing && m.anonymous ? ' checked' : '') + '><span></span></label></div>' +
       '<div class="lb-opt"><span><b>Appear on the global board</b><small>Turn off to compete only inside your groups.</small></span><label class="switch"><input type="checkbox" id="lb-glob"' + (!editing || m.in_global ? ' checked' : '') + '><span></span></label></div>' +
       '<button class="lb-btn" id="lb-save" type="button">' + (editing ? 'Save' : 'Join the leaderboard') + '</button>' +
-      (editing ? '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-cancel" type="button">Cancel</button><button class="lb-btn danger row" id="lb-leave" type="button">Leave leaderboard</button></div>' : '') + '</div>' + how();
+      (editing ? '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-cancel" type="button">Cancel</button><button class="lb-btn danger row" id="lb-leave" type="button">Delete my profile</button></div><p class="lb-note-sm">Delete my profile removes you from the global board and from all your groups.</p>' : '') + '</div>' + how();
   }
   function how() { return '<details class="lb-how"><summary>How points work</summary><div>Each day is scored out of 100 by how much you completed. A full week is up to 700.<table><tr><td>Water goal</td><td>30</td></tr><tr><td>To-dos due that day</td><td>25</td></tr><tr><td>Food logged (3 meals)</td><td>15</td></tr><tr><td>Sleep logged</td><td>15</td></tr><tr><td>Medicines logged</td><td>15</td></tr></table>Parts you do not use do not count against you. To-dos only count on days you had some. Scores are based on your own goals, so everyone competes fairly.</div></details>'; }
   function hero(rows) {
@@ -5144,14 +5161,14 @@
     if (!rows.length) return h + '<div class="lb-card"><p>' + empty + '</p></div>';
     return h + hero(rows) + podium(rows) + list(rows);
   }
-  function footer() { return '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-edit" type="button">Edit how I appear</button><button class="lb-btn danger row" id="lb-leave" type="button">Remove me from the leaderboard</button></div><p class="lb-note">Shown as <b>' + esc(S.me.anonymous ? 'Anonymous' : S.me.nickname) + '</b>' + (S.me.in_global ? ' on the global board.' : '. Hidden from the global board.') + '</p>' + how(); }
+  function footer() { return '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-edit" type="button">Edit my name</button>' + (S.me.in_global ? '<button class="lb-btn danger row" id="lb-gl-off" type="button">Leave global board</button>' : '<button class="lb-btn row" id="lb-gl-on" type="button">Join global board</button>') + '</div><p class="lb-note">Shown as <b>' + esc(S.me.anonymous ? 'Anonymous' : S.me.nickname) + '</b>' + (S.me.in_global ? ' on the global board.' : '. Hidden from the global board.') + '</p>' + how(); }
   function groupsView() {
     var chips = '<div class="lb-chips">' + S.groups.map(function (g) { return '<button type="button" data-g="' + g.id + '" class="' + (g.id === S.gid && !S.form ? 'on' : '') + '">' + esc(g.name) + '</button>'; }).join('') + '<button type="button" data-form="new" class="' + (S.form === 'new' ? 'on' : '') + '">New</button><button type="button" data-form="join" class="' + (S.form === 'join' ? 'on' : '') + '">Join with code</button></div>';
     if (S.form === 'new') return chips + '<div class="lb-card"><h3>New group</h3><p>Make a group for your friends. You get a code to share.</p><input id="lb-gname" class="lb-field" maxlength="24" placeholder="Group name" /><button class="lb-btn" id="lb-gcreate" type="button">Create group</button></div>';
     if (S.form === 'join') return chips + '<div class="lb-card"><h3>Join a group</h3><p>Type the 6 letter code your friend shared.</p><input id="lb-gcode" class="lb-field" maxlength="6" autocapitalize="characters" autocomplete="off" placeholder="ABC123" style="letter-spacing:.2em;text-transform:uppercase" /><button class="lb-btn" id="lb-gjoin" type="button">Join group</button></div>';
     var g = S.groups.filter(function (x) { return x.id === S.gid; })[0];
     if (!g) return chips + '<div class="lb-card"><div class="lb-ic">' + ICON.trophy + '</div><h3>Your own league</h3><p>Create a group for your friends or family, or join one with a code. Only people in the group see the group board.</p><button class="lb-btn" data-form="new" type="button">Create a group</button><button class="lb-btn ghost" data-form="join" type="button">I have a code</button></div>';
-    return chips + '<div class="lb-code"><span>Code <b>' + g.code + '</b><br>' + g.members + (g.members === 1 ? ' member' : ' members') + '</span><button type="button" id="lb-gshare">Invite</button></div>' + board('Nobody has scored yet this week.') + '<div class="lb-pair"><button class="lb-btn ghost row" id="lb-gleave" type="button">Leave this group</button></div>';
+    return chips + '<div class="lb-code"><span>Code <b>' + g.code + '</b><br>' + g.members + (g.members === 1 ? ' member' : ' members') + '</span><button type="button" id="lb-gshare">Invite</button></div>' + board('Nobody has scored yet this week.') + '<div class="lb-pair"><button class="lb-btn danger row" id="lb-gleave" type="button">Leave this group</button></div>';
   }
   function countUp() {
     document.querySelectorAll('#lb-body [data-count]').forEach(function (el) {
@@ -5168,7 +5185,7 @@
     if (!ready()) html = '<div class="lb-card"><div class="lb-ic">' + ICON.trophy + '</div><h3>Sign in first</h3><p>The leaderboard works with your Daily Log account. Sign in and get approved to join.</p></div>';
     else if (!S.me.member) { html = joinForm(false); seg.hidden = true; }
     else if (S.edit) html = joinForm(true);
-    else { seg.hidden = false; html = S.tab === 'global' ? (S.me.in_global ? board('Nobody on the global board yet. Be the first.') : '<div class="lb-card"><p>You are hidden from the global board. Open Edit how I appear to show up here, or compete in a group.</p></div>') + footer() : groupsView() + (S.gid ? '' : '') + (S.form ? '' : ''); }
+    else { seg.hidden = false; html = S.tab === 'global' ? (S.me.in_global ? board('Nobody on the global board yet. Be the first.') : '<div class="lb-card"><p>You are not on the global board. Your groups are not affected. Tap Join global board below to appear here.</p></div>') + footer() : groupsView() + (S.gid ? '' : '') + (S.form ? '' : ''); }
     if (S.me.member && !S.edit && S.tab === 'groups') html += '<p class="lb-note">Shown as <b>' + esc(S.me.anonymous ? 'Anonymous' : S.me.nickname) + '</b> in your groups.</p>';
     var key = html.length + ':' + S.tab + S.gid + S.form + (S.rows ? S.rows.length : 0) + S.loading;
     $('lb-body').innerHTML = html; countUp();
@@ -5189,6 +5206,15 @@
     var gb = t.closest('[data-g]'); if (gb) { S.gid = gb.dataset.g; S.form = ''; loadBoard(); return; }
     var fb = t.closest('[data-form]'); if (fb) { S.form = fb.dataset.form; draw(); return; }
     if (t.id === 'lb-edit') { S.edit = true; draw(); return; }
+    if (t.id === 'lb-gl-off') {
+      if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again'; setTimeout(function () { if (t.isConnected) { t.dataset.sure = ''; t.textContent = 'Leave global board'; } }, 3000); return; }
+      var ro = await sb().rpc('lb_set_global', { p_global: false }); if (ro.error) { showToast(/function|does not exist/i.test(msg(ro.error)) ? 'Run the new leaderboard SQL first' : msg(ro.error)); return; }
+      S.me.in_global = false; jset(MK, S.me); S.rows = null; showToast('You left the global board. Groups are not changed'); draw(); return;
+    }
+    if (t.id === 'lb-gl-on') {
+      var rn = await sb().rpc('lb_set_global', { p_global: true }); if (rn.error) { showToast(msg(rn.error)); return; }
+      S.me.in_global = true; jset(MK, S.me); showToast('You are on the global board'); draw(); loadBoard(); return;
+    }
     if (t.id === 'lb-cancel') { S.edit = false; draw(); return; }
     if (t.id === 'lb-save') {
       var nick = $('lb-nick').value.trim(); if (nick.length < 2) { showToast('Nickname needs 2 to 20 letters'); return; }
@@ -5198,7 +5224,7 @@
       S.edit = false; await loadMe(); await submitNow(); await loadGroups(); showToast('You are on the leaderboard'); if (navigator.vibrate) navigator.vibrate(15); loadBoard(); return;
     }
     if (t.id === 'lb-leave') {
-      if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to leave'; return; }
+      if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again'; return; }
       await sb().rpc('lb_leave'); S.me = { member: false }; jset(MK, S.me); jset(CK, {}); S.groups = []; S.gid = null; S.edit = false; lastSub = ''; showToast('You left the leaderboard'); draw(); return;
     }
     if (t.id === 'lb-gcreate') {
@@ -5214,12 +5240,12 @@
       await loadGroups(); S.gid = r3.data && r3.data[0] ? r3.data[0].id : S.gid; S.form = ''; showToast('Joined the group'); loadBoard(); return;
     }
     if (t.id === 'lb-gleave') {
-      if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again to leave'; return; }
+      if (t.dataset.sure !== '1') { t.dataset.sure = '1'; t.textContent = 'Tap again'; return; }
       await sb().rpc('lb_leave_group', { p_group: S.gid }); await loadGroups(); S.rows = null; showToast('Left the group'); loadBoard(); return;
     }
     if (t.id === 'lb-gshare') {
       var g = S.groups.filter(function (x) { return x.id === S.gid; })[0]; if (!g) return;
-      var text = 'Join my Daily Log group "' + g.name + '". Open ' + SITE + ', tap the trophy, then Groups, Join with code, and enter ' + g.code + '.';
+      var link = SITE + '/?join=' + g.code, text = 'Join my Daily Log group "' + g.name + '". Tap the link to open it in the app: ' + link + ' (code ' + g.code + ')';
       if (navigator.share) { try { await navigator.share({ title: 'Daily Log group', text: text }); } catch (er) {} }
       else if (typeof copyText === 'function') { var ok = await copyText(text); showToast(ok ? 'Invite copied' : 'Could not copy'); }
     }
@@ -5229,6 +5255,108 @@
   document.addEventListener('visibilitychange', function () { if (document.hidden) submitNow(); });
   setInterval(function () { if (S.me.member) submitNow(); }, 120000);
   setTimeout(function () { loadMe().then(function () { if (S.me.member) { window.__lbTouch(); } }); }, 4000);
+  window.__lbApi = { S: S, open: open, loadMe: loadMe, loadGroups: loadGroups, loadBoard: loadBoard, submitNow: submitNow, draw: draw, msg: msg };
+})();
+</script>
+
+<script>
+// ---------- deep links: invite links, notification taps, home screen shortcuts ----------
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var PK = 'daily_log_pending_join_v1', busy = false;
+  function sb() { return window.__auth && window.__auth.sb(); }
+  function me() { return window.__auth && window.__auth.me(); }
+  function esc(t) { return typeof escapeHtml === 'function' ? escapeHtml(t) : String(t); }
+  function closeAll() { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); }
+  function wait(test, ms, cb) { var t0 = Date.now(); (function tick() { var r = test(); if (r) return cb(r); if (Date.now() - t0 > ms) return cb(null); setTimeout(tick, 250); })(); }
+
+  // where a link or notification should land
+  function go(target) {
+    target = String(target || '').toLowerCase();
+    var open = {
+      todo: function () { closeAll(); if (window.__todoOpen) window.__todoOpen(); },
+      leaderboard: function () { closeAll(); if (window.__lb) window.__lbApi.open(); },
+      chat: function () { closeAll(); var b = $('open-chat-btn'); if (b) b.click(); },
+      reminders: function () { closeAll(); var b = $('set-rem-row'); if (b) b.click(); },
+      settings: function () { closeAll(); var b = $('open-settings-btn'); if (b) b.click(); },
+      water: function () { closeAll(); window.scrollTo({ top: 0, behavior: 'smooth' }); var t = document.querySelector('.tank'); if (t) { t.classList.add('pulse-go'); setTimeout(function () { t.classList.remove('pulse-go'); }, 1400); } }
+    }[target];
+    if (open) wait(function () { return window.__todoOpen && window.__lbApi && document.readyState !== 'loading'; }, 6000, function () { open(); });
+  }
+  window.__go = go;
+
+  // the invite sheet
+  function sheet(html) { $('inv-body').innerHTML = html; $('inv-modal').classList.add('open'); }
+  function clearPending() { try { localStorage.removeItem(PK); } catch (e) {} }
+  function pending() { try { return localStorage.getItem(PK) || ''; } catch (e) { return ''; } }
+  function close() { $('inv-modal').classList.remove('open'); }
+
+  async function showInvite(code) {
+    if (busy) return; busy = true;
+    try {
+      var u = me();
+      if (!sb() || !u) {
+        sheet('<div class="inv-card"><div class="lb-ic">' + trophy() + '</div><h3>Sign in to see this invite</h3><p>Someone invited you to a Daily Log group. Sign in with Google and get approved, then it opens here.</p><button class="lb-btn ghost" id="inv-no" type="button">Close</button></div>'); return;
+      }
+      if (u.status !== 'approved') {
+        sheet('<div class="inv-card"><div class="lb-ic">' + trophy() + '</div><h3>Waiting for approval</h3><p>Once your account is approved, this group invite will open for you.</p><button class="lb-btn ghost" id="inv-no" type="button">Close</button></div>'); return;
+      }
+      var r = await sb().rpc('lb_group_peek', { p_code: code });
+      if (r.error) { sheet('<div class="inv-card"><h3>Could not open the invite</h3><p>' + esc(/function|does not exist/i.test(r.error.message || '') ? 'The leaderboard SQL has not been updated yet.' : (r.error.message || 'Try again in a moment.')) + '</p><button class="lb-btn ghost" id="inv-no" type="button">Close</button></div>'); return; }
+      var g = r.data && r.data[0];
+      if (!g) { clearPending(); sheet('<div class="inv-card"><h3>This invite is not valid</h3><p>The group code ' + esc(code) + ' was not found. Ask your friend for a new link.</p><button class="lb-btn ghost" id="inv-no" type="button">Close</button></div>'); return; }
+      var lb = window.__lbApi; if (lb) await lb.loadMe();
+      var member = lb && lb.S.me && lb.S.me.member;
+      var meta = '<span class="inv-meta">' + g.members + (g.members === 1 ? ' member' : ' members') + ' · weekly leaderboard</span>';
+      if (g.joined) { clearPending(); sheet('<div class="inv-card"><div class="lb-ic">' + trophy() + '</div><h3>You are already in ' + esc(g.name) + '</h3>' + meta + '<button class="lb-btn" id="inv-open" data-g="' + g.id + '" type="button">Open the group</button></div>'); return; }
+      if (g.is_full) { clearPending(); sheet('<div class="inv-card"><h3>' + esc(g.name) + ' is full</h3><p>This group has 50 people already.</p><button class="lb-btn ghost" id="inv-no" type="button">Close</button></div>'); return; }
+      var nick = ((window.SETTINGS && SETTINGS.name) || '').trim().slice(0, 20);
+      var form = member ? '<p class="lb-note-sm" style="text-align:center">You will join as <b>' + esc(lb.S.me.anonymous ? 'Anonymous' : lb.S.me.nickname) + '</b>.</p>' :
+        '<label class="field-label" for="inv-nick" style="text-align:left;display:block">Your nickname</label><input id="inv-nick" class="lb-field" maxlength="20" autocomplete="off" placeholder="2 to 20 letters" value="' + esc(nick) + '" />' +
+        '<div class="lb-opt"><span><b>Show me as Anonymous</b><small>Group members see a random animal name.</small></span><label class="switch"><input type="checkbox" id="inv-anon"><span></span></label></div>' +
+        '<p class="lb-note-sm" style="text-align:center">Only this group sees you. You are not added to the global board.</p>';
+      sheet('<div class="inv-card" data-code="' + esc(g.code) + '"><div class="lb-ic">' + trophy() + '</div><h3>' + esc(g.inviter) + ' invited you to ' + esc(g.name) + '</h3>' + meta + form + '<button class="lb-btn" id="inv-yes" type="button">Join group</button><button class="lb-btn ghost" id="inv-no" data-decline="1" type="button">Not now</button></div>');
+    } finally { busy = false; }
+  }
+  function trophy() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2"/><path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2"/><path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3"/><path d="M4 22h16"/><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/><path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3"/></svg>'; }
+
+  document.addEventListener('click', async function (e) {
+    var t = e.target.closest ? e.target.closest('button') : null; if (!t || !t.closest('#inv-modal')) { if (e.target.id === 'inv-modal') close(); return; }
+    if (t.id === 'inv-no') { if (t.dataset.decline) { clearPending(); } close(); return; }
+    if (t.id === 'inv-open') { var gid = t.dataset.g; close(); var lb = window.__lbApi; if (lb) { lb.S.tab = 'groups'; lb.S.gid = gid; await lb.open(); lb.S.tab = 'groups'; lb.S.gid = gid; lb.S.form = ''; lb.draw(); lb.loadBoard(); } return; }
+    if (t.id === 'inv-yes') {
+      var card = t.closest('.inv-card'), code = card.dataset.code, lb2 = window.__lbApi, nk = $('inv-nick');
+      t.disabled = true;
+      try {
+        if (nk) {
+          var nick = nk.value.trim(); if (nick.length < 2) { showToast('Nickname needs 2 to 20 letters'); t.disabled = false; return; }
+          var j = await sb().rpc('lb_join', { p_nick: nick, p_anon: $('inv-anon').checked, p_global: false });
+          if (j.error) { showToast(j.error.message || 'Could not join'); t.disabled = false; return; }
+        }
+        var r = await sb().rpc('lb_join_group', { p_code: code });
+        if (r.error) { showToast(r.error.message || 'Could not join'); t.disabled = false; return; }
+        clearPending(); close(); if (navigator.vibrate) navigator.vibrate(15);
+        showToast('You joined the group');
+        await lb2.loadMe(); await lb2.loadGroups(); if (lb2.submitNow) lb2.submitNow();
+        var gid2 = r.data && r.data[0] ? r.data[0].id : null;
+        lb2.S.tab = 'groups'; lb2.S.form = ''; lb2.S.edit = false; await lb2.open(); lb2.S.tab = 'groups'; if (gid2) lb2.S.gid = gid2; lb2.draw(); lb2.loadBoard();
+      } catch (er) { t.disabled = false; showToast('Could not join. Try again'); }
+    }
+  });
+
+  // read the link we were opened with
+  function fromUrl() {
+    var q = new URLSearchParams(location.search), j = (q.get('join') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6), g = q.get('go');
+    if (j.length === 6) { try { localStorage.setItem(PK, j); } catch (e) {} }
+    if (j || g || q.has('join') || q.has('go')) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {} }
+    return g;
+  }
+  var goAfter = fromUrl();
+  function resumeInvite() { var c = pending(); if (c) wait(function () { var u = me(); return window.__lbApi && sb() && u; }, 20000, function (ok) { if (ok) showInvite(c); else if (pending()) showInvite(c); }); }
+  window.addEventListener('load', function () { setTimeout(function () { if (goAfter) go(goAfter); resumeInvite(); }, 400); });
+  // a notification tapped while the app was already open
+  if (navigator.serviceWorker) navigator.serviceWorker.addEventListener('message', function (e) { var d = e.data || {}; if (d.type === 'go' && d.go) go(d.go); });
+  window.__showInvite = showInvite;
 })();
 </script>
 

@@ -1,6 +1,6 @@
 // Daily Log service worker: lets the app open offline.
 // Network first (so new versions show up), cache as backup.
-const CACHE = 'daily-log-v35';
+const CACHE = 'daily-log-v36';
 const FILES = ['./', './index.html', './gsap.min.js', './ScrollTrigger.min.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './badge-96.png'];
 
 self.addEventListener('install', e => {
@@ -35,18 +35,31 @@ self.addEventListener('fetch', e => {
   );
 });
 
-// Alerts (web push)
+// Alerts (web push). Each alert opens the part of the app it is about.
+function targetFor(d) {
+  if (d.go) return d.go;
+  const tag = String(d.tag || '');
+  if (tag === 'water') return 'water';
+  if (tag.startsWith('todo') || /^t\d/.test(tag)) return 'todo';
+  if (/^c\d/.test(tag)) return 'reminders';
+  if (tag.startsWith('lb')) return 'leaderboard';
+  return '';
+}
 self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (_) {}
+  const go = targetFor(d);
   e.waitUntil(self.registration.showNotification(d.title || 'Daily Log', {
-    body: d.body || '', icon: 'icon-192.png', badge: 'badge-96.png', tag: d.tag || undefined, data: { url: './' }
+    body: d.body || '', icon: 'icon-192.png', badge: 'badge-96.png', tag: d.tag || undefined, data: { go }
   }));
 });
 self.addEventListener('notificationclick', e => {
   e.notification.close();
+  const go = (e.notification.data && e.notification.data.go) || '';
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-    for (const c of list) { if ('focus' in c) return c.focus(); }
-    return self.clients.openWindow('./');
+    for (const c of list) {
+      if ('focus' in c) { if (go) c.postMessage({ type: 'go', go }); return c.focus(); }
+    }
+    return self.clients.openWindow(go ? './?go=' + encodeURIComponent(go) : './');
   }));
 });

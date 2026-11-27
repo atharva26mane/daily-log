@@ -146,5 +146,22 @@ create or replace function lb_leave_group(p_group uuid) returns void language sq
   delete from lb_group_members where group_id = p_group and user_id = auth.uid();
 $fn$;
 
+-- show or hide me on the global board only (groups and scores stay)
+create or replace function lb_set_global(p_global boolean) returns void language sql security definer set search_path = public as $fn$
+  update lb_members set in_global = coalesce(p_global, true) where user_id = auth.uid();
+$fn$;
+
+-- preview a group from an invite link, before joining
+create or replace function lb_group_peek(p_code text)
+returns table(id uuid, name text, code text, members int, inviter text, joined boolean, is_full boolean)
+language sql security definer set search_path = public as $fn$
+  select g.id, g.name, g.code,
+         (select count(*)::int from lb_group_members x where x.group_id = g.id),
+         coalesce((select lb_name(o.user_id, o.nickname, o.anonymous) from lb_members o where o.user_id = g.owner), 'A friend'),
+         exists (select 1 from lb_group_members me where me.group_id = g.id and me.user_id = auth.uid()),
+         (select count(*) from lb_group_members x where x.group_id = g.id) >= 50
+  from lb_groups g where g.code = upper(btrim(p_code)) and is_approved();
+$fn$;
+
 grant execute on function lb_me(), lb_join(text, boolean, boolean), lb_leave(), lb_submit(date, int, int[], int),
-  lb_global(date), lb_group_board(uuid, date), lb_my_groups(), lb_create_group(text), lb_join_group(text), lb_leave_group(uuid) to authenticated;
+  lb_global(date), lb_group_board(uuid, date), lb_my_groups(), lb_create_group(text), lb_join_group(text), lb_leave_group(uuid), lb_set_global(boolean), lb_group_peek(text) to authenticated;
