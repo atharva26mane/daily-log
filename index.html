@@ -1480,7 +1480,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 45</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 46</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -6666,6 +6666,20 @@
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') { takeWater().then(soon); } else push(); });
   setInterval(soon, 60000);
   setTimeout(function () { takeWater().then(push); }, 1500);
+  // every time the app opens: check permissions and ask for the ones that are missing
+  async function askPerms() {
+    try {
+      var n = window.Capacitor.Plugins.LocalNotifications;
+      if (n) { var pr = await n.checkPermissions(); if (!pr || pr.display !== 'granted') await n.requestPermissions(); }
+    } catch (e) {}
+    try {
+      if (navigator.permissions && navigator.geolocation) {
+        var st = await navigator.permissions.query({ name: 'geolocation' });
+        if (st.state !== 'granted') navigator.geolocation.getCurrentPosition(function () {}, function () {}, { timeout: 8000, maximumAge: 3600000 });
+      }
+    } catch (e) {}
+  }
+  setTimeout(askPerms, 2500);
   // Snippets screen: block screenshots and screen recording while a snippet is on screen
   var sec = false;
   function secure(on) { if (on === sec) return; sec = on; try { WB().secure({ on: on }); } catch (e) {} }

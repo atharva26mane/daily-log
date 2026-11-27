@@ -22,9 +22,9 @@ print('splash files replaced:', n)
 # 3) manifest: permissions + link that brings the user back after Google sign-in
 mp = os.path.join(app, 'src', 'main', 'AndroidManifest.xml')
 m = open(mp, encoding='utf-8').read()
-perms = ''.join('    <uses-permission android:name="android.permission.%s" />\n' % p for p in ['VIBRATE', 'CAMERA', 'POST_NOTIFICATIONS'])
+perms = ''.join('    <uses-permission android:name="android.permission.%s" />\n' % p for p in ['VIBRATE', 'CAMERA', 'POST_NOTIFICATIONS', 'ACCESS_COARSE_LOCATION', 'ACCESS_FINE_LOCATION'])
 perms += '    <uses-feature android:name="android.hardware.camera" android:required="false" />\n'
-if 'android.permission.VIBRATE' not in m:
+if 'ACCESS_FINE_LOCATION' not in m:
     m = m.replace('</manifest>', perms + '</manifest>')
 flt = ('            <intent-filter>\n'
        '                <action android:name="android.intent.action.VIEW" />\n'
