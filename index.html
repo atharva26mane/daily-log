@@ -971,6 +971,13 @@
     .lb-mini i { width: 4px; min-height: 3px; border-radius: 2px; background: rgba(64,81,59,0.5); }
     .lb-mini i.off { background: rgba(64,81,59,0.14); }
     .lb-pt { min-width: 40px; text-align: right; font-weight: 800; font-size: 16px; color: var(--forest); font-variant-numeric: tabular-nums; }
+    .pl-empty { text-align: center; padding: 28px 8px 8px; }
+    .pl-empty-ic { width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 20px; display: grid; place-items: center; background: rgba(64,81,59,0.10); color: var(--forest); }
+    .pl-empty h3 { margin: 0 0 6px; font-family: var(--display); font-size: 22px; color: var(--forest); }
+    .pl-empty p { margin: 0 auto 18px; max-width: 280px; font-size: 15px; line-height: 1.45; color: var(--moss); }
+    .pl-empty .lb-btn { width: 100%; }
+    .pl-link { display: block; margin: 8px auto 0; min-height: 44px; padding: 0 14px; background: none; border: 0; font: inherit; font-size: 15px; font-weight: 600; color: var(--forest); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+    .pl-link:active { opacity: .6; }
     .lb-card { padding: 20px 18px; border-radius: 26px; background: rgba(255,255,255,0.78); border: 1px solid rgba(64,81,59,0.12); margin-bottom: 12px; }
     .lb-card h3 { margin: 10px 0 6px; font-family: var(--display); font-size: 22px; color: var(--forest); letter-spacing: -0.01em; }
     .lb-card p { margin: 0 0 12px; font-size: 15px; color: var(--ink); line-height: 1.45; }
@@ -1316,7 +1323,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 40</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 41</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -5828,7 +5835,11 @@
     var act = active(), done = list().filter(function (p) { return p.doneAt; });
     var top = '<div class="lb-pair" style="margin:0 0 12px"><button class="lb-btn row" data-act="ai" type="button">Plan with AI</button><button class="lb-btn ghost row" data-act="mine" type="button">Write my own</button></div>';
     if (S.form) top += '<div class="lb-card"><label class="field-label" for="pl-t">Goal</label><input id="pl-t" class="lb-field" maxlength="60" placeholder="For example: Gain 3 kg" /><label class="field-label" for="pl-d">Goal date (optional)</label><input id="pl-d" class="lb-field" type="date" /><button class="lb-btn" data-act="create" type="button">Create plan</button></div>';
-    b.innerHTML = top + (act.length ? act.map(card).join('') : (S.form ? '' : '<div class="lb-card"><p>Plans keep your big goals in one place, with small steps and dates. Tap Plan with AI and tell it what you want to achieve.</p></div>')) +
+    if (!act.length && !done.length && !S.form) {
+      b.innerHTML = '<div class="pl-empty"><div class="pl-empty-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg></div><h3>No plans yet</h3><p>Pick one big goal, like gaining weight or finishing a course. The AI breaks it into small steps.</p><button class="lb-btn" data-act="ai" type="button">Start with AI</button><button class="pl-link" data-act="mine" type="button">or write it myself</button></div>';
+      return;
+    }
+    b.innerHTML = top + (act.length ? act.map(card).join('') : '') +
       (done.length ? '<h4 style="margin:14px 2px 8px;font-size:13px;color:var(--moss)">Done</h4>' + done.map(card).join('') : '');
   }
   function setMode(on) {
