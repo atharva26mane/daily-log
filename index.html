@@ -616,8 +616,32 @@
     @keyframes glow { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
     @keyframes wander { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(22px, -16px); } 66% { transform: translate(-14px, 10px); } }
 
-    .tank-bottle { margin-top: 12px; }
+    .tank-bottle { margin-top: 14px; }
     .tank-bottle:empty { display: none; }
+    .bt-card { display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 12px; border-radius: 18px; background: rgba(64,81,59,0.07); border: 1px solid rgba(64,81,59,0.10); }
+    .bt-card.open { cursor: pointer; background: rgba(64,81,59,0.10); transition: transform 160ms cubic-bezier(0.23,1,0.32,1); }
+    .bt-card.open:active { transform: scale(0.985); }
+    .bt-ic { flex: none; width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.8); color: var(--forest); }
+    .bt-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .bt-ic.live { background: var(--forest); color: var(--cream); }
+    .bt-tx { flex: 1; min-width: 0; display: block; }
+    .bt-tx b { display: block; font-size: 15px; color: var(--ink); line-height: 1.25; }
+    .bt-tx small { display: block; font-size: 13px; color: var(--moss); line-height: 1.3; font-variant-numeric: tabular-nums; }
+    .bt-go { flex: none; min-width: 76px; min-height: 44px; padding: 0 16px; border-radius: 14px; border: 1px solid rgba(64,81,59,0.3); background: #fff; color: var(--forest); font: 800 15px var(--body); cursor: pointer; transition: transform 160ms cubic-bezier(0.23,1,0.32,1); }
+    .bt-go.solid { background: var(--forest); border-color: var(--forest); color: var(--cream); }
+    .bt-go:active { transform: scale(0.96); }
+    .bt-line { margin: 0 0 8px; font-size: 14px; font-weight: 600; color: var(--moss); line-height: 1.35; }
+    .bt-line b { color: var(--forest); }
+    .bt-undo { background: none; border: 0; padding: 4px 2px; color: var(--forest); font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; min-height: 32px; }
+    .bt-times { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 16px; }
+    .bt-times label { display: block; }
+    .bt-times span { display: block; margin: 0 0 6px 2px; font-size: 13px; font-weight: 700; color: var(--moss); }
+    .bt-times input { width: 100%; height: 52px; padding: 0 12px; border-radius: 14px; border: 1px solid rgba(64,81,59,0.28); background: #fff; font: 700 18px var(--body); color: var(--ink); font-variant-numeric: tabular-nums; box-sizing: border-box; }
+    .bt-sec { margin: 0 0 8px 2px; font-size: 13px; font-weight: 700; color: var(--moss); }
+    .bt-amt button { flex: 1; min-width: 0; justify-content: center; }
+    .bt-prev { margin: 4px 2px 12px; font-size: 14px; color: var(--ink); line-height: 1.4; min-height: 40px; }
+    .bt-links { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; }
+    .bt-links button { background: none; border: 0; min-height: 44px; padding: 0 4px; color: var(--moss); font: 700 14px var(--body); text-decoration: underline; cursor: pointer; }
     .plan-strip { margin-top: -6px; }
     .plan-strip .ps-ic { flex: none; width: 22px; height: 22px; fill: none; stroke: var(--forest); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .plan-strip .ps-main { flex: 1; min-width: 0; display: block; }
@@ -657,12 +681,6 @@
     .ai-mem { display: block; margin-top: 8px; font-size: 12.5px; color: var(--moss); }
     .bt-line { margin: 0 0 8px; font-size: 14px; font-weight: 600; color: var(--moss); font-variant-numeric: tabular-nums; line-height: 1.35; }
     .bt-line b { color: var(--forest); }
-    .bt-row { display: flex; gap: 8px; }
-    .bt-row .quick-btn { font-size: 15px; min-width: 0; padding: 0 10px; }
-    .bt-row .quick-btn.solid { background: var(--forest); color: var(--cream); border-color: var(--forest); }
-    .bt-row .quick-btn.small { flex: none; width: 48px; padding: 0; }
-    .bt-row .quick-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -4px; margin-right: 6px; }
-    .bt-row .quick-btn.small svg { margin: 0; }
     .bt-undo { background: none; border: 0; padding: 4px 2px; color: var(--forest); font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; min-height: 32px; }
     .tank-since { margin-top: 6px; font-size: 14px; color: var(--moss); font-variant-numeric: tabular-nums; font-weight: 600; }
 
@@ -1298,7 +1316,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 39</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 40</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -5571,8 +5589,8 @@
     }
     return out;
   }
-  function logDrink(total, startMs) {
-    var key = getTodayKey(), parts = plan(total, startMs, Date.now()), ids = [];
+  function logDrink(total, startMs, endMs) {
+    var key = getTodayKey(), parts = plan(total, startMs, endMs || Date.now()), ids = [];
     if (!Array.isArray(allData[key])) allData[key] = [];
     parts.forEach(function (p, i) {
       var id = Date.now() + '-b' + i + Math.random().toString(36).slice(2, 5);
@@ -5592,28 +5610,26 @@
     SETTINGS.bottleLast = null; saveData(); saveSettings(); renderMain(); showToast('Bottle removed');
   }
   function start(atMs) { SETTINGS.bottleOpen = { start: atMs || Date.now(), size: size() }; SETTINGS.bottleLast = null; saveSettings(); renderMain(); if (window.__schedSoon) window.__schedSoon(); showToast('Bottle started at ' + hm(SETTINGS.bottleOpen.start)); }
-  function finish(ml) {
+  function finish(ml, startMs, endMs) {
     var o = open(), s = size(), total = ml != null ? ml : (o && o.size) || s; if (!o && !s) return;
-    var from = o ? o.start : Date.now() - 90 * 60000;
-    var n = logDrink(total, from); showToast('Logged ' + total + ' ml in ' + n + (n === 1 ? ' part' : ' parts'));
+    var from = startMs || (o ? o.start : Date.now() - 90 * 60000);
+    var n = logDrink(total, from, endMs); showToast('Logged ' + total + ' ml in ' + n + (n === 1 ? ' part' : ' parts'));
   }
   window.__bottle = { size: size, open: open, start: start, finish: finish, undo: undo, plan: plan, log: logDrink };
 
   // ---------- the strip on the water card ----------
+  function card(title, sub, btn, act, solid) {
+    return '<div class="bt-card"><span class="bt-ic">' + ICON + '</span><span class="bt-tx"><b>' + title + '</b><small>' + sub + '</small></span><button class="bt-go' + (solid ? ' solid' : '') + '" data-bt="' + act + '" type="button">' + btn + '</button></div>';
+  }
   function draw() {
     var el = $('tank-bottle'); if (!el) return;
     if (viewingPastDay) { el.innerHTML = ''; return; }
     var s = size(), o = open(), L = SETTINGS.bottleLast, h;
-    if (o) {
-      h = '<p class="bt-line"><b>' + o.size + ' ml bottle</b> open since ' + hm(o.start) + ' (' + dur(Date.now() - o.start) + ')</p><div class="bt-row"><button class="quick-btn solid" data-bt="finish" type="button">Finished</button><button class="quick-btn" data-bt="left" type="button">Some left</button><button class="quick-btn small" data-bt="cancel" type="button" aria-label="Cancel this bottle"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>';
-    } else if (L && Date.now() - L.at < 15 * 60000 && L.key === getTodayKey()) {
-      h = '<p class="bt-line">Logged <b>' + L.ml + ' ml</b> in ' + L.n + (L.n === 1 ? ' part' : ' parts') + '. <button class="bt-undo" data-bt="undo" type="button">Undo</button></p>' + startRow(s);
-    } else h = startRow(s);
+    if (o) h = '<div class="bt-card open" data-bt="edit" role="button" tabindex="0"><span class="bt-ic live">' + ICON + '</span><span class="bt-tx"><b>' + o.size + ' ml bottle</b><small>Since ' + hm(o.start) + ' · ' + dur(Date.now() - o.start) + '</small></span><button class="bt-go solid" data-bt="finish" type="button">Finish</button></div>';
+    else if (!s) h = card('Track a whole bottle', 'Log the whole bottle in one go', 'Set up', 'setup');
+    else h = card(s + ' ml bottle', 'Start it, finish it, log it once', 'Start', 'start') + (L && Date.now() - L.at < 15 * 60000 && L.key === getTodayKey() ? '' : '');
+    if (!o && L && Date.now() - L.at < 15 * 60000 && L.key === getTodayKey()) h = '<p class="bt-line">Logged <b>' + L.ml + ' ml</b> in ' + L.n + (L.n === 1 ? ' part' : ' parts') + '. <button class="bt-undo" data-bt="undo" type="button">Undo</button></p>' + h;
     if (el.dataset.sig !== h) { el.dataset.sig = h; el.innerHTML = h; }
-  }
-  function startRow(s) {
-    return s ? '<div class="bt-row"><button class="quick-btn" data-bt="start" type="button">' + ICON + 'Start ' + s + ' ml bottle</button><button class="quick-btn small" data-bt="size" type="button" aria-label="Change bottle size"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>'
-             : '<div class="bt-row"><button class="quick-btn" data-bt="setup" type="button">' + ICON + 'Track a whole bottle</button></div>';
   }
   if (typeof renderMain === 'function') { var _r = renderMain; renderMain = function () { var x = _r.apply(this, arguments); try { draw(); drawSettingsRow(); } catch (e) {} return x; }; }
   function drawSettingsRow() { var v = $('set-bottle-val'); if (v) v.textContent = size() ? size() + ' ml' : 'Not set'; }
@@ -5621,18 +5637,35 @@
 
   // ---------- the small sheet ----------
   function sheet(m, after) { mode = m; afterSize = !!after; paint(); $('bt-modal').classList.add('open'); }
+  var drank = 1;
+  function toMs(hhmm) { var p = String(hhmm || '').split(':'); if (p.length < 2) return NaN; var d = new Date(); d.setHours(+p[0], +p[1], 0, 0); return d.getTime(); }
+  function preview() {
+    var o = open(), tot = (o && o.size) || size(), ml = Math.round(tot * drank / 5) * 5, a = toMs($('bt-from') && $('bt-from').value), z = toMs($('bt-to') && $('bt-to').value), pv = $('bt-prev'), go = $('bt-drank');
+    if (!pv) return;
+    if (isNaN(a) || isNaN(z)) { pv.textContent = 'Pick the start and finish time.'; return; }
+    if (z > Date.now() + 60000) { pv.textContent = 'The finish time is in the future.'; if (go) go.disabled = true; return; }
+    if (a >= z) { pv.textContent = 'The bottle must start before it finishes.'; if (go) go.disabled = true; return; }
+    var pl = plan(ml, a, z); if (go) { go.disabled = ml < 5; go.textContent = 'Log ' + ml + ' ml'; }
+    pv.textContent = pl.length === 1 ? ml + ' ml logged at ' + hm(pl[0].at) + '.' : pl.length + ' sips of about ' + pl[0].ml + ' ml, from ' + hm(pl[0].at) + ' to ' + hm(pl[pl.length - 1].at) + '.';
+  }
   function paint() {
     var s = size(), o = open(), b = $('bt-body');
     if (mode === 'size') {
       $('bt-title').textContent = 'My water bottle';
       b.innerHTML = '<div class="lb-card"><p>How much does your bottle hold? Use the size printed on it.</p><div class="lb-chips">' + SIZES.map(function (n) { return '<button type="button" data-sz="' + n + '" class="' + (n === s ? 'on' : '') + '">' + n + ' ml</button>'; }).join('') + '</div><label class="field-label" for="bt-ml">Or type it</label><input id="bt-ml" class="lb-field" type="number" inputmode="numeric" min="100" max="5000" placeholder="For example 675" value="' + (s || '') + '" /><button class="lb-btn" id="bt-save" type="button">' + (afterSize ? 'Save and start the bottle' : 'Save') + '</button></div>';
     } else {
-      var t = (o && o.size) || s;
-      $('bt-title').textContent = 'How much is left?';
-      b.innerHTML = '<div class="lb-card"><p>Only what you drank is logged. Your ' + t + ' ml bottle, how much is left in it?</p><div class="lb-chips">' + [[0.25, '¼ left'], [0.5, 'Half left'], [0.75, '¾ left']].map(function (c) { return '<button type="button" data-left="' + Math.round(t * c[0] / 5) * 5 + '">' + c[1] + '</button>'; }).join('') + '</div><label class="field-label" for="bt-left">Or type the ml left</label><input id="bt-left" class="lb-field" type="number" inputmode="numeric" min="0" max="' + t + '" placeholder="For example 200" /><button class="lb-btn" id="bt-drank" type="button">Log what I drank</button></div>';
+      var t = (o && o.size) || s, now = Date.now();
+      $('bt-title').textContent = 'Finish bottle';
+      b.innerHTML = '<div class="lb-card"><div class="bt-times"><label><span>Started</span><input id="bt-from" type="time" value="' + hm(o ? o.start : now - 90 * 60000) + '" /></label><label><span>Finished</span><input id="bt-to" type="time" value="' + hm(now) + '" /></label></div>' +
+        '<div class="bt-sec">How much did you drink?</div><div class="lb-chips bt-amt" id="bt-amt">' + [[1, 'All'], [0.75, '¾'], [0.5, '½'], [0.25, '¼']].map(function (c) { return '<button type="button" data-frac="' + c[0] + '" class="' + (c[0] === drank ? 'on' : '') + '">' + c[1] + '</button>'; }).join('') + '</div>' +
+        '<p class="bt-prev" id="bt-prev"></p><button class="lb-btn" id="bt-drank" type="button">Log</button>' +
+        '<div class="bt-links"><button type="button" data-bt2="size">Change bottle size</button>' + (o ? '<button type="button" data-bt2="drop">Drop this bottle</button>' : '') + '</div></div>';
+      preview();
     }
   }
   function close() { $('bt-modal').classList.remove('open'); }
+  document.addEventListener('input', function (e) { if (e.target.id === 'bt-from' || e.target.id === 'bt-to') preview(); });
+  document.addEventListener('keydown', function (e) { var c = e.target.closest && e.target.closest('.bt-card.open'); if (c && (e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); drank = 1; sheet('finish'); } });
   document.addEventListener('click', function (e) {
     var t = e.target; if (!t.closest) return;
     var a = t.closest('[data-bt]');
@@ -5641,26 +5674,29 @@
       if (k === 'setup') sheet('size', true);
       else if (k === 'size') sheet('size', false);
       else if (k === 'start') start();
-      else if (k === 'finish') finish();
-      else if (k === 'left') sheet('left');
+      else if (k === 'finish' || k === 'edit') { drank = 1; sheet('finish'); }
       else if (k === 'undo') undo();
-      else if (k === 'cancel') { if (a.dataset.sure !== '1') { a.dataset.sure = '1'; showToast('Tap the cross again to drop this bottle'); setTimeout(function () { a.dataset.sure = ''; }, 3000); } else { SETTINGS.bottleOpen = null; saveSettings(); renderMain(); showToast('Bottle dropped. Nothing was logged'); } }
       return;
     }
     if (t.closest('#set-bottle-row')) { $('settings-modal').classList.remove('open'); setTimeout(function () { sheet('size', false); }, 140); return; }
     if (t.id === 'bt-close' || t.id === 'bt-modal') { close(); return; }
     if (!t.closest('#bt-modal')) return;
     var sz = t.closest('[data-sz]'); if (sz) { $('bt-ml').value = sz.dataset.sz; document.querySelectorAll('#bt-body [data-sz]').forEach(function (b) { b.classList.toggle('on', b === sz); }); return; }
-    var lf = t.closest('[data-left]'); if (lf) { $('bt-left').value = lf.dataset.left; return; }
+    var fr = t.closest('[data-frac]'); if (fr) { drank = Number(fr.dataset.frac); document.querySelectorAll('#bt-amt button').forEach(function (b) { b.classList.toggle('on', b === fr); }); preview(); return; }
+    var l2 = t.closest('[data-bt2]');
+    if (l2) {
+      if (l2.dataset.bt2 === 'size') { sheet('size', false); return; }
+      if (l2.dataset.bt2 === 'drop') { if (l2.dataset.sure !== '1') { l2.dataset.sure = '1'; l2.textContent = 'Tap again to drop'; return; } SETTINGS.bottleOpen = null; saveSettings(); close(); renderMain(); showToast('Bottle dropped. Nothing was logged'); return; }
+    }
     if (t.id === 'bt-save') {
       var v = Math.round(Number($('bt-ml').value)); if (!(v >= 100 && v <= 5000)) { showToast('Enter a size from 100 to 5000 ml'); return; }
       SETTINGS.bottle = { size: v }; if (open()) { SETTINGS.bottleOpen.size = v; } saveSettings(); close(); renderMain();
       if (afterSize && !open()) start(); else showToast('Bottle size saved: ' + v + ' ml'); return;
     }
     if (t.id === 'bt-drank') {
-      var tot = (open() && open().size) || size(), left = Math.round(Number($('bt-left').value));
-      if (!(left >= 0 && left < tot)) { showToast('Left must be less than ' + tot + ' ml'); return; }
-      close(); finish(tot - left);
+      var o2 = open(), tot = (o2 && o2.size) || size(), a = toMs($('bt-from').value), z = toMs($('bt-to').value), ml = Math.round(tot * drank / 5) * 5;
+      if (isNaN(a) || isNaN(z) || a >= z || z > Date.now() + 60000) { preview(); return; }
+      close(); finish(ml, a, z);
     }
   });
 
