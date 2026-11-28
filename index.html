@@ -1853,7 +1853,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 57</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 58</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -8080,11 +8080,20 @@
 
   // ---------------- tilt the water ----------------
   var tilt = 0, tiltT = 0, tiltOn = false, tiltRaf = 0, tankSeen = true;
+  var tv = 0, tClock = 0;
+  // water behaves like a spring: it lags behind the phone, overshoots, then sloshes back and settles
   function tiltLoop() {
-    tilt += (tiltT - tilt) * 0.2;
-    var f = $('tank-fill'); if (f) f.style.setProperty('--tilt', tilt.toFixed(2) + 'deg');
-    if (Math.abs(tiltT - tilt) > 0.05) tiltRaf = requestAnimationFrame(tiltLoop); else tiltRaf = 0;
+    tv += (tiltT - tilt) * 0.045; tv *= 0.93; tilt += tv; tilt = Math.max(-30, Math.min(30, tilt));
+    var f = $('tank-fill');
+    if (f) { f.style.setProperty('--tilt', tilt.toFixed(2) + 'deg'); f.style.setProperty('--slosh', (Math.min(1, Math.abs(tv) / 1.5) * 6).toFixed(1) + 'px'); }
+    if (Math.abs(tiltT - tilt) > 0.04 || Math.abs(tv) > 0.03) tiltRaf = requestAnimationFrame(tiltLoop); else { tiltRaf = 0; if (f) f.style.setProperty('--tilt', tiltT.toFixed(2) + 'deg'); tilt = tiltT; tv = 0; }
   }
+  var lastAx = null;
+  window.addEventListener('devicemotion', function (e) {
+    var g = e.accelerationIncludingGravity; if (!g || typeof g.x !== 'number' || document.hidden) return;
+    if (lastAx !== null) { var d = g.x - lastAx; if (Math.abs(d) > 0.8) { tv += Math.max(-4, Math.min(4, d * -0.35)); if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop); } }
+    lastAx = g.x;
+  });
   var nOri = 0, nMot = 0, dbgOn = false, lastG = null, lastX = null;
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#set-tilt-row')) return; dbgOn = !dbgOn; var v = $('set-tilt-val');
@@ -8094,7 +8103,7 @@
   window.addEventListener('deviceorientation', function (e) { nOri++; if (typeof e.gamma === 'number') lastG = e.gamma; });
   window.addEventListener('devicemotion', function (e) { nMot++; var g = e.accelerationIncludingGravity; if (g && typeof g.x === 'number') lastX = g.x; });
   var oriSeen = false;
-  function setTilt(t) { t = Math.max(-24, Math.min(24, t)); if (Math.abs(t - tiltT) < 0.3) return; tiltT = t; if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop); }
+  function setTilt(t) { t = Math.max(-24, Math.min(24, t)); if (Math.abs(t - tiltT) < 0.15) return; tiltT = t; if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop); }
   function onOri(e) {
     if (typeof e.gamma !== 'number') return; oriSeen = true;
     if (document.hidden) return;
