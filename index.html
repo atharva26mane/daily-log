@@ -1853,7 +1853,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 56</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 57</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -8107,8 +8107,13 @@
     setTilt(Math.asin(Math.max(-1, Math.min(1, g.x / 9.81))) * 180 / Math.PI * 0.8);
   }
   if (!calm) {
-    var canOri = typeof DeviceOrientationEvent === 'undefined' || typeof DeviceOrientationEvent.requestPermission !== 'function';
-    if (canOri) { window.addEventListener('deviceorientation', onOri); window.addEventListener('devicemotion', onMotion); tiltOn = true; }
+    // newer Android WebViews also define requestPermission, so never skip the listeners because of it
+    window.addEventListener('deviceorientation', onOri); window.addEventListener('devicemotion', onMotion); tiltOn = true;
+    try {
+      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        document.addEventListener('pointerup', function ask() { document.removeEventListener('pointerup', ask); try { var r = DeviceOrientationEvent.requestPermission(); if (r && r.catch) r.catch(function () {}); } catch (e) {} }, { once: true });
+      }
+    } catch (e) {}
   }
   if (tank && 'IntersectionObserver' in window) new IntersectionObserver(function (es) { tankSeen = es[0].isIntersecting; }).observe(tank);
 
