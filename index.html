@@ -81,7 +81,7 @@
     .ground { background-color: var(--mist); background-image: linear-gradient(180deg, var(--f4) 0, var(--g2) 150px, var(--g3) 520px, var(--g4) 900px); padding: 18px 0 40px; }
 
     /* Water tank (the hero) */
-    .tank { position: relative; overflow: hidden; background: var(--foam); border-radius: 28px; padding: 22px 20px 18px; margin-bottom: 14px; isolation: isolate; box-shadow: 0 14px 34px rgba(26,38,24,0.35); --fillc: var(--sea-light); --wavec: var(--sea); }
+    .tank { position: relative; overflow: hidden; background: var(--foam); border-radius: 28px; padding: 22px 20px 18px; margin-bottom: 14px; isolation: isolate; box-shadow: 0 14px 34px rgba(26,38,24,0.35); --fillc: #8fb2c3; --wavec: #6f9bb0; }
     .tank.done { --fillc: #b6d3a6; --wavec: var(--leaf); }
     .tank-fill { position: absolute; left: 0; right: 0; bottom: 0; height: 100%; transform: translateY(var(--drop, 120%)); transition: transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: -1; }
     .wave { position: absolute; top: -8px; left: 0; width: 200%; height: 24px; fill: var(--wavec); stroke: none; animation: drift 7s linear infinite; }
@@ -899,6 +899,22 @@
     @keyframes hmWob { from { transform: rotate(-7deg) translateY(0); } to { transform: rotate(6deg) translateY(-6px); } }
     @media (prefers-reduced-motion: reduce) { .hm-star, .hm-aur, .hm-cloud, .hm-smoke, .hm-birds, .hm-birds path, .hm-kite .swing, .hm-kite .wob { animation: none !important; } .hm-smoke { display: none; } .hm-cloud { opacity: 0; } }
 
+
+    /* nature pass: see-through cards over the water, seasons, bird */
+    .tank .quick-btn { background: rgba(254,250,224,0.62); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+    .tank .bt-card { background: rgba(254,250,224,0.5); border-color: rgba(64,81,59,0.2); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+    body[data-season="autumn"] .forest .f-svg { filter: hue-rotate(-68deg) saturate(1.15); }
+    body[data-season="winter"] .forest .f-svg { filter: saturate(0.55) brightness(1.06) hue-rotate(12deg); }
+    body[data-season="spring"] .forest .f-svg { filter: hue-rotate(14deg) saturate(1.2) brightness(1.05); }
+    body[data-season="autumn"] .leaf { fill: #d9893a; } body[data-season="autumn"] .leaf.alt { fill: #b8542a; }
+    body[data-season="spring"] .leaf { fill: #f0a9bd; } body[data-season="spring"] .leaf.alt { fill: #f7d1dc; }
+    body[data-season="winter"] .leaf { fill: #f1f0e8; } body[data-season="winter"] .leaf.alt { fill: #cfe0e6; }
+    .td-alldone { position: relative; }
+    .td-bird { position: absolute; right: 22px; top: -23px; z-index: 3; width: 38px; height: 30px; pointer-events: none; transform-origin: 50% 100%; animation: birdland 1.5s cubic-bezier(0.23,1,0.32,1) both, birdbob 3.2s ease-in-out 1.6s infinite; }
+    .td-bird svg { width: 100%; height: 100%; display: block; }
+    @keyframes birdland { 0% { transform: translate(120px, -90px) rotate(-18deg); opacity: 0; } 25% { opacity: 1; } 70% { transform: translate(-4px, 3px) rotate(4deg); } 100% { transform: none; } }
+    @keyframes birdbob { 0%, 80%, 100% { transform: none; } 86% { transform: translateY(-3px) rotate(-5deg); } 92% { transform: translateY(0) rotate(3deg); } }
+    @media (prefers-reduced-motion: reduce) { .td-bird { animation: none; } }
     /* live water simulation (canvas) replaces the flat css water when motion is allowed */
     #tank-sim { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; display: none; }
     .tank.sim #tank-sim { display: block; }
@@ -1859,7 +1875,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 59</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 60</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -3429,6 +3445,20 @@
     }
 
     // Sun and moon travel across the sky with the real time.
+    var SKY_KEYS = [[0,'#16242e','#32535a'],[4.6,'#1b2c38','#3a5a62'],[5.6,'#d99a86','#f3d6ad'],[7,'#b9cbd0','#f1edd4'],[9.5,'#adc4ce','#edf1d6'],[16.2,'#adc4ce','#edf1d6'],[17.8,'#e0a374','#f4d2a0'],[19,'#8a86a3','#d9b8a8'],[20.2,'#1b2c38','#3a5a62'],[24,'#16242e','#32535a']];
+    function hx(c) { return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]; }
+    function mix(a, b, t) { var A = hx(a), B = hx(b); return 'rgb(' + A.map(function (v, i) { return Math.round(v + (B[i] - v) * t); }).join(',') + ')'; }
+    function skyColors(h) {
+      var b = document.body, st = b.style;
+      var ok = !b.dataset.wx && !b.classList.contains('theme-volcano') && !b.classList.contains('theme-himalaya') && !viewingPastDay;
+      var d = new Date(), m = d.getMonth() + 1;
+      b.dataset.season = (m === 10 || m === 11) ? 'autumn' : (m === 12 || m === 1) ? 'winter' : (m === 2 || m === 3) ? 'spring' : 'summer';
+      if (!ok) { st.removeProperty('--sky-top'); st.removeProperty('--sky-bottom'); return; }
+      for (var i = 0; i < SKY_KEYS.length - 1; i++) {
+        var a = SKY_KEYS[i], c = SKY_KEYS[i + 1];
+        if (h >= a[0] && h <= c[0]) { var t = (h - a[0]) / (c[0] - a[0]); t = t * t * (3 - 2 * t); st.setProperty('--sky-top', mix(a[1], c[1], t)); st.setProperty('--sky-bottom', mix(a[2], c[2], t)); return; }
+      }
+    }
     function applyMood() {
       const d = new Date();
       const h = (typeof window.__forceHour === 'number') ? window.__forceHour : d.getHours() + d.getMinutes() / 60;
@@ -3446,6 +3476,7 @@
       const left = p => (52 + Math.min(Math.max(p, 0), 1) * 30).toFixed(1) + '%';
       const st = document.body.style;
       st.setProperty('--sun-x', left(pSun));  st.setProperty('--sun-y', arc(pSun));  st.setProperty('--sun-o', (pSun >= 0 && pSun <= 1) ? '1' : '0');
+      skyColors(h);
       st.setProperty('--moon-x', left(pMoon)); st.setProperty('--moon-y', arc(pMoon)); st.setProperty('--moon-o', (pMoon >= 0 && pMoon <= 1) ? '1' : '0');
     }
 
@@ -3505,6 +3536,8 @@
       updateSince(n);
     }
     setInterval(tickClock, 1000);
+    window.__applyMood = applyMood;
+    try { new MutationObserver(function () { applyMood(); }).observe(document.body, { attributes: true, attributeFilter: ['class', 'data-wx'] }); } catch (e) {}
     setInterval(applyMood, 60000);
     document.addEventListener('visibilitychange', () => { if (!document.hidden) { tickClock(); applyMood(); } });
 
@@ -5808,7 +5841,7 @@
     if (past || (!pend.length && !done.length)) { card.hidden = true; card.innerHTML = ''; lastPct = 0; return; }
     var total = pend.length + done.length, pct = Math.round(done.length / total * 100);
     var shown = pend.slice(0, 4), extra = pend.length - shown.length;
-    var html = '<div class="td-head">' + ICON.list + '<span class="td-title">' + (pend.length ? 'Today' : 'All done today') + '</span><span class="td-count">' + done.length + ' of ' + total + '</span><button class="td-add" type="button" data-open-sheet="1" aria-label="Add to-do">' + ICON.plus + '</button></div>' +
+    var html = (!pend.length ? '<span class="td-bird" aria-hidden="true"><svg viewBox="0 0 38 30"><path d="M6 20c3-9 12-12 20-9l7-4-3 7c2 3 1 7-2 9-6 4-16 4-22-3z" fill="#6f8f72"/><path d="M10 21c5 3 13 3 18-1" fill="none" stroke="#e9dfc2" stroke-width="2.4" stroke-linecap="round"/><circle cx="27" cy="12" r="1.5" fill="#1d2a1d"/><path d="M33 8l5-1-4 4z" fill="#e2a24a"/><path d="M14 27v3M20 27v3" stroke="#6b5a3c" stroke-width="1.6" stroke-linecap="round"/></svg></span>' : '') + '<div class="td-head">' + ICON.list + '<span class="td-title">' + (pend.length ? 'Today' : 'All done today') + '</span><span class="td-count">' + done.length + ' of ' + total + '</span><button class="td-add" type="button" data-open-sheet="1" aria-label="Add to-do">' + ICON.plus + '</button></div>' +
       '<div class="td-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="width:' + lastPct + '%"></i></div>';
     if (!pend.length) html += '<div class="td-alldone">' + ICON.check + '<span>Everything for today is done. Nice work.</span></div>';
     html += '<ul class="td-list">' + shown.map(function (x) { return row(x, t, true); }).join('') + done.slice(0, pend.length ? 2 : 3).map(function (x) { return row(x, t, true).replace('class="td-item"', 'class="td-item is-done"'); }).join('') + '</ul>';
@@ -8104,11 +8137,16 @@
 
   // ---------------- live water: a row of springy columns, so it slops, splashes and settles like water in a bottle ----------------
   var SIM = null;
+  function wind() { var f = document.querySelector('.forest'); if (!f) return; f.classList.remove('sway'); void f.offsetWidth; f.classList.add('sway'); setTimeout(function () { f.classList.remove('sway'); }, 1000); }
   (function () {
     var cv = $('tank-sim'), tk = $('tank'); if (!cv || !tk || calm || !cv.getContext) return;
     var ctx = cv.getContext('2d'), N = 44, h = [], v = [], W = 0, H = 0, dpr = 1, level = null, fillC = '#7fa9bd', waveC = '#a9c8d6', colAt = 0, seen = true, run = false, drops = [], bubs = [], T0 = 0, lastNow = 0;
     for (var i = 0; i <= N; i++) { h.push(0); v.push(0); }
+    var foam = 0, fpool = [];
+    for (var fi = 0; fi < 26; fi++) fpool.push({ k: Math.random() * N, r: 2 + Math.random() * 3.5, o: Math.random() * 6.3 });
     SIM = {
+      ripple: function (px) { var c = Math.round(px / (W || 1) * N); for (var i = -3; i <= 3; i++) { var j = c + i; if (j >= 0 && j <= N) v[j] += (i === 0 ? 5 : 3 - Math.abs(i)) * -1.4; } foam = Math.min(1, foam + 0.15); kick(); },
+      plop: function () { SIM.ripple(W * (0.2 + Math.random() * 0.6)); splash(4); },
       push: function (dx, dy) { // dx: sideways shake, dy: up/down shake
         for (var i = 0; i <= N; i++) { var x = i / N - 0.5; v[i] += dx * x * 2.2 + dy * (Math.sin(i * 0.9) * 0.4); }
         splash(Math.min(6, Math.abs(dx) * 2 + Math.abs(dy) * 2));
@@ -8143,6 +8181,7 @@
       var energy = 0; for (var e = 0; e <= N; e++) { if (h[e] > 70) h[e] = 70; if (h[e] < -70) h[e] = -70; energy += Math.abs(v[e]); }
       // crests that move fast throw drops
       if (energy / N > 0.9 && Math.random() < 0.5) splash(1);
+      foam = Math.min(1, foam + Math.min(0.06, energy / N * 0.02)); foam *= 0.992;
       if (Math.random() < 0.05 && level < 1.1 && bubs.length < 14) bubs.push({ x: Math.random() * W, y: H, vy: 0.5 + Math.random() * 0.9, r: 1 + Math.random() * 2, ph: Math.random() * 6 });
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
       if (level < 1.15) {
@@ -8151,6 +8190,11 @@
         ctx.globalAlpha = 1; ctx.fillStyle = fillC; path(0, 1); ctx.fill();
         ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.beginPath();
         for (var q = 0; q <= N; q++) { var px = q / N * W, py = baseY + h[q] - 1; if (q === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py); } ctx.stroke();
+        if (foam > 0.04) {
+          ctx.fillStyle = 'rgba(255,255,255,' + (0.5 * foam).toFixed(2) + ')';
+          for (var f2 = 0; f2 < fpool.length; f2++) { var fp = fpool[f2], fk = Math.max(0, Math.min(N, Math.round(fp.k + Math.sin(t * 0.7 + fp.o) * 2))); ctx.beginPath(); ctx.arc(fk / N * W, baseY + h[fk] + 3 + Math.sin(t + fp.o) * 2, fp.r * (0.5 + foam), 0, 6.3); ctx.fill(); }
+          ctx.fillStyle = 'rgba(255,255,255,' + (0.18 * foam).toFixed(2) + ')'; path(6, 1); ctx.lineTo(W, baseY + 14); ctx.fill();
+        }
         ctx.fillStyle = 'rgba(255,255,255,0.35)';
         for (var b = bubs.length - 1; b >= 0; b--) { var bb = bubs[b]; bb.y -= bb.vy * dt; bb.x += Math.sin(t * 2 + bb.ph) * 0.3; var sy = baseY + h[Math.max(0, Math.min(N, Math.round(bb.x / W * N)))]; if (bb.y < sy + 4) { bubs.splice(b, 1); continue; } ctx.beginPath(); ctx.arc(bb.x, bb.y, bb.r, 0, 6.3); ctx.fill(); }
         ctx.fillStyle = waveC;
@@ -8169,6 +8213,8 @@
     }
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) kick(); }).observe(tk);
     window.addEventListener('resize', function () { W = 0; });
+    tk.addEventListener('pointerdown', function (e) { if (e.target.closest('button, a, input, .wp-card, .tank-bottle, .tank-quick')) return; var r = tk.getBoundingClientRect(); SIM.ripple(e.clientX - r.left); });
+    tk.addEventListener('click', function (e) { if (e.target.closest('.quick-btn, [data-wp="log"]')) { SIM.plop(); wind(); } });
     kick();
   })();
   var nOri = 0, nMot = 0, dbgOn = false, lastG = null, lastX = null;
