@@ -900,6 +900,36 @@
     @media (prefers-reduced-motion: reduce) { .hm-star, .hm-aur, .hm-cloud, .hm-smoke, .hm-birds, .hm-birds path, .hm-kite .swing, .hm-kite .wob { animation: none !important; } .hm-smoke { display: none; } .hm-cloud { opacity: 0; } }
 
 
+
+    /* ---------- tree of the day + hidden menu ---------- */
+    .tod-forest { height: 258px; overflow: hidden; }
+    body.has-tod .tod-forest .f-layer, body.has-tod .tod-forest .f-svg { display: none; }
+    .tod { position: absolute; inset: 0; margin: 0 auto; max-width: 560px; }
+    .tod-soil { position: absolute; left: -6%; right: -6%; bottom: -26px; height: 44px; border-radius: 50% 50% 0 0 / 70% 70% 0 0; background: linear-gradient(#5b4632 0, #4a3a2a 60%, #3c3024 100%); }
+    .tod-soil::after { content: ''; position: absolute; left: 4%; right: 4%; top: 2px; height: 6px; border-radius: 3px; background: radial-gradient(circle at 10% 50%, #6f8d4f 0 3px, transparent 4px) 0 0/22px 6px repeat-x, radial-gradient(circle at 60% 50%, #587a45 0 2.5px, transparent 3.5px) 7px 0/31px 6px repeat-x; opacity: 0.9; }
+    .tod canvas { position: absolute; right: 0; bottom: 8px; width: min(100%, 340px); height: auto; aspect-ratio: 340 / 250; pointer-events: none; }
+    .tod-sway { position: absolute; right: 0; bottom: 8px; width: min(100%, 340px); aspect-ratio: 340 / 250; transform-origin: var(--ox, 50%) var(--oy, 70%); animation: todsway 7s ease-in-out infinite alternate; will-change: transform; }
+    .tod-sway canvas { right: auto; left: 0; bottom: auto; top: 0; width: 100%; }
+    @keyframes todsway { 0% { transform: rotate(-0.9deg); } 100% { transform: rotate(0.9deg); } }
+    .tod-sway.gust { animation: todgust 1.8s cubic-bezier(0.3, 0.1, 0.3, 1) both; }
+    @keyframes todgust { 0% { transform: rotate(0); } 18% { transform: rotate(3.4deg); } 40% { transform: rotate(-2.6deg); } 62% { transform: rotate(1.6deg); } 82% { transform: rotate(-0.8deg); } 100% { transform: rotate(0); } }
+    .tod-petals { position: absolute; right: 0; bottom: 8px; width: min(100%, 340px); aspect-ratio: 340 / 250; pointer-events: none; overflow: visible; }
+    .tod-petals i { position: absolute; width: 7px; height: 5px; border-radius: 60% 40% 60% 40%; opacity: 0; animation: todfall 5s ease-in forwards; }
+    @keyframes todfall { 0% { transform: translate(0, 0) rotate(0); opacity: 0; } 12% { opacity: 0.95; } 100% { transform: translate(var(--dx, 30px), 200px) rotate(var(--dr, 300deg)); opacity: 0; } }
+    body[data-mood="night"] .tod canvas { filter: brightness(0.5) saturate(0.8); }
+    body[data-mood="dusk"] .tod canvas, body[data-mood="dawn"] .tod canvas { filter: brightness(0.92) sepia(0.12); }
+    @media (prefers-reduced-motion: reduce) { .tod-sway, .tod-sway.gust, .tod-petals i { animation: none; } }
+    #header-label.hide-date { display: none; }
+    .tray-btn { position: absolute; right: 0; top: 16px; z-index: 6; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--head-bg); border: 1px solid var(--head-line); border-radius: 50%; color: var(--head); cursor: pointer; transition: transform 200ms cubic-bezier(0.23,1,0.32,1), background-color 140ms ease; }
+    .tray-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 240ms cubic-bezier(0.23,1,0.32,1); }
+    .tray-btn:active { transform: scale(0.93); }
+    body.tray-open .tray-btn svg { transform: rotate(90deg); }
+    .tray-dot { position: absolute; top: 2px; right: 2px; width: 11px; height: 11px; border-radius: 50%; background: #E2763A; border: 2px solid var(--cream); }
+    .tray-dot[hidden] { display: none; }
+    .top { position: relative; }
+    #today-actions { max-height: 0; opacity: 0; overflow: hidden; margin-top: -10px; transform: translateY(-8px); pointer-events: none; transition: max-height 260ms cubic-bezier(0.23,1,0.32,1), opacity 180ms ease, transform 260ms cubic-bezier(0.23,1,0.32,1), margin 260ms ease; }
+    body.tray-open #today-actions { max-height: 64px; opacity: 1; margin-top: 0; transform: none; pointer-events: auto; }
+    @media (prefers-reduced-motion: reduce) { #today-actions { transition: none; } }
     /* nature pass: see-through cards over the water, seasons, bird */
     .tank .quick-btn { background: rgba(254,250,224,0.62); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
     .tank .bt-card { background: rgba(254,250,224,0.5); border-color: rgba(64,81,59,0.2); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
@@ -1544,6 +1574,7 @@
             <button class="icon-btn" hidden id="open-theme-btn" aria-label="Choose theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg></button>
             <button class="icon-btn" hidden id="open-ai-btn" aria-label="AI settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg></button>
           </div>
+          <button class="tray-btn" id="tray-btn" type="button" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg><span class="tray-dot" id="tray-dot" hidden></span></button>
           <div class="top-actions" id="past-actions" style="display:none;">
             <button class="pill-btn" id="back-to-history-btn">History</button>
             <button class="pill-btn" id="back-to-today-btn">Today</button>
@@ -1875,7 +1906,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 60</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 61</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -1903,6 +1934,7 @@
         <button class="set-row set-link" id="set-backup-row"><span class="set-name">Backup and restore</span><span class="set-val">Export / import</span></button>
         <button class="set-row set-link" id="set-ts-row" type="button"><span class="set-name">Text size</span><span class="set-val" id="set-ts-val">Normal</span></button>
         <button class="set-row set-link" id="set-hap-row" type="button"><span class="set-name">Vibration</span><span class="set-val" id="set-hap-val">On</span></button>
+        <button class="set-row set-link" id="set-tree-row" type="button"><span class="set-name">Tree of the day</span><span class="set-val" id="set-tree-val"></span></button>
         <button class="set-row set-link" id="set-tilt-row" type="button"><span class="set-name">Tilt test</span><span class="set-val" id="set-tilt-val">Tap to test</span></button>
         <button class="set-row set-link" id="set-snd-row" type="button"><span class="set-name">Water sound</span><span class="set-val" id="set-snd-val">Off</span></button>
       </div>
@@ -3130,6 +3162,8 @@
       document.getElementById('header-label').textContent = viewingPastDay
         ? 'Past day, ' + shortDate(activeDateKey)
         : shortDate(activeDateKey);
+      document.getElementById('header-label').classList.toggle('hide-date', !viewingPastDay);
+      { const tb = document.getElementById('tray-btn'); if (tb) tb.style.display = viewingPastDay ? 'none' : 'flex'; if (viewingPastDay) document.body.classList.remove('tray-open'); }
       document.getElementById('today-actions').style.display = viewingPastDay ? 'none' : 'flex';
       document.getElementById('past-actions').style.display = viewingPastDay ? 'flex' : 'none';
       document.getElementById('today-bottom-bar').style.display = viewingPastDay ? 'none' : 'block';
@@ -8356,6 +8390,226 @@
   setTimeout(all, 0);
   // a one-time tip about the new gestures
   setTimeout(function () { if (past() || LSg('daily_log_tip_pour') ) return; LSs('daily_log_tip_pour', '1'); showToast('New: hold the water card and drag up to pour. Hold a + button to change it.'); }, 3500);
+})();
+</script>
+<script>
+</script>
+<script>
+// ===== TREE OF THE DAY: one tree a day, drawn in code with trunk, branches, leaves and roots =====
+(function () {
+  var W = 340, H = 250, GY = 236, CX = 170;
+  function $(id) { return document.getElementById(id); }
+  function rng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function hx(c) { return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]; }
+  function lit(c, f) { var a = hx(c), t = f < 0 ? 0 : 255, k = Math.abs(f); return 'rgb(' + a.map(function (v) { return Math.round(v + (t - v) * k); }).join(',') + ')'; }
+  var LV = [-0.5, -0.36, -0.24, -0.12, 0, 0.1, 0.2, 0.32];
+  function ramps(P) { return P.map(function (c) { return LV.map(function (f) { return lit(c, f); }); }); }
+  var T = [
+    { n: 'Yoshino Cherry', a: 'round', c: ['#f2cfdb', '#f9e3ea', '#e9b0c5'], tr: '#5a4036', fall: '#f7c9d8', th: 62, rx: 112, ry: 80, cs: 1.05 },
+    { n: 'Sugar Maple', a: 'round', c: ['#f08a1f', '#e8661a', '#f4b02a'], tr: '#5e4636', fall: '#f08a1f', th: 60 },
+    { n: 'Banyan', a: 'banyan', c: ['#4a7a45', '#3a6a38', '#5f9150'], tr: '#7a5c44', fall: '#7fb05a' },
+    { n: 'Deodar Cedar', a: 'conic', c: ['#4f7a4a', '#3f6a40', '#6a9a5a'], tr: '#5a4636', fall: '#6a9a5a', h: 175, rx: 78 },
+    { n: 'Golden Laburnum', a: 'weep', c: ['#6aa04a', '#5a9040', '#7fb55a'], ac: '#f4cc2a', tr: '#5a4636', fall: '#f4cc2a' },
+    { n: 'Royal Palm', a: 'palm', c: ['#4f8a45', '#3f7a3a', '#6aa04a'], tr: '#cfc9b8', fall: '#6aa04a', lean: 0, bw: 15 },
+    { n: 'Scarlet Oak', a: 'round', c: ['#e0302a', '#c9241f', '#f04a38'], tr: '#5a4636', fall: '#e0302a', th: 58 },
+    { n: 'Blue Atlas Cedar', a: 'conic', c: ['#6f9ba3', '#5b8890', '#8fb4ba'], tr: '#5a4a40', fall: '#8fb4ba', h: 165, rx: 82 },
+    { n: 'Crape Myrtle', a: 'multi', c: ['#e8407a', '#f06a98', '#c92e68'], tr: '#a89078', fall: '#f06a98' },
+    { n: 'English Oak', a: 'round', c: ['#4f7a3a', '#3f6a30', '#6b9a4a'], tr: '#6b5846', fall: '#8ab05a', th: 46, rx: 140, ry: 70, bw: 30 },
+    { n: 'Japanese Maple', a: 'round', c: ['#c9241f', '#a81d28', '#e0402a'], tr: '#4a382e', fall: '#c9241f', th: 52, rx: 105, ry: 72 },
+    { n: 'Coconut Palm', a: 'palm', c: ['#5a9a3a', '#4a8a30', '#76b04a'], tr: '#a89478', fall: '#76b04a', lean: 34, bw: 13 },
+    { n: 'European White Birch', a: 'birch', c: ['#8fb85a', '#a9cc6a', '#76a048'], tr: '#efeadb', fall: '#a9cc6a' },
+    { n: 'Coast Redwood', a: 'conic', c: ['#3d6a45', '#2f5538', '#527d55'], tr: '#8a4a32', fall: '#527d55', h: 195, rx: 46, bw: 22 },
+    { n: 'Japanese White Pine', a: 'pine', c: ['#4f8a7e', '#3f7a70', '#6aa49a'], tr: '#5a4a40', fall: '#6aa49a' },
+    { n: 'Golden Trumpet Tree', a: 'round', c: ['#f4c21f', '#f6d24a', '#e8a81a'], tr: '#6b5846', fall: '#f4c21f', th: 60 },
+    { n: 'Weeping Beech', a: 'weep', c: ['#6aa04a', '#7fb55a', '#548a3e'], tr: '#8a8478', fall: '#7fb55a' },
+    { n: 'Orchid Tree', a: 'round', c: ['#5f9a4a', '#4a8a3c', '#79b35a'], ac: '#d44aa8', tr: '#6b5846', fall: '#d44aa8', th: 64 },
+    { n: 'Bald Cypress', a: 'conic', c: ['#d9692f', '#c4531f', '#e88a45'], tr: '#7a4a32', fall: '#d9692f', h: 170, rx: 70, bw: 24 },
+    { n: 'Flowering Dogwood', a: 'round', c: ['#f7f5ea', '#ffffff', '#dedac6'], ac: '#7fa050', tr: '#4f4036', fall: '#f7f5ea', th: 62, rx: 108, ry: 70 },
+    { n: 'Olive Tree', a: 'round', c: ['#7c8f78', '#93a58e', '#66795f'], tr: '#8a7a62', fall: '#93a58e', th: 40, rx: 100, ry: 64, bw: 34 },
+    { n: 'Katsura', a: 'round', c: ['#f2b032', '#f08a2a', '#f6cc5a'], tr: '#5a4636', fall: '#f2b032', th: 56 },
+    { n: 'Italian Stone Pine', a: 'umbrella', c: ['#4a7a3a', '#3f6a30', '#5f8e45'], tr: '#8a5a42', fall: '#5f8e45' },
+    { n: 'Pride of India', a: 'round', c: ['#4f8a45', '#5f9a4a', '#3f7a3a'], ac: '#c04ac8', tr: '#7a6a58', fall: '#c04ac8', th: 62 },
+    { n: 'Japanese Black Pine', a: 'pine', c: ['#2f5a3a', '#3f6a45', '#244a30'], tr: '#4a3a30', fall: '#3f6a45' },
+    { n: 'Silk Floss Tree', a: 'round', c: ['#e8509a', '#f27ab4', '#cf3a86'], tr: '#7a8a68', fall: '#f27ab4', th: 70 },
+    { n: 'Copper Beech', a: 'round', c: ['#5a1f3a', '#6f2a45', '#451830'], tr: '#8a8478', fall: '#8a3a5a', th: 56 },
+    { n: 'Royal Empress Tree', a: 'round', c: ['#9a7ad8', '#b79ae8', '#7e5fc0'], tr: '#6b5846', fall: '#b79ae8', th: 66 },
+    { n: 'Quaking Aspen', a: 'multi', c: ['#f4c21f', '#f6d24a', '#e8a81a'], tr: '#efeadb', fall: '#f4c21f', white: true },
+    { n: 'Giant Sequoia', a: 'conic', c: ['#4a7a45', '#3a6a38', '#5f9150'], tr: '#a0522d', fall: '#5f9150', h: 180, rx: 54, bw: 30 },
+    { n: 'Frangipani', a: 'round', c: ['#5f9a4a', '#4f8a3e', '#79b35a'], ac: '#ffffff', tr: '#8a8478', fall: '#ffffff', th: 54, rx: 95, ry: 60, cs: 0.8 },
+    { n: 'Red Horse Chestnut', a: 'round', c: ['#3f6f3a', '#4f8447', '#2f5a30'], ac: '#d6405a', tr: '#5a4636', fall: '#d6405a', th: 56 },
+    { n: 'Persian Ironwood', a: 'round', c: ['#e24a32', '#f0802a', '#c9382a'], tr: '#8a8478', fall: '#f0802a', th: 56 }
+  ];
+  var base = Math.floor(Date.UTC(2026, 10, 28) / 864e5);
+  function dayIdx(d) { var n = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); return (((n - base) % T.length) + T.length) % T.length; }
+
+  // a tapered branch: wide at the start, thin at the end
+  function limb(c, x0, y0, cx, cy, x1, y1, w0, w1, col, n) {
+    n = n || 12; var L = [], R = [], i, t, mt, x, y, dx, dy, l, w;
+    for (i = 0; i <= n; i++) {
+      t = i / n; mt = 1 - t; x = mt * mt * x0 + 2 * mt * t * cx + t * t * x1; y = mt * mt * y0 + 2 * mt * t * cy + t * t * y1;
+      dx = 2 * mt * (cx - x0) + 2 * t * (x1 - cx); dy = 2 * mt * (cy - y0) + 2 * t * (y1 - cy); l = Math.sqrt(dx * dx + dy * dy) || 1; w = (w0 + (w1 - w0) * t) / 2;
+      L.push([x - dy / l * w, y + dx / l * w]); R.push([x + dy / l * w, y - dx / l * w]);
+    }
+    c.fillStyle = col; c.beginPath(); c.moveTo(L[0][0], L[0][1]);
+    for (i = 1; i <= n; i++) c.lineTo(L[i][0], L[i][1]);
+    for (i = n; i >= 0; i--) c.lineTo(R[i][0], R[i][1]);
+    c.closePath(); c.fill();
+  }
+  function roots(c, cx, gy, bw, col, rnd) {
+    var s, k, n = 3;
+    for (s = -1; s <= 1; s += 2) for (k = 0; k < n; k++) {
+      var len = bw * (0.9 + rnd() * 1.1) + k * 6, yy = gy - 16 + k * 4;
+      limb(c, cx + s * bw * 0.2, yy, cx + s * (bw * 0.5 + len * 0.35), gy - 2, cx + s * (bw * 0.45 + len), gy + 5 + k * 2, bw * 0.55 - k * 2, 2, col, 8);
+    }
+  }
+  function bark(c, cx, y0, y1, bw, rnd, col) {
+    c.strokeStyle = col; c.globalAlpha = 0.28; c.lineWidth = 1.3;
+    for (var i = 0; i < 9; i++) { var x = cx + (rnd() - 0.5) * bw * 0.8, h = 18 + rnd() * 40, y = y1 + rnd() * (y0 - y1 - h); c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + (rnd() - 0.5) * 4, y + h / 2, x + (rnd() - 0.5) * 3, y + h); c.stroke(); }
+    c.globalAlpha = 1;
+  }
+  function needles(c, x, y, rad, n, rd, rp, flat) {
+    for (var i = 0; i < n; i++) {
+      var a = rd() * 6.283, d = Math.sqrt(rd()) * rad, px = x + Math.cos(a) * d, py = y + Math.sin(a) * d * (flat || 0.8);
+      var lv = Math.min(7, Math.max(0, Math.round(3 + (-Math.sin(a) * 0.9 - Math.cos(a) * 0.3) * d / rad * 3 + (rd() - 0.5) * 2)));
+      var pi = (rd() * rp.length) | 0, ang = 1.2 + (rd() - 0.5) * 1.6 + (px < CX ? 0.4 : -0.4);
+      c.strokeStyle = rp[pi][lv]; c.lineWidth = 1.5; c.beginPath(); c.moveTo(px, py); c.lineTo(px + Math.cos(ang) * 8 * (px < CX ? -1 : 1), py + Math.sin(ang) * 8); c.stroke();
+    }
+  }
+  function leaves(c, x, y, rad, n, rd, rp, sp, E, flat) {
+    c.globalAlpha = 0.3; c.fillStyle = rp[0][0]; c.beginPath(); c.ellipse(x + 2, y + rad * 0.2, rad * 0.95, rad * 0.8 * (flat || 1), 0, 0, 6.283); c.fill(); c.globalAlpha = 1;
+    for (var i = 0; i < n; i++) {
+      var a = rd() * 6.283, d = Math.sqrt(rd()) * rad, px = x + Math.cos(a) * d, py = y + Math.sin(a) * d * 0.9 * (flat || 1);
+      var l = (-Math.sin(a) * 0.62 - Math.cos(a) * 0.3) * (d / rad) * 0.9 + ((E ? (E.cy - py) / E.ry : 0) * 0.35);
+      var lv = Math.max(0, Math.min(7, Math.round(3.4 + l * 4 + (rd() - 0.5) * 2.2)));
+      var pi = (rd() * rp.length) | 0, s = 3.4 + rd() * 4;
+      if (sp.ac && rd() < 0.13) { c.fillStyle = sp.ac; c.beginPath(); c.arc(px, py, 2.6 + rd() * 2.2, 0, 6.283); c.fill(); continue; }
+      c.fillStyle = rp[pi][lv]; c.beginPath(); c.ellipse(px, py, s, s * 0.62, rd() * 3.14, 0, 6.283); c.fill();
+    }
+  }
+  function draw(sp, tc, cc, seed) {
+    var rd = rng(seed), rp = ramps(sp.c), A = sp.a, th = sp.th || 60, bw = sp.bw || 20, i, j, x, y, o = { ox: CX, oy: GY - th };
+    function trunk(x0, y0, x1, y1, w0, w1, bx) { limb(tc, x0, GY, bx, (GY + y1) / 2, x1, y1, w0, w1, sp.tr, 14); bark(tc, x0, GY - 8, y1, w0, rd, '#000'); }
+    if (A === 'round' || A === 'birch' || A === 'multi') {
+      var rx = sp.rx || (A === 'birch' ? 70 : 100), ry = sp.ry || (A === 'birch' ? 74 : 78), topY = GY - th - (A === 'birch' ? 36 : 0), E = { cx: CX + (rd() - 0.5) * 8, cy: topY - ry * 0.58, rx: rx, ry: ry }, N = sp.nc || 36, cl = [], tx = CX;
+      if (A === 'multi') { for (j = -1; j <= 1; j++) limb(tc, CX + j * 8, GY, CX + j * 24, GY - 56, CX + j * 40, GY - 104, 11, 5, sp.tr, 12); E.cy = GY - 150; E.ry = 58; E.rx = 96; topY = GY - 104; if (sp.white) { tc.fillStyle = '#2a2a24'; for (i = 0; i < 18; i++) tc.fillRect(CX + (rd() - 0.5) * 80, GY - 20 - rd() * 80, 5, 1.6); } }
+      else { limb(tc, CX, GY, CX + (rd() - 0.5) * 10, GY - th / 2, CX, topY + 6, bw, bw * 0.55, sp.tr, 14); bark(tc, CX, GY - 8, topY, bw, rd, '#000'); }
+      if (A === 'birch') { tc.fillStyle = '#3a3a30'; for (i = 0; i < 22; i++) tc.fillRect(CX + (rd() - 0.5) * bw * 0.7, GY - 12 - rd() * (th + 20), 4.5, 1.7); }
+      for (i = 0; i < N; i++) { var a = rd() * 6.283, d = Math.pow(rd(), 0.62); cl.push({ x: E.cx + Math.cos(a) * E.rx * d * 0.92, y: E.cy + Math.sin(a) * E.ry * d * 0.9, r: (15 + rd() * 14) * (sp.cs || 1) }); }
+      for (i = 0; i < 4; i++) cl.push({ x: E.cx + (rd() - 0.5) * E.rx * 0.7, y: E.cy + (rd() - 0.3) * E.ry * 0.6, r: 30 * (sp.cs || 1) });
+      cl.forEach(function (k) { limb(tc, CX, topY + 8, (CX + k.x) / 2 + (rd() - 0.5) * 18, (topY + k.y) / 2 + 12, k.x, k.y, 6.5, 1.4, sp.tr, 9); });
+      cl.sort(function (p, q) { return q.y - p.y; });
+      cl.forEach(function (k) { leaves(cc, k.x, k.y, k.r, Math.round(k.r * k.r / 3.3), rd, rp, sp, E); });
+      o.oy = topY;
+    } else if (A === 'conic') {
+      var h = sp.h || 170, rxx = sp.rx || 70, apex = GY - (sp.th || 30) - h, Tn = 12;
+      limb(tc, CX, GY, CX, GY - 50, CX, apex + 10, bw, 4, sp.tr, 14); bark(tc, CX, GY - 8, apex + 30, bw, rd, '#000');
+      for (i = 0; i < Tn; i++) {
+        var f = i / (Tn - 1), yy = apex + 8 + f * (h - 14), ww = 8 + f * rxx;
+        for (var sd = -1; sd <= 1; sd += 2) {
+          var ex = CX + sd * ww, ey = yy + 10 + f * 8;
+          limb(tc, CX, yy - 2, CX + sd * ww * 0.5, yy - 3, ex, ey, 4, 1, sp.tr, 6);
+          var pn = 3 + Math.round(f * 3);
+          for (var q = 1; q <= pn; q++) { var tt2 = q / pn; needles(cc, CX + sd * ww * tt2 * (0.9 + rd() * 0.15), yy + (ey - yy) * tt2 * tt2 + (rd() - 0.5) * 3, 8 + f * 4 + (1 - tt2) * 2, 34 + Math.round(f * 16), rd, rp, 0.7); }
+        }
+        for (var q2 = 0; q2 < 2; q2++) needles(cc, CX + (rd() - 0.5) * ww * 0.9, yy + 8 + f * 6, 9 + f * 5, 40, rd, rp, 0.7);
+      }
+      o.oy = GY - 30;
+    } else if (A === 'weep') {
+      var tY = GY - 74, E2 = { cx: CX, cy: tY - 34, rx: 92, ry: 52 };
+      limb(tc, CX, GY, CX + 4, GY - 40, CX, tY + 6, 24, 12, sp.tr, 14); bark(tc, CX, GY - 8, tY, 24, rd, '#000');
+      for (i = 0; i < 14; i++) { var a2 = Math.PI + rd() * Math.PI, k2x = E2.cx + Math.cos(a2) * E2.rx * 0.8, k2y = E2.cy + Math.sin(a2) * E2.ry * 0.7; limb(tc, CX, tY + 6, (CX + k2x) / 2, tY - 20, k2x, k2y, 7, 1.5, sp.tr, 8); leaves(cc, k2x, k2y, 24, 90, rd, rp, sp, E2); }
+      for (i = 0; i < 90; i++) {
+        var a3 = Math.PI * (1.02 + rd() * 0.96), sx0 = 0, sx = E2.cx + Math.cos(a3) * (E2.rx + 10) * (0.7 + rd() * 0.3), sy = E2.cy + Math.sin(a3) * -E2.ry * 0.2 + 8 + rd() * 30, len = 34 + rd() * 72, px = sx, py = sy, ph = rd() * 6; if (Math.abs(sx - CX) < 20 && len > 30) continue;
+        for (j = 0; j < len / 4.5; j++) { py += 4.5; px += Math.sin(ph + j * 0.4) * 0.8; var lv = Math.max(0, Math.min(7, Math.round(3 + (rd() - 0.5) * 3 + (j / 8) * -1))); var pi2 = (rd() * rp.length) | 0;
+          if (sp.ac && rd() < 0.22) { cc.fillStyle = sp.ac; cc.beginPath(); cc.ellipse(px, py, 2.3, 3.6, 0, 0, 6.283); cc.fill(); } else { cc.fillStyle = rp[pi2][lv]; cc.beginPath(); cc.ellipse(px, py, 2.6, 4.6, 0.15, 0, 6.283); cc.fill(); } }
+      }
+      o.oy = tY;
+    } else if (A === 'umbrella') {
+      var tt = 128, tY2 = GY - tt, E3 = { cx: CX, cy: tY2 - 12, rx: 104, ry: 30 };
+      limb(tc, CX, GY, CX + 14, GY - 70, CX + 4, tY2 + 4, 17, 9, sp.tr, 14); bark(tc, CX, GY - 8, tY2, 15, rd, '#000');
+      for (i = 0; i < 7; i++) { var kx = E3.cx + (i - 3) * 30 + (rd() - 0.5) * 10, ky = E3.cy + (rd() - 0.5) * 10; limb(tc, CX + 4, tY2 + 6, (CX + kx) / 2, tY2 - 4, kx, ky, 6, 1.5, sp.tr, 8); }
+      var cl2 = []; for (i = 0; i < 24; i++) cl2.push({ x: E3.cx + (rd() - 0.5) * E3.rx * 1.9, y: E3.cy + (rd() - 0.5) * E3.ry * 1.5 });
+      cl2.sort(function (p, q) { return q.y - p.y; }).forEach(function (k) { var edge = Math.abs(k.x - E3.cx) / E3.rx; leaves(cc, k.x, k.y, 24 - edge * 6, 90, rd, rp, sp, E3, 0.6); });
+      o.oy = tY2;
+    } else if (A === 'banyan') {
+      var tY3 = GY - 60, E4 = { cx: CX, cy: tY3 - 44, rx: 140, ry: 54 }, cl3 = [];
+      for (i = 0; i < 19; i++) { var xx = CX - 128 + i * 13.5 + (rd() - 0.5) * 6, yT = E4.cy + 30 + rd() * 16, bx = xx + (rd() - 0.5) * 12; limb(tc, xx, yT, bx, (yT + GY) / 2, xx + (rd() - 0.5) * 3, GY + 1, 3.8, 2.6, i % 4 === 0 ? '#6a4e3a' : '#8a6a52', 9); limb(tc, xx - 1, yT, bx - 1, (yT + GY) / 2, xx - 1, GY, 1.2, 0.8, '#b08a6a', 6); }
+      limb(tc, CX, GY, CX + 4, GY - 30, CX, tY3 - 4, 36, 22, '#7a5c44', 14); bark(tc, CX, GY - 8, tY3, 34, rd, '#000');
+      for (i = 0; i < 40; i++) { var a4 = rd() * 6.283, d4 = Math.pow(rd(), 0.6); cl3.push({ x: E4.cx + Math.cos(a4) * E4.rx * d4 * 0.95, y: E4.cy + Math.sin(a4) * E4.ry * d4 * 0.9, r: 20 + rd() * 14 }); }
+      cl3.sort(function (p, q) { return q.y - p.y; }).forEach(function (k) { leaves(cc, k.x, k.y, k.r, Math.round(k.r * k.r / 3.3), rd, rp, sp, E4); });
+      o.oy = tY3;
+    } else if (A === 'pine') {
+      var pts = [[CX - 4, GY], [CX + 28, GY - 60], [CX - 14, GY - 120], [CX + 16, GY - 178]];
+      limb(tc, pts[0][0], pts[0][1], CX + 46, GY - 28, pts[1][0], pts[1][1], 22, 14, sp.tr, 12); limb(tc, pts[1][0], pts[1][1], CX - 30, GY - 90, pts[2][0], pts[2][1], 14, 9, sp.tr, 12); limb(tc, pts[2][0], pts[2][1], CX + 40, GY - 150, pts[3][0], pts[3][1], 9, 4, sp.tr, 12); bark(tc, CX + 8, GY - 8, GY - 90, 18, rd, '#000');
+      var pads = [[CX - 78, GY - 64, 56], [CX + 76, GY - 84, 60], [CX - 66, GY - 128, 52], [CX + 60, GY - 150, 46], [CX + 6, GY - 196, 52], [CX - 20, GY - 100, 38]];
+      pads.forEach(function (p, k) { var from = pts[Math.min(3, 1 + (k % 3))]; limb(tc, from[0], from[1], (from[0] + p[0]) / 2, (from[1] + p[1]) / 2 + 10, p[0], p[1] + 6, 8, 2, sp.tr, 8); needles(cc, p[0], p[1], p[2], 330, rd, rp, 0.38); });
+      o.oy = GY - 100;
+    } else if (A === 'palm') {
+      var lean = sp.lean || 0, tx2 = CX + lean, ty2 = GY - 138;
+      limb(tc, CX, GY, CX + lean * 0.1, GY - 80, tx2, ty2, bw + 4, bw - 3, sp.tr, 16);
+      tc.strokeStyle = 'rgba(0,0,0,0.2)'; tc.lineWidth = 1.2; for (i = 0; i < 16; i++) { var fy = GY - 8 - i * 8.6, fx = CX + lean * Math.pow(1 - (fy - ty2) / (GY - ty2), 2) * 1.0; tc.beginPath(); tc.moveTo(fx - bw / 2, fy); tc.lineTo(fx + bw / 2, fy + 1.5); tc.stroke(); }
+      for (i = 0; i < 11; i++) {
+        var an = Math.PI * (1.04 + i / 10 * 0.92) + (rd() - 0.5) * 0.12, len2 = 96 + rd() * 28, ex = tx2 + Math.cos(an) * len2, ey = ty2 + Math.sin(an) * len2 * 0.78 + 20 + Math.abs(Math.cos(an)) * 26, cx2 = tx2 + Math.cos(an) * len2 * 0.5, cy2 = ty2 + Math.sin(an) * len2 * 0.8 - 10;
+        cc.strokeStyle = rp[2][1]; cc.lineWidth = 2.2; cc.beginPath(); cc.moveTo(tx2, ty2); cc.quadraticCurveTo(cx2, cy2, ex, ey); cc.stroke();
+        for (j = 1; j < 18; j++) { var t = j / 18, mt = 1 - t, qx = mt * mt * tx2 + 2 * mt * t * cx2 + t * t * ex, qy = mt * mt * ty2 + 2 * mt * t * cy2 + t * t * ey, ll = 28 * (1 - t * 0.5);
+          for (var sd = -1; sd <= 1; sd += 2) { cc.strokeStyle = rp[(rd() * 3) | 0][2 + ((rd() * 5) | 0)]; cc.lineWidth = 1.5; cc.beginPath(); cc.moveTo(qx, qy); cc.lineTo(qx + sd * ll * 0.55, qy + ll * 0.85); cc.stroke(); } }
+      }
+      o.ox = tx2; o.oy = ty2 + 8; roots(tc, CX, GY, 12, sp.tr, rd); return o;
+    } else if (A === 'multi2') { }
+    roots(tc, CX, GY, (A === 'banyan' ? 32 : (A === 'multi' ? 22 : bw)), sp.tr, rd);
+    return o;
+  }
+
+  var cvT = null, cvC = null, cur = -1, petalT = 0, scene = null, seenIO = true;
+  function dpr() { return Math.min(2, window.devicePixelRatio || 1); }
+  function render(idx, tcv, ccv, seed) {
+    var d = dpr(), sp = T[idx], tc, cc;
+    [tcv, ccv].forEach(function (c) { c.width = W * d; c.height = H * d; });
+    tc = tcv.getContext('2d'); cc = ccv.getContext('2d'); tc.setTransform(d, 0, 0, d, 0, 0); cc.setTransform(d, 0, 0, d, 0, 0);
+    return draw(sp, tc, cc, seed || (idx * 7919 + 13));
+  }
+  function pick() {
+    var d = new Date(), k = null;
+    try { k = JSON.parse(localStorage.getItem('dl_tree_ov') || 'null'); } catch (e) {}
+    var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+    return k && k.day === key ? k.idx : dayIdx(d);
+  }
+  function mount(forest) {
+    forest.classList.add('tod-forest'); document.body.classList.add('has-tod');
+    forest.innerHTML = '<div class="tod" id="tod"><div class="tod-soil"></div><canvas class="tod-trunk" id="tod-trunk"></canvas><div class="tod-sway" id="tod-sway"><canvas id="tod-canopy"></canvas></div><div class="tod-petals" id="tod-petals"></div></div>';
+    cvT = $('tod-trunk'); cvC = $('tod-canopy'); show(pick());
+    forest.addEventListener('click', function () { gust(); var n = T[cur] && T[cur].n; if (n && window.showToast) showToast('Tree of the day: ' + n); });
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { seenIO = es[0].isIntersecting; }).observe(forest);
+    setInterval(function () { var d = new Date(); var p = pick(); if (p !== cur) show(p); petal(); }, 1100);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) { var p = pick(); if (p !== cur) show(p); } });
+  }
+  function show(idx) {
+    cur = idx; var o = render(idx, cvT, cvC), sw = $('tod-sway'), sp = T[idx];
+    sw.style.setProperty('--ox', (o.ox / W * 100).toFixed(1) + '%'); sw.style.setProperty('--oy', (o.oy / H * 100).toFixed(1) + '%');
+    var b = document.body.style; b.setProperty('--tod1', sp.fall); b.setProperty('--tod2', sp.c[0]);
+    var v = $('set-tree-val'); if (v) v.textContent = sp.n;
+  }
+  function gust() { var sw = $('tod-sway'); if (!sw) return; sw.classList.remove('gust'); void sw.offsetWidth; sw.classList.add('gust'); for (var i = 0; i < 12; i++) petal(true); }
+  function petal(burst) {
+    var box = $('tod-petals'); if (!box || !seenIO || document.hidden || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (box.children.length > (burst ? 26 : 7)) return; var sp = T[cur]; if (!sp) return;
+    var p = document.createElement('i'), c = Math.random() < 0.6 ? sp.fall : sp.c[(Math.random() * 3) | 0];
+    p.style.cssText = 'left:' + (18 + Math.random() * 64).toFixed(1) + '%;top:' + (8 + Math.random() * 44).toFixed(1) + '%;background:' + c + ';--dx:' + ((Math.random() - 0.4) * 130).toFixed(0) + 'px;--dr:' + ((Math.random() - 0.5) * 540).toFixed(0) + 'deg;animation-duration:' + (3.8 + Math.random() * 3).toFixed(1) + 's';
+    box.appendChild(p); setTimeout(function () { p.remove(); }, 7200);
+  }
+  window.__tod = { list: T, render: render, mount: mount, show: show, next: function () { var d = new Date(), k = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate(), n = (cur + 1) % T.length; try { localStorage.setItem('dl_tree_ov', JSON.stringify({ day: k, idx: n })); } catch (e) {} show(n); return T[n].n; }, name: function () { return T[cur] && T[cur].n; } };
+  function init() { var f = document.querySelector('.forest'); if (f && !f.classList.contains('tod-forest')) mount(f); }
+  window.__todInit = init;
+})();
+
+(function () {
+  var b = document.body, btn = document.getElementById('tray-btn'), t = 0;
+  function set(on) { b.classList.toggle('tray-open', on); btn.setAttribute('aria-expanded', on ? 'true' : 'false'); clearTimeout(t); if (on) t = setTimeout(function () { set(false); }, 8000); }
+  btn.addEventListener('click', function (e) { e.stopPropagation(); set(!b.classList.contains('tray-open')); });
+  document.addEventListener('click', function (e) { if (b.classList.contains('tray-open') && !e.target.closest('#today-actions, #tray-btn')) set(false); else if (e.target.closest('#today-actions .icon-btn')) setTimeout(function () { set(false); }, 150); });
+  setInterval(function () { var n = document.getElementById('bell-n'), d = document.getElementById('tray-dot'); if (n && d) d.hidden = n.hidden; }, 1500);
+  document.addEventListener('click', function (e) { var r = e.target.closest('#set-tree-row'); if (r && window.__tod) { var n = window.__tod.next(); if (window.showToast) showToast(n + ' (changes back tomorrow)'); } });
+  if (window.__todInit) window.__todInit();
 })();
 </script>
 <script>
