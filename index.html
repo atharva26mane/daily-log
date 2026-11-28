@@ -1853,7 +1853,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 53</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 54</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -1881,6 +1881,7 @@
         <button class="set-row set-link" id="set-backup-row"><span class="set-name">Backup and restore</span><span class="set-val">Export / import</span></button>
         <button class="set-row set-link" id="set-ts-row" type="button"><span class="set-name">Text size</span><span class="set-val" id="set-ts-val">Normal</span></button>
         <button class="set-row set-link" id="set-hap-row" type="button"><span class="set-name">Vibration</span><span class="set-val" id="set-hap-val">On</span></button>
+        <button class="set-row set-link" id="set-tilt-row" type="button"><span class="set-name">Tilt test</span><span class="set-val" id="set-tilt-val">Tap to test</span></button>
         <button class="set-row set-link" id="set-snd-row" type="button"><span class="set-name">Water sound</span><span class="set-val" id="set-snd-val">Off</span></button>
       </div>
 
@@ -8084,6 +8085,14 @@
     var f = $('tank-fill'); if (f) f.style.setProperty('--tilt', tilt.toFixed(2) + 'deg');
     if (Math.abs(tiltT - tilt) > 0.05) tiltRaf = requestAnimationFrame(tiltLoop); else tiltRaf = 0;
   }
+  var nOri = 0, nMot = 0, dbgOn = false, lastG = null, lastX = null;
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('#set-tilt-row')) return; dbgOn = !dbgOn; var v = $('set-tilt-val');
+    if (!dbgOn) { v.textContent = 'Tap to test'; return; }
+    (function tick() { if (!dbgOn) return; v.textContent = 'tilt ' + (tilt || 0).toFixed(1) + ' | turn ' + nOri + (lastG === null ? '' : ' (' + Math.round(lastG) + ')') + ' | motion ' + nMot + (lastX === null ? '' : ' (' + lastX.toFixed(1) + ')') + (calm ? ' | reduced motion ON' : '') + (tankSeen ? '' : ' | tank off screen'); setTimeout(tick, 300); })();
+  });
+  window.addEventListener('deviceorientation', function (e) { nOri++; if (typeof e.gamma === 'number') lastG = e.gamma; });
+  window.addEventListener('devicemotion', function (e) { nMot++; var g = e.accelerationIncludingGravity; if (g && typeof g.x === 'number') lastX = g.x; });
   var oriSeen = false;
   function setTilt(t) { t = Math.max(-12, Math.min(12, t)); if (Math.abs(t - tiltT) < 0.3) return; tiltT = t; if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop); }
   function onOri(e) {
