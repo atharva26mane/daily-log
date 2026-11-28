@@ -623,6 +623,140 @@
     @keyframes glow { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
     @keyframes wander { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(22px, -16px); } 66% { transform: translate(-14px, 10px); } }
 
+    /* ---------- Water plan ---------- */
+    .wp-card { margin-top: 14px; padding: 12px; border-radius: 18px; background: rgba(254,250,224,0.78); border: 1px solid rgba(64,81,59,0.14); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 160ms cubic-bezier(0.23,1,0.32,1); }
+    .wp-card:active { transform: scale(0.99); }
+    .wp-card[hidden] { display: none; }
+    .wp-row { display: flex; align-items: center; gap: 12px; }
+    .wp-ic { flex: none; width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #fff; color: #4f7f95; }
+    .wp-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
+    .wp-ic.live { background: var(--forest); color: var(--cream); }
+    .wp-tx { flex: 1; min-width: 0; display: block; }
+    .wp-tx b { display: block; font-size: 15px; color: var(--ink); line-height: 1.25; font-variant-numeric: tabular-nums; }
+    .wp-tx small { display: block; font-size: 13px; color: var(--moss); line-height: 1.3; font-variant-numeric: tabular-nums; }
+    .wp-btn { flex: none; min-height: 44px; padding: 0 14px; border-radius: 14px; border: 1px solid rgba(64,81,59,0.3); background: #fff; color: var(--forest); font: 800 14px var(--body); cursor: pointer; transition: transform 160ms cubic-bezier(0.23,1,0.32,1); }
+    .wp-btn.solid { background: var(--forest); border-color: var(--forest); color: var(--cream); }
+    .wp-btn.wide { width: 100%; margin-top: 6px; }
+    .wp-btn:active { transform: scale(0.96); }
+    .wp-strip { position: relative; margin-top: 12px; }
+    .wp-track { position: relative; height: 14px; border-radius: 7px; background: rgba(64,81,59,0.08); }
+    .wp-strip.big .wp-track { height: 20px; border-radius: 10px; }
+    .wp-q { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: rgba(185,148,112,0.26); }
+    .wp-q.busy { background: rgba(64,81,59,0.16); }
+    .wp-t { position: absolute; top: 28%; height: 44%; width: 2px; margin-left: -1px; border-radius: 1px; background: rgba(64,81,59,0.38); }
+    .wp-t.big { top: 14%; height: 72%; width: 3px; margin-left: -1.5px; }
+    .wp-t.dn { background: var(--fern); }
+    .wp-t.ms { background: rgba(64,81,59,0.16); }
+    .wp-t.sk { opacity: 0.3; }
+    .wp-t.nx { top: -22%; height: 144%; width: 4px; margin-left: -2px; border-radius: 2px; background: var(--forest); box-shadow: 0 0 0 3px rgba(150,182,197,0.6); z-index: 2; }
+    .wp-now { position: absolute; top: -5px; bottom: -5px; width: 2px; margin-left: -1px; border-radius: 1px; background: #b4532a; z-index: 1; }
+    .wp-marks { position: relative; height: 14px; margin-top: 3px; }
+    .wp-m { position: absolute; top: 0; width: 14px; height: 14px; margin-left: -7px; color: var(--driftwood); }
+    .wp-m svg, .wp-dot svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .wp-ends { display: none; justify-content: space-between; font-size: 12px; color: var(--moss); font-variant-numeric: tabular-nums; font-weight: 600; }
+    .wp-strip.big .wp-ends { display: flex; }
+    .wp-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 6px; }
+    .wp-open { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--forest); }
+    .wp-open::after { content: ''; display: inline-block; width: 6px; height: 6px; margin-left: 6px; border-right: 2px solid currentColor; border-top: 2px solid currentColor; transform: translateY(-1px) rotate(45deg); }
+    .wp-chip { flex: none; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: rgba(96,153,102,0.16); color: var(--forest); font-variant-numeric: tabular-nums; }
+    .wp-chip.good { background: rgba(157,192,139,0.45); }
+    .wp-chip.warn { background: rgba(185,148,112,0.28); color: #6b4423; }
+    .tank .wp-card + .tank-quick { margin-top: 12px; }
+    #wp-modal .sheet { padding-top: 22px; }
+    .wp-sum { padding: 14px; border-radius: 20px; background: rgba(255,255,255,0.6); border: 1px solid rgba(64,81,59,0.12); margin-bottom: 12px; }
+    .wp-sum-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .wp-sum-n { font-size: 15px; color: var(--moss); font-variant-numeric: tabular-nums; }
+    .wp-sum-n b { font-family: var(--display); font-size: 30px; font-weight: 800; color: var(--forest); letter-spacing: -0.02em; margin-right: 4px; }
+    .wp-sum-p { margin: 6px 0 12px; font-size: 14px; color: var(--moss); line-height: 1.4; }
+    .wp-next { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 12px; padding: 16px; border-radius: 22px; background: var(--forest); color: var(--cream); margin-bottom: 12px; }
+    .wp-next.due { box-shadow: 0 0 0 3px var(--sea); }
+    .wp-next-l { min-width: 0; }
+    .wp-k { display: block; font-size: 13px; font-weight: 600; opacity: 0.85; }
+    .wp-big { display: block; font-family: var(--display); font-size: 40px; font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .wp-next > .wp-big { grid-column: 1 / -1; font-size: 28px; }
+    .wp-sips { display: block; font-size: 14px; opacity: 0.88; font-variant-numeric: tabular-nums; }
+    .wp-next p, .wp-why { grid-column: 1 / -1; margin: 6px 0 0; font-size: 14px; line-height: 1.4; opacity: 0.92; }
+    .lb-btn.wp-log { width: auto; margin: 0; padding: 0 20px; background: var(--cream); color: var(--forest); }
+    .wp-warn { background: rgba(185,148,112,0.2); color: #5e3d1f; border-radius: 14px; padding: 10px 12px; font-size: 14px; line-height: 1.4; margin: 0 0 12px; }
+    .wp-urine { padding: 12px 14px 8px; border-radius: 18px; border: 1px solid rgba(64,81,59,0.14); background: rgba(255,255,255,0.55); margin-bottom: 12px; }
+    .wp-u-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .wp-u-head b { font-size: 15px; color: var(--ink); }
+    .wp-u-head span { font-size: 13px; color: var(--moss); font-variant-numeric: tabular-nums; }
+    .wp-u-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 10px 0 6px; }
+    .wp-u-chips button { min-height: 44px; padding: 0 6px; border-radius: 14px; border: 1px solid rgba(64,81,59,0.22); background: #fff; font: 600 14px var(--body); color: var(--ink); display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: transform 160ms cubic-bezier(0.23,1,0.32,1); }
+    .wp-u-chips button:active { transform: scale(0.96); }
+    .wp-u-chips i { flex: none; width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.18); }
+    .wp-tip { font-size: 14px; color: var(--moss); margin: 0 4px 10px; line-height: 1.4; }
+    .wp-list { margin: 6px 0 14px; }
+    .wp-list:not(.all) .past { display: none; }
+    .wp-earlier { width: 100%; min-height: 44px; border: 1px dashed rgba(64,81,59,0.32); border-radius: 14px; background: transparent; color: var(--forest); font: 700 14px var(--body); cursor: pointer; margin-bottom: 4px; }
+    .wp-part { font-size: 13px; font-weight: 700; color: var(--moss); margin: 12px 0 2px 6px; }
+    .wp-r { display: grid; grid-template-columns: 46px 22px 1fr auto; align-items: center; gap: 8px; min-height: 48px; padding: 2px 8px; border-radius: 14px; }
+    .wp-r.nx { background: rgba(150,182,197,0.22); }
+    .wp-r.past { opacity: 0.55; }
+    .wp-time { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 14px; color: var(--ink); }
+    .wp-dot { align-self: stretch; position: relative; display: flex; align-items: center; justify-content: center; }
+    .wp-dot::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: rgba(64,81,59,0.14); }
+    .wp-dot i { position: relative; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2px solid var(--sea); }
+    .wp-r.key .wp-dot i { width: 14px; height: 14px; }
+    .wp-r.dn .wp-dot i { background: var(--fern); border-color: var(--fern); }
+    .wp-r.nx .wp-dot i { background: var(--forest); border-color: var(--forest); box-shadow: 0 0 0 4px rgba(150,182,197,0.55); }
+    .wp-dot svg { position: relative; width: 20px; height: 20px; padding: 2px; border-radius: 50%; background: var(--cream); color: var(--driftwood); box-sizing: border-box; }
+    .wp-r.act .wp-dot svg { color: var(--forest); }
+    .wp-c { min-width: 0; padding: 4px 0; }
+    .wp-c b { display: block; font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .wp-c small { display: block; font-size: 13px; color: var(--moss); line-height: 1.3; }
+    .wp-st { font-size: 12px; font-weight: 700; color: var(--moss); }
+    .wp-st.ok { color: var(--fern); }
+    .wp-st.nx { color: var(--forest); }
+    .lb-btn.wp-sec { background: transparent; color: var(--forest); border: 1px solid rgba(64,81,59,0.3); }
+    .lb-btn.wp-sec[disabled] { opacity: 0.6; }
+    .wp-fine { margin-top: 14px; }
+    .wp-intro { font-size: 15px; color: var(--moss); margin: 0 4px 14px; line-height: 1.45; }
+    .set-input.wp-time { max-width: 42%; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--forest); }
+    .wp-learn { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--moss); margin: -2px 6px 8px; }
+    .wp-learn button { flex: none; min-height: 40px; padding: 0 12px; border-radius: 12px; border: 1px solid rgba(64,81,59,0.3); background: #fff; color: var(--forest); font: 700 13px var(--body); cursor: pointer; }
+    .wp-seg.n2 { grid-template-columns: repeat(2, 1fr); }
+    .wp-seg.n6 button { font-variant-numeric: tabular-nums; }
+    .wp-act .set-name b { margin-right: 6px; font-variant-numeric: tabular-nums; }
+    .wp-act .set-name small { display: block; font-size: 12px; color: var(--moss); font-weight: 500; }
+    .wp-x { flex: none; width: 44px; height: 44px; border: 0; background: transparent; font-size: 24px; line-height: 1; color: var(--moss); cursor: pointer; }
+    .wp-add { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    .wp-add .seg { margin: 0; }
+    .wp-add .set-input { border: 1px solid rgba(128,128,128,0.3); border-radius: 14px; padding: 10px 12px; min-height: 46px; background: rgba(255,255,255,0.5); text-align: left; width: 100%; max-width: none; box-sizing: border-box; font-size: 16px; }
+    .wp-add-row { display: flex; gap: 8px; }
+    .wp-add-row .set-input { flex: 1; min-width: 0; }
+    .wp-ai { margin-top: 10px; padding: 12px 14px; border-radius: 18px; background: rgba(255,255,255,0.6); border: 1px solid rgba(64,81,59,0.14); }
+    .wp-ai-ch { list-style: none; padding: 0; margin: 4px 0 8px; }
+    .wp-ai-ch li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 2px; border-bottom: 1px solid rgba(64,81,59,0.1); font-size: 14px; }
+    .wp-ai-ch li b { font-variant-numeric: tabular-nums; color: var(--forest); }
+    .wp-ai-tips { margin: 6px 0 10px; padding-left: 18px; font-size: 14px; line-height: 1.45; color: var(--ink); }
+    .wp-ai-tips li + li { margin-top: 4px; }
+    .wp-ai-btns { display: flex; gap: 8px; }
+    .wp-ai-btns .wp-btn { flex: 1; }
+    .pl-link.wp-off { display: block; margin: 16px auto 4px; }
+    body.theme-volcano .wp-card { background: rgba(255,255,255,0.06); border-color: var(--edge); }
+    body.theme-volcano .wp-tx b { color: #ffe3c8; }
+    body.theme-volcano .wp-tx small, body.theme-volcano .wp-ends { color: #e4c9b6; }
+    body.theme-volcano .wp-ic { background: rgba(255,255,255,0.1); color: #ffd9bd; }
+    body.theme-volcano .wp-ic.live { background: var(--ember); color: #1f120c; }
+    body.theme-volcano .wp-card .wp-btn { background: rgba(255,255,255,0.08); border-color: rgba(255,160,100,0.38); color: #ffe3c8; }
+    body.theme-volcano .wp-card .wp-btn.solid { background: var(--ember); border-color: var(--ember); color: #1f120c; }
+    body.theme-volcano .wp-card .wp-track { background: rgba(255,255,255,0.1); }
+    body.theme-volcano .wp-card .wp-t { background: rgba(255,227,200,0.45); }
+    body.theme-volcano .wp-card .wp-t.dn { background: #ffb347; }
+    body.theme-volcano .wp-card .wp-t.ms { background: rgba(255,227,200,0.18); }
+    body.theme-volcano .wp-card .wp-t.nx { background: #fff1e2; box-shadow: 0 0 0 3px rgba(255,122,47,0.5); }
+    body.theme-volcano .wp-card .wp-now { background: var(--ember); }
+    body.theme-volcano .wp-card .wp-m { color: #ffb38a; }
+    body.theme-volcano .wp-card .wp-open { color: #ffd9bd; }
+    body.theme-volcano .wp-card .wp-chip { background: rgba(255,255,255,0.1); color: #ffe3c8; }
+    @media (prefers-reduced-motion: reduce) { .wp-card, .wp-btn, .wp-u-chips button { transition: none; } }
+    .apk-up { position: fixed; left: 12px; right: 12px; bottom: calc(96px + var(--safe-bottom)); z-index: 60; max-width: 520px; margin: 0 auto; padding: 14px; border-radius: 20px; background: var(--cream); color: var(--ink); border: 1px solid rgba(64,81,59,0.2); box-shadow: 0 12px 30px rgba(26,38,24,0.3); animation: rise 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .apk-up b { display: block; font-size: 16px; color: var(--forest); }
+    .apk-up span { display: block; font-size: 14px; color: var(--moss); margin: 4px 0 10px; line-height: 1.4; }
+    .apk-btns { display: flex; gap: 8px; }
+    .apk-btns .wp-btn { flex: 1; }
     .tank-bottle { margin-top: 14px; }
     .tank-bottle:empty { display: none; }
     .bt-card { display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 12px; border-radius: 18px; background: rgba(64,81,59,0.07); border: 1px solid rgba(64,81,59,0.10); }
@@ -1195,6 +1329,7 @@
           <div class="tank-num"><span id="tank-ml">0</span><small>ml</small></div>
           <div class="tank-sub" id="tank-sub"></div>
           <div class="tank-since" id="tank-since"></div>
+          <div class="wp-card" id="wp-card" role="button" tabindex="0" hidden></div>
           <div class="tank-quick" id="tank-quick">
             <button class="quick-btn" data-ml="100">+100</button>
             <button class="quick-btn" data-ml="200">+200</button>
@@ -1480,7 +1615,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 46</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 48</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -1636,6 +1771,10 @@
   </div>
 
   <!-- REMINDERS MODAL -->
+  <div id="wp-modal" class="overlay">
+    <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Water plan"><div id="wp-body"></div></div>
+  </div>
+
   <div id="rem-modal" class="overlay">
     <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Reminders">
       <div class="chat-head"><h2 class="sheet-title">Reminders</h2><div class="chat-head-btns"><button id="rem-close">Done</button></div></div>
@@ -1647,10 +1786,13 @@
       </div>
       <div class="set-group">
         <div class="set-label">Water</div>
+        <button class="set-row set-link" id="rem-wp-row" type="button"><span class="set-name">Water plan</span><span class="set-val" id="rem-wp-val">Set up</span></button>
+        <div id="rem-water-old">
         <div class="set-row"><span class="set-name">Water reminders</span><label class="switch"><input type="checkbox" id="rem-water" /><span></span></label></div>
         <div class="set-name" style="margin:8px 4px 6px">How often</div>
         <div class="seg" id="rem-mode"><button type="button" data-m="smart">Smart</button><button type="button" data-m="60">1h</button><button type="button" data-m="120">2h</button><button type="button" data-m="180">3h</button></div>
         <p class="set-note" id="rem-smart-note">Smart adapts to your day: how much you have had, your activity, urine colour and constipation if you log them. Reminders stay between your wake and bed time.</p>
+        </div>
       </div>
       <div class="set-group">
         <div class="set-label">Your own reminders</div>
@@ -2272,6 +2414,7 @@
       '- Home screen: the Water card (shows ml and the goal, quick buttons +100 +200 +250 +500, and the bottle strip), the To-do card for today, the Plans strip, the "Talk to AI" button, the "Add" button, and cards for food, fibre, medicines, symptoms, stool, sleep, weight and notes. Copy today and Last 3 days copy your log as text.\n' +
       '- Top icons: History (past days), Insights (charts), Leaderboard (trophy), Updates (bell: new snippets, stamps from friends, reminders coming up today), Settings (gear).\n' +
       '- Snippets: the Snippets strip under Plans. Share a photo Polaroid with a group of friends. Friends open it once by shaking their phone to develop it, can stamp Proud, Same, Join me or Drink up, and it disappears after 24 hours. The group icon inside Snippets makes or joins groups (same groups as the leaderboard).\n' +
+      '- Water plan: the line under the water number on the Water card ("Next: 60 ml at 10:40"). Tap it for the full timeline of when to drink and how much, based on wake, sleep and meal times (logged meals move it), workouts and busy times, and urine colour (Clear, Pale yellow, Dark yellow buttons). Edit changes timings and how often (10 to 60 min), reminders (every drink, hourly, off) and the goal. "Personalize with AI" reads the last 7 days and suggests timings. Only sips from 30 min before to 30 min after a meal; drinks stop 1 hour before sleep.\n' +
       '- Water bottle: Settings > My water bottle sets the bottle size. On the Water card tap "Start ... ml bottle", drink, then tap Finished (the whole bottle is logged and spread over the time you took) or Some left (only what you drank is logged). Undo shows for a few minutes.\n' +
       '- To-do: tap the To-do card or strip. Pick when (today, tomorrow, this week, 2 weeks, this month) and an optional time for an alert.\n' +
       '- Plans: the Plans strip under the to-do card. Big goals with steps, a how-to note and progress. Make one with Plan mode in this chat, or write your own. A step can be added to your to-dos.\n' +
@@ -2302,6 +2445,7 @@
         (SETTINGS.name ? 'The user\'s name is ' + SETTINGS.name + '.' : ''),
         'Recent days (for context only): ' + [1, 2, 3].map(i => { const k = shiftDateKey(dayKey, -i); return formatDisplayDate(k) + ': water ' + getWaterTotal(getDayEntries(k)) + ' ml, ' + getDayEntries(k).length + ' entries'; }).join('; ') + '.',
         'Water drunk so far on this day: ' + getWaterTotal(entries) + ' ml.',
+        (window.__wp && !viewingPastDay ? window.__wp.summary() : ''),
         'ALREADY LOGGED on this day:',
         logged,
         'Gudlax taken last night (previous day): ' + yGud,
@@ -2339,7 +2483,7 @@
         'h) "move my vitamin reminder to 9" -> reminders [label "Vitamin C", 09:00, same repeat, replaces "Vitamin C"].\n' +
         'i) "stop the vitamin reminder" -> reminders [label "Vitamin C", replaces "Vitamin C", remove true].',
         '20. PLANS (big goals over weeks or months, like gaining weight, finishing a course, building a habit). When the user clearly asks for a plan for a goal, or PLAN MODE is on, fill "plan" with: "title" (2 to 5 words), "why" (one line), "how" (2 to 3 short sentences: the way to reach it), "due" (the goal date as YYYY-MM-DD, or ""), "replaces" (exact title of an existing plan in PLANS to change, else ""), and 4 to 9 "steps", each a small action with its own "due" date (YYYY-MM-DD) from today up to the goal date, the first step due today or tomorrow. Fit the steps to the user\'s real routine from their log. Never put plan steps in todos or entries. In "reply" say in one or two short lines what the plan is and ask "Add this plan?". If the goal, the date or the starting point is unclear, ask at most TWO short questions first and leave "plan" empty.',
-        '21. THE APP. You know this app well (see APP GUIDE). When the user asks how to do something or where something is, answer in one or two short steps using the exact names of buttons and screens, and set "open" to the screen that helps (todo, plans, reminders, leaderboard, settings, water, bottle) so the app shows an Open button. Otherwise set "open" to "none". Never say you cannot see the app.',
+        '21. THE APP. You know this app well (see APP GUIDE). When the user asks how to do something or where something is, answer in one or two short steps using the exact names of buttons and screens, and set "open" to the screen that helps (todo, plans, reminders, leaderboard, settings, water, waterplan, bottle, snippets) so the app shows an Open button. Use waterplan when they ask when to drink, how much to drink next, or to plan or change their water timings. Otherwise set "open" to "none". Never say you cannot see the app.',
         '22. REMEMBER. When the user tells you something lasting about their own routine or preferences that helps you help them later (wake or sleep time, bottle size, a diet like vegetarian, a usual gym day, what they call a medicine), put it in "remember" as a very short fact in their words. Never remember health conditions, diagnoses, money, passwords, ID numbers or other people. Do not remember one-time things. Usually "remember" is empty.',
         '23. UNDERSTANDING. The user may mix English with Hindi or Marathi words (paani = water, khana = food, subah = morning, raat = night, neend = sleep, dawai or goli = medicine, pee liya = drank, kha liya = ate, nahi = no). Understand them and reply in simple English. "yes", "ok", "haan", "kar do", "add it" after your proposal all mean confirm. If a message could be DONE or PLAN, use the tense: "I will" or "need to" is a plan, "I did" or "had" is done. When you are not sure, ask one short question.',
         '24. TYPOS. The user types fast on a phone and often misspells words. Always work out the most likely word from the context and go on, for example gyn or gim = gym, wter = water, slp = sleep, tablt = tablet, brekfast = breakfast. NEVER ask what a word means when it is probably a typo, and never say a message is out of scope because of a typo. If the user asks "what is X" about a word from their own message, explain it in one short line and carry on with their goal.',
@@ -2460,7 +2604,7 @@
             properties: {
               reply: { type: 'STRING' },
               action: { type: 'STRING', enum: ['propose', 'add_pending', 'none'] },
-              open: { type: 'STRING', enum: ['none', 'todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'bottle', 'snippets'] },
+              open: { type: 'STRING', enum: ['none', 'todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'waterplan', 'bottle', 'snippets'] },
               remember: { type: 'ARRAY', items: { type: 'STRING' } },
               plan: {
                 type: 'OBJECT',
@@ -2541,7 +2685,7 @@
       if (window.__nlpFix) { todoProps.forEach(p => window.__nlpFix(p, text, todoProps.length)); remProps.forEach(p => window.__nlpFix(p, text, remProps.length)); }
       const planProps = [];
       if (out.plan && window.__planClean) { const pl = window.__planClean(out.plan); if (pl) planProps.push({ cat: 'plan', text: pl.title, plan: pl, day: 'today', time: '', status: 'pending' }); }
-      const openT = ['todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'bottle', 'snippets'].includes(out.open) ? out.open : '';
+      const openT = ['todo', 'plans', 'reminders', 'leaderboard', 'settings', 'water', 'waterplan', 'bottle', 'snippets'].includes(out.open) ? out.open : '';
       const noted = window.__memAdd ? window.__memAdd(out.remember) : [];
       const extra = { open: openT, noted: noted };
 
@@ -4213,12 +4357,22 @@
       window.Capacitor.Plugins.App.addListener('appUrlOpen', async function (ev) {
         try {
           var u = new URL(ev.url); if (u.protocol !== 'com.atharva.dailylog:') return;
+          if (u.host === 'go') { var tg = u.pathname.replace(/^\/+/, ''); if (tg && window.__go) window.__go(tg); return; }
           try { await window.Capacitor.Plugins.Browser.close(); } catch (e0) {}
           var code = u.searchParams.get('code');
           if (code && sb) { var rr = await sb.auth.exchangeCodeForSession(code); if (rr.error) setGate('error', 'Sign-in did not finish. Try again.'); else location.reload(); }
           else if (u.searchParams.get('error') || u.hash.indexOf('error') >= 0) setGate('error', 'Google sign-in was cancelled. Try again.');
         } catch (e) {}
       });
+      // opened from a widget while the app was closed
+      window.Capacitor.Plugins.App.getLaunchUrl().then(function (r) {
+        try {
+          var u = r && r.url && new URL(r.url); if (!u || u.host !== 'go') return;
+          var tg = u.pathname.replace(/^\/+/, ''), k = 'dl_launch_go';
+          if (!tg || sessionStorage.getItem(k) === r.url) return; sessionStorage.setItem(k, r.url);
+          setTimeout(function () { if (window.__go) window.__go(tg); }, 1200);
+        } catch (e2) {}
+      }).catch(function () {});
     } catch (e) {}
   }
   $('auth-check').addEventListener('click', recheck);
@@ -4415,8 +4569,10 @@
     // an open bottle: one nudge to log it, and no water reminders while you are drinking it
     var bo = SETTINGS.bottleOpen, bottleOn = !!(bo && bo.start && nowMs - bo.start < 6 * 3600000);
     if (bottleOn) { var nb = bo.start + 3 * 3600000; if (nb > nowMs + 60000 && nb <= horizon) out.push({ at: nb, title: 'Your water bottle', body: 'Finished it? Tap to log it.', tag: 'bottle' }); }
-    // smart water
-    if (r.water.on !== false && c.total < c.target && !bottleOn) {
+    // water plan (when it is on) or the older smart water reminders
+    var wpOn = !!(window.__wp && window.__wp.on());
+    if (wpOn) { if (!bottleOn) { try { out = out.concat(window.__wp.reminders(horizon)); } catch (e) {} } }
+    else if (r.water.on !== false && c.total < c.target && !bottleOn) {
       var plan = modeGap(c), gap = plan.gap, amt = Math.min(300, Math.max(150, Math.round((c.target - c.total) / 6 / 50) * 50));
       var waters = sortEntries(c.entries.filter(function(e){ return e.cat === 'water' && extractWaterMl(e.text) > 0; }));
       var last = waters.length ? toMin(waters[waters.length - 1].time) : null;
@@ -4434,7 +4590,7 @@
       var tm = atMin(1, c.wake + 30);
       if (tm < horizon + 3600000) out.push({ at: tm, title: 'Good morning', body: 'Start the day with a glass of water.', tag: 'water' });
     }
-    return out.filter(function(x){ return x.at > nowMs; }).sort(function(a, b){ return a.at - b.at; }).slice(0, 14);
+    return out.filter(function(x){ return x.at > nowMs; }).sort(function(a, b){ return a.at - b.at; }).slice(0, wpOn ? 200 : 14);
   }
   window.__buildSchedule = buildSchedule;
   window.__schedSoon = function () { lastSig = ''; schedSoon(); };
@@ -4556,6 +4712,9 @@
   window.__remRedraw = function () { drawList(); };
   function drawRem() {
     var r = R();
+    var wpOn = !!(window.__wp && window.__wp.on()), wpw = SETTINGS.waterPlan || {};
+    $('rem-water-old').hidden = wpOn;
+    $('rem-wp-val').textContent = wpOn ? (wpw.remind === 'off' ? 'On, no reminders' : 'Every ' + (wpw.gap || 20) + ' min' + (wpw.remind === 'hourly' ? ', reminds hourly' : '')) : 'Set up';
     $('rem-push').checked = subscribedHere() && (LN() ? true : ('Notification' in window) && Notification.permission === 'granted');
     $('rem-water').checked = r.water.on !== false;
     document.querySelectorAll('#rem-mode button').forEach(function(b){ b.classList.toggle('on', b.dataset.m === (r.water.mode || 'smart')); });
@@ -4567,6 +4726,7 @@
   }
   function openRem() { $('settings-modal').classList.remove('open'); drawRem(); rm.classList.add('open'); }
   $('set-rem-row').addEventListener('click', openRem);
+  $('rem-wp-row').addEventListener('click', function () { rm.classList.remove('open'); if (window.__wp) window.__wp.open(); });
   $('rem-close').addEventListener('click', function(){ rm.classList.remove('open'); });
   rm.addEventListener('click', function(e){ if (e.target === rm) rm.classList.remove('open'); });
   $('rem-push').addEventListener('change', async function(e) {
@@ -4665,6 +4825,7 @@
     function nudge() {
       var box = document.getElementById('nudge'); if (!box) return;
       if (viewingPastDay) { box.hidden = true; return; }
+      if (window.__wp && window.__wp.on()) { box.hidden = true; return; }
       var n = new Date(), now = n.getHours() * 60 + n.getMinutes(), es = getDayEntries(getTodayKey());
       var total = getWaterTotal(es), target = WATER_TARGET_ML, left = Math.max(0, target - total);
       var waters = sortEntries(es.filter(function(e){ return e.cat === 'water' && extractWaterMl(e.text) > 0; }));
@@ -6132,7 +6293,7 @@
   function openMem() { drawMem(); $('mem-modal').classList.add('open'); }
 
   // ---------- buttons the AI can show, and where they go ----------
-  var OL = { todo: 'Open my to-dos', plans: 'Open Plans', reminders: 'Open Reminders', leaderboard: 'Open the leaderboard', settings: 'Open Settings', water: 'Go to the water card', bottle: 'Open my bottle size', snippets: 'Open Snippets' };
+  var OL = { todo: 'Open my to-dos', plans: 'Open Plans', reminders: 'Open Reminders', leaderboard: 'Open the leaderboard', settings: 'Open Settings', water: 'Go to the water card', waterplan: 'Open my water plan', bottle: 'Open my bottle size', snippets: 'Open Snippets' };
   window.__openLabel = function (k) { return OL[k] || ''; };
   window.__propLabelPlanFn = window.__propLabelPlan;
   setTimeout(function () { drawMemRow(); try { strip(); } catch (e) {} }, 300);
@@ -6147,6 +6308,7 @@
     t = String(t || '').toLowerCase();
     if (t === 'plans') { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); if (window.__planOpen) window.__planOpen(); return; }
     if (t === 'snippets') { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); if (window.__snOpen) window.__snOpen('tray'); return; }
+    if (t === 'waterplan' || (t === 'water' && window.__wp && window.__wp.on() && !document.querySelector('.overlay.open'))) { if (window.__wp) { window.__wp.open(); return; } }
     if (t === 'bottle') { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); if (window.__bottle && window.__bottle.sheet) window.__bottle.sheet(); return; }
     if (base) base(t);
   };
@@ -6627,6 +6789,631 @@
 })();
 </script>
 <script>
+// =========================================================================
+// WATER PLAN: when to drink and how much, from your own day
+// =========================================================================
+(function () {
+  var GAPS = [10, 15, 20, 30, 45, 60];
+  var MEALS = [['breakfast', 'Breakfast', '08:30'], ['lunch', 'Lunch', '13:00'], ['dinner', 'Dinner', '20:30']];
+  var DARK = /(dark|deep|yellow|orange|brown|amber)\s+(urine|pee)|(urine|pee)[^.\n]{0,20}(dark|yellow|orange|brown|amber)/i;
+  var PALE = /(clear|pale|white|colou?rless|transparent|light)\s+(urine|pee)|(urine|pee)[^.\n]{0,20}(clear|pale|white|colou?rless|transparent|light)/i;
+  var CONSTI = /constipat|hard stool|no stool|not passed|straining|stool[^.\n]{0,20}(hard|dry|pain)/i;
+  var SNACK = /\b(snack|tea|coffee|chai|biscuits?|juice|fruit|banana|apple|nuts)\b/i;
+  var TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+  function $(id) { return document.getElementById(id); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function esc(t) { return escapeHtml(String(t == null ? '' : t)); }
+  function arr(x) { return Array.isArray(x) ? x : []; }
+  function toMin(t) { var p = String(t || '').split(':'), h = parseInt(p[0], 10), m = parseInt(p[1], 10); if (isNaN(h)) return null; return h * 60 + (isNaN(m) ? 0 : m); }
+  function dayMin(t) { var m = toMin(t); return m === null ? null : (m < 240 ? m + 1440 : m); } // the day starts at 4 AM
+  function hm(m) { m = Math.round(m); m = ((m % 1440) + 1440) % 1440; return pad(Math.floor(m / 60)) + ':' + pad(m % 60); }
+  function nowMin() { var d = new Date(), m = d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60; return m < 240 ? m + 1440 : m; }
+  function fmt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function r10(x) { return x <= 0 ? 0 : Math.max(10, Math.round(x / 10) * 10); }
+  function sipText(ml) {
+    if (ml <= 0) return ''; if (ml <= 20) return 'a sip or two'; if (ml <= 45) return '2 to 3 sips'; if (ml <= 80) return '2 to 3 mouthfuls';
+    if (ml <= 140) return 'half a glass'; if (ml <= 210) return 'a small glass'; if (ml <= 300) return 'a glass'; return 'a big glass';
+  }
+  function inText(mins) {
+    mins = Math.max(0, Math.round(mins)); if (mins < 1) return 'now';
+    if (mins < 60) return 'in ' + mins + ' min'; var h = Math.floor(mins / 60), m = mins % 60; return 'in ' + h + ' h' + (m ? ' ' + m + ' min' : '');
+  }
+
+  // ---------- settings ----------
+  function W() {
+    var w = SETTINGS.waterPlan; if (!w || typeof w !== 'object') w = SETTINGS.waterPlan = {};
+    if (GAPS.indexOf(+w.gap) < 0) w.gap = 20; else w.gap = +w.gap;
+    if (['all', 'hourly', 'off'].indexOf(w.remind) < 0) w.remind = 'all';
+    if (!Array.isArray(w.acts)) w.acts = [];
+    return w;
+  }
+  function isOn() { var w = SETTINGS.waterPlan; return !!(w && w.on); }
+  function setMeals() { var mt = SETTINGS.mealTimes || {}; return MEALS.map(function (m) { var at = toMin(mt[m[0]]); return { k: m[0], name: m[1], at: at === null ? toMin(m[2]) : at }; }); }
+  function wakeBed() { var pr = SETTINGS.profile || {}; var w = toMin(pr.wake), b = toMin(pr.bed); return { wake: w === null ? 390 : w, bed: b === null ? 1380 : b }; }
+
+  // ---------- reading the diary ----------
+  // meal times found in one day of entries: { breakfast: min, lunch: min, dinner: min }
+  function mealTimesIn(es, set) {
+    var foods = arr(es).filter(function (e) { return e && e.cat === 'food'; }).map(function (e) { return { m: dayMin(e.time), t: String(e.text || '').toLowerCase() }; }).filter(function (x) { return x.m !== null; });
+    var used = {}, out = {};
+    set.forEach(function (s) {
+      var re = new RegExp('\\b' + s.k + '\\b'), best = -1;
+      foods.forEach(function (x, j) { if (!used[j] && re.test(x.t) && (best < 0 || x.m < foods[best].m)) best = j; });
+      if (best >= 0) { out[s.k] = foods[best].m; used[best] = 1; }
+    });
+    set.forEach(function (s, i) {
+      if (out[s.k] != null) return;
+      var lo = Math.max(s.at - 120, i ? (set[i - 1].at + s.at) / 2 : -1e9), hi = Math.min(s.at + 150, i < set.length - 1 ? (s.at + set[i + 1].at) / 2 : 1e9), best = -1;
+      foods.forEach(function (x, j) {
+        if (used[j]) return; if (SNACK.test(x.t) && !/breakfast|lunch|dinner|meal/.test(x.t)) return;
+        if (x.m >= lo && x.m <= hi && (best < 0 || Math.abs(x.m - s.at) < Math.abs(foods[best].m - s.at))) best = j;
+      });
+      if (best >= 0) { out[s.k] = foods[best].m; used[best] = 1; }
+    });
+    return out;
+  }
+  // usual meal times from the last 14 days (needs 3 days or more)
+  function learned() {
+    var set = setMeals(), acc = { breakfast: [], lunch: [], dinner: [] }, key = getTodayKey();
+    for (var d = 1; d <= 14; d++) { var r = mealTimesIn(getDayEntries(shiftDateKey(key, -d)), set); Object.keys(r).forEach(function (k) { acc[k].push(r[k]); }); }
+    var out = {};
+    Object.keys(acc).forEach(function (k) {
+      var a = acc[k].sort(function (x, y) { return x - y; }), n = a.length; if (n < 3) return;
+      var md = n % 2 ? a[(n - 1) / 2] : (a[n / 2 - 1] + a[n / 2]) / 2;
+      out[k] = { at: Math.round(md / 5) * 5, n: n };
+    });
+    return out;
+  }
+  function urineState(es, now) {
+    var best = null;
+    arr(es).forEach(function (e) {
+      var t = String(e.text || ''), m = dayMin(e.time); if (m === null || m > now + 1) return;
+      var s = DARK.test(t) ? 'dark' : PALE.test(t) ? (/clear|colou?rless|transparent/i.test(t) ? 'clear' : 'pale') : '';
+      if (s && (!best || m >= best.at)) best = { s: s, at: m };
+    });
+    return best && now - best.at <= 180 ? best : (best ? { s: best.s, at: best.at, old: true } : null);
+  }
+  function gutCare(key) {
+    var pr = SETTINGS.profile || {};
+    if ((pr.goals || []).indexOf('digestion') >= 0) return true;
+    for (var d = 0; d <= 2; d++) {
+      var es = getDayEntries(shiftDateKey(key, -d));
+      if (es.some(function (e) { return e.cat === 'gudlax' || CONSTI.test(String(e.text || '')); })) return true;
+    }
+    return false;
+  }
+
+  // ---------- the plan (pure: same input, same plan) ----------
+  // o: { wake, bed, goal, gap, meals:[{k,name,at,src}], acts:[{label,at,dur,type}], gut }
+  function build(o) {
+    var wake = o.wake, bed = o.bed, gap = GAPS.indexOf(+o.gap) >= 0 ? +o.gap : 20, goal = Math.max(500, +o.goal || 2500);
+    if (bed <= wake) bed += 1440;
+    var end = bed - 60; if (end - wake < 120) end = Math.min(bed - 15, wake + 120);
+    var t0 = wake + 15, sp = [], quiet = [], blocks = [], meals = [], acts = [];
+    sp.push({ at: t0, ml: o.gut ? 300 : 250, kind: 'morning', label: 'After waking' });
+    arr(o.meals).forEach(function (m) {
+      if (m.at == null || m.at < wake || m.at > bed) return;
+      meals.push(m); quiet.push({ from: m.at - 30, to: m.at + 30, meal: m });
+      if (m.at - 30 > t0 + 20) sp.push({ at: m.at - 30, ml: 150, kind: 'pre', label: 'Before ' + m.name.toLowerCase(), meal: m });
+      sp.push({ at: m.at + 30, ml: 200, kind: 'post', label: 'After ' + m.name.toLowerCase(), meal: m });
+    });
+    arr(o.acts).forEach(function (a) {
+      if (a.at == null || !(a.dur > 0)) return;
+      var s = a.at < wake - 60 ? a.at + 1440 : a.at, e = s + a.dur, label = String(a.label || (a.type === 'busy' ? 'Busy' : 'Workout'));
+      acts.push({ label: label, at: s, dur: a.dur, type: a.type });
+      if (a.type === 'busy') {
+        blocks.push({ from: s, to: e, label: label, busy: true });
+        if (a.dur >= 45) { sp.push({ at: s - 10, ml: 150, kind: 'before', label: 'Before ' + label, act: label }); sp.push({ at: e + 5, ml: 150, kind: 'after', label: 'After ' + label, act: label }); }
+      } else {
+        blocks.push({ from: s - 30, to: e + 15, label: label });
+        sp.push({ at: s - 30, ml: 200, kind: 'wpre', label: 'Before ' + label, act: label });
+        var step = Math.max(15, gap);
+        for (var t = s + step; t < e - 5; t += step) sp.push({ at: t, ml: 100, kind: 'wdur', label: 'During ' + label, act: label });
+        sp.push({ at: e + 15, ml: 300, kind: 'wpost', label: 'After ' + label, act: label });
+      }
+    });
+    // keep drinks inside the day; nothing while you cannot drink
+    sp = sp.filter(function (s) {
+      if (s.at < wake) return false;
+      if (s.at > (s.kind === 'wpost' ? bed - 20 : end)) return false;
+      return !blocks.some(function (b) { return b.busy && s.kind !== 'before' && s.kind !== 'after' && s.at > b.from && s.at < b.to; });
+    }).sort(function (a, b) { return a.at - b.at; });
+    // two drinks within 10 minutes become one
+    var merged = [];
+    sp.forEach(function (s) {
+      var p = merged[merged.length - 1];
+      if (p && s.at - p.at < 10) { p.ml = Math.min(350, p.ml + s.ml); p.also = (p.also || []).concat([s]); }
+      else merged.push(s);
+    });
+    sp = merged;
+    var near = Math.max(8, gap * 0.6), regs = [];
+    for (var t = t0 + gap; t <= end + 0.01; t += gap) {
+      if (quiet.some(function (q) { return t > q.from && t < q.to; })) continue;
+      if (blocks.some(function (b) { return t > b.from && t < b.to; })) continue;
+      if (sp.some(function (s) { return Math.abs(s.at - t) < near; })) continue;
+      regs.push({ at: t, ml: 0, kind: 'sip', label: 'Sip' });
+    }
+    // amounts: special drinks first (max 60% of the goal), the rest spread evenly
+    var S = sp.reduce(function (a, s) { return a + s.ml; }, 0);
+    if (regs.length) {
+      if (S > goal * 0.6) { var k = goal * 0.6 / S; sp.forEach(function (s) { s.ml *= k; }); S = goal * 0.6; }
+      var each = (goal - S) / regs.length; regs.forEach(function (r) { r.ml = each; });
+    } else if (S > 0) { var k2 = goal / S; sp.forEach(function (s) { s.ml *= k2; }); }
+    var slots = sp.concat(regs).sort(function (a, b) { return a.at - b.at; });
+    slots.forEach(function (s, i) { s.base = s.ml; s.i = i; });
+    if (slots.length) slots[slots.length - 1].last = true;
+    return { slots: slots, quiet: quiet, blocks: blocks, meals: meals, acts: acts, wake: wake, bed: bed, end: end, gap: gap, goal: goal, gut: !!o.gut };
+  }
+
+  // the plan right now: what is done, what is due, how much each next drink is
+  // c: { now, drunk, waters:[min], urine:{s,at} }
+  function live(p, c) {
+    var gap = p.gap, cover = Math.max(5, Math.min(20, gap / 2)), n = p.slots.length, now = c.now;
+    var remaining = Math.max(0, p.goal - c.drunk), plannedNow = 0, due = null;
+    p.slots.forEach(function (s, i) {
+      var nextAt = i < n - 1 ? p.slots[i + 1].at : s.at + gap;
+      s.nextAt = nextAt; s.amt = 0; s.skip = false;
+      s.done = c.waters.some(function (w) { return w >= s.at - cover && w < nextAt; });
+      s.past = s.at <= now && !(now < nextAt && !s.done);
+      if (s.at <= now) plannedNow += s.base;
+      if (s.at <= now && now < nextAt && !s.done) due = s;
+    });
+    var U = p.slots.filter(function (s) { return !s.done && (s.at > now || s === due); });
+    var boost = c.urine && !c.urine.old && c.urine.s === 'dark';
+    var w = U.map(function (s, j) { return s.base * (boost && j < 3 && s.at <= now + 90 ? 1.4 : 1); });
+    var B = w.reduce(function (a, x) { return a + x; }, 0), given = 0;
+    if (remaining > 0 && U.length && B > 0) {
+      var avg = remaining / U.length, pick = U;
+      if (avg < 30) {
+        var step = Math.ceil(30 / avg); pick = U.filter(function (s, j) { return j % step === 0; });
+        U.forEach(function (s) { if (pick.indexOf(s) < 0) s.skip = true; });
+        w = pick.map(function (s) { return s.base; }); B = w.reduce(function (a, x) { return a + x; }, 0);
+      }
+      var f = remaining / B;
+      pick.forEach(function (s, j) {
+        var cap = Math.min(350, Math.max(60, s.base * 2.5));
+        s.amt = r10(Math.min(cap, w[j] * f)); given += s.amt;
+      });
+    } else U.forEach(function (s) { s.skip = true; });
+    var next = U.filter(function (s) { return s.amt > 0; })[0] || null;
+    var status = c.drunk >= p.goal ? 'done' : now < p.wake ? 'before' : now > p.end && !due ? 'over' : (c.drunk - plannedNow < -150 ? 'behind' : c.drunk - plannedNow > 300 ? 'ahead' : 'ok');
+    return { next: next, due: due && due.amt > 0 ? due : null, upcoming: U, remaining: remaining, plannedNow: plannedNow, diff: Math.round(c.drunk - plannedNow), left: Math.max(0, Math.round(remaining - given)), status: status, cover: cover, urine: c.urine, boost: boost };
+  }
+
+  // ---------- today's real input ----------
+  function inputFor(key, isToday) {
+    var w = W(), wb = wakeBed(), set = setMeals(), es = getDayEntries(key), logged = isToday ? mealTimesIn(es, set) : {};
+    return {
+      wake: wb.wake, bed: wb.bed, goal: WATER_TARGET_ML, gap: w.gap, gut: gutCare(getTodayKey()),
+      meals: set.map(function (s) { return { k: s.k, name: s.name, at: logged[s.k] != null ? logged[s.k] : s.at, src: logged[s.k] != null ? 'logged' : 'usual' }; }),
+      acts: w.acts.filter(function (a) { return a && (a.days !== 'once' || a.date === key); }).map(function (a) { return { label: a.label, at: toMin(a.time), dur: +a.dur || 0, type: a.type === 'busy' ? 'busy' : 'work' }; })
+    };
+  }
+  function today() {
+    var key = getTodayKey(), es = getDayEntries(key), now = nowMin();
+    var p = build(inputFor(key, true));
+    var waters = es.filter(function (e) { return e.cat === 'water' && extractWaterMl(e.text) > 0; }).map(function (e) { return dayMin(e.time); }).filter(function (m) { return m !== null; });
+    var L = live(p, { now: now, drunk: getWaterTotal(es), waters: waters, urine: urineState(es, now) });
+    return { key: key, p: p, L: L, now: now, drunk: getWaterTotal(es) };
+  }
+  function dayStartMs(key) { return keyToDate(key).getTime(); }
+
+  // ---------- words ----------
+  function why(s, p) {
+    var t = '';
+    switch (s.kind) {
+      case 'morning': t = p.gut ? 'Warm water soon after waking can help your gut get going.' : 'Start your day with water.'; break;
+      case 'pre': t = s.meal.name + ' at ' + hm(s.meal.at) + '. Have this now, then only sips while you eat.'; break;
+      case 'post': t = s.meal.name + (s.meal.src === 'logged' ? ' was at ' + hm(s.meal.at) + '.' : ' is usually at ' + hm(s.meal.at) + '.') + ' Now is a good time.'; break;
+      case 'wpre': t = 'Before ' + s.act + '. Drink before you start.'; break;
+      case 'wdur': t = 'Small sips while you move.'; break;
+      case 'wpost': t = 'After ' + s.act + '. Refill what you sweated out.'; break;
+      case 'before': t = 'You cannot drink during ' + s.act + ', so have it now.'; break;
+      case 'after': t = s.act + ' is over. Catch up a little.'; break;
+      default: t = '';
+    }
+    if (s.also) s.also.forEach(function (a) { if (a.kind === 'pre') t += ' ' + a.meal.name + ' at ' + hm(a.meal.at) + ' next, then only sips.'; });
+    if (s.last) t += (t ? ' ' : '') + 'Last one for today, so your sleep stays unbroken.';
+    return t;
+  }
+  function label(s) {
+    if (s.kind === 'sip') return 'Sip'; var l = s.label;
+    if (s.also) s.also.forEach(function (a) { if (a.label && l.indexOf(a.label) < 0) l += ' and ' + a.label.charAt(0).toLowerCase() + a.label.slice(1); });
+    return l;
+  }
+  function statusText(L) {
+    return L.status === 'done' ? 'Goal reached' : L.status === 'behind' ? 'Behind by ' + fmt(-L.diff) + ' ml' : L.status === 'ahead' ? 'Ahead by ' + fmt(L.diff) + ' ml' : L.status === 'ok' ? 'On track' : L.status === 'before' ? 'Not started yet' : '';
+  }
+
+  // ---------- reminders (used by the alert schedule) ----------
+  function reminders(horizonMs) {
+    if (!isOn()) return []; var w = W(); if (w.remind === 'off') return [];
+    var out = [], nowMs = Date.now(), T = today();
+    function add(list, key, useAmt) {
+      var base = dayStartMs(key), lastAt = -1e9;
+      list.forEach(function (s, j) {
+        var ml = useAmt ? s.amt : r10(s.base); if (!(ml > 0)) return;
+        if (w.remind === 'hourly' && s.kind === 'sip' && s.at - lastAt < 55) return;
+        var at = base + Math.round(s.at * 60000);
+        if (at <= nowMs + 60000 || at > horizonMs) return;
+        lastAt = s.at;
+        var nx = list.slice(j + 1).filter(function (x) { return (useAmt ? x.amt : x.base) > 0; })[0];
+        var body = sipText(ml).charAt(0).toUpperCase() + sipText(ml).slice(1) + '. ' + why(s, T.p);
+        if (!why(s, T.p) && nx) body += 'Next at ' + hm(nx.at) + '.';
+        out.push({ at: at, title: 'Water: ' + ml + ' ml', body: body.trim(), tag: 'water' });
+      });
+    }
+    if (T.L.status !== 'done') add(T.L.upcoming.filter(function (s) { return s.amt > 0; }), T.key, true);
+    var k2 = shiftDateKey(T.key, 1), i2 = inputFor(k2, false);
+    i2.acts = W().acts.filter(function (a) { return a && a.days !== 'once'; }).map(function (a) { return { label: a.label, at: toMin(a.time), dur: +a.dur || 0, type: a.type === 'busy' ? 'busy' : 'work' }; });
+    add(build(i2).slots, k2, false);
+    return out;
+  }
+  function nextList(n) {
+    if (!isOn()) return [];
+    var T = today(); if (T.L.status === 'done') return [];
+    var base = dayStartMs(T.key);
+    return T.L.upcoming.filter(function (s) { return s.amt > 0; }).slice(0, n || 40).map(function (s) { return [base + Math.round(s.at * 60000), s.amt]; });
+  }
+  function summary() {
+    if (!isOn()) return 'Water plan: not set up yet (the user can tap the line under the water number to make one).';
+    var T = today(), L = T.L, p = T.p;
+    var meals = p.meals.map(function (m) { return m.name + ' ' + hm(m.at) + (m.src === 'logged' ? ' (logged)' : ' (usual)'); }).join(', ');
+    return 'WATER PLAN (on): wake ' + hm(p.wake) + ', last drink ' + hm(p.end) + ', a drink every ' + p.gap + ' min, meals: ' + meals + '. ' +
+      (L.status === 'done' ? 'Goal reached today.' : (L.due ? 'Due now: ' + L.due.amt + ' ml. ' : '') + (L.next ? 'Next: ' + L.next.amt + ' ml at ' + hm(L.next.at) + '. ' : '') + 'Status: ' + statusText(L) + '.') +
+      ' When the user asks when or how much to drink, answer from this plan.';
+  }
+
+  // ---------- home card ----------
+  var IC_DROP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c3.2 4 6 7.4 6 10.6a6 6 0 0 1-12 0c0-3.2 2.8-6.6 6-10.6z"/></svg>';
+  var IC_FORK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M16 21V3c-2 1.5-3 4-3 7h3"/></svg>';
+  var IC_ACT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4.5a1.5 1.5 0 1 1 0 .01M7 21l3-6 3 2v4M9.5 9.5 12 8l3 3 3 1M6 13l2-4"/></svg>';
+  var IC_BUSY = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></svg>';
+
+  function strip(T, big) {
+    var p = T.p, a = p.wake, b = Math.max(p.end, p.slots.length ? p.slots[p.slots.length - 1].at : p.end), span = Math.max(60, b - a);
+    function x(m) { return Math.max(0, Math.min(100, (m - a) / span * 100)).toFixed(2); }
+    var h = '';
+    p.quiet.forEach(function (q) { h += '<i class="wp-q" style="left:' + x(q.from) + '%;width:' + (x(q.to) - x(q.from)).toFixed(2) + '%"></i>'; });
+    p.blocks.forEach(function (q) { if (q.busy) h += '<i class="wp-q busy" style="left:' + x(q.from) + '%;width:' + (x(q.to) - x(q.from)).toFixed(2) + '%"></i>'; });
+    var nx = T.L.due || T.L.next;
+    p.slots.forEach(function (s) {
+      var cls = s === nx ? 'nx' : s.done ? 'dn' : (s.at <= T.now ? 'ms' : (s.skip ? 'sk' : ''));
+      h += '<i class="wp-t ' + cls + (s.kind !== 'sip' ? ' big' : '') + '" style="left:' + x(s.at) + '%"></i>';
+    });
+    var nowX = T.now >= a && T.now <= b ? '<i class="wp-now" style="left:' + x(T.now) + '%"></i>' : '';
+    var marks = p.meals.map(function (m) { return '<span class="wp-m" style="left:' + x(m.at) + '%" title="' + esc(m.name) + '">' + IC_FORK + '</span>'; }).join('');
+    return '<div class="wp-strip' + (big ? ' big' : '') + '" aria-hidden="true"><div class="wp-track">' + h + nowX + '</div><div class="wp-marks">' + marks + '</div>' +
+      '<div class="wp-ends"><span>' + hm(a) + '</span><span>' + hm(b) + '</span></div></div>';
+  }
+  function chip(L) {
+    var c = L.status === 'behind' ? 'warn' : L.status === 'done' || L.status === 'ahead' ? 'good' : 'ok', t = statusText(L);
+    return t && L.status !== 'before' ? '<span class="wp-chip ' + c + '">' + esc(t) + '</span>' : '';
+  }
+  function cardHtml() {
+    if (!isOn()) {
+      return '<div class="wp-row"><span class="wp-ic">' + IC_DROP + '</span><span class="wp-tx"><b>When should I drink, and how much?</b><small>Make a plan from your wake, meal and sleep times</small></span>' +
+        '<button type="button" class="wp-btn" data-wp="setup">Set up</button></div>';
+    }
+    var T = today(), L = T.L, s = L.due || L.next, title, sub, btn = '';
+    if (L.status === 'done') { title = 'Goal reached'; sub = 'Sip only when you feel thirsty'; }
+    else if (L.status === 'over' || !s) { title = 'Drinking time is over for today'; sub = (L.remaining ? fmt(L.remaining) + ' ml left. Sip if you are thirsty, no need to force it' : 'Sleep well'); }
+    else if (L.due) { title = 'Drink ' + s.amt + ' ml now'; sub = sipText(s.amt).replace(/^./, function (c) { return c.toUpperCase(); }) + ', due at ' + hm(s.at); btn = '<button type="button" class="wp-btn solid" data-wp="log" data-ml="' + s.amt + '">Drank it</button>'; }
+    else { title = 'Next: ' + s.amt + ' ml at ' + hm(s.at); sub = sipText(s.amt).replace(/^./, function (c) { return c.toUpperCase(); }) + ', ' + inText(s.at - T.now); btn = '<button type="button" class="wp-btn" data-wp="log" data-ml="' + s.amt + '">Drank it</button>'; }
+    return '<div class="wp-row"><span class="wp-ic' + (L.due ? ' live' : '') + '">' + IC_DROP + '</span><span class="wp-tx"><b>' + esc(title) + '</b><small>' + esc(sub) + '</small></span>' + btn + '</div>' +
+      strip(T, false) + '<div class="wp-foot">' + chip(L) + '<span class="wp-open">Your water timeline</span></div>';
+  }
+  var lastCard = '';
+  function drawCard() {
+    var el = $('wp-card'); if (!el) return;
+    if (typeof viewingPastDay !== 'undefined' && viewingPastDay) { el.hidden = true; return; }
+    var h; try { h = cardHtml(); } catch (e) { el.hidden = true; return; }
+    if (h !== lastCard) { el.innerHTML = h; lastCard = h; }
+    el.hidden = false;
+    el.setAttribute('aria-label', isOn() ? 'Water plan. ' + el.textContent : 'Make a water plan');
+  }
+
+  // ---------- the plan sheet ----------
+  var view = 'plan', D = null, showPast = false, aiBusy = false, aiOut = null;
+  function open(v) {
+    document.querySelectorAll('.overlay.open').forEach(function (o) { if (o.id !== 'wp-modal') o.classList.remove('open'); });
+    view = v || (isOn() ? 'plan' : 'setup'); showPast = false; aiOut = null;
+    if (view === 'setup') D = draft();
+    draw(); $('wp-modal').classList.add('open');
+    var sh = $('wp-modal').querySelector('.sheet'); if (sh) sh.scrollTop = 0;
+  }
+  function close() { $('wp-modal').classList.remove('open'); }
+  function draw() { var b = $('wp-body'); if (!b) return; b.innerHTML = view === 'setup' ? setupHtml() : planHtml(); }
+
+  function part(m) { var h = (m % 1440) / 60; return h < 12 && m < 1440 ? 'Morning' : h < 17 && m < 1440 ? 'Afternoon' : h < 21 && m < 1440 ? 'Evening' : 'Night'; }
+  function planHtml() {
+    var T = today(), L = T.L, p = T.p, s = L.due || L.next;
+    var h = '<div class="chat-head"><h2 class="sheet-title">Water plan</h2><div class="chat-head-btns"><button type="button" data-wp="edit">Edit</button><button type="button" data-wp="close">Done</button></div></div>';
+    var reg = p.slots.filter(function (x) { return x.kind === 'sip'; })[0];
+    h += '<div class="wp-sum"><div class="wp-sum-top"><div class="wp-sum-n"><b>' + fmt(T.drunk) + '</b> of ' + fmt(p.goal) + ' ml</div>' + chip(L) + '</div>' +
+      '<p class="wp-sum-p">' + (reg ? 'About ' + r10(reg.base) + ' ml every ' + p.gap + ' min' : 'A drink every ' + p.gap + ' min') + ', from ' + hm(p.slots.length ? p.slots[0].at : p.wake) + ' to ' + hm(p.slots.length ? p.slots[p.slots.length - 1].at : p.end) + '. Only sips from 30 min before to 30 min after each meal.</p>' +
+      strip(T, true) + '</div>';
+    // now / next
+    if (L.status === 'done') h += '<div class="wp-next"><b class="wp-big">Goal reached</b><p>Well done. Sip only when you feel thirsty.</p></div>';
+    else if (L.status === 'over' || !s) h += '<div class="wp-next"><b class="wp-big">Done for today</b><p>' + (L.remaining ? fmt(L.remaining) + ' ml was left. Do not force it before sleep. Tomorrow starts at ' + hm(p.wake + 15) + '.' : 'Sleep well.') + '</p></div>';
+    else {
+      h += '<div class="wp-next' + (L.due ? ' due' : '') + '"><div class="wp-next-l"><span class="wp-k">' + (L.due ? 'Now' : 'Next, ' + inText(s.at - T.now)) + '</span><b class="wp-big">' + s.amt + ' ml</b>' +
+        '<span class="wp-sips">' + esc(sipText(s.amt)) + ' at ' + hm(s.at) + '</span></div><button type="button" class="lb-btn wp-log" data-wp="log" data-ml="' + s.amt + '">Drank it</button>' +
+        (why(s, p) ? '<p class="wp-why">' + esc(why(s, p)) + '</p>' : '') + '</div>';
+      if (L.status === 'behind' && L.left > 0) h += '<p class="wp-warn">Even with catching up, about ' + fmt(L.left) + ' ml may be left today. Do not gulp it all at once. Bigger drinks below are spread out on purpose.</p>';
+      else if (L.status === 'behind') h += '<p class="wp-warn">You are a bit behind. The next drinks are a little bigger to catch up slowly.</p>';
+    }
+    // urine check
+    var u = L.urine, ut = u ? (u.s === 'dark' ? 'Dark' : u.s === 'clear' ? 'Clear' : 'Pale yellow') + ' at ' + hm(u.at) : '';
+    h += '<div class="wp-urine"><div class="wp-u-head"><b>Urine colour</b><span>' + (ut ? 'Last: ' + esc(ut) : 'Check it now and then') + '</span></div>' +
+      '<div class="wp-u-chips"><button type="button" data-u="clear"><i style="background:#f3f1d8"></i>Clear</button><button type="button" data-u="pale"><i style="background:#f1df7a"></i>Pale yellow</button><button type="button" data-u="dark"><i style="background:#c98f1c"></i>Dark yellow</button></div>' +
+      '<p class="set-note">' + (u && !u.old && u.s === 'dark' ? 'Your plan moved more water into the next hour. Check again later.' : u && !u.old && u.s === 'clear' ? 'Well hydrated. If it stays clear all day, you can drink a little less.' : 'Pale yellow is the aim. Dark means drink a bit more soon.') + '</p></div>';
+    if (p.gut) h += '<p class="wp-tip">For your gut: warm water after waking, steady sips through the day, and a full glass with fibre.</p>';
+    if (p.acts.some(function (a) { return a.type !== 'busy'; })) h += '<p class="wp-tip">On workout days you may need more than your goal. Drink when thirsty.</p>';
+    // timeline
+    var rows = [], pastN = 0;
+    p.slots.forEach(function (x) { rows.push({ at: x.at, s: x }); });
+    p.meals.forEach(function (m) { rows.push({ at: m.at, m: m }); });
+    p.acts.forEach(function (a) { rows.push({ at: a.at, a: a }); });
+    rows.sort(function (a, b) { return a.at - b.at || ((a.s ? 1 : 0) - (b.s ? 1 : 0)); });
+    var nx = L.due || L.next, list = '', lastPart = '';
+    rows.forEach(function (r) {
+      var past = r.s ? (r.s.past && r.s !== nx) : r.at < T.now - 30;
+      if (past) pastN++;
+      var pt = part(r.at); var head = pt !== lastPart ? '<div class="wp-part' + (past ? ' past' : '') + '">' + pt + '</div>' : ''; lastPart = pt;
+      var cls = past ? ' past' : '';
+      if (r.m) list += head + '<div class="wp-r meal' + cls + '"><span class="wp-time">' + hm(r.at) + '</span><span class="wp-dot">' + IC_FORK + '</span><span class="wp-c"><b>' + esc(r.m.name) + '</b><small>' + (r.m.src === 'logged' ? 'Logged' : 'Your usual time') + '. Only sips ' + hm(r.at - 30) + ' to ' + hm(r.at + 30) + '</small></span></div>';
+      else if (r.a) list += head + '<div class="wp-r act' + cls + '"><span class="wp-time">' + hm(r.at) + '</span><span class="wp-dot">' + (r.a.type === 'busy' ? IC_BUSY : IC_ACT) + '</span><span class="wp-c"><b>' + esc(r.a.label) + '</b><small>' + r.a.dur + ' min' + (r.a.type === 'busy' ? ', no drinks during it' : ', sips during it') + '</small></span></div>';
+      else {
+        var s = r.s, isNx = s === nx, ml = s.done || past ? r10(s.base) : s.amt, st = s.done ? '<span class="wp-st ok">Done</span>' : isNx ? '<span class="wp-st nx">' + (L.due ? 'Now' : 'Next') + '</span>' : past ? '<span class="wp-st">Missed</span>' : s.skip ? '<span class="wp-st">Optional</span>' : '';
+        var lab = label(s), sub = s.kind === 'sip' ? sipText(ml) : lab + ', ' + sipText(ml);
+        list += head + '<div class="wp-r' + cls + (isNx ? ' nx' : '') + (s.done ? ' dn' : '') + (s.kind !== 'sip' ? ' key' : '') + '"><span class="wp-time">' + hm(s.at) + '</span><span class="wp-dot"><i></i></span><span class="wp-c"><b>' + (s.skip && !past && !s.done ? 'Sip if thirsty' : ml + ' ml') + '</b><small>' + esc(sub) + '</small></span>' + st + '</div>';
+      }
+    });
+    h += '<div class="wp-list' + (showPast ? ' all' : '') + '">' + (pastN ? '<button type="button" class="wp-earlier" data-wp="past">' + (showPast ? 'Hide earlier' : 'Show ' + pastN + ' earlier') + '</button>' : '') + list + '</div>';
+    h += '<button type="button" class="lb-btn wp-sec" data-wp="edit">Change my timings</button>' +
+      '<button type="button" class="lb-btn wp-sec" data-wp="ai">Personalize with AI</button>' +
+      '<p class="set-note wp-fine">A glass here means about 250 ml. This is general guidance, not medical advice. If a doctor gave you a fluid limit, follow that.</p>';
+    return h;
+  }
+
+  // ---------- setup ----------
+  function draft() {
+    var w = W(), wb = wakeBed(), mt = SETTINGS.mealTimes || {};
+    return {
+      wake: hm(wb.wake), bed: hm(wb.bed), breakfast: mt.breakfast || '08:30', lunch: mt.lunch || '13:00', dinner: mt.dinner || '20:30',
+      gap: w.gap, remind: w.remind, goal: WATER_TARGET_ML, acts: JSON.parse(JSON.stringify(w.acts.filter(function (a) { return a.days !== 'once' || a.date === getTodayKey(); }))),
+      aType: 'work', aDays: 'all'
+    };
+  }
+  function alertsOk() { try { if (localStorage.getItem('daily_log_push_v1') !== '1') return false; } catch (e) { return false; } if (window.__NATIVE) return true; return ('Notification' in window) && Notification.permission === 'granted'; }
+  function previewEach(d) {
+    var wb = { wake: toMin(d.wake), bed: toMin(d.bed) };
+    if (wb.wake === null || wb.bed === null) return null;
+    var p = build({ wake: wb.wake, bed: wb.bed, goal: d.goal, gap: d.gap, gut: gutCare(getTodayKey()), meals: MEALS.map(function (m) { return { k: m[0], name: m[1], at: toMin(d[m[0]]), src: 'usual' }; }), acts: d.acts.map(function (a) { return { label: a.label, at: toMin(a.time), dur: +a.dur, type: a.type }; }) });
+    var reg = p.slots.filter(function (x) { return x.kind === 'sip'; })[0];
+    return { p: p, each: reg ? r10(reg.base) : 0 };
+  }
+  function seg(name, opts, cur) { return '<div class="seg wp-seg n' + opts.length + '" data-seg="' + name + '">' + opts.map(function (o) { return '<button type="button" data-v="' + o[0] + '" class="' + (String(o[0]) === String(cur) ? 'on' : '') + '">' + o[1] + '</button>'; }).join('') + '</div>'; }
+  function setupHtml() {
+    var d = D, L = learned(), pv = previewEach(d);
+    var h = '<div class="chat-head"><h2 class="sheet-title">Your water plan</h2><div class="chat-head-btns"><button type="button" data-wp="' + (isOn() ? 'back' : 'close') + '">Cancel</button></div></div>';
+    h += '<p class="wp-intro">Tell it your day once. It splits your goal into small drinks at the right times, moves around your meals, and keeps reminding you.</p>';
+    h += '<div class="set-group"><div class="set-label">Your day</div>' +
+      '<label class="set-row"><span class="set-name">Wake up</span><input class="set-input wp-time" type="time" data-f="wake" value="' + esc(d.wake) + '" /></label>' +
+      '<label class="set-row"><span class="set-name">Go to sleep</span><input class="set-input wp-time" type="time" data-f="bed" value="' + esc(d.bed) + '" /></label>' +
+      '<p class="set-note">Drinks stop 1 hour before sleep, so you do not wake up at night.</p></div>';
+    h += '<div class="set-group"><div class="set-label">Meals</div>';
+    MEALS.forEach(function (m) {
+      var lv = L[m[0]], hint = '';
+      if (lv && Math.abs(lv.at - (toMin(d[m[0]]) || 0)) >= 15) hint = '<div class="wp-learn">Your log says about ' + hm(lv.at) + ' (' + lv.n + ' days)<button type="button" data-use="' + m[0] + '" data-t="' + hm(lv.at) + '">Use ' + hm(lv.at) + '</button></div>';
+      h += '<label class="set-row"><span class="set-name">' + m[1] + '</span><input class="set-input wp-time" type="time" data-f="' + m[0] + '" value="' + esc(d[m[0]]) + '" /></label>' + hint;
+    });
+    h += '<p class="set-note">If you forget to log a meal, the plan uses these times. When you log a meal, the plan moves to the real time.</p></div>';
+    h += '<div class="set-group"><div class="set-label">How often to drink</div>' + seg('gap', GAPS.map(function (g) { return [g, g + ' min']; }), d.gap) +
+      '<p class="set-note" id="wp-each">' + (pv && pv.each ? 'About ' + pv.each + ' ml each time (' + sipText(pv.each) + '), plus a bigger glass after waking and around meals.' : '') + '</p></div>';
+    h += '<div class="set-group"><div class="set-label">Reminders</div>' + seg('remind', [['all', 'Every drink'], ['hourly', 'About hourly'], ['off', 'Off']], d.remind) +
+      (alertsOk() ? '<p class="set-note">Alerts are on for this phone.</p>' : '<p class="set-note">Alerts are off on this phone, so reminders cannot reach you yet.</p><button type="button" class="wp-btn wide" data-wp="alerts">Turn on alerts</button>') + '</div>';
+    h += '<div class="set-group"><div class="set-label">Workouts and busy times</div>' +
+      (d.acts.length ? d.acts.map(function (a) { return '<div class="set-row wp-act"><span class="set-name"><b>' + esc(a.time) + '</b> ' + esc(a.label) + '<small>' + a.dur + ' min, ' + (a.type === 'busy' ? 'no drinks' : 'workout') + ', ' + (a.days === 'once' ? 'today only' : 'every day') + '</small></span><button type="button" class="wp-x" data-del="' + esc(a.id) + '" aria-label="Remove ' + esc(a.label) + '">&times;</button></div>'; }).join('') : '<p class="set-note">Add a gym session, a walk, a long meeting or travel. The plan adds water around it.</p>') +
+      '<div class="wp-add"><input class="set-input" id="wp-a-name" type="text" maxlength="24" placeholder="Name, for example Gym or Meeting" autocomplete="off" value="' + esc(d.aName || '') + '" />' +
+      '<div class="wp-add-row"><input class="set-input wp-time" id="wp-a-time" type="time" value="' + esc(d.aTime || '18:00') + '" aria-label="Start time" /><select class="set-input" id="wp-a-dur" aria-label="How long">' +
+      [15, 30, 45, 60, 90, 120, 180, 240].map(function (m) { return '<option value="' + m + '"' + (m === (d.aDur || 60) ? ' selected' : '') + '>' + (m < 60 ? m + ' min' : (m / 60) + ' h') + '</option>'; }).join('') + '</select></div>' +
+      seg('aType', [['work', 'Workout'], ['busy', 'Cannot drink']], d.aType) + seg('aDays', [['all', 'Every day'], ['once', 'Today only']], d.aDays) +
+      '<button type="button" class="wp-btn wide" data-wp="addact">Add</button></div></div>';
+    h += '<div class="set-group"><div class="set-label">Daily goal</div><div class="set-row"><span class="set-name">Water a day</span><span class="stepper"><button type="button" data-wp="gm" aria-label="Less water">-</button><output>' + fmt(d.goal) + '</output><button type="button" data-wp="gp" aria-label="More water">+</button></span></div></div>';
+    h += '<div class="set-group"><button type="button" class="lb-btn wp-sec" data-wp="ai"' + (aiBusy ? ' disabled' : '') + '>' + (aiBusy ? 'Reading your last 7 days...' : 'Personalize with AI') + '</button>' + (aiOut ? aiHtml() : '') + '</div>';
+    h += '<button type="button" class="lb-btn" data-wp="save">' + (isOn() ? 'Save plan' : 'Make my plan') + '</button>';
+    if (isOn()) h += '<button type="button" class="pl-link wp-off" data-wp="off">Turn off water plan</button>';
+    return h;
+  }
+  function aiHtml() {
+    var o = aiOut, names = { wake: 'Wake up', bed: 'Sleep', breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner', gap: 'How often', goal: 'Daily goal' }, rows = '';
+    if (o.error) return '<p class="wp-warn">' + esc(o.error) + '</p>';
+    Object.keys(names).forEach(function (k) {
+      if (o.ch[k] == null) return;
+      var from = k === 'gap' ? D.gap + ' min' : k === 'goal' ? fmt(D.goal) + ' ml' : D[k], to = k === 'gap' ? o.ch[k] + ' min' : k === 'goal' ? fmt(o.ch[k]) + ' ml' : o.ch[k];
+      if (String(from) !== String(to)) rows += '<li><span>' + names[k] + '</span><b>' + esc(from) + ' to ' + esc(to) + '</b></li>';
+    });
+    return '<div class="wp-ai">' + (rows ? '<div class="set-label">Suggested changes</div><ul class="wp-ai-ch">' + rows + '</ul>' : '<p class="set-note">Your timings already fit your log.</p>') +
+      (o.tips.length ? '<ul class="wp-ai-tips">' + o.tips.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
+      (rows ? '<div class="wp-ai-btns"><button type="button" class="wp-btn solid" data-wp="aiuse">Use these</button><button type="button" class="wp-btn" data-wp="aino">Keep mine</button></div>' : '') + '</div>';
+  }
+  function diaryText() {
+    var key = getTodayKey(), out = [];
+    for (var d = 0; d < 7; d++) {
+      var k = shiftDateKey(key, -d), es = sortEntries(getDayEntries(k)).filter(function (e) { return ['water', 'food', 'stool', 'gudlax', 'fibre', 'notes', 'symptoms', 'sleep'].indexOf(e.cat) >= 0; });
+      if (es.length) out.push(k + (d === 0 ? ' (today)' : '') + ': ' + es.map(function (e) { return e.time + ' ' + e.cat + ' ' + String(e.text || '').slice(0, 50); }).join('; '));
+    }
+    return out.join('\n').slice(0, 7000) || '(nothing logged in the last 7 days)';
+  }
+  async function askAi() {
+    if (aiBusy) return; aiBusy = true; aiOut = null; draw();
+    var pr = SETTINGS.profile || {};
+    var txt = 'You help one person plan WHEN to drink water and HOW MUCH. Use their real diary below.\n' +
+      'Current plan: wake ' + D.wake + ', sleep ' + D.bed + ', breakfast ' + D.breakfast + ', lunch ' + D.lunch + ', dinner ' + D.dinner + ', a drink every ' + D.gap + ' min, daily goal ' + D.goal + ' ml.\n' +
+      'Profile: age ' + (pr.age || '?') + ', weight ' + (pr.weight || '?') + ' kg, activity ' + (pr.activity || '?') + ', goals ' + (pr.goals || []).join(', ') + (pr.extra ? ', notes: ' + String(pr.extra).slice(0, 200) : '') + '.\n' +
+      'Workouts and busy times: ' + (D.acts.map(function (a) { return a.time + ' ' + a.label + ' ' + a.dur + ' min'; }).join(', ') || 'none') + '.\n' +
+      'Diary, last 7 days (24-hour times; a day starts at 04:00; the gudlax category is a laxative; notes may say urine colour):\n' + diaryText() + '\n\n' +
+      'Return the best settings for THIS person. Rules: use their real usual wake, meal and sleep times from the diary when they clearly differ from the plan; otherwise keep the plan time. ' +
+      'gap must be one of 10, 15, 20, 30, 45, 60: smaller (10 to 20) for constipation, dark urine or someone who drinks small amounts often; bigger (30 to 60) for someone who forgets or prefers full glasses. ' +
+      'goal is ml, a multiple of 250 between 1500 and 5000; keep the current goal unless the diary clearly shows dark urine often, hard stools or heavy workouts. ' +
+      'tips: 0 to 3 short tips in very simple English (max 18 words each), specific to their diary, with times where useful. No medical claims, no emojis. ' +
+      'Reply with JSON only: {"wake":"HH:MM","bed":"HH:MM","breakfast":"HH:MM","lunch":"HH:MM","dinner":"HH:MM","gap":20,"goal":3000,"tips":["..."]}';
+    var raw = null;
+    try {
+      raw = await aiGenerate({ contents: [{ parts: [{ text: txt }] }], generationConfig: { temperature: 0.2, responseMimeType: 'application/json', responseSchema: { type: 'OBJECT', properties: { wake: { type: 'STRING' }, bed: { type: 'STRING' }, breakfast: { type: 'STRING' }, lunch: { type: 'STRING' }, dinner: { type: 'STRING' }, gap: { type: 'NUMBER' }, goal: { type: 'NUMBER' }, tips: { type: 'ARRAY', items: { type: 'STRING' } } }, required: ['wake', 'bed', 'breakfast', 'lunch', 'dinner', 'gap', 'goal', 'tips'] } } }, 30000);
+    } catch (e) { raw = null; }
+    aiBusy = false;
+    if (!raw) { aiOut = { error: (typeof getAiKey === 'function' && !getAiKey()) ? 'The AI helper is not set up yet. Add it in Settings > AI helper.' : 'The AI did not answer. Check your internet and try again.' }; draw(); return; }
+    var j = null; try { var mm = String(raw).match(/\{[\s\S]*\}/); j = JSON.parse(mm ? mm[0] : raw); } catch (e) { j = null; }
+    if (!j || typeof j !== 'object') { aiOut = { error: 'The AI answer was not clear. Try again.' }; draw(); return; }
+    var ch = {};
+    ['wake', 'bed', 'breakfast', 'lunch', 'dinner'].forEach(function (k) { var v = String(j[k] || '').trim(); if (/^\d:\d\d$/.test(v)) v = '0' + v; if (TIME_RE.test(v)) ch[k] = v; });
+    if (GAPS.indexOf(+j.gap) >= 0) ch.gap = +j.gap;
+    var g = Math.round((+j.goal || 0) / 250) * 250; if (g >= 1500 && g <= 5000) ch.goal = g;
+    if (ch.wake && ch.bed && ch.wake === ch.bed) { delete ch.wake; delete ch.bed; }
+    var tips = arr(j.tips).map(function (t) { return String(t || '').replace(/\s*[\u2014\u2013]\s*/g, ', ').trim().slice(0, 140); }).filter(Boolean).slice(0, 3);
+    aiOut = { ch: ch, tips: tips }; draw();
+  }
+
+  function saveSetup() {
+    var d = D, w = W();
+    ['wake', 'bed', 'breakfast', 'lunch', 'dinner'].forEach(function (k) { if (!TIME_RE.test(d[k])) d[k] = draft()[k]; });
+    if (d.wake === d.bed) { showToast('Wake up and sleep cannot be the same time'); return; }
+    var wk = toMin(d.wake), meals = MEALS.map(function (m) { var t = toMin(d[m[0]]); return t < wk ? t + 1440 : t; });
+    if (!(meals[0] < meals[1] && meals[1] < meals[2])) { showToast('Meals should be in order: breakfast, lunch, then dinner'); return; }
+    SETTINGS.profile = SETTINGS.profile || {}; SETTINGS.profile.wake = d.wake; SETTINGS.profile.bed = d.bed;
+    SETTINGS.mealTimes = { breakfast: d.breakfast, lunch: d.lunch, dinner: d.dinner };
+    w.gap = d.gap; w.remind = d.remind; w.on = true;
+    w.acts = d.acts.filter(function (a) { return a.days !== 'once' || a.date === getTodayKey(); });
+    if (d.goal !== WATER_TARGET_ML) { WATER_TARGET_ML = Math.min(6000, Math.max(500, d.goal)); SETTINGS.waterTarget = WATER_TARGET_ML; var sv = $('set-water-val'); if (sv) sv.textContent = WATER_TARGET_ML; }
+    saveSettings(); lastCard = ''; renderMain();
+    if (window.__schedSoon) window.__schedSoon();
+    view = 'plan'; draw(); var sh = $('wp-modal').querySelector('.sheet'); if (sh) sh.scrollTop = 0;
+    showToast(w.remind === 'off' ? 'Plan saved' : alertsOk() ? 'Plan saved. Reminders are set' : 'Plan saved. Turn on alerts to get reminders');
+  }
+  function logUrine(k) {
+    var key = getTodayKey(); if (!Array.isArray(allData[key])) allData[key] = [];
+    allData[key].push({ id: Date.now() + '-u' + Math.random().toString(36).slice(2, 6), text: k === 'dark' ? 'dark urine' : k === 'clear' ? 'clear urine' : 'pale urine', cat: 'notes', time: getCurrentHHMM(), createdAt: Date.now() });
+    saveData(); lastCard = ''; renderMain(); draw();
+    showToast(k === 'dark' ? 'Noted. More water moved into the next hour' : k === 'clear' ? 'Noted. You are well hydrated' : 'Noted. That is the aim');
+    if (window.__schedSoon) window.__schedSoon();
+  }
+  function logWater(ml, btn) {
+    ml = Math.round(+ml || 0); if (!(ml > 0)) return;
+    try { if (window.__fx && btn) window.__fx.pour(btn); } catch (e) {}
+    addQuickWater(ml); lastCard = ''; drawCard(); if ($('wp-modal').classList.contains('open')) draw();
+  }
+
+  // ---------- events ----------
+  function grab() {
+    if (view !== 'setup' || !D) return;
+    document.querySelectorAll('#wp-body [data-f]').forEach(function (i) { if (TIME_RE.test(i.value)) D[i.dataset.f] = i.value; });
+    var n = $('wp-a-name'), t = $('wp-a-time'), d = $('wp-a-dur');
+    if (n) D.aName = n.value; if (t && TIME_RE.test(t.value)) D.aTime = t.value; if (d) D.aDur = +d.value;
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('#wp-modal')) grab();
+    var card = e.target.closest('#wp-card');
+    if (card) {
+      var b = e.target.closest('[data-wp]');
+      if (b && b.dataset.wp === 'log') { e.stopPropagation(); logWater(b.dataset.ml, b); return; }
+      open(b && b.dataset.wp === 'setup' ? 'setup' : null); return;
+    }
+    if (!e.target.closest('#wp-modal')) return;
+    if (e.target.id === 'wp-modal') { close(); return; }
+    var t = e.target.closest('[data-wp],[data-u],[data-seg] button,[data-use],[data-del]'); if (!t) return;
+    if (t.dataset.u) { logUrine(t.dataset.u); return; }
+    if (t.dataset.use) { D[t.dataset.use] = t.dataset.t; draw(); return; }
+    if (t.dataset.del) { D.acts = D.acts.filter(function (a) { return String(a.id) !== t.dataset.del; }); draw(); return; }
+    var sg = t.closest('[data-seg]');
+    if (sg && !t.dataset.wp) { var nm = sg.dataset.seg, v = t.dataset.v; D[nm] = nm === 'gap' ? +v : v; draw(); return; }
+    var a = t.dataset.wp;
+    if (a === 'close') close();
+    else if (a === 'edit') { D = draft(); aiOut = null; view = 'setup'; draw(); $('wp-modal').querySelector('.sheet').scrollTop = 0; }
+    else if (a === 'back') { view = 'plan'; draw(); }
+    else if (a === 'past') { showPast = !showPast; draw(); }
+    else if (a === 'log') logWater(t.dataset.ml, t);
+    else if (a === 'save') saveSetup();
+    else if (a === 'off') { W().on = false; saveSettings(); lastCard = ''; renderMain(); if (window.__schedSoon) window.__schedSoon(); close(); showToast('Water plan turned off'); }
+    else if (a === 'gm' || a === 'gp') { D.goal = Math.min(6000, Math.max(500, D.goal + (a === 'gp' ? 250 : -250))); draw(); }
+    else if (a === 'ai') { if (view !== 'setup') { D = draft(); view = 'setup'; } askAi(); }
+    else if (a === 'aiuse') { Object.keys(aiOut.ch).forEach(function (k) { D[k] = aiOut.ch[k]; }); aiOut = { ch: {}, tips: aiOut.tips }; draw(); showToast('Changes added. Tap Save plan to keep them'); }
+    else if (a === 'aino') { aiOut = { ch: {}, tips: aiOut.tips }; draw(); }
+    else if (a === 'alerts') { saveSetup(); close(); setTimeout(function () { if (window.__go) window.__go('reminders'); }, 150); }
+    else if (a === 'addact') {
+      var nm2 = ($('wp-a-name').value || '').trim().slice(0, 24) || (D.aType === 'busy' ? 'Busy' : 'Workout'), tm = $('wp-a-time').value, du = +$('wp-a-dur').value;
+      if (!TIME_RE.test(tm)) { showToast('Pick a start time'); return; }
+      D.acts.push({ id: Date.now().toString(36), label: nm2, time: tm, dur: du, type: D.aType, days: D.aDays, date: getTodayKey() });
+      D.acts.sort(function (x, y) { return x.time.localeCompare(y.time); }); D.aName = ''; draw();
+    }
+  });
+  document.addEventListener('change', function (e) {
+    var i = e.target; if (!i.closest || !i.closest('#wp-modal') || !i.dataset.f || !D) return;
+    if (TIME_RE.test(i.value)) { D[i.dataset.f] = i.value; var pv = previewEach(D), n = $('wp-each'); if (n && pv && pv.each) n.textContent = 'About ' + pv.each + ' ml each time (' + sipText(pv.each) + '), plus a bigger glass after waking and around meals.'; }
+  });
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.id === 'wp-card') { e.preventDefault(); open(); }
+    if (e.key === 'Escape' && $('wp-modal') && $('wp-modal').classList.contains('open')) close();
+  });
+
+  // redraw with the rest of the home screen, and keep the countdown fresh
+  var rm = window.renderMain;
+  if (typeof rm === 'function') window.renderMain = function () { var r = rm.apply(this, arguments); try { drawCard(); } catch (e) {} return r; };
+  setInterval(function () { drawCard(); var m = $('wp-modal'); if (m && m.classList.contains('open') && view === 'plan') draw(); }, 30000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { lastCard = ''; drawCard(); } });
+  setTimeout(drawCard, 0);
+
+  function pack(p, key, drinks, dark) {
+    var last = p.slots.length ? p.slots[p.slots.length - 1].at : p.end;
+    return {
+      key: key, start: dayStartMs(key), wake: p.wake, end: p.end, to: Math.max(p.end, last), gap: p.gap, goal: p.goal,
+      slots: p.slots.map(function (s) { return [Math.round(s.at * 10) / 10, Math.round(s.base), s.kind === 'sip' ? 0 : 1]; }),
+      meals: p.meals.map(function (m) { return m.at; }), quiet: p.quiet.map(function (q) { return [q.from, q.to]; }),
+      busy: p.blocks.filter(function (b) { return b.busy; }).map(function (b) { return [b.from, b.to]; }), drinks: drinks, dark: dark
+    };
+  }
+  function widgetPlan() {
+    if (!isOn()) return null;
+    var T = today(), es = getDayEntries(T.key), u = T.L.urine;
+    var drinks = es.filter(function (e) { return e.cat === 'water' && extractWaterMl(e.text) > 0; }).map(function (e) { return dayMin(e.time); }).filter(function (m) { return m !== null; });
+    var k2 = shiftDateKey(T.key, 1), i2 = inputFor(k2, false);
+    return { today: pack(T.p, T.key, drinks, u && u.s === 'dark' ? u.at : -1e9), tomorrow: pack(build(i2), k2, [], -1e9) };
+  }
+  window.__wp = { widgetPlan: widgetPlan, on: isOn, open: open, build: build, live: live, today: today, reminders: reminders, nextList: nextList, summary: summary, mealTimesIn: mealTimesIn, learned: learned, sipText: sipText, draw: drawCard };
+})();
+</script>
+<script>
+/* Android app only: asks to install a new app version when the phone-side code changed */
+(function () {
+  var NATIVE_NEEDED = 3, APK = 'https://github.com/atharva26mane/daily-log/releases/download/app-latest/DailyLog.apk', SNOOZE = 'dl_apk_snooze';
+  if (!window.__NATIVE) return;
+  async function level() {
+    try { var wb = window.Capacitor.Plugins.WidgetBridge; if (!wb) return 1; var r = await wb.info(); return +(r && r.level) || 1; } catch (e) { return 1; }
+  }
+  function show() {
+    if (document.getElementById('apk-up')) return;
+    var d = document.createElement('div'); d.id = 'apk-up'; d.className = 'apk-up'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-label', 'App update');
+    d.innerHTML = '<b>App update ready</b><span>New home-screen widgets need a quick install. Install it over this app; your data stays.</span>' +
+      '<div class="apk-btns"><button type="button" class="wp-btn" data-k="later">Later</button><button type="button" class="wp-btn solid" data-k="go">Install</button></div>';
+    d.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-k]'); if (!b) return;
+      if (b.dataset.k === 'go') { try { window.Capacitor.Plugins.Browser.open({ url: APK }); } catch (e2) { location.href = APK; } }
+      try { localStorage.setItem(SNOOZE, String(Date.now())); } catch (e3) {}
+      d.remove();
+    });
+    document.body.appendChild(d);
+  }
+  setTimeout(async function () {
+    var lv = await level(); if (lv >= NATIVE_NEEDED) return;
+    var t = 0; try { t = +localStorage.getItem(SNOOZE) || 0; } catch (e) {}
+    if (Date.now() - t < 20 * 3600000) return;
+    show();
+  }, 4000);
+})();
+</script>
+<script>
 /* Android app only: keeps the home-screen widgets up to date and locks the Snippets screen against screenshots */
 (function () {
   function WB() { try { return window.__NATIVE && window.Capacitor.Plugins.WidgetBridge; } catch (e) { return null; } }
@@ -6641,7 +7428,8 @@
         .slice(0, 3).map(function (x) { return (x.time ? x.time + '  ' : '') + String(x.text || '').slice(0, 40); });
     } catch (e) {}
     try { sn = window.__sn.S.feed.filter(function (x) { return !x.mine && !x.seen; }).length; } catch (e) {}
-    return { day: key, waterMl: Math.round(getWaterTotal(es)), goal: Math.round(WATER_TARGET_ML), done: st.done, total: st.total, todos: todos, snippets: sn };
+    var plan = null; try { plan = window.__wp ? window.__wp.widgetPlan() : null; } catch (e) {}
+    return { day: key, waterMl: Math.round(getWaterTotal(es)), goal: Math.round(WATER_TARGET_ML), done: st.done, total: st.total, todos: todos, snippets: sn, plan: plan };
   }
   function push() {
     var d = summary(), sg = JSON.stringify(d);
@@ -6652,13 +7440,17 @@
   // water added from the widget while the app was closed
   async function takeWater() {
     try {
-      var r = await WB().takePending(), ml = Math.round(+(r && r.ml) || 0);
-      if (ml > 0) {
-        var key = getTodayKey(); if (!Array.isArray(allData[key])) allData[key] = [];
-        var n = Math.min(40, Math.round(ml / 250)) || 1, each = Math.round(ml / n);
-        for (var i = 0; i < n; i++) allData[key].push({ id: Date.now() + '-w' + i + Math.random().toString(36).slice(2, 5), text: 'water ' + each + 'ml', cat: 'water', time: getCurrentHHMM(), createdAt: Date.now() + i });
-        saveData(); renderMain(); showToast('Added ' + ml + ' ml from your widget');
-      }
+      var r = await WB().takePending(), ml = Math.round(+(r && r.ml) || 0), list = [], total = 0;
+      try { list = JSON.parse((r && r.list) || '[]'); } catch (e2) { list = []; }
+      if (ml > 0) list.push([Date.now(), ml]); // from an older app version, time unknown
+      list.forEach(function (it, i) {
+        var at = +it[0], v = Math.round(+it[1] || 0); if (!(at > 0) || !(v > 0)) return;
+        var d = new Date(at), key = dateToKey(new Date(at - 4 * 3600000));
+        if (!Array.isArray(allData[key])) allData[key] = [];
+        allData[key].push({ id: at + '-w' + i + Math.random().toString(36).slice(2, 5), text: 'water ' + v + 'ml', cat: 'water', time: pad2(d.getHours()) + ':' + pad2(d.getMinutes()), createdAt: at });
+        total += v;
+      });
+      if (total > 0) { saveData(); renderMain(); showToast('Added ' + total + ' ml from your widget'); }
     } catch (e) {}
   }
   var rm = window.renderMain;

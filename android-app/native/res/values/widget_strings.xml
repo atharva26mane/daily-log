@@ -3,4 +3,6 @@
     <string name="widget_water_desc">Water today with a +250 ml button</string>
     <string name="widget_todo_desc">Your next to-dos for today</string>
     <string name="widget_snippets_desc">New snippets from your friends</string>
+    <string name="widget_timeline_desc">Your water plan: what to drink now, the day timeline, and quick logging</string>
+    <string name="widget_quick_desc">Log water in one tap</string>
 </resources>

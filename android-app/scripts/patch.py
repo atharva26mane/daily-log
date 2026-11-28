@@ -31,6 +31,7 @@ flt = ('            <intent-filter>\n'
        '                <category android:name="android.intent.category.DEFAULT" />\n'
        '                <category android:name="android.intent.category.BROWSABLE" />\n'
        '                <data android:scheme="com.atharva.dailylog" android:host="auth" />\n'
+       '                <data android:scheme="com.atharva.dailylog" android:host="go" />\n'
        '            </intent-filter>\n')
 if 'com.atharva.dailylog' not in m:
     i = m.index('</activity>'); m = m[:i] + flt + '        ' + m[i:]
@@ -50,7 +51,7 @@ for sub in ['layout', 'xml', 'drawable', 'values']:
 m = open(mp, encoding='utf-8').read()
 if 'WaterWidget' not in m:
     recv = ''
-    for cls, info in [('WaterWidget', 'widget_water_info'), ('TodoWidget', 'widget_todo_info'), ('SnippetsWidget', 'widget_snippets_info')]:
+    for cls, info in [('WaterWidget', 'widget_water_info'), ('TimelineWidget', 'widget_timeline_info'), ('QuickWidget', 'widget_quick_info'), ('TodoWidget', 'widget_todo_info'), ('SnippetsWidget', 'widget_snippets_info')]:
         recv += ('        <receiver android:name=".%s" android:exported="false">\n'
                  '            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>\n'
                  '            <meta-data android:name="android.appwidget.provider" android:resource="@xml/%s" />\n'

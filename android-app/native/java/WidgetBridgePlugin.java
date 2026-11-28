@@ -24,9 +24,18 @@ public class WidgetBridgePlugin extends Plugin {
     public void takePending(PluginCall call) {
         SharedPreferences p = getContext().getSharedPreferences(WidgetUtil.PREFS, Context.MODE_PRIVATE);
         int ml = p.getInt("pendingMl", 0);
-        if (ml > 0) p.edit().putInt("pendingMl", 0).apply();
+        String list = p.getString("pendingList", "[]");
+        p.edit().putInt("pendingMl", 0).putString("pendingList", "[]").apply();
         JSObject o = new JSObject();
         o.put("ml", ml);
+        o.put("list", list);
+        call.resolve(o);
+    }
+
+    @PluginMethod
+    public void info(PluginCall call) {
+        JSObject o = new JSObject();
+        o.put("level", WidgetUtil.LEVEL);
         call.resolve(o);
     }
 
