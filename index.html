@@ -1853,7 +1853,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 54</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 55</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -8081,7 +8081,7 @@
   // ---------------- tilt the water ----------------
   var tilt = 0, tiltT = 0, tiltOn = false, tiltRaf = 0, tankSeen = true;
   function tiltLoop() {
-    tilt += (tiltT - tilt) * 0.12;
+    tilt += (tiltT - tilt) * 0.2;
     var f = $('tank-fill'); if (f) f.style.setProperty('--tilt', tilt.toFixed(2) + 'deg');
     if (Math.abs(tiltT - tilt) > 0.05) tiltRaf = requestAnimationFrame(tiltLoop); else tiltRaf = 0;
   }
@@ -8094,17 +8094,17 @@
   window.addEventListener('deviceorientation', function (e) { nOri++; if (typeof e.gamma === 'number') lastG = e.gamma; });
   window.addEventListener('devicemotion', function (e) { nMot++; var g = e.accelerationIncludingGravity; if (g && typeof g.x === 'number') lastX = g.x; });
   var oriSeen = false;
-  function setTilt(t) { t = Math.max(-12, Math.min(12, t)); if (Math.abs(t - tiltT) < 0.3) return; tiltT = t; if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop); }
+  function setTilt(t) { t = Math.max(-24, Math.min(24, t)); if (Math.abs(t - tiltT) < 0.3) return; tiltT = t; if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop); }
   function onOri(e) {
     if (typeof e.gamma !== 'number') return; oriSeen = true;
     if (document.hidden || !tankSeen || P) return;
-    setTilt(-e.gamma * 0.4);
+    setTilt(-e.gamma * 0.8);
   }
   // Android WebView sometimes sends no orientation events but does send motion events: use gravity from those instead
   function onMotion(e) {
     if (oriSeen) return; var g = e.accelerationIncludingGravity; if (!g || typeof g.x !== 'number') return;
     if (document.hidden || !tankSeen || P) return;
-    setTilt(Math.asin(Math.max(-1, Math.min(1, g.x / 9.81))) * 180 / Math.PI * 0.4);
+    setTilt(Math.asin(Math.max(-1, Math.min(1, g.x / 9.81))) * 180 / Math.PI * 0.8);
   }
   if (!calm) {
     var canOri = typeof DeviceOrientationEvent === 'undefined' || typeof DeviceOrientationEvent.requestPermission !== 'function';
