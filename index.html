@@ -757,6 +757,124 @@
     .apk-up span { display: block; font-size: 14px; color: var(--moss); margin: 4px 0 10px; line-height: 1.4; }
     .apk-btns { display: flex; gap: 8px; }
     .apk-btns .wp-btn { flex: 1; }
+    /* ---------- Forest, ghost race, crab pal ---------- */
+    .fr-strip .ps-main { flex: 1; min-width: 0; display: block; }
+    .fr-strip .ps-main b { display: block; font-size: 15px; color: var(--ink); }
+    .fr-strip .ps-main small { display: block; font-size: 13px; color: var(--moss); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fr-mini { flex: none; display: flex; align-items: flex-end; gap: 0; height: 30px; }
+    .fr-mini svg { width: 13px; height: 22px; overflow: visible; }
+    .fr-mini svg.now { width: 18px; height: 28px; transform-origin: 50% 100%; }
+    .fr-mini svg.plant { animation: frPlant 900ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes frPlant { 0% { transform: scale(0.2) translateY(6px); opacity: 0.4; } 60% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(1); } }
+    .fr-chev { flex: none; width: 20px; height: 20px; fill: none; stroke: var(--forest); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .fr-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 2px 0 10px; }
+    .fr-stats div { padding: 10px 8px; border-radius: 16px; background: rgba(255,255,255,0.6); border: 1px solid rgba(64,81,59,0.12); text-align: center; }
+    .fr-stats b { display: block; font-family: var(--display); font-size: 28px; font-weight: 800; line-height: 1; color: var(--forest); font-variant-numeric: tabular-nums; }
+    .fr-stats span { display: block; margin-top: 4px; font-size: 12px; font-weight: 600; color: var(--moss); }
+    .fr-scene { border-radius: 22px; overflow: hidden; background: #e7eedb; border: 1px solid rgba(64,81,59,0.12); }
+    .fr-svg { display: block; width: 100%; height: auto; }
+    .fr-svg, .fr-mini svg, .fr-legend svg, .pal svg, .hm-kite, .hm-birds svg { stroke: none; }
+    .fr-c { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .fr-cap { text-align: center; font-size: 14px; font-weight: 600; color: var(--forest); margin: 10px 4px 6px; min-height: 20px; font-variant-numeric: tabular-nums; }
+    .fr-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--moss); margin-bottom: 6px; }
+    .fr-legend span { display: inline-flex; align-items: center; gap: 2px; }
+    .fr-legend svg { width: 16px; height: 24px; overflow: visible; }
+    .ghost-line { position: absolute; left: 0; right: 0; height: 0; border-top: 2px dashed rgba(64,81,59,0.42); z-index: -1; transition: top 1.4s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: none; }
+    .ghost-line[hidden] { display: none; }
+    .ghost-line span { position: absolute; right: 10px; top: -20px; font-size: 11px; font-weight: 700; color: var(--moss); background: rgba(241,240,232,0.85); border-radius: 8px; padding: 1px 7px; }
+    .tank-ghost { margin-top: 2px; font-size: 13px; color: var(--moss); font-weight: 600; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 6px; }
+    .tank-ghost::before { content: ''; flex: none; width: 14px; border-top: 2px dashed rgba(64,81,59,0.5); }
+    .tank-ghost[hidden] { display: none; }
+    .pal { position: absolute; top: 12px; right: 10px; width: 58px; height: 46px; padding: 0; border: 0; background: none; z-index: 2; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .pal[hidden] { display: none; }
+    .pal svg { width: 100%; height: 100%; overflow: visible; }
+    .pal .pb { fill: #c98a5e; } .pal .pl { stroke: #c98a5e; stroke-width: 2.2; stroke-linecap: round; fill: none; }
+    .pal .stalk { stroke: #a66f49; stroke-width: 2; stroke-linecap: round; }
+    .pal .ew { fill: #fff; stroke: #5b4636; stroke-width: 0.8; } .pal .ep { fill: #2c2622; }
+    .pal .ink { fill: none; stroke: #2c2622; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .pal .lid { fill: #c98a5e; }
+    .pal .e-open, .pal .e-shut, .pal .e-joy, .pal .lid, .pal .m-smile, .pal .m-o, .pal .zz { display: none; }
+    .pal .claw { transform-box: fill-box; transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .pal .claw.l { transform-origin: 100% 100%; } .pal .claw.r { transform-origin: 0% 100%; }
+    .pal.m-ok .e-open, .pal.m-ok .m-smile { display: inline; }
+    .pal.m-ok .e-open { transform-box: fill-box; transform-origin: 50% 50%; animation: palBlink 5.5s infinite; }
+    .pal.m-sleepy .e-open, .pal.m-sleepy .lid, .pal.m-sleepy .m-o { display: inline; }
+    .pal.m-sleepy .claw.l { transform: rotate(-22deg); } .pal.m-sleepy .claw.r { transform: rotate(22deg); }
+    .pal.m-sleepy svg { animation: palBob 3.2s ease-in-out infinite; }
+    .pal.m-asleep .e-shut, .pal.m-asleep .zz { display: inline; }
+    .pal.m-asleep svg { animation: palBreathe 4s ease-in-out infinite; transform-origin: 50% 100%; }
+    .pal.m-asleep .zz { animation: palZ 3.6s ease-in-out infinite; }
+    .pal.m-happy .e-joy, .pal.m-happy .m-smile, .pal.m-party .e-joy, .pal.m-party .m-smile { display: inline; }
+    .pal.m-happy .claw.l, .pal.m-party .claw.l { transform: rotate(28deg); } .pal.m-happy .claw.r, .pal.m-party .claw.r { transform: rotate(-28deg); }
+    .pal.m-party svg { animation: palDance 0.5s ease-in-out 8 alternate; transform-origin: 50% 100%; }
+    .pal.bounce svg { animation: palHop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .pal.m-party.bounce svg { animation: palHop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), palDance 0.5s ease-in-out 0.6s 8 alternate; }
+    @keyframes palBlink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+    @keyframes palBob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(2px) rotate(-3deg); } }
+    @keyframes palBreathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.95); } }
+    @keyframes palZ { 0% { opacity: 0; transform: translate(0, 4px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(6px, -10px); } }
+    @keyframes palDance { from { transform: rotate(-8deg) translateY(0); } to { transform: rotate(8deg) translateY(-2px); } }
+    @keyframes palHop { 0% { transform: translateY(0); } 40% { transform: translateY(-12px) rotate(-6deg); } 100% { transform: translateY(0); } }
+    .pal-say { position: absolute; top: 14px; right: 74px; max-width: 210px; z-index: 3; padding: 8px 11px; border-radius: 14px; background: var(--cream); color: var(--ink); font-size: 13px; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 18px rgba(26,38,24,0.18); pointer-events: none; }
+    .pal-say::after { content: ''; position: absolute; right: -6px; top: 14px; border: 6px solid transparent; border-left-color: var(--cream); border-right: 0; }
+    .pal-say[hidden] { display: none; }
+    .pal-say.in { animation: palSay 220ms cubic-bezier(0.23, 1, 0.32, 1); transform-origin: 100% 30%; }
+    @keyframes palSay { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+    .crab.slow { animation-duration: 70s; }
+    .wp-q.fz { background: rgba(180,83,42,0.2); }
+    .wp-zone { padding: 10px 12px; border-radius: 14px; background: rgba(180,83,42,0.1); margin: 0 0 12px; }
+    .wp-zone b { display: block; font-size: 14px; color: #7a3a1c; }
+    .wp-zone p { margin: 2px 0 0; font-size: 13px; line-height: 1.4; color: #5e3d1f; }
+    .wp-small { display: block; font-size: 12px; font-weight: 500; color: var(--moss); }
+    body.theme-volcano .fr-strip .ps-main b { color: #ffe3c8; } body.theme-volcano .fr-strip .ps-main small { color: #e4c9b6; } body.theme-volcano .fr-chev { stroke: #ffd9bd; }
+    body.theme-volcano .tank-ghost { color: #e4c9b6; } body.theme-volcano .tank-ghost::before, body.theme-volcano .ghost-line { border-color: rgba(255,200,160,0.5); }
+    body.theme-volcano .ghost-line span { background: rgba(32,22,18,0.8); color: #ffd9bd; }
+    @media (prefers-reduced-motion: reduce) { .pal svg, .pal .e-open, .pal .zz, .fr-mini svg.plant, .pal-say.in { animation: none !important; } .pal.m-asleep .zz { opacity: 1; } .ghost-line { transition: none; } }
+    /* ---------- Himalaya theme: stars, peaks, a village, a rooftop kite ---------- */
+    .hm-bg { display: none; }
+    .theme-opt .sw.h { background: linear-gradient(180deg,#1d2a3a,#6f97b8 45%,#668a58 70%,#a7835d); }
+    body.theme-himalaya { background: #3c3a2e; }
+    body.theme-himalaya #main-screen { position: relative; min-height: calc(min(100vw, 640px) * 3.8130 + 296px); padding-bottom: 96px; }
+    body.theme-himalaya .hm-bg { display: flex; flex-direction: column; position: absolute; top: 0; bottom: 96px; left: 0; right: 0; max-width: 640px; margin: 0 auto; z-index: 0; pointer-events: none; overflow: hidden; }
+    body.theme-himalaya #main-screen > :not(.hm-bg):not(.theme-bg):not(.bottom-bar) { position: relative; z-index: 1; }
+    .hm-top, .hm-bot { position: relative; flex: none; width: 100%; background-size: 100% 100%; background-repeat: no-repeat; overflow: hidden; }
+    .hm-top { aspect-ratio: 984 / 2303; background-image: url(hm-top.webp); }
+    .hm-fill { flex: 1 1 auto; background: #668a58; }
+    .hm-bot { aspect-ratio: 984 / 1450; background-image: url(hm-bot.webp); }
+    body.theme-himalaya .theme-end { display: block; height: calc(min(100vw, 640px) * 1.4736 * 0.97); }
+    body.theme-himalaya .sky, body.theme-himalaya .ground, body.theme-himalaya .shore { background: transparent !important; }
+    body.theme-himalaya .wet, body.theme-himalaya .hitfoam, body.theme-himalaya .drip, body.theme-himalaya .sky-fx, body.theme-himalaya .forest-fx, body.theme-himalaya .sea, body.theme-himalaya .shore .deco, body.theme-himalaya .crab { display: none !important; }
+    body.theme-himalaya .forest { visibility: hidden; height: 370px; }
+    body.theme-himalaya, body.theme-himalaya[data-mood] { --head: #fefae0; --head-sub: #c9d2bf; --head-bg: rgba(254,250,224,0.12); --head-line: rgba(254,250,224,0.3); }
+    body.theme-himalaya .shore::before { display: none !important; }
+    body.theme-himalaya .shore { min-height: 0; padding: 10px 0 0; }
+    body.theme-himalaya .shore-inner { border-radius: 22px; padding: 18px 16px 12px; max-width: 528px; margin: 0 16px; background: rgba(254,250,224,0.96); box-shadow: 0 10px 28px rgba(20,30,20,0.25); }
+    @media (min-width: 560px) { body.theme-himalaya .shore-inner { margin: 0 auto; } }
+    body.theme-himalaya .proverb { background: rgba(254,250,224,0.9); }
+    body.theme-himalaya .tank { box-shadow: 0 14px 34px rgba(10,16,24,0.4); }
+    body.theme-himalaya .todo-strip, body.theme-himalaya .nudge { background: rgba(254,250,224,0.93); }
+    /* life in the picture */
+    .hm-star { position: absolute; width: 3px; height: 3px; margin: -1.5px; border-radius: 50%; background: #fffbe8; box-shadow: 0 0 6px 2px rgba(255,251,232,0.55); animation: hmTwinkle 4s ease-in-out infinite; }
+    @keyframes hmTwinkle { 0%, 100% { opacity: 0.15; transform: scale(0.7); } 50% { opacity: 1; transform: scale(1.15); } }
+    .hm-aur { position: absolute; left: 52%; top: 0; width: 46%; height: 24%; background: radial-gradient(closest-side, rgba(90,220,160,0.32), rgba(90,220,160,0) 100%); mix-blend-mode: screen; animation: hmAur 9s ease-in-out infinite; }
+    @keyframes hmAur { 0%, 100% { opacity: 0.2; transform: translateX(0) scaleY(1); } 50% { opacity: 0.85; transform: translateX(-3%) scaleY(1.08); } }
+    .hm-cloud { position: absolute; width: 46%; height: 3.2%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,0.55), rgba(255,255,255,0) 100%); animation: hmDrift 48s linear infinite; }
+    .hm-cloud.c2 { width: 34%; animation-duration: 66s; animation-delay: -30s; opacity: 0.8; }
+    @keyframes hmDrift { from { transform: translateX(-120%); } to { transform: translateX(320%); } }
+    .hm-smoke { position: absolute; width: 2.4%; aspect-ratio: 1; margin: -1.2% 0 0 -1.2%; border-radius: 50%; background: radial-gradient(closest-side, rgba(235,235,230,0.75), rgba(235,235,230,0) 100%); opacity: 0; animation: hmSmoke 6s ease-out infinite; }
+    @keyframes hmSmoke { 0% { opacity: 0; transform: translate(0, 0) scale(0.6); } 15% { opacity: 0.85; } 100% { opacity: 0; transform: translate(60%, -520%) scale(2.6); } }
+    .hm-birds { position: absolute; left: 0; width: 16%; animation: hmFly 26s linear infinite; }
+    .hm-birds svg { width: 100%; height: auto; overflow: visible; }
+    .hm-birds path { fill: none; stroke: #2f3a2b; stroke-width: 1.6; stroke-linecap: round; animation: hmFlap 0.7s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 50%; }
+    .hm-birds path:nth-child(2) { animation-delay: -0.3s; } .hm-birds path:nth-child(3) { animation-delay: -0.5s; }
+    @keyframes hmFly { from { transform: translateX(-30%); } to { transform: translateX(720%); } }
+    @keyframes hmFlap { from { transform: scaleY(1); } to { transform: scaleY(0.35); } }
+    .hm-kite { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .hm-kite .swing { transform-box: view-box; transform-origin: 829px 215px; animation: hmSwing 5.5s ease-in-out infinite; }
+    .hm-kite .wob { transform-box: view-box; transform-origin: 862px 132px; animation: hmWob 1.7s ease-in-out infinite alternate; }
+    @keyframes hmSwing { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
+    @keyframes hmWob { from { transform: rotate(-7deg) translateY(0); } to { transform: rotate(6deg) translateY(-6px); } }
+    @media (prefers-reduced-motion: reduce) { .hm-star, .hm-aur, .hm-cloud, .hm-smoke, .hm-birds, .hm-birds path, .hm-kite .swing, .hm-kite .wob { animation: none !important; } .hm-smoke { display: none; } .hm-cloud { opacity: 0; } }
     .tank-bottle { margin-top: 14px; }
     .tank-bottle:empty { display: none; }
     .bt-card { display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 12px; border-radius: 18px; background: rgba(64,81,59,0.07); border: 1px solid rgba(64,81,59,0.10); }
@@ -1283,6 +1401,25 @@
 
   <!-- MAIN SCREEN (Today or Selected Past Day) -->
   <div id="main-screen" class="screen active">
+    <div class="hm-bg" aria-hidden="true">
+      <div class="hm-top"><i class="hm-star" style="left:33.4%;top:4.92%;animation-delay:-3.3s;animation-duration:3.2s"></i><i class="hm-star" style="left:53.4%;top:10.51%;animation-delay:-0.3s;animation-duration:4.5s"></i><i class="hm-star" style="left:6.5%;top:12.27%;animation-delay:-0.3s;animation-duration:3.3s"></i><i class="hm-star" style="left:42.9%;top:22.50%;animation-delay:-0.6s;animation-duration:3.7s"></i><i class="hm-star" style="left:62.0%;top:25.64%;animation-delay:-2.9s;animation-duration:4.2s"></i><i class="hm-star" style="left:94.8%;top:2.21%;animation-delay:-4.3s;animation-duration:3.9s"></i><i class="hm-star" style="left:16.6%;top:4.06%;animation-delay:-1.5s;animation-duration:5.4s"></i><i class="hm-star" style="left:20.0%;top:16.12%;animation-delay:-3.2s;animation-duration:4.1s"></i><i class="hm-star" style="left:54.5%;top:2.63%;animation-delay:-0.3s;animation-duration:3.6s"></i><i class="hm-star" style="left:67.0%;top:12.12%;animation-delay:-1.6s;animation-duration:4.8s"></i><i class="hm-star" style="left:45.6%;top:8.79%;animation-delay:-4.0s;animation-duration:5.1s"></i><i class="hm-star" style="left:25.9%;top:15.94%;animation-delay:-2.6s;animation-duration:5.6s"></i><i class="hm-star" style="left:71.6%;top:8.49%;animation-delay:-4.9s;animation-duration:3.4s"></i><i class="hm-star" style="left:42.3%;top:20.69%;animation-delay:-0.8s;animation-duration:4.5s"></i><i class="hm-star" style="left:6.7%;top:18.37%;animation-delay:-3.8s;animation-duration:4.7s"></i><i class="hm-star" style="left:85.3%;top:9.16%;animation-delay:-3.5s;animation-duration:4.8s"></i><i class="hm-aur"></i><i class="hm-cloud" style="top:56.45%"></i><i class="hm-cloud c2" style="top:60.36%"></i><i class="hm-smoke" style="left:47.26%;top:86.97%;animation-delay:-0.0s"></i><i class="hm-smoke" style="left:47.26%;top:86.97%;animation-delay:-3.0s"></i><i class="hm-smoke" style="left:61.69%;top:84.37%;animation-delay:-1.1s"></i><i class="hm-smoke" style="left:61.69%;top:84.37%;animation-delay:-4.1s"></i><i class="hm-smoke" style="left:73.88%;top:83.80%;animation-delay:-2.2s"></i><i class="hm-smoke" style="left:73.88%;top:83.80%;animation-delay:-5.2s"></i><i class="hm-smoke" style="left:83.54%;top:82.94%;animation-delay:-3.3s"></i><i class="hm-smoke" style="left:83.54%;top:82.94%;animation-delay:-6.3s"></i><i class="hm-smoke" style="left:89.63%;top:82.20%;animation-delay:-4.4s"></i><i class="hm-smoke" style="left:89.63%;top:82.20%;animation-delay:-7.4s"></i><div class="hm-birds" style="top:68.61%"><svg viewBox="0 0 60 24"><path d="M2 8 Q7 2 12 8 Q17 2 22 8"/><path d="M28 16 Q32 11 36 16 Q40 11 44 16"/><path d="M46 6 Q49 2 52 6 Q55 2 58 6"/></svg></div></div>
+      <div class="hm-fill"></div>
+      <div class="hm-bot"><svg class="hm-kite" viewBox="0 0 984 1450" preserveAspectRatio="none" aria-hidden="true">
+          <g class="swing">
+            <path d="M829 215 Q848 176 862 134" fill="none" stroke="#efe8d8" stroke-width="1.6" opacity="0.9"/>
+            <g class="wob"><g transform="translate(862 132) scale(1.55) translate(-862 -132)">
+              <path d="M862 132 C858 150 870 160 862 176 C854 192 868 202 860 218" fill="none" stroke="#f2c14e" stroke-width="3" stroke-linecap="round">
+                <animate attributeName="d" dur="1.2s" repeatCount="indefinite" values="M862 132 C858 150 870 160 862 176 C854 192 868 202 860 218;M862 132 C868 150 856 162 864 178 C872 194 856 204 866 220;M862 132 C858 150 870 160 862 176 C854 192 868 202 860 218"/>
+              </path>
+              <path d="M862 62 L896 98 L862 134 L828 98Z" fill="#d6336c"/>
+              <path d="M862 62 L896 98 L862 98Z" fill="#f2c14e"/>
+              <path d="M862 98 L828 98 L862 134Z" fill="#f2c14e"/>
+              <path d="M862 62 L862 134 M832 94 Q862 82 892 94" fill="none" stroke="#6b2a2a" stroke-width="2"/>
+              <path d="M856 134 L862 144 L868 134Z" fill="#d6336c"/>
+            </g></g>
+          </g>
+        </svg></div>
+    </div>
     <div class="theme-bg" aria-hidden="true">
       <div class="tl tl-top"><div class="lv lv-glow"></div><div class="lv lv-flow"><i></i></div><i class="puff"></i><i class="puff"></i><i class="puff"></i></div>
       <div class="tl tl-mid"><div class="lv lv-glow"></div><div class="lv lv-flow"><i></i></div><div class="glow core"></div></div>
@@ -1326,9 +1463,26 @@
             <svg class="wave" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 0 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
             <div class="fill-body"></div>
           </div>
+          <div class="ghost-line" id="ghost-line" hidden><span>Best you</span></div>
+          <button class="pal m-ok" id="pal" type="button" aria-label="Crab"><svg viewBox="0 0 60 46" aria-hidden="true">
+            <path class="pl" d="M18 34 L11 40 M20 37 L15 44 M42 34 L49 40 M40 37 L45 44"/>
+            <path class="claw l pb" d="M17 28 C9 27 5 20 8 14 C10 16 12 18 15 18 C13 14 14 11 16 10 C19 14 20 22 17 28Z"/>
+            <path class="claw r pb" d="M43 28 C51 27 55 20 52 14 C50 16 48 18 45 18 C47 14 46 11 44 10 C41 14 40 22 43 28Z"/>
+            <ellipse class="pb" cx="30" cy="31" rx="15" ry="10"/>
+            <path class="stalk" d="M25 23 L24 14 M35 23 L36 14"/>
+            <g class="e-open"><circle class="ew" cx="24" cy="12" r="3.6"/><circle class="ep" cx="24.4" cy="12.4" r="1.7"/><circle class="ew" cx="36" cy="12" r="3.6"/><circle class="ep" cx="36.4" cy="12.4" r="1.7"/></g>
+            <g class="lid"><path d="M20.4 12 A3.6 3.6 0 0 1 27.6 12Z"/><path d="M32.4 12 A3.6 3.6 0 0 1 39.6 12Z"/></g>
+            <g class="e-shut"><path class="ink" d="M21 12.5 Q24 14.5 27 12.5 M33 12.5 Q36 14.5 39 12.5"/></g>
+            <g class="e-joy"><path class="ink" d="M21 13 Q24 9 27 13 M33 13 Q36 9 39 13"/></g>
+            <path class="m-smile ink" d="M26 32 Q30 35.5 34 32"/>
+            <ellipse class="m-o" cx="30" cy="33" rx="2.2" ry="2.6" fill="#5b2f22"/>
+            <text class="zz" x="44" y="8" font-size="10" font-weight="700" fill="#526247">z</text>
+          </svg></button>
+          <span class="pal-say" id="pal-say" hidden></span>
           <div class="tank-num"><span id="tank-ml">0</span><small>ml</small></div>
           <div class="tank-sub" id="tank-sub"></div>
           <div class="tank-since" id="tank-since"></div>
+          <div class="tank-ghost" id="tank-ghost" hidden></div>
           <div class="wp-card" id="wp-card" role="button" tabindex="0" hidden></div>
           <div class="tank-quick" id="tank-quick">
             <button class="quick-btn" data-ml="100">+100</button>
@@ -1342,6 +1496,7 @@
         <button class="todo-strip" id="todo-strip" type="button" aria-label="Open to-do list"></button>
         <button class="todo-strip plan-strip" id="plan-strip" type="button" aria-label="Open plans"></button>
         <button class="todo-strip sn-strip" id="sn-strip" type="button" aria-label="Open Snippets"></button>
+        <button class="todo-strip fr-strip" id="fr-strip" type="button" aria-label="Open your forest"></button>
 
         <div class="actions">
           <button class="act primary" id="open-chat-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H10l-4.5 3.8V16h-1z"/></svg><span>Talk to AI</span></button>
@@ -1602,6 +1757,7 @@
       <div class="theme-opts">
         <button class="theme-opt" data-theme="forest"><span class="sw f"></span><span><b>Forest</b><small>Trees, hills and the sea</small></span></button>
         <button class="theme-opt" data-theme="volcano"><span class="sw v"></span><span><b>Volcano</b><small>Down into the earth to a foundry</small></span></button>
+        <button class="theme-opt" data-theme="himalaya"><span class="sw h"></span><span><b>Himalaya</b><small>From the stars to a rooftop kite</small></span></button>
       </div>
       <div class="backup-stack"><button class="btn-cancel" id="theme-close-btn">Close</button></div>
     </div>
@@ -1615,7 +1771,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 48</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 50</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -1771,6 +1927,10 @@
   </div>
 
   <!-- REMINDERS MODAL -->
+  <div id="fr-modal" class="overlay">
+    <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Your forest"><div id="fr-body"></div></div>
+  </div>
+
   <div id="wp-modal" class="overlay">
     <div class="sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Water plan"><div id="wp-body"></div></div>
   </div>
@@ -3759,8 +3919,9 @@
     var t0=t&&t.textContent, s0=sub&&sub.textContent;
     function apply(n){
       body.classList.toggle('theme-volcano', n==='volcano');
-      if(t) t.textContent = n==='volcano' ? 'Your week' : t0;
-      if(sub) sub.textContent = n==='volcano' ? 'A glowing shell means you reached your water target that day. Tap one to open that day.' : s0;
+      body.classList.toggle('theme-himalaya', n==='himalaya');
+      if(t) t.textContent = n==='forest' ? t0 : 'Your week';
+      if(sub) sub.textContent = n==='volcano' ? 'A glowing shell means you reached your water target that day. Tap one to open that day.' : n==='himalaya' ? 'A filled shell means you reached your water target that day. Tap one to open that day.' : s0;
       document.querySelectorAll('.theme-opt').forEach(function(b){ b.classList.toggle('on', b.dataset.theme===n); });
     }
     var cur='forest'; try { cur=localStorage.getItem(KEY)||'forest'; } catch(e){}
@@ -3805,7 +3966,7 @@
     function refresh() {
       nameIn.value = SETTINGS.name || '';
       wVal.textContent = WATER_TARGET_ML;
-      document.getElementById('set-theme-val').textContent = document.body.classList.contains('theme-volcano') ? 'Volcano' : 'Forest';
+      document.getElementById('set-theme-val').textContent = document.body.classList.contains('theme-volcano') ? 'Volcano' : document.body.classList.contains('theme-himalaya') ? 'Himalaya' : 'Forest';
       var on = [getGroqKey() && 'Groq', getGeminiKey() && 'Gemini'].filter(Boolean);
       document.getElementById('set-ai-val').textContent = on.length ? 'On (' + on.join(' + ') + ')' : 'Off';
     }
@@ -4602,6 +4763,16 @@
   // ---------- Android app: reminders are scheduled on the phone itself ----------
   function LN() { try { return window.__NATIVE && window.Capacitor.Plugins.LocalNotifications; } catch (e) { return null; } }
   function goFor(tag) { tag = String(tag || ''); return (tag === 'water' || tag === 'bottle') ? 'water' : (tag.indexOf('todo') === 0 || /^t\d/.test(tag)) ? 'todo' : /^c\d/.test(tag) ? 'reminders' : ''; }
+  // quiet alerts for hours you never miss, firm ones for hours you often forget
+  var chOk = false;
+  async function channels(n) {
+    if (chOk) return;
+    try {
+      await n.createChannel({ id: 'water_quiet', name: 'Water (quiet)', description: 'Water reminders in hours you rarely miss', importance: 2, visibility: 1, vibration: false });
+      await n.createChannel({ id: 'water_firm', name: 'Water (firm)', description: 'Water reminders in hours you often forget', importance: 4, visibility: 1, vibration: true });
+      chOk = true;
+    } catch (e) { chOk = false; }
+  }
   async function nativeSchedule() {
     var n = LN(); if (!n) return;
     try {
@@ -4609,7 +4780,8 @@
       if (p && p.notifications && p.notifications.length) await n.cancel({ notifications: p.notifications.map(function (x) { return { id: x.id }; }) });
       if (!subscribedHere()) return;
       var list = buildSchedule(); if (!list.length) return;
-      await n.schedule({ notifications: list.map(function (x, i) { return { id: i + 1, title: x.title, body: x.body, schedule: { at: new Date(x.at), allowWhileIdle: true }, extra: { go: goFor(x.tag) } }; }) });
+      await channels(n);
+      await n.schedule({ notifications: list.map(function (x, i) { var o = { id: i + 1, title: x.title, body: x.body, schedule: { at: new Date(x.at), allowWhileIdle: true }, extra: { go: goFor(x.tag) } }; if (x.channel && chOk) o.channelId = x.channel; return o; }) });
     } catch (e) {}
   }
   (function () {
@@ -6980,6 +7152,36 @@
     return { next: next, due: due && due.amt > 0 ? due : null, upcoming: U, remaining: remaining, plannedNow: plannedNow, diff: Math.round(c.drunk - plannedNow), left: Math.max(0, Math.round(remaining - given)), status: status, cover: cover, urine: c.urine, boost: boost };
   }
 
+  // ---------- forgetting zones: hours you usually skip water (last 14 days) ----------
+  var zCache = { sig: '', z: null };
+  function zones() {
+    var w = W(); if (w.smart === false) return { forget: [], reliable: {}, days: 0, off: true };
+    var key = getTodayKey(), wb = wakeBed(), wake = wb.wake, bed = wb.bed <= wb.wake ? wb.bed + 1440 : wb.bed, end = bed - 60;
+    var set = setMeals(), days = [], sig = key + '|' + wake + '|' + end + '|' + set.map(function (m) { return m.at; }).join(',');
+    for (var d = 1; d <= 14; d++) {
+      var es = getDayEntries(shiftDateKey(key, -d)).filter(function (e) { return e.cat === 'water' && extractWaterMl(e.text) > 0; });
+      if (es.length >= 2) days.push(es.map(function (e) { return dayMin(e.time); }).filter(function (m) { return m !== null; }));
+      sig += '|' + es.length;
+    }
+    if (zCache.sig === sig) return zCache.z;
+    var out = { forget: [], reliable: {}, days: days.length };
+    if (days.length >= 5) {
+      var h0 = Math.ceil((wake + 30) / 60), h1 = Math.floor(end / 60) - 1, run = null;
+      for (var h = h0; h <= h1; h++) {
+        var from = h * 60, to = from + 60;
+        var mealy = set.some(function (m) { var a = Math.max(from, m.at - 30), b = Math.min(to, m.at + 30); return b - a >= 30; });
+        var hit = days.filter(function (ms) { return ms.some(function (m) { return m >= from && m < to; }); }).length, rate = hit / days.length;
+        if (!mealy && rate <= 0.3) {
+          if (run && run.to === from) { run.to = to; run.miss = Math.max(run.miss, days.length - hit); }
+          else { run = { from: from, to: to, miss: days.length - hit, of: days.length }; out.forget.push(run); }
+        } else { run = null; if (rate >= 0.75) out.reliable[h] = true; }
+      }
+    }
+    zCache = { sig: sig, z: out };
+    return out;
+  }
+  function inForget(z, m) { return z.forget.some(function (f) { return m >= f.from && m < f.to; }); }
+
   // ---------- today's real input ----------
   function inputFor(key, isToday) {
     var w = W(), wb = wakeBed(), set = setMeals(), es = getDayEntries(key), logged = isToday ? mealTimesIn(es, set) : {};
@@ -7028,19 +7230,29 @@
   // ---------- reminders (used by the alert schedule) ----------
   function reminders(horizonMs) {
     if (!isOn()) return []; var w = W(); if (w.remind === 'off') return [];
-    var out = [], nowMs = Date.now(), T = today();
+    var out = [], nowMs = Date.now(), T = today(), Z = zones();
     function add(list, key, useAmt) {
       var base = dayStartMs(key), lastAt = -1e9;
       list.forEach(function (s, j) {
         var ml = useAmt ? s.amt : r10(s.base); if (!(ml > 0)) return;
-        if (w.remind === 'hourly' && s.kind === 'sip' && s.at - lastAt < 55) return;
+        var firm = inForget(Z, s.at);
+        if (w.remind === 'hourly' && s.kind === 'sip' && !firm && s.at - lastAt < 55) return;
         var at = base + Math.round(s.at * 60000);
         if (at <= nowMs + 60000 || at > horizonMs) return;
         lastAt = s.at;
         var nx = list.slice(j + 1).filter(function (x) { return (useAmt ? x.amt : x.base) > 0; })[0];
-        var body = sipText(ml).charAt(0).toUpperCase() + sipText(ml).slice(1) + '. ' + why(s, T.p);
+        var body = (firm ? 'You usually forget water around now. ' : '') + sipText(ml).charAt(0).toUpperCase() + sipText(ml).slice(1) + '. ' + why(s, T.p);
         if (!why(s, T.p) && nx) body += 'Next at ' + hm(nx.at) + '.';
-        out.push({ at: at, title: 'Water: ' + ml + ' ml', body: body.trim(), tag: 'water' });
+        var item = { at: at, title: 'Water: ' + ml + ' ml', body: body.trim(), tag: 'water' };
+        if (firm) item.channel = 'water_firm';
+        else if (w.remind === 'all' && s.kind === 'sip' && Z.reliable[Math.floor(s.at / 60)]) item.channel = 'water_quiet';
+        out.push(item);
+        // a second nudge in forgetting zones (it disappears when you log water, because the schedule is rebuilt)
+        var room = (nx ? nx.at : s.at + 60) - s.at;
+        if (firm && room >= 28) {
+          var at2 = at + Math.min(10, room - 5) * 60000;
+          if (at2 <= horizonMs) out.push({ at: at2, title: 'Still need ' + ml + ' ml', body: 'This is when you usually forget. Have it now.', tag: 'water', channel: 'water_firm' });
+        }
       });
     }
     if (T.L.status !== 'done') add(T.L.upcoming.filter(function (s) { return s.amt > 0; }), T.key, true);
@@ -7076,6 +7288,7 @@
     var h = '';
     p.quiet.forEach(function (q) { h += '<i class="wp-q" style="left:' + x(q.from) + '%;width:' + (x(q.to) - x(q.from)).toFixed(2) + '%"></i>'; });
     p.blocks.forEach(function (q) { if (q.busy) h += '<i class="wp-q busy" style="left:' + x(q.from) + '%;width:' + (x(q.to) - x(q.from)).toFixed(2) + '%"></i>'; });
+    zones().forget.forEach(function (q) { h += '<i class="wp-q fz" style="left:' + x(q.from) + '%;width:' + (x(q.to) - x(q.from)).toFixed(2) + '%"></i>'; });
     var nx = T.L.due || T.L.next;
     p.slots.forEach(function (s) {
       var cls = s === nx ? 'nx' : s.done ? 'dn' : (s.at <= T.now ? 'ms' : (s.skip ? 'sk' : ''));
@@ -7148,6 +7361,9 @@
     h += '<div class="wp-urine"><div class="wp-u-head"><b>Urine colour</b><span>' + (ut ? 'Last: ' + esc(ut) : 'Check it now and then') + '</span></div>' +
       '<div class="wp-u-chips"><button type="button" data-u="clear"><i style="background:#f3f1d8"></i>Clear</button><button type="button" data-u="pale"><i style="background:#f1df7a"></i>Pale yellow</button><button type="button" data-u="dark"><i style="background:#c98f1c"></i>Dark yellow</button></div>' +
       '<p class="set-note">' + (u && !u.old && u.s === 'dark' ? 'Your plan moved more water into the next hour. Check again later.' : u && !u.old && u.s === 'clear' ? 'Well hydrated. If it stays clear all day, you can drink a little less.' : 'Pale yellow is the aim. Dark means drink a bit more soon.') + '</p></div>';
+    var Z = zones();
+    if (Z.forget.length) h += '<div class="wp-zone"><b>Your forgetting ' + (Z.forget.length > 1 ? 'times' : 'time') + '</b><p>' + Z.forget.map(function (f) { return hm(f.from) + ' to ' + hm(f.to) + ' (missed on ' + f.miss + ' of ' + f.of + ' days)'; }).join(', ') + '. Reminders here are firmer, with a second nudge. In hours you never miss, they stay quiet.</p></div>';
+    else if (!Z.off && Z.days < 5) h += '<p class="wp-tip">After 5 days of logging, the plan learns the hours you usually forget water and reminds you harder there.</p>';
     if (p.gut) h += '<p class="wp-tip">For your gut: warm water after waking, steady sips through the day, and a full glass with fibre.</p>';
     if (p.acts.some(function (a) { return a.type !== 'busy'; })) h += '<p class="wp-tip">On workout days you may need more than your goal. Drink when thirsty.</p>';
     // timeline
@@ -7166,7 +7382,7 @@
       else if (r.a) list += head + '<div class="wp-r act' + cls + '"><span class="wp-time">' + hm(r.at) + '</span><span class="wp-dot">' + (r.a.type === 'busy' ? IC_BUSY : IC_ACT) + '</span><span class="wp-c"><b>' + esc(r.a.label) + '</b><small>' + r.a.dur + ' min' + (r.a.type === 'busy' ? ', no drinks during it' : ', sips during it') + '</small></span></div>';
       else {
         var s = r.s, isNx = s === nx, ml = s.done || past ? r10(s.base) : s.amt, st = s.done ? '<span class="wp-st ok">Done</span>' : isNx ? '<span class="wp-st nx">' + (L.due ? 'Now' : 'Next') + '</span>' : past ? '<span class="wp-st">Missed</span>' : s.skip ? '<span class="wp-st">Optional</span>' : '';
-        var lab = label(s), sub = s.kind === 'sip' ? sipText(ml) : lab + ', ' + sipText(ml);
+        var lab = label(s), sub = (s.kind === 'sip' ? sipText(ml) : lab + ', ' + sipText(ml)) + (!past && !s.done && inForget(Z, s.at) ? '. Usual miss time' : '');
         list += head + '<div class="wp-r' + cls + (isNx ? ' nx' : '') + (s.done ? ' dn' : '') + (s.kind !== 'sip' ? ' key' : '') + '"><span class="wp-time">' + hm(s.at) + '</span><span class="wp-dot"><i></i></span><span class="wp-c"><b>' + (s.skip && !past && !s.done ? 'Sip if thirsty' : ml + ' ml') + '</b><small>' + esc(sub) + '</small></span>' + st + '</div>';
       }
     });
@@ -7182,7 +7398,7 @@
     var w = W(), wb = wakeBed(), mt = SETTINGS.mealTimes || {};
     return {
       wake: hm(wb.wake), bed: hm(wb.bed), breakfast: mt.breakfast || '08:30', lunch: mt.lunch || '13:00', dinner: mt.dinner || '20:30',
-      gap: w.gap, remind: w.remind, goal: WATER_TARGET_ML, acts: JSON.parse(JSON.stringify(w.acts.filter(function (a) { return a.days !== 'once' || a.date === getTodayKey(); }))),
+      gap: w.gap, remind: w.remind, smart: w.smart !== false, goal: WATER_TARGET_ML, acts: JSON.parse(JSON.stringify(w.acts.filter(function (a) { return a.days !== 'once' || a.date === getTodayKey(); }))),
       aType: 'work', aDays: 'all'
     };
   }
@@ -7213,6 +7429,7 @@
     h += '<div class="set-group"><div class="set-label">How often to drink</div>' + seg('gap', GAPS.map(function (g) { return [g, g + ' min']; }), d.gap) +
       '<p class="set-note" id="wp-each">' + (pv && pv.each ? 'About ' + pv.each + ' ml each time (' + sipText(pv.each) + '), plus a bigger glass after waking and around meals.' : '') + '</p></div>';
     h += '<div class="set-group"><div class="set-label">Reminders</div>' + seg('remind', [['all', 'Every drink'], ['hourly', 'About hourly'], ['off', 'Off']], d.remind) +
+      '<label class="set-row"><span class="set-name">Learn when I forget<small class="wp-small">Firmer reminders in hours you usually miss</small></span><span class="switch"><input type="checkbox" data-chk="smart"' + (d.smart !== false ? ' checked' : '') + ' /><span></span></span></label>' +
       (alertsOk() ? '<p class="set-note">Alerts are on for this phone.</p>' : '<p class="set-note">Alerts are off on this phone, so reminders cannot reach you yet.</p><button type="button" class="wp-btn wide" data-wp="alerts">Turn on alerts</button>') + '</div>';
     h += '<div class="set-group"><div class="set-label">Workouts and busy times</div>' +
       (d.acts.length ? d.acts.map(function (a) { return '<div class="set-row wp-act"><span class="set-name"><b>' + esc(a.time) + '</b> ' + esc(a.label) + '<small>' + a.dur + ' min, ' + (a.type === 'busy' ? 'no drinks' : 'workout') + ', ' + (a.days === 'once' ? 'today only' : 'every day') + '</small></span><button type="button" class="wp-x" data-del="' + esc(a.id) + '" aria-label="Remove ' + esc(a.label) + '">&times;</button></div>'; }).join('') : '<p class="set-note">Add a gym session, a walk, a long meeting or travel. The plan adds water around it.</p>') +
@@ -7285,7 +7502,7 @@
     if (!(meals[0] < meals[1] && meals[1] < meals[2])) { showToast('Meals should be in order: breakfast, lunch, then dinner'); return; }
     SETTINGS.profile = SETTINGS.profile || {}; SETTINGS.profile.wake = d.wake; SETTINGS.profile.bed = d.bed;
     SETTINGS.mealTimes = { breakfast: d.breakfast, lunch: d.lunch, dinner: d.dinner };
-    w.gap = d.gap; w.remind = d.remind; w.on = true;
+    w.gap = d.gap; w.remind = d.remind; w.smart = d.smart !== false; w.on = true; zCache.sig = '';
     w.acts = d.acts.filter(function (a) { return a.days !== 'once' || a.date === getTodayKey(); });
     if (d.goal !== WATER_TARGET_ML) { WATER_TARGET_ML = Math.min(6000, Math.max(500, d.goal)); SETTINGS.waterTarget = WATER_TARGET_ML; var sv = $('set-water-val'); if (sv) sv.textContent = WATER_TARGET_ML; }
     saveSettings(); lastCard = ''; renderMain();
@@ -7350,7 +7567,9 @@
     }
   });
   document.addEventListener('change', function (e) {
-    var i = e.target; if (!i.closest || !i.closest('#wp-modal') || !i.dataset.f || !D) return;
+    var i = e.target; if (!i.closest || !i.closest('#wp-modal') || !D) return;
+    if (i.dataset.chk) { D[i.dataset.chk] = i.checked; return; }
+    if (!i.dataset.f) return;
     if (TIME_RE.test(i.value)) { D[i.dataset.f] = i.value; var pv = previewEach(D), n = $('wp-each'); if (n && pv && pv.each) n.textContent = 'About ' + pv.each + ' ml each time (' + sipText(pv.each) + '), plus a bigger glass after waking and around meals.'; }
   });
   document.addEventListener('keydown', function (e) {
@@ -7381,7 +7600,219 @@
     var k2 = shiftDateKey(T.key, 1), i2 = inputFor(k2, false);
     return { today: pack(T.p, T.key, drinks, u && u.s === 'dark' ? u.at : -1e9), tomorrow: pack(build(i2), k2, [], -1e9) };
   }
-  window.__wp = { widgetPlan: widgetPlan, on: isOn, open: open, build: build, live: live, today: today, reminders: reminders, nextList: nextList, summary: summary, mealTimesIn: mealTimesIn, learned: learned, sipText: sipText, draw: drawCard };
+  window.__wp = { zones: zones, widgetPlan: widgetPlan, on: isOn, open: open, build: build, live: live, today: today, reminders: reminders, nextList: nextList, summary: summary, mealTimesIn: mealTimesIn, learned: learned, sipText: sipText, draw: drawCard };
+})();
+</script>
+<script>
+// =========================================================================
+// FOREST (a tree for every goal day), GHOST RACE (race your best day), THE CRAB PAL (moods)
+// =========================================================================
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function esc(t) { return escapeHtml(String(t == null ? '' : t)); }
+  function fmt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function dayMin(t) { var p = String(t || '').split(':'), h = parseInt(p[0], 10), m = parseInt(p[1], 10); if (isNaN(h)) return null; h = h * 60 + (isNaN(m) ? 0 : m); return h < 240 ? h + 1440 : h; }
+  function nowMin() { var d = new Date(), m = d.getHours() * 60 + d.getMinutes(); return m < 240 ? m + 1440 : m; }
+  function hm(m) { m = ((Math.round(m) % 1440) + 1440) % 1440; return pad(Math.floor(m / 60)) + ':' + pad(m % 60); }
+  function hash(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967295; }
+  var DN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function nice(key) { var d = keyToDate(key); return DN[d.getDay()] + ' ' + d.getDate() + ' ' + MN[d.getMonth()]; }
+  var calm = false; try { calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+  // ---------------- FOREST ----------------
+  function waters(key) { return getDayEntries(key).filter(function (e) { return e.cat === 'water' && extractWaterMl(e.text) > 0; }); }
+  function firstDay() {
+    var ks = Object.keys(allData || {}).filter(function (k) { return /^\d{4}-\d{2}-\d{2}$/.test(k) && getDayEntries(k).length; }).sort();
+    return ks[0] || getTodayKey();
+  }
+  // kind: tree (goal), young (60% or more), dry (less), none (before you started), future, grow (today)
+  function dayKind(key, first, today) {
+    if (key > today) return { k: 'future', ml: 0 };
+    var ml = getWaterTotal(getDayEntries(key)), g = WATER_TARGET_ML;
+    if (key === today) return { k: ml >= g ? 'tree' : 'grow', ml: ml, p: Math.min(1, ml / g), today: true };
+    if (key < first) return { k: 'none', ml: 0 };
+    return { k: ml >= g ? 'tree' : ml >= g * 0.6 ? 'young' : 'dry', ml: ml };
+  }
+  function stats() {
+    var today = getTodayKey(), first = firstDay(), trees = 0, best = 0, run = 0, k = first, guard = 0;
+    while (k <= today && guard++ < 1500) {
+      var met = getWaterTotal(getDayEntries(k)) >= WATER_TARGET_ML;
+      if (met) { trees++; run++; best = Math.max(best, run); } else if (k !== today) run = 0;
+      k = shiftDateKey(k, 1);
+    }
+    // current streak: goal days ending today (or yesterday if today is not done yet)
+    var cur = 0, d = today;
+    if (getWaterTotal(getDayEntries(d)) < WATER_TARGET_ML) d = shiftDateKey(d, -1);
+    while (d >= first && getWaterTotal(getDayEntries(d)) >= WATER_TARGET_ML && cur < 1500) { cur++; d = shiftDateKey(d, -1); }
+    return { trees: trees, best: best, cur: cur };
+  }
+  // one plant, drawn with its base at 0,0
+  function plant(kind, seed, p) {
+    var v = seed < 0.45 ? 'pine' : seed < 0.78 ? 'round' : 'tall', tone = ['#3f6b4a', '#4a7a52', '#365f46'][Math.floor(seed * 7) % 3];
+    function tree(s) {
+      var t = '<g transform="scale(' + s.toFixed(3) + ')">';
+      if (v === 'pine') t += '<rect x="-2" y="-8" width="4" height="9" rx="1" fill="#8a6a4a"/><path d="M0 -44 L13 -20 L7 -20 L16 -6 L-16 -6 L-7 -20 L-13 -20Z" fill="' + tone + '"/>';
+      else if (v === 'round') t += '<rect x="-2" y="-12" width="4" height="13" rx="1" fill="#8a6a4a"/><circle cx="0" cy="-24" r="14" fill="#609966"/><circle cx="-5" cy="-28" r="6" fill="#77ab74"/>';
+      else t += '<rect x="-2" y="-8" width="4" height="9" rx="1" fill="#8a6a4a"/><ellipse cx="0" cy="-27" rx="8" ry="21" fill="' + tone + '"/>';
+      return t + '</g>';
+    }
+    if (kind === 'tree') return tree(0.9 + seed * 0.2);
+    if (kind === 'young') return tree(0.5);
+    if (kind === 'grow') return '<ellipse cx="0" cy="1" rx="15" ry="4" fill="none" stroke="#40513b" stroke-width="1.4" stroke-dasharray="3 3" opacity=".55"/>' + (p > 0.02 ? tree(0.22 + 0.6 * p) : '<path d="M0 0 C0 -6 -4 -8 -6 -8 M0 -3 C1 -7 4 -8 6 -8" stroke="#609966" stroke-width="2" fill="none" stroke-linecap="round"/>');
+    if (kind === 'dry') return '<ellipse cx="0" cy="1" rx="12" ry="3.5" fill="#c9a77c" opacity=".75"/><path d="M0 0 L0 -10 M0 -6 L-4 -10 M0 -8 L3 -12" stroke="#8a6a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
+    if (kind === 'future') return '<ellipse cx="0" cy="1" rx="11" ry="3" fill="none" stroke="#40513b" stroke-width="1.1" stroke-dasharray="2 3" opacity=".3"/>';
+    return '<circle cx="-4" cy="0" r="1.2" fill="#609966" opacity=".5"/><circle cx="3" cy="-1" r="1" fill="#609966" opacity=".4"/>';
+  }
+  var selKey = '';
+  function scene() {
+    var today = getTodayKey(), first = firstDay(), dt = keyToDate(today), dow = (dt.getDay() + 6) % 7;
+    var monday = shiftDateKey(today, -dow), rows = 8, out = '';
+    out += '<path d="M0 74 C70 52 150 60 200 56 C260 52 320 60 360 70 V310 H0Z" fill="#c9dcb3"/><path d="M0 190 C90 176 250 182 360 192 V310 H0Z" fill="#b6d0a0"/>';
+    for (var r = 0; r < rows; r++) {
+      var f = r / (rows - 1), s = 0.52 + 0.48 * f, y = 92 + r * 27 + f * f * 8, W = 210 + 135 * f, wk = shiftDateKey(monday, -7 * (rows - 1 - r));
+      for (var c = 0; c < 7; c++) {
+        var key = shiftDateKey(wk, c), K = dayKind(key, first, today), sd = hash(key);
+        var x = 180 - W / 2 + (c + 0.5) * W / 7 + (sd - 0.5) * 6 * s, yy = y + (hash(key + 'y') - 0.5) * 4 * s;
+        var lab = nice(key) + ': ' + (K.k === 'future' ? 'coming up' : K.k === 'none' ? 'before you started' : fmt(K.ml) + ' ml' + (K.k === 'tree' ? ', a tree grew' : K.k === 'young' ? ', a young tree' : K.k === 'grow' ? ', growing now' : ', a dry day'));
+        out += '<g class="fr-c' + (key === selKey ? ' sel' : '') + (K.today ? ' today' : '') + '" data-k="' + key + '" transform="translate(' + x.toFixed(1) + ' ' + yy.toFixed(1) + ') scale(' + s.toFixed(3) + ')" role="img" aria-label="' + esc(lab) + '">' +
+          '<rect x="-20" y="-50" width="40" height="56" fill="transparent"/>' + (key === selKey ? '<ellipse cx="0" cy="2" rx="17" ry="5" fill="none" stroke="#b4532a" stroke-width="2"/>' : '') + plant(K.k, sd, K.p || 0) + '</g>';
+      }
+    }
+    return '<svg class="fr-svg" viewBox="0 0 360 310" aria-label="Your forest, the last 8 weeks">' + out + '</svg>';
+  }
+  function caption() {
+    if (!selKey) return 'Tap a tree to see that day.';
+    var K = dayKind(selKey, firstDay(), getTodayKey());
+    if (K.k === 'future') return nice(selKey) + ': not here yet.';
+    if (K.k === 'none') return nice(selKey) + ': before you started.';
+    return nice(selKey) + ': ' + fmt(K.ml) + ' ml. ' + (K.k === 'tree' ? 'Goal reached, a tree grew.' : K.k === 'young' ? 'Close, a young tree.' : K.k === 'grow' ? 'Today. Your tree grows as you drink.' : 'A dry day.');
+  }
+  function drawForest() {
+    var st = stats(), b = $('fr-body'); if (!b) return;
+    b.innerHTML = '<div class="chat-head"><h2 class="sheet-title">Your forest</h2><div class="chat-head-btns"><button type="button" data-fr="close">Done</button></div></div>' +
+      '<div class="fr-stats"><div><b>' + st.trees + '</b><span>' + (st.trees === 1 ? 'tree' : 'trees') + '</span></div><div><b>' + st.cur + '</b><span>day streak</span></div><div><b>' + st.best + '</b><span>best streak</span></div></div>' +
+      '<div class="fr-scene">' + scene() + '</div><p class="fr-cap" aria-live="polite">' + esc(caption()) + '</p>' +
+      '<div class="fr-legend"><span><svg viewBox="-18 -48 36 52">' + plant('tree', 0.2, 1) + '</svg>Goal reached</span><span><svg viewBox="-18 -48 36 52">' + plant('young', 0.2, 1) + '</svg>Close (60%+)</span><span><svg viewBox="-18 -48 36 52">' + plant('dry', 0.2, 1) + '</svg>Dry day</span></div>' +
+      '<p class="set-note">Every day you reach your water goal, a tree grows here. Back rows are older weeks, the front row is this week.</p>';
+  }
+  function openForest() { document.querySelectorAll('.overlay.open').forEach(function (o) { o.classList.remove('open'); }); selKey = getTodayKey(); drawForest(); $('fr-modal').classList.add('open'); }
+  var lastMet = null;
+  function frStrip() {
+    var el = $('fr-strip'); if (!el) return;
+    if (typeof viewingPastDay !== 'undefined' && viewingPastDay) { el.hidden = true; return; } el.hidden = false;
+    var today = getTodayKey(), first = firstDay(), st = stats(), mini = '';
+    for (var i = 6; i >= 0; i--) { var k = shiftDateKey(today, -i), K = dayKind(k, first, today); mini += '<svg class="fr-mini-t' + (i === 0 ? ' now' : '') + '" viewBox="-18 -48 36 52" aria-hidden="true">' + plant(K.k, hash(k), K.p || 0) + '</svg>'; }
+    var sub = st.trees ? st.trees + (st.trees === 1 ? ' tree' : ' trees') + (st.cur > 1 ? ', ' + st.cur + '-day streak' : '') : 'Reach your goal to grow your first tree';
+    var h = '<span class="fr-mini">' + mini + '</span><span class="ps-main"><b>Your forest</b><small>' + esc(sub) + '</small></span><svg viewBox="0 0 24 24" class="fr-chev" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+    if (el.dataset.sig !== h) { el.dataset.sig = h; el.innerHTML = h; }
+    var met = getWaterTotal(getDayEntries(today)) >= WATER_TARGET_ML;
+    if (lastMet === false && met && !calm) { var t = el.querySelector('.fr-mini-t.now'); if (t) { t.classList.remove('plant'); void t.getBoundingClientRect(); t.classList.add('plant'); } }
+    lastMet = met;
+  }
+
+  // ---------------- GHOST RACE ----------------
+  var gCache = { sig: '', best: null };
+  function bestDay() {
+    var today = getTodayKey(), goal = WATER_TARGET_ML, sig = today + '|' + goal, cands = [];
+    for (var d = 1; d <= 30; d++) {
+      var k = shiftDateKey(today, -d), ws = waters(k); sig += '|' + ws.length;
+      if (ws.length) cands.push({ k: k, ws: ws });
+    }
+    if (gCache.sig === sig) return gCache.best;
+    var best = null;
+    cands.forEach(function (c) {
+      var list = c.ws.map(function (e) { return { m: dayMin(e.time), ml: extractWaterMl(e.text) }; }).filter(function (x) { return x.m !== null; }).sort(function (a, b) { return a.m - b.m; });
+      var tot = 0, reach = null; list.forEach(function (x) { tot += x.ml; if (reach === null && tot >= goal) reach = x.m; });
+      var score = reach !== null ? 100000 - reach : tot; // reaching the goal earliest wins, else the biggest day
+      if (tot >= goal * 0.4 && (!best || score > best.score)) best = { k: c.k, list: list, tot: tot, reach: reach, score: score };
+    });
+    gCache = { sig: sig, best: best };
+    return best;
+  }
+  function ghost() {
+    var line = $('ghost-line'), txt = $('tank-ghost'); if (!line || !txt) return;
+    var b = (typeof viewingPastDay !== 'undefined' && viewingPastDay) ? null : bestDay();
+    if (!b) { line.hidden = true; txt.hidden = true; return; }
+    var now = nowMin(), g = 0, first = b.list[0] ? b.list[0].m : null;
+    b.list.forEach(function (x) { if (x.m <= now) g += x.ml; });
+    var mine = getWaterTotal(getDayEntries(getTodayKey())), goal = WATER_TARGET_ML, diff = mine - g, who = 'Best you (' + nice(b.k).split(' ').slice(0, 1)[0] + ' ' + keyToDate(b.k).getDate() + ' ' + MN[keyToDate(b.k).getMonth()] + ')';
+    var t;
+    if (g <= 0) t = 'Best you started at ' + hm(first);
+    else if (mine >= goal) t = 'Goal done. Best you ' + (b.reach !== null ? 'got there at ' + hm(b.reach) : 'had ' + fmt(b.tot) + ' ml');
+    else if (diff >= 50) t = 'Ahead of best you by ' + fmt(diff) + ' ml';
+    else if (diff <= -50) t = 'Best you had ' + fmt(g) + ' ml by now';
+    else t = 'Neck and neck with best you';
+    txt.textContent = t; txt.hidden = false; txt.title = who;
+    var pct = Math.min(100, g / goal * 100);
+    if (g <= 0 || mine >= goal) { line.hidden = true; return; }
+    line.hidden = false; line.style.top = (100 - pct).toFixed(2) + '%';
+  }
+
+  // ---------------- THE CRAB PAL ----------------
+  var palMood = '', happyUntil = 0, lastTotal = null, bubbleT = null, bootAt = Date.now();
+  function mood() {
+    var es = getDayEntries(getTodayKey()), total = getWaterTotal(es), goal = WATER_TARGET_ML, now = nowMin();
+    var pr = SETTINGS.profile || {}, wp = (pr.wake || '06:30').split(':'), bp = (pr.bed || '23:00').split(':');
+    var wake = (+wp[0]) * 60 + (+wp[1] || 0), bed = (+bp[0]) * 60 + (+bp[1] || 0); if (bed <= wake) bed += 1440;
+    if (now < wake - 15 || now > bed) return 'asleep';
+    if (total >= goal) return 'party';
+    if (Date.now() < happyUntil) return 'happy';
+    var behind = false;
+    try { if (window.__wp && window.__wp.on()) behind = window.__wp.today().L.status === 'behind'; } catch (e) {}
+    if (!(window.__wp && window.__wp.on())) {
+      var ws = waters(getTodayKey()).map(function (e) { return dayMin(e.time); }).filter(function (m) { return m !== null; });
+      var last = ws.length ? Math.max.apply(null, ws) : null, frac = Math.max(0, Math.min(1, (now - wake) / Math.max(240, bed - 60 - wake)));
+      behind = (last === null ? now - wake > 90 : now - last > 150) || total < goal * frac * 0.6;
+    }
+    return behind ? 'sleepy' : 'ok';
+  }
+  function palLine(m) {
+    var total = getWaterTotal(getDayEntries(getTodayKey())), left = Math.max(0, WATER_TARGET_ML - total), nx = '';
+    try { if (window.__wp && window.__wp.on()) { var L = window.__wp.today().L, s = L.due || L.next; if (s) nx = s.amt + ' ml ' + (L.due ? 'now' : 'at ' + hm(s.at)); } } catch (e) {}
+    if (m === 'asleep') return 'Shh. Sleeping. See you in the morning.';
+    if (m === 'party') return 'We did it! ' + fmt(total) + ' ml today.';
+    if (m === 'happy') return 'Ahh, that felt good.';
+    if (m === 'sleepy') return 'I am drying out... ' + (nx ? nx + '?' : 'a glass with me?');
+    return fmt(total) + ' ml so far. ' + (nx ? 'Next: ' + nx + '.' : fmt(left) + ' ml to go.');
+  }
+  function pal() {
+    var el = $('pal'); if (!el) return;
+    if (typeof viewingPastDay !== 'undefined' && viewingPastDay) { el.hidden = true; return; } el.hidden = false;
+    var total = getWaterTotal(getDayEntries(getTodayKey()));
+    if (lastTotal !== null && total > lastTotal && Date.now() - bootAt > 4000) { happyUntil = Date.now() + 5000; setTimeout(pal, 5100); }
+    lastTotal = total;
+    var m = mood();
+    if (m !== palMood) {
+      el.className = 'pal m-' + m + (m === 'happy' || m === 'party' ? ' bounce' : '');
+      palMood = m;
+      var c = $('crab'); if (c) { c.classList.toggle('slow', m === 'sleepy' || m === 'asleep'); }
+    }
+    el.setAttribute('aria-label', 'Crab: ' + palLine(m));
+  }
+  function bubble() {
+    var el = $('pal'), b = $('pal-say'); if (!el || !b) return;
+    b.textContent = palLine(palMood || mood()); b.hidden = false; b.classList.remove('in'); void b.offsetWidth; b.classList.add('in');
+    el.classList.remove('bounce'); void el.offsetWidth; el.classList.add('bounce');
+    try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {}
+    clearTimeout(bubbleT); bubbleT = setTimeout(function () { b.hidden = true; }, 3200);
+  }
+
+  // ---------------- wiring ----------------
+  function all() { try { frStrip(); } catch (e) {} try { ghost(); } catch (e) {} try { pal(); } catch (e) {} }
+  var rm = window.renderMain;
+  if (typeof rm === 'function') window.renderMain = function () { var r = rm.apply(this, arguments); all(); return r; };
+  setInterval(all, 60000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { gCache.sig = ''; all(); } });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('#fr-strip')) { openForest(); return; }
+    if (e.target.closest('#pal')) { e.stopPropagation(); bubble(); return; }
+    var m = e.target.closest('#fr-modal'); if (!m) return;
+    if (e.target.id === 'fr-modal' || e.target.closest('[data-fr="close"]')) { m.classList.remove('open'); return; }
+    var c = e.target.closest('.fr-c'); if (c) { selKey = c.dataset.k; drawForest(); }
+  });
+  setTimeout(all, 0);
+  window.__forest = { open: openForest, stats: stats, bestDay: bestDay, mood: mood };
 })();
 </script>
 <script>
