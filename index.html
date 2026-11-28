@@ -905,13 +905,18 @@
     .sky.has-scene { min-height: calc(min(100vw, 600px) * 1.338); }
     .sky.has-scene > .forest.tod-forest { position: absolute; left: 0; right: 0; bottom: 0; height: auto; z-index: 1; overflow: visible; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     .sky.has-scene > .container { z-index: 3; }
-    .tod-box { position: relative; width: 100%; max-width: 600px; margin: 0 auto; aspect-ratio: 1080 / 1445; --tod-f: brightness(1); }
+    .sky.has-scene { --head: #fefae0; --head-sub: #f3efd4; --head-bg: rgba(16,28,24,0.46); --head-line: rgba(254,250,224,0.34); --scrim: 0.46; }
+    .sky.has-scene::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 230px; z-index: 2; pointer-events: none; background: linear-gradient(180deg, rgba(12,22,20,var(--scrim)) 0%, rgba(12,22,20,calc(var(--scrim) * 0.45)) 55%, transparent 100%); }
+    .sky.has-scene h1, .sky.has-scene .top-sub, .sky.has-scene .clock { text-shadow: 0 1px 12px rgba(10,20,18,0.55), 0 0 2px rgba(10,20,18,0.35); }
+    .sky.has-scene .icon-btn, .sky.has-scene .tray-btn { -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2); box-shadow: 0 4px 16px rgba(8,18,16,0.28); }
+    .tod-box { position: relative; width: 100%; max-width: 600px; margin: 0 auto; aspect-ratio: 1080 / 1445; --tod-f: saturate(1.16) contrast(1.06) brightness(1.03); }
+    .tod-box::after { content: ''; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light; opacity: var(--tod-glow, 0); background: radial-gradient(ellipse 90% 60% at 18% 32%, rgba(255,196,120,0.95), rgba(255,150,90,0.35) 55%, transparent 80%); transition: opacity 1.4s ease; }
     .tod-box canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; filter: var(--tod-f); transition: filter 1.2s ease; pointer-events: none; }
     .tod-fog { position: absolute; left: 0; right: 0; top: 40%; height: 36%; pointer-events: none; opacity: var(--tod-fog, 0.22); background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--sky-bottom) 92%, #fff) 55%, transparent); transition: opacity 1.4s ease; }
     .tod-base { position: absolute; left: 0; right: 0; bottom: -1px; height: 13%; pointer-events: none; background: linear-gradient(180deg, transparent, var(--f4)); }
-    body[data-mood="dawn"] .tod-box { --tod-f: sepia(0.18) saturate(1.05) brightness(1.02); --tod-fog: 0.34; }
-    body[data-mood="dusk"] .tod-box { --tod-f: sepia(0.32) saturate(1.1) hue-rotate(-12deg) brightness(0.82); --tod-fog: 0.26; }
-    body[data-mood="night"] .tod-box { --tod-f: brightness(0.36) saturate(0.7) hue-rotate(12deg); --tod-fog: 0.2; }
+    body[data-mood="dawn"] .tod-box { --tod-f: sepia(0.1) saturate(1.2) contrast(1.05) brightness(1.04); --tod-fog: 0.34; --tod-glow: 0.8; }
+    body[data-mood="dusk"] .tod-box { --tod-f: sepia(0.12) saturate(1.3) contrast(1.08) brightness(0.98); --tod-fog: 0.2; --tod-glow: 0.95; }
+    body[data-mood="night"] .tod-box { --tod-f: brightness(0.5) saturate(0.85) contrast(1.05) hue-rotate(10deg); --tod-fog: 0.2; }
     body[data-wx="rain"] .tod-box, body[data-wx="drizzle"] .tod-box { --tod-f: brightness(0.74) saturate(0.78) contrast(0.96); --tod-fog: 0.55; }
     body[data-wx="storm"] .tod-box { --tod-f: brightness(0.55) saturate(0.7); --tod-fog: 0.6; }
     body[data-wx="fog"] .tod-box { --tod-f: brightness(1.02) saturate(0.7); --tod-fog: 0.92; }
@@ -1914,7 +1919,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 62</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 63</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
