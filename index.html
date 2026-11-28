@@ -1853,7 +1853,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 55</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 56</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -8089,7 +8089,7 @@
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#set-tilt-row')) return; dbgOn = !dbgOn; var v = $('set-tilt-val');
     if (!dbgOn) { v.textContent = 'Tap to test'; return; }
-    (function tick() { if (!dbgOn) return; v.textContent = 'tilt ' + (tilt || 0).toFixed(1) + ' | turn ' + nOri + (lastG === null ? '' : ' (' + Math.round(lastG) + ')') + ' | motion ' + nMot + (lastX === null ? '' : ' (' + lastX.toFixed(1) + ')') + (calm ? ' | reduced motion ON' : '') + (tankSeen ? '' : ' | tank off screen'); setTimeout(tick, 300); })();
+    (function tick() { if (!dbgOn) return; v.textContent = 'tilt ' + (tilt || 0).toFixed(1) + ' | turn ' + nOri + (lastG === null ? '' : ' (' + Math.round(lastG) + ')') + ' | motion ' + nMot + (lastX === null ? '' : ' (' + lastX.toFixed(1) + ')') + (calm ? ' | reduced motion ON' : '') + (P ? ' | pour stuck' : ''); setTimeout(tick, 300); })();
   });
   window.addEventListener('deviceorientation', function (e) { nOri++; if (typeof e.gamma === 'number') lastG = e.gamma; });
   window.addEventListener('devicemotion', function (e) { nMot++; var g = e.accelerationIncludingGravity; if (g && typeof g.x === 'number') lastX = g.x; });
@@ -8097,13 +8097,13 @@
   function setTilt(t) { t = Math.max(-24, Math.min(24, t)); if (Math.abs(t - tiltT) < 0.3) return; tiltT = t; if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop); }
   function onOri(e) {
     if (typeof e.gamma !== 'number') return; oriSeen = true;
-    if (document.hidden || !tankSeen || P) return;
+    if (document.hidden) return;
     setTilt(-e.gamma * 0.8);
   }
   // Android WebView sometimes sends no orientation events but does send motion events: use gravity from those instead
   function onMotion(e) {
     if (oriSeen) return; var g = e.accelerationIncludingGravity; if (!g || typeof g.x !== 'number') return;
-    if (document.hidden || !tankSeen || P) return;
+    if (document.hidden) return;
     setTilt(Math.asin(Math.max(-1, Math.min(1, g.x / 9.81))) * 180 / Math.PI * 0.8);
   }
   if (!calm) {
