@@ -624,7 +624,7 @@
     @keyframes wander { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(22px, -16px); } 66% { transform: translate(-14px, 10px); } }
 
     /* ---------- Water plan ---------- */
-    .wp-card { margin-top: 14px; padding: 12px; border-radius: 18px; background: rgba(254,250,224,0.78); border: 1px solid rgba(64,81,59,0.14); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 160ms cubic-bezier(0.23,1,0.32,1); }
+    .wp-card { margin-top: 14px; padding: 12px; border-radius: 18px; background: rgba(254,250,224,0.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid rgba(64,81,59,0.14); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 160ms cubic-bezier(0.23,1,0.32,1); }
     .wp-card:active { transform: scale(0.99); }
     .wp-card[hidden] { display: none; }
     .wp-row { display: flex; align-items: center; gap: 12px; }
@@ -898,6 +898,11 @@
     @keyframes hmSwing { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
     @keyframes hmWob { from { transform: rotate(-7deg) translateY(0); } to { transform: rotate(6deg) translateY(-6px); } }
     @media (prefers-reduced-motion: reduce) { .hm-star, .hm-aur, .hm-cloud, .hm-smoke, .hm-birds, .hm-birds path, .hm-kite .swing, .hm-kite .wob { animation: none !important; } .hm-smoke { display: none; } .hm-cloud { opacity: 0; } }
+
+    /* live water simulation (canvas) replaces the flat css water when motion is allowed */
+    #tank-sim { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; display: none; }
+    .tank.sim #tank-sim { display: block; }
+    .tank.sim .tank-fill { opacity: 0; transition: none; }
     /* ---------- Round 2: pour, tilt, morning card, night floor, quick buttons, fireflies, pull-down day ---------- */
     .tank { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     .tank-fill { left: -30%; right: -30%; rotate: var(--tilt, 0deg); transform-origin: 50% var(--drop, 100%); }
@@ -1544,7 +1549,8 @@
             <svg class="wave" viewBox="0 0 400 22" preserveAspectRatio="none"><path d="M0 11 Q50 0 100 11 T200 11 T300 11 T400 11 V22 H0Z"/></svg>
             <div class="fill-body"></div>
           </div>
-                    <button class="pal m-ok" id="pal" type="button" aria-label="Crab"><svg viewBox="0 0 60 46" aria-hidden="true">
+                    <canvas id="tank-sim" aria-hidden="true"></canvas>
+          <button class="pal m-ok" id="pal" type="button" aria-label="Crab"><svg viewBox="0 0 60 46" aria-hidden="true">
             <path class="pl" d="M18 34 L11 40 M20 37 L15 44 M42 34 L49 40 M40 37 L45 44"/>
             <path class="claw l pb" d="M17 28 C9 27 5 20 8 14 C10 16 12 18 15 18 C13 14 14 11 16 10 C19 14 20 22 17 28Z"/>
             <path class="claw r pb" d="M43 28 C51 27 55 20 52 14 C50 16 48 18 45 18 C47 14 46 11 44 10 C41 14 40 22 43 28Z"/>
@@ -1853,7 +1859,7 @@
       <div class="set-group" id="set-account">
         <div class="set-label">Account</div>
         <div class="set-row"><span class="set-name" id="acc-email">Signed in</span><span class="set-val" id="acc-sync"></span></div>
-        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 58</span></button>
+        <button class="set-row set-link" id="set-update-row" type="button"><span class="set-name">Update app</span><span class="set-val" id="app-build">Version 59</span></button>
         <button class="set-row set-link" id="set-admin-row" hidden><span class="set-name">Admin</span><span class="set-val" id="adm-badge">People and AI keys</span></button>
         <button class="set-row set-link" id="set-signout-row"><span class="set-name">Sign out</span><span class="set-val" id="so-val">This device</span></button>
       </div>
@@ -8088,12 +8094,83 @@
     if (f) { f.style.setProperty('--tilt', tilt.toFixed(2) + 'deg'); f.style.setProperty('--slosh', (Math.min(1, Math.abs(tv) / 1.5) * 6).toFixed(1) + 'px'); }
     if (Math.abs(tiltT - tilt) > 0.04 || Math.abs(tv) > 0.03) tiltRaf = requestAnimationFrame(tiltLoop); else { tiltRaf = 0; if (f) f.style.setProperty('--tilt', tiltT.toFixed(2) + 'deg'); tilt = tiltT; tv = 0; }
   }
-  var lastAx = null;
+  var lastAx = null, lastAz = null;
   window.addEventListener('devicemotion', function (e) {
     var g = e.accelerationIncludingGravity; if (!g || typeof g.x !== 'number' || document.hidden) return;
-    if (lastAx !== null) { var d = g.x - lastAx; if (Math.abs(d) > 0.8) { tv += Math.max(-4, Math.min(4, d * -0.35)); if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop); } }
+    if (lastAx !== null) { var d = g.x - lastAx, dz = (g.z || 0) - (lastAz || 0); if (SIM && (Math.abs(d) > 0.7 || Math.abs(dz) > 0.7)) SIM.push(Math.max(-3, Math.min(3, d * -0.5)), Math.max(-3, Math.min(3, dz * 0.4))); }
+    lastAz = g.z;
     lastAx = g.x;
   });
+
+  // ---------------- live water: a row of springy columns, so it slops, splashes and settles like water in a bottle ----------------
+  var SIM = null;
+  (function () {
+    var cv = $('tank-sim'), tk = $('tank'); if (!cv || !tk || calm || !cv.getContext) return;
+    var ctx = cv.getContext('2d'), N = 44, h = [], v = [], W = 0, H = 0, dpr = 1, level = null, fillC = '#7fa9bd', waveC = '#a9c8d6', colAt = 0, seen = true, run = false, drops = [], bubs = [], T0 = 0, lastNow = 0;
+    for (var i = 0; i <= N; i++) { h.push(0); v.push(0); }
+    SIM = {
+      push: function (dx, dy) { // dx: sideways shake, dy: up/down shake
+        for (var i = 0; i <= N; i++) { var x = i / N - 0.5; v[i] += dx * x * 2.2 + dy * (Math.sin(i * 0.9) * 0.4); }
+        splash(Math.min(6, Math.abs(dx) * 2 + Math.abs(dy) * 2));
+        kick();
+      }
+    };
+    function size() { var r = tk.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1); W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height)); cv.width = W * dpr; cv.height = H * dpr; }
+    function colors() {
+      var b = tk.querySelector('.fill-body'), w = tk.querySelector('.wave');
+      try { var c1 = getComputedStyle(b).backgroundColor, c2 = getComputedStyle(w).fill; if (c1) fillC = c1; if (c2 && c2 !== 'none') waveC = c2; } catch (e) {}
+    }
+    function dropPct() { var f = $('tank-fill'), d = f ? parseFloat(f.style.getPropertyValue('--drop')) : NaN; return isNaN(d) ? 120 : d; }
+    function splash(n) { for (var k = 0; k < n && drops.length < 40; k++) { var i = Math.floor(Math.random() * N); drops.push({ x: i / N * W, y: 0, vx: (Math.random() - 0.5) * 2.5 + v[i] * 0.4, vy: -(1.5 + Math.random() * 2.6), r: 1.5 + Math.random() * 2.2, life: 1, fresh: true, i: i }); } }
+    function kick() { if (!run && seen) { run = true; lastNow = 0; requestAnimationFrame(frame); } }
+    function frame(now) {
+      if (!run) return;
+      if (!seen || document.hidden) { run = false; return; }
+      var dt = lastNow ? Math.min(2.2, (now - lastNow) / 16.7) : 1; lastNow = now;
+      if (!W) size();
+      if (now - colAt > 1000) { colAt = now; colors(); if (Math.abs(tk.offsetWidth - W) > 2 || Math.abs(tk.offsetHeight - H) > 2) size(); }
+      var target = Math.max(0, Math.min(1.2, dropPct() / 100)); if (level === null) level = target; level += (target - level) * 0.05 * dt;
+      var baseY = level * H, slope = Math.tan(Math.max(-26, Math.min(26, tiltT)) * Math.PI / 180) * 0.9, t = now / 1000, mean = 0;
+      for (var s = 0; s < 2; s++) {
+        for (var i = 0; i <= N; i++) {
+          var x = (i / N - 0.5) * W, eq = slope * x + Math.sin(t * 1.3 + i * 0.35) * 1.6 + Math.sin(t * 0.8 - i * 0.2) * 1.1;
+          var l = h[i === 0 ? 0 : i - 1], r = h[i === N ? N : i + 1];
+          v[i] += ((eq - h[i]) * 0.022 + (l + r - 2 * h[i]) * 0.2) * dt * 0.5; v[i] *= 0.985;
+        }
+        for (var j = 0; j <= N; j++) { h[j] += v[j] * dt * 0.5; mean += h[j]; }
+      }
+      mean /= (2 * (N + 1)); for (var m = 0; m <= N; m++) h[m] -= mean * 0.5;
+      var energy = 0; for (var e = 0; e <= N; e++) { if (h[e] > 70) h[e] = 70; if (h[e] < -70) h[e] = -70; energy += Math.abs(v[e]); }
+      // crests that move fast throw drops
+      if (energy / N > 0.9 && Math.random() < 0.5) splash(1);
+      if (Math.random() < 0.05 && level < 1.1 && bubs.length < 14) bubs.push({ x: Math.random() * W, y: H, vy: 0.5 + Math.random() * 0.9, r: 1 + Math.random() * 2, ph: Math.random() * 6 });
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+      if (level < 1.15) {
+        function path(off, amp) { ctx.beginPath(); ctx.moveTo(0, H + 4); for (var i = 0; i <= N; i++) ctx.lineTo(i / N * W, baseY + h[i] * amp + off); ctx.lineTo(W, H + 4); ctx.closePath(); }
+        ctx.fillStyle = waveC; ctx.globalAlpha = 0.75; path(-5, 1.12); ctx.fill();
+        ctx.globalAlpha = 1; ctx.fillStyle = fillC; path(0, 1); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.beginPath();
+        for (var q = 0; q <= N; q++) { var px = q / N * W, py = baseY + h[q] - 1; if (q === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py); } ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        for (var b = bubs.length - 1; b >= 0; b--) { var bb = bubs[b]; bb.y -= bb.vy * dt; bb.x += Math.sin(t * 2 + bb.ph) * 0.3; var sy = baseY + h[Math.max(0, Math.min(N, Math.round(bb.x / W * N)))]; if (bb.y < sy + 4) { bubs.splice(b, 1); continue; } ctx.beginPath(); ctx.arc(bb.x, bb.y, bb.r, 0, 6.3); ctx.fill(); }
+        ctx.fillStyle = waveC;
+        for (var d = drops.length - 1; d >= 0; d--) {
+          var p = drops[d]; if (p.fresh) { p.y = baseY + h[p.i] - 2; p.fresh = false; }
+          p.vy += 0.16 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+          var si = Math.max(0, Math.min(N, Math.round(p.x / W * N))), sy2 = baseY + h[si];
+          if (p.y > sy2 && p.vy > 0) { v[si] += 0.8; drops.splice(d, 1); continue; }
+          if (p.x < 0 || p.x > W) { drops.splice(d, 1); continue; }
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.3); ctx.fill();
+        }
+      }
+      tk.classList.add('sim');
+      // keep running while there is movement or a drifting surface; slow ambient needs the loop, so it always runs while visible
+      requestAnimationFrame(frame);
+    }
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) kick(); }).observe(tk);
+    window.addEventListener('resize', function () { W = 0; });
+    kick();
+  })();
   var nOri = 0, nMot = 0, dbgOn = false, lastG = null, lastX = null;
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#set-tilt-row')) return; dbgOn = !dbgOn; var v = $('set-tilt-val');
